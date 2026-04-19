@@ -131,21 +131,23 @@ body { background: var(--bg); color: var(--t1); font-family: 'Plus Jakarta Sans'
   display: none; position: absolute; top: calc(100% + 6px); right: 0;
   background: var(--bg); border: 1px solid var(--b1); border-radius: 8px;
   box-shadow: 0 12px 36px rgba(0,0,0,.22); z-index: 300;
-  width: 220px; overflow: hidden;
+  width: 260px; overflow: hidden;
 }
 .tools-menu.open { display: block; }
 .tools-menu-tabs {
-  display: flex; border-bottom: 1px solid var(--b1); background: var(--s1);
+  display: flex; border-bottom: 2px solid var(--b1); background: var(--s1);
+  overflow-x: auto; -webkit-overflow-scrolling: touch;
 }
+.tools-menu-tabs::-webkit-scrollbar { display: none; }
 .tools-menu-tab {
-  flex: 1; padding: 8px 4px; border: none; background: none;
+  flex-shrink: 0; padding: 9px 10px; border: none; background: none;
   font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 700;
-  font-size: 8.5px; letter-spacing: .06em; text-transform: uppercase;
+  font-size: 9px; letter-spacing: .05em; text-transform: uppercase;
   color: var(--t3); cursor: pointer; transition: color .12s, background .12s;
-  border-bottom: 2px solid transparent; margin-bottom: -1px;
+  border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap;
 }
-.tools-menu-tab:hover { color: var(--t2); }
-.tools-menu-tab.on { color: var(--blue); border-bottom-color: var(--blue); background: var(--bg); }
+.tools-menu-tab:hover { color: var(--t2); background: var(--s2); }
+.tools-menu-tab.on { color: var(--blue); border-bottom-color: var(--blue); background: var(--bg); font-weight: 800; }
 .tools-tab-content { padding: 6px; }
 .tools-tab-content.hidden { display: none; }
 .tools-item {
@@ -953,10 +955,10 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
   .qa-panel.open    { width:300px; }
   .gloss-panel.open { width:300px; }
 
-  /* Tools menu — anchor to bottom on narrow iPad portrait */
-  .tools-menu { width:240px; }
+  /* Tools menu */
+  .tools-menu { width:260px; }
   .tools-item { padding:10px 12px; font-size:11.5px; }
-  .tools-menu-tab { font-size:9px; padding:9px 4px; }
+  .tools-menu-tab { font-size:9.5px; padding:10px 10px; }
 
   /* Modals — near-full screen, slight padding */
   .xdrill-modal,
