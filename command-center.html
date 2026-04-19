@@ -1137,46 +1137,55 @@ body {
 .cal-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
+  border-bottom: 1px solid var(--b1);
+  padding-bottom: 6px;
 }
 .cal-wd {
   text-align: center;
   font-size: 9px;
   font-weight: 700;
-  letter-spacing: .12em;
+  letter-spacing: .14em;
   text-transform: uppercase;
   color: var(--t4);
-  padding: 4px 0;
+  padding: 2px 0;
 }
 .cal-grid {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 1px;
 }
-/* Each week is one CSS grid — day cells + event bars share the same columns */
 .cal-week-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  column-gap: 3px;
+  column-gap: 1px;
   row-gap: 2px;
+  background: var(--b0);
+  border: 1px solid var(--b1);
+  border-radius: 4px;
+  overflow: hidden;
+  padding: 0 0 4px;
 }
 .cal-day-num-cell {
   grid-row: 1;
-  background: var(--s2);
-  border: 1px solid var(--b1);
-  border-radius: 4px 4px 0 0;
-  padding: 6px 8px 4px;
-  font-size: 11px;
+  background: var(--s1);
+  padding: 7px 9px 5px;
+  font-size: 12px;
   font-weight: 700;
   color: var(--t3);
   text-align: right;
+  border-bottom: 1px solid var(--b1);
 }
-.cal-day-num-cell.other-month { opacity: .25; }
+.cal-day-num-cell.other-month {
+  opacity: .3;
+  background: var(--bg);
+}
 .cal-day-num-cell.today {
   color: var(--amber);
-  border-color: var(--amber);
   background: var(--amber-bg);
+  border-bottom-color: var(--amber);
 }
+.cal-day-num-cell.weekend { background: var(--bg); }
 .cal-ev-bar {
   font-size: 9px;
   font-weight: 600;
@@ -1184,19 +1193,13 @@ body {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  height: 18px;
-  line-height: 18px;
+  height: 17px;
+  line-height: 17px;
   cursor: default;
-  opacity: .92;
-  transition: opacity .1s;
+  transition: filter .1s;
+  margin: 0 1px;
 }
-.cal-ev-bar:hover { opacity: 1; }
-.cal-week-spacer {
-  grid-column: 1 / 8;
-  height: 3px;
-  background: var(--b0);
-  border-radius: 0 0 4px 4px;
-}
+.cal-ev-bar:hover { filter: brightness(1.15); }
 .cal-no-google {
   text-align: center;
   padding: 32px 20px;
@@ -2423,6 +2426,20 @@ setInterval(() => { renderAct(); renderMetrics(); renderDate(); }, 60000);
    GOOGLE CALENDAR + TASKS
 ============================================================ */
 const G_CLIENT_ID = '1091846037259-g1elmfo52jjhi5ensj8u45j55951eoo2.apps.googleusercontent.com';
+
+const CAL_PALETTE = [
+  '#4285F4','#E53935','#43A047','#FB8C00','#8E24AA',
+  '#00ACC1','#D81B60','#F4511E','#039BE5','#6D4C41',
+  '#0097A7','#7CB342','#C0CA33','#FF7043','#5E35B1',
+];
+function calColor(ev) {
+  const c = ev._calColor;
+  if (c && c !== '#ffffff' && c !== '#000000' && c !== '#c0c0c0') return c;
+  const str = ev._calId || ev._calName || ev.summary || '';
+  let h = 0;
+  for (let i = 0; i < str.length; i++) h = str.charCodeAt(i) + ((h << 5) - h);
+  return CAL_PALETTE[Math.abs(h) % CAL_PALETTE.length];
+}
 const G_SCOPES    = 'https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/tasks';
 
 let gTokenClient = null;
@@ -2491,7 +2508,7 @@ async function loadCalendarEvents() {
   const cals = (calList.items || []).filter(c => c.selected !== false && c.accessRole !== 'none');
   const results = await Promise.all(cals.map(cal =>
     gFetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(cal.id)}/events?timeMin=${encodeURIComponent(now)}&timeMax=${encodeURIComponent(end)}&singleEvents=true&orderBy=startTime&maxResults=50`)
-      .then(d => (d.items || []).map(ev => ({ ...ev, _calColor: cal.backgroundColor || null, _calName: cal.summary || '' })))
+      .then(d => (d.items || []).map(ev => ({ ...ev, _calColor: cal.backgroundColor || null, _calName: cal.summary || '', _calId: cal.id || '' })))
       .catch(() => [])
   ));
   gCalEvents = results.flat().sort((a, b) => {
@@ -2574,7 +2591,8 @@ function renderGPanel(mode) {
   const calHTML = gCalEvents.length
     ? gCalEvents.map(ev => {
         const t = fmtEventTime(ev);
-        return `<div class="g-event ${t.today ? 'g-event-today' : ''}">
+        const c = calColor(ev);
+        return `<div class="g-event ${t.today ? 'g-event-today' : ''}" style="border-left:3px solid ${c};padding-left:9px">
           <div class="g-event-title">${esc(ev.summary || '(No title)')}</div>
           <div class="g-event-time">${t.label}${ev._calName ? ' · ' + esc(ev._calName) : ''}</div>
         </div>`;
@@ -2715,12 +2733,19 @@ function renderCalGrid() {
     weekDates.forEach((date, col) => {
       const isThisMonth = date.getMonth() === calMonth;
       const isToday     = date.toDateString() === today.toDateString();
-      html += `<div class="cal-day-num-cell${!isThisMonth ? ' other-month' : ''}${isToday ? ' today' : ''}" style="grid-column:${col+1};grid-row:1">${date.getDate()}</div>`;
+      const isWeekend   = date.getDay() === 0 || date.getDay() === 6;
+      const cls = [
+        'cal-day-num-cell',
+        !isThisMonth ? 'other-month' : '',
+        isToday      ? 'today'       : '',
+        isWeekend && isThisMonth && !isToday ? 'weekend' : '',
+      ].filter(Boolean).join(' ');
+      html += `<div class="${cls}" style="grid-column:${col+1};grid-row:1">${date.getDate()}</div>`;
     });
 
     // Event bars — rows 2+
     placed.forEach(({ ev, startCol, endCol, continuesLeft, continuesRight, lane }) => {
-      const color = ev._calColor || '#1B4FD8';
+      const color = calColor(ev);
       const rTL   = continuesLeft  ? '0' : '3px';
       const rTR   = continuesRight ? '0' : '3px';
       const rBR   = continuesRight ? '0' : '3px';
@@ -2734,8 +2759,6 @@ function renderCalGrid() {
       </div>`;
     });
 
-    // Bottom border strip
-    html += `<div class="cal-week-spacer"></div>`;
 
     const weekEl = document.createElement('div');
     weekEl.className = 'cal-week-grid';
