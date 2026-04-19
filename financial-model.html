@@ -912,6 +912,110 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
   .ff-val-lo, .ff-val-hi { display:none; }
 }
 
+/* ── IPAD (769px – 1100px) ───────────────────────────────── */
+@media (min-width:769px) and (max-width:1100px) {
+
+  /* Allow body to scroll like a document instead of locking viewport */
+  html, body { height:auto; overflow:auto; }
+
+  /* Model type bar — horizontal scroll, tighter tabs */
+  .model-bar { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .model-bar::-webkit-scrollbar { display:none; }
+  .mtab { padding:0 14px; font-size:9.5px; }
+
+  /* Topbar — compress, hide secondary info */
+  .topbar { height:auto; flex-wrap:wrap; padding:8px 12px; gap:6px; row-gap:6px; }
+  .top-sub { display:none; }
+  .back-btn { display:none; }
+  .top-sep { display:none; }
+  .topbar-actions { margin-left:auto; gap:6px; flex-wrap:wrap; }
+  .tbtn { padding:8px 11px; font-size:10.5px; }
+
+  /* Formula bar — show but compact */
+  .fbar { height:32px; }
+
+  /* Main layout — keep side-by-side but inner areas scroll */
+  .fm-body { height:calc(100vh - 130px); }
+  .grid-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+
+  /* Sheet tabs */
+  .sheet-tabs { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .sheet-tabs::-webkit-scrollbar { display:none; }
+  .stab { padding:9px 14px; font-size:10px; }
+
+  /* KPI strip */
+  .kpi-strip { overflow-x:auto; -webkit-overflow-scrolling:touch; flex-wrap:nowrap; }
+  .kpi-strip::-webkit-scrollbar { display:none; }
+
+  /* Side panels — slightly narrower */
+  .steps-panel.open { width:260px; }
+  .guide-panel.open { width:260px; }
+  .qa-panel.open    { width:300px; }
+  .gloss-panel.open { width:300px; }
+
+  /* Tools menu — anchor to bottom on narrow iPad portrait */
+  .tools-menu { width:240px; }
+  .tools-item { padding:10px 12px; font-size:11.5px; }
+  .tools-menu-tab { font-size:9px; padding:9px 4px; }
+
+  /* Modals — near-full screen, slight padding */
+  .xdrill-modal,
+  .behav-modal,
+  .dt-modal { padding-top:20px; }
+  .xdrill-box  { max-height:88vh; }
+  .behav-box,
+  .dt-box      { max-height:88vh; }
+
+  /* Drill grids — single column on iPad portrait */
+  .int-stmt-grid   { grid-template-columns:1fr; }
+  .plbo-layout     { grid-template-columns:1fr; }
+  .ma-layout       { grid-template-columns:1fr; }
+
+  /* Drill body text */
+  .behav-q-text { font-size:14px; }
+  .xdrill-body  { padding:14px 16px; }
+
+  /* Table cells — slightly larger for touch */
+  .lbl-td { font-size:11px; }
+  .val-td  { font-size:11px; }
+  .col-hdr-row th { font-size:10px; }
+
+  /* Scenario buttons */
+  .scen-btn { height:32px; padding:0 12px; }
+}
+
+/* ── TOUCH DEVICE IMPROVEMENTS (all sizes) ───────────────── */
+@media (pointer:coarse) {
+  /* Bigger tap targets */
+  .tbtn          { min-height:40px; padding:8px 12px; }
+  .tools-item    { min-height:40px; padding:10px 12px; }
+  .mtab          { min-height:40px; }
+  .stab          { min-height:38px; padding:9px 14px; }
+  .scen-btn      { min-height:36px; }
+  .modal-close   { width:36px; height:36px; font-size:16px; }
+  .xdrill-check,
+  .xdrill-hint-btn { min-width:36px; min-height:36px; }
+  .behav-nav-arrow { min-height:40px; padding:10px 18px; }
+  .dt-action-btn { padding:7px 12px; min-height:34px; }
+
+  /* Smooth momentum scrolling on all scrollable areas */
+  .grid-wrap, .sheet-tabs, .model-bar, .kpi-strip,
+  .xdrill-body, .behav-body, .dt-body,
+  .pulse-body, .mock-body, .acct-body,
+  .steps-scroll, .qa-scroll, .gloss-scroll, .guide-scroll {
+    -webkit-overflow-scrolling:touch;
+  }
+
+  /* Remove hover effects that don't make sense on touch */
+  .tbtn:hover            { color:var(--t2); border-color:var(--b1); }
+  .tools-item:hover      { background:none; color:var(--t2); }
+  .tools-item:active     { background:var(--s2); color:var(--t1); }
+  .tools-menu-tab:hover  { color:var(--t3); }
+  .tools-menu-tab:active { color:var(--t2); }
+  .mtab:hover            { color:var(--t3); }
+  .mtab:active           { color:var(--t2); }
+}
+
 /* ── M&A DEAL PROCESS ────────────────────────────────────── */
 .map-modal { display:none; position:fixed; inset:0; z-index:400; background:rgba(0,0,0,.6); align-items:flex-start; justify-content:center; padding:28px 16px; overflow-y:auto; }
 .map-modal.open { display:flex; }
@@ -1065,6 +1169,12 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
   .xdrill-modal { padding-top:0; align-items:flex-end; }
   .xdrill-box { border-radius:12px 12px 0 0; max-height:92vh; width:100%; }
   .int-stmt-grid { grid-template-columns:1fr; }
+}
+@media (max-width:768px) {
+  .behav-modal { padding-top:0; align-items:flex-end; }
+  .behav-box { border-radius:12px 12px 0 0; max-height:92vh; width:100%; }
+  .dt-modal { padding-top:0; align-items:flex-end; }
+  .dt-box { border-radius:12px 12px 0 0; max-height:92vh; width:100%; border-left:none; border-right:none; border-bottom:none; }
 }
 /* ── DEAL TRACKER ─────────────────────────────────────── */
 .dt-modal { display:none; position:fixed; inset:0; z-index:400; background:rgba(0,0,0,.55); align-items:flex-start; justify-content:center; padding-top:30px; }
