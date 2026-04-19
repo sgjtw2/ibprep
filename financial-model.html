@@ -1054,6 +1054,55 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
   .xdrill-box { border-radius:12px 12px 0 0; max-height:92vh; width:100%; }
   .int-stmt-grid { grid-template-columns:1fr; }
 }
+/* ── DEAL TRACKER ─────────────────────────────────────── */
+.dt-modal { display:none; position:fixed; inset:0; z-index:400; background:rgba(0,0,0,.55); align-items:flex-start; justify-content:center; padding-top:30px; }
+.dt-modal.open { display:flex; }
+.dt-box { background:var(--bg); border:1px solid var(--b1); border-radius:8px; width:min(860px,97vw); max-height:92vh; display:flex; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,.4); }
+.dt-body { flex:1; overflow-y:auto; padding:16px 20px; }
+.dt-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; padding:60px 20px; color:var(--t3); text-align:center; }
+.dt-empty-icon { font-size:32px; opacity:.4; }
+.dt-empty-title { font-family:'Syne',sans-serif; font-weight:800; font-size:13px; color:var(--t2); }
+.dt-empty-sub { font-size:10px; max-width:280px; line-height:1.6; }
+.dt-grid { display:flex; flex-direction:column; gap:10px; }
+.dt-card { background:var(--s1); border:1px solid var(--b1); border-radius:7px; padding:14px 16px; }
+.dt-card-top { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:8px; }
+.dt-deal-name { font-family:'Syne',sans-serif; font-weight:800; font-size:13px; color:var(--t1); }
+.dt-deal-arrow { color:var(--blue); margin:0 6px; }
+.dt-card-badges { display:flex; gap:6px; flex-wrap:wrap; margin-top:4px; }
+.dt-badge { font-size:8px; font-family:'Syne',sans-serif; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:2px 7px; border-radius:3px; }
+.dt-badge.type-ma { background:rgba(27,79,216,.1); color:var(--blue); border:1px solid var(--bbrd); }
+.dt-badge.type-lbo { background:rgba(217,119,6,.1); color:#D97706; border:1px solid rgba(217,119,6,.3); }
+.dt-badge.type-ipo { background:rgba(22,163,74,.1); color:var(--green); border:1px solid rgba(22,163,74,.3); }
+.dt-badge.type-other { background:var(--s2); color:var(--t3); border:1px solid var(--b1); }
+.dt-badge.size { background:var(--s2); color:var(--t2); border:1px solid var(--b1); }
+.dt-card-actions { display:flex; gap:6px; flex-shrink:0; }
+.dt-action-btn { padding:4px 10px; border-radius:3px; border:1px solid var(--b1); background:none; font-family:'Syne',sans-serif; font-weight:700; font-size:8px; letter-spacing:.06em; text-transform:uppercase; color:var(--t3); cursor:pointer; transition:all .12s; }
+.dt-action-btn:hover { border-color:var(--b2); color:var(--t2); }
+.dt-action-btn.delete:hover { border-color:var(--red); color:var(--red); }
+.dt-section { margin-bottom:6px; }
+.dt-section-lbl { font-size:8px; font-family:'Syne',sans-serif; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--t3); margin-bottom:3px; }
+.dt-section-txt { font-size:10.5px; color:var(--t2); line-height:1.6; }
+.dt-section-txt.highlight { color:var(--t1); font-style:italic; }
+.dt-form { display:flex; flex-direction:column; gap:14px; }
+.dt-field { display:flex; flex-direction:column; gap:5px; }
+.dt-field-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.dt-label { font-size:9px; font-family:'Syne',sans-serif; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:var(--t3); }
+.dt-input, .dt-select { background:var(--s1); border:1px solid var(--b1); border-radius:4px; padding:8px 10px; color:var(--t1); font-family:'JetBrains Mono',monospace; font-size:11px; outline:none; transition:border-color .12s; width:100%; }
+.dt-input:focus, .dt-select:focus { border-color:var(--blue); }
+.dt-textarea { background:var(--s1); border:1px solid var(--b1); border-radius:4px; padding:8px 10px; color:var(--t1); font-family:'JetBrains Mono',monospace; font-size:11px; outline:none; transition:border-color .12s; width:100%; resize:vertical; min-height:72px; line-height:1.5; }
+.dt-textarea:focus { border-color:var(--blue); }
+.dt-form-actions { display:flex; gap:8px; justify-content:flex-end; padding-top:4px; }
+.dt-save-btn { padding:9px 20px; background:var(--blue); border:none; border-radius:4px; font-family:'Syne',sans-serif; font-weight:800; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:#fff; cursor:pointer; transition:opacity .12s; }
+.dt-save-btn:hover { opacity:.88; }
+.dt-cancel-btn { padding:9px 16px; background:none; border:1px solid var(--b1); border-radius:4px; font-family:'Syne',sans-serif; font-weight:700; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--t3); cursor:pointer; transition:all .12s; }
+.dt-cancel-btn:hover { border-color:var(--b2); color:var(--t2); }
+.dt-add-btn { padding:7px 14px; background:var(--blue); border:none; border-radius:4px; font-family:'Syne',sans-serif; font-weight:800; font-size:9px; letter-spacing:.1em; text-transform:uppercase; color:#fff; cursor:pointer; transition:opacity .12s; }
+.dt-add-btn:hover { opacity:.88; }
+@media (max-width:768px) {
+  .dt-modal { padding-top:0; align-items:flex-end; }
+  .dt-box { border-radius:12px 12px 0 0; max-height:92vh; width:100%; }
+  .dt-field-row { grid-template-columns:1fr; }
+}
 /* ── M&A ACCRETION/DILUTION ───────────────────────────── */
 .ma-scenario-tabs { display:flex; border-bottom:1px solid var(--b1); flex-shrink:0; overflow-x:auto; }
 .ma-stab { padding:8px 16px; font-family:'Syne',sans-serif; font-weight:700; font-size:9px; letter-spacing:.06em; text-transform:uppercase; color:var(--t3); cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; }
@@ -1427,6 +1476,12 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
         </button>
         <button class="tools-item" id="behavBtn" onclick="toggleBehav();closeToolsMenu()">
           <span class="tools-item-icon">🗣️</span>Fit Questions<span class="tools-item-badge"></span>
+        </button>
+        <button class="tools-item" id="maQABtn" onclick="toggleMaQA();closeToolsMenu()">
+          <span class="tools-item-icon">🏦</span>M&amp;A Technicals<span class="tools-item-badge"></span>
+        </button>
+        <button class="tools-item" id="dealTrackerBtn" onclick="toggleDealTracker();closeToolsMenu()">
+          <span class="tools-item-icon">📋</span>Deal Tracker<span class="tools-item-badge"></span>
         </button>
         <button class="tools-item" id="mockBtn" onclick="toggleMock();closeToolsMenu()">
           <span class="tools-item-icon">🎙️</span>Mock Interview<span class="tools-item-badge"></span>
@@ -2934,6 +2989,10 @@ let showMaDrill   = false, maDrillIdx = 0, maDrillState = {};
 let showPaperLBO  = false, paperLBOIdx = 0, paperLBOState = {};
 let showBehav     = false, behavCatIdx = 0, behavQIdx = 0, behavPhase = 'question', behavTimer = null, behavElapsed = 0;
 let behavScores   = JSON.parse(localStorage.getItem('fm-behav-scores') || '{}');
+let showMaQA      = false, maQACatIdx = 0, maQAQIdx = 0, maQAPhase = 'question', maQATimer = null, maQAElapsed = 0;
+let maQAScores    = JSON.parse(localStorage.getItem('fm-maqa-scores') || '{}');
+let showDealTracker = false, dtView = 'list', dtEditId = null;
+let dealTracker   = JSON.parse(localStorage.getItem('fm-deal-tracker') || '[]');
 let acctCatIdx  = 0;
 let acctPracticed = JSON.parse(localStorage.getItem('fm-acct-practiced') || '{}');
 let mockMode = 'all', mockTimerLimit = 45, mockScreen = 'setup';
@@ -6814,6 +6873,442 @@ function clearBehavTimer() {
 }
 
 /* ============================================================
+   M&A TECHNICAL Q&A
+============================================================ */
+const MAQA_CATS = [
+  {
+    id:'valuation', label:'Valuation',
+    qs: [
+      {
+        q: 'Walk me through the three main valuation methodologies.',
+        guidance: `<strong>Three methodologies:</strong><br><br>
+<strong>1. DCF (Discounted Cash Flow)</strong> — intrinsic value based on the company's own projected free cash flows, discounted at WACC. Most theoretically rigorous but heavily assumption-driven. Best when cash flows are predictable and stable.<br><br>
+<strong>2. Comparable Companies (Trading Comps)</strong> — relative value based on how similar public companies trade on key multiples: EV/EBITDA, P/E, EV/Revenue. Market-based and current. Limitation: reflects sector-wide mispricing, no control premium.<br><br>
+<strong>3. Precedent Transactions</strong> — multiples paid in similar past M&A deals. Includes control premium (typically 20–40%). Most relevant for deal pricing. Limitation: reflects a specific market environment at deal date.<br><br>
+<strong>Synthesise all three</strong> into a football field valuation range. DCF gives widest range; precedents set the ceiling.`
+      },
+      {
+        q: 'When would you use a DCF vs. trading comps vs. precedent transactions?',
+        guidance: `<strong>DCF:</strong> Use when cash flows are long-dated and predictable (infrastructure, utilities); when the company has unique characteristics with few good comparables; when you want to explicitly model synergies or different operating scenarios. Weakness: garbage in, garbage out — highly sensitive to WACC and terminal growth rate.<br><br>
+<strong>Trading Comps:</strong> Fast market-based sanity check; best when a liquid, active peer group exists; reflects real-time investor sentiment. Weakness: may embed sector mispricing; no control premium.<br><br>
+<strong>Precedent Transactions:</strong> Best for setting offer price in an M&A context — reflects what acquirers actually paid. Use when there are enough comparable deals in the past 3–5 years.<br><br>
+<strong>In practice:</strong> Run all three and triangulate. The spread between them tells a story — explain any outliers.`
+      },
+      {
+        q: 'Why do precedent transactions typically trade at a premium to trading comps?',
+        guidance: `<strong>Three reasons:</strong><br><br>
+<strong>1. Control premium:</strong> The acquirer pays extra for the right to control the company — its strategy, cash flows, and decisions. Typically 20–40% over the unaffected share price.<br><br>
+<strong>2. Synergy value:</strong> Acquirer prices in expected cost and revenue synergies — not available to a passive market investor.<br><br>
+<strong>3. Auction dynamics:</strong> Competitive bidding in a sell-side process pushes prices above what a single buyer might pay.<br><br>
+<strong>Caveat:</strong> Precedents reflect a specific point in time's market conditions — adjust for deal cycle (low-rate 2021 vs. higher-rate 2023 deals priced very differently).`
+      },
+      {
+        q: 'Walk me through how you calculate WACC.',
+        guidance: `<strong>WACC = (E/V × Ke) + (D/V × Kd × (1 − T))</strong><br><br>
+<strong>Cost of Equity (Ke) via CAPM:</strong> Ke = Rf + β × ERP<br>
+• Rf = risk-free rate (10-year Treasury yield)<br>
+• β = levered beta (unlever peer betas, re-lever at target capital structure)<br>
+• ERP = equity risk premium (~5–6% historically)<br><br>
+<strong>Cost of Debt (Kd):</strong> Pre-tax yield on company's debt (current market yield, not coupon rate). Tax-shield: multiply by (1 − Tax Rate).<br><br>
+<strong>Capital structure weights (E/V, D/V):</strong> Use market values, NOT book values. E = market cap, D = market value of debt.<br><br>
+<strong>Common interview trap:</strong> Use target capital structure (where the company is heading), not current — especially in LBOs where leverage changes dramatically.`
+      },
+      {
+        q: 'What is terminal value and how do you calculate it? What % of DCF value does it typically represent?',
+        guidance: `<strong>Terminal value</strong> captures all cash flows beyond the explicit forecast period (typically 5–10 years).<br><br>
+<strong>Two methods:</strong><br>
+• <em>Gordon Growth (Perpetuity Growth):</em> TV = FCF<sub>n+1</sub> / (WACC − g). g = long-term growth rate, typically GDP growth rate (2–3%). Sensitive to g — stress-test it.<br>
+• <em>Exit Multiple:</em> TV = EBITDA<sub>n</sub> × Exit EV/EBITDA multiple. More market-anchored. Circular if you derive the multiple from trading comps you already used.<br><br>
+<strong>Typical weight:</strong> Terminal value represents 60–80% of total DCF enterprise value. This is why terminal assumptions matter so much — small changes in WACC or g have outsized impact.<br><br>
+<strong>Sanity check:</strong> Cross-check both methods — if they diverge significantly, investigate why.`
+      }
+    ]
+  },
+  {
+    id:'deal_mech', label:'Deal Mechanics',
+    qs: [
+      {
+        q: 'Walk me through the key steps in a sell-side M&A process.',
+        guidance: `<strong>Phase 1 — Preparation (4–6 weeks):</strong> Engage advisors, sign engagement letter. Prepare CIM (Confidential Information Memorandum), management presentation, data room. Identify universe of potential buyers (strategic + financial).<br><br>
+<strong>Phase 2 — First Round (3–4 weeks):</strong> Send teasers, execute NDAs with interested parties, distribute CIM. Management presentations (sometimes). Receive indicative (non-binding) bids.<br><br>
+<strong>Phase 3 — Second Round / Due Diligence (4–8 weeks):</strong> Shortlist 2–4 serious bidders. Full data room access, management Q&A, site visits. Receive final bids with markup of purchase agreement.<br><br>
+<strong>Phase 4 — Negotiation & Signing (2–4 weeks):</strong> Select winning bidder. Negotiate and execute definitive agreement (merger agreement or SPA). Announce publicly.<br><br>
+<strong>Phase 5 — Closing (1–6 months):</strong> Regulatory approvals (HSR filing, CFIUS if applicable), shareholder vote if required, satisfy closing conditions. Close and fund.`
+      },
+      {
+        q: 'What is the difference between a stock deal and an asset deal? What are the tax implications?',
+        guidance: `<strong>Stock Deal:</strong> Buyer acquires the target entity — all assets AND all liabilities (disclosed and undisclosed). Simpler for large transactions, no need for third-party consents on contracts. Seller receives capital gains treatment (lower rate).<br><br>
+<strong>Asset Deal:</strong> Buyer selects specific assets and explicitly assumed liabilities. Buyer gets step-up in tax basis (can depreciate/amortise assets at fair market value — significant tax benefit). Seller faces potentially higher ordinary income tax on certain asset classes (inventory, accounts receivable). Requires individual asset transfers and consents.<br><br>
+<strong>Who prefers what:</strong><br>
+• Buyer generally prefers asset deals: liability protection, tax step-up<br>
+• Seller generally prefers stock deals: capital gains rate, clean exit<br><br>
+<strong>In practice:</strong> Most large public company M&A is structured as stock/merger. Asset deals common for distressed situations, carve-outs, and smaller transactions.`
+      },
+      {
+        q: 'Why might a strategic buyer pay more than a financial buyer (PE)?',
+        guidance: `<strong>Strategic buyer advantages:</strong><br><br>
+<strong>1. Synergies:</strong> Strategic can realise cost and revenue synergies — overhead elimination, cross-selling, pricing power, technology integration. A PE fund captures no synergies from combining with existing portfolio companies (unless bolt-on).<br><br>
+<strong>2. Lower cost of capital:</strong> A large public strategic may have a lower equity cost of capital than a PE fund requiring 20%+ IRR.<br><br>
+<strong>3. "Must-have" strategic logic:</strong> Target may block a competitor, provide market access, or contain critical IP — strategic value beyond financial returns.<br><br>
+<strong>4. No exit premium:</strong> Strategic holds indefinitely and doesn't need to price in an exit. PE must exit in 3–7 years, limiting how much they can pay if exit multiples are uncertain.<br><br>
+<strong>Caveat:</strong> In low-rate environments with cheap debt, highly leveraged PE deals can sometimes outbid strategics — leverage magnifies returns even at high entry prices.`
+      },
+      {
+        q: 'What is a fairness opinion and when is it required?',
+        guidance: `<strong>A fairness opinion</strong> is a written opinion from an investment bank (or independent financial advisor) stating that the financial terms of a transaction are fair, from a financial point of view, to the company's shareholders.<br><br>
+<strong>When required:</strong><br>
+• Boards of public companies — to protect against breach-of-fiduciary-duty claims under Delaware law<br>
+• Any transaction with a conflict of interest: management buyouts, going-private transactions, related-party deals<br>
+• Often required by the board's lawyers as a matter of process risk management<br><br>
+<strong>What it is NOT:</strong> Not a valuation; the bank isn't saying the price is optimal or the highest possible — just that it falls within a reasonable range.<br><br>
+<strong>Conflict of interest:</strong> The issuing bank typically earns a contingency fee (larger if deal closes). Disclose this in the opinion. Critics argue this creates bias toward approving deals.`
+      },
+      {
+        q: 'What is a Material Adverse Change (MAC) clause?',
+        guidance: `<strong>MAC/MAE clause</strong> allows a buyer to walk away from a signed deal — without paying the break fee — if a material adverse change occurs at the target between signing and closing.<br><br>
+<strong>Standard exclusions</strong> (events that don't trigger MAC): general economic/market conditions, industry-wide events, changes in law or GAAP, acts of war, and — post-COVID — many agreements explicitly exclude pandemic effects.<br><br>
+<strong>Rarely successfully invoked:</strong> Delaware courts set a high bar — the adverse change must be "durationally significant" (not short-term). Landmark case: <em>Akorn v. Fresenius</em> (2018) — one of the few times a MAC was successfully invoked.<br><br>
+<strong>Negotiating tensions:</strong> Buyer wants tight MAC definition (easy to trigger). Seller wants broad exclusions (hard to trigger). The MAC clause is one of the most heavily negotiated provisions in any merger agreement.`
+      },
+      {
+        q: 'What is a go-shop provision? When does it appear and why?',
+        guidance: `<strong>A go-shop provision</strong> allows the target company to actively solicit competing bids for a specified period (typically 30–50 days) after signing a definitive agreement with an initial buyer.<br><br>
+<strong>When it appears:</strong> Usually in private equity-led buyouts or negotiated (non-auction) deals where the board didn't run a full competitive process before signing. It's a mechanism to demonstrate fiduciary compliance post-signing.<br><br>
+<strong>Why it matters:</strong><br>
+• Protects the board against claims it didn't maximise shareholder value<br>
+• May result in a topping bid — good for shareholders<br>
+• Initial bidder typically gets a lower break-up fee during the go-shop window (e.g., 1% vs. 3% after)<br><br>
+<strong>In practice:</strong> Go-shops rarely produce topping bids, but they do provide legal protection for the board and reduce the initial buyer's termination fee during the window.`
+      }
+    ]
+  },
+  {
+    id:'ma_model', label:'A/D & Synergies',
+    qs: [
+      {
+        q: 'Walk me through an accretion/dilution analysis.',
+        guidance: `<strong>9-step process:</strong><br><br>
+1. Calculate acquirer standalone EPS (NI ÷ shares)<br>
+2. Determine deal consideration: % cash vs. % stock<br>
+3. If cash: calculate annual interest expense (debt × rate) → after-tax financing cost (× (1 − tax rate))<br>
+4. If stock: calculate new shares issued (stock consideration ÷ acquirer share price)<br>
+5. Add after-tax synergies if applicable (synergies × (1 − tax rate))<br>
+6. Pro forma NI = Acquirer NI + Target NI − After-tax financing cost + After-tax synergies<br>
+7. Pro forma shares = Acquirer shares + New shares issued<br>
+8. Pro forma EPS = Pro forma NI ÷ Pro forma shares<br>
+9. Accretion/(Dilution) = Pro forma EPS − Standalone EPS (report as $ and %)<br><br>
+<strong>Key conclusion:</strong> Is the deal accretive or dilutive? And what level of synergies are needed to make it neutral (breakeven synergies)?`
+      },
+      {
+        q: 'When is an all-stock deal accretive vs. dilutive? Explain the P/E rule.',
+        guidance: `<strong>The P/E rule:</strong><br><br>
+• <strong>Accretive</strong> when Acquirer P/E > Target P/E (acquirer's stock is "more expensive" — you're issuing high-P/E stock to buy low-P/E earnings)<br>
+• <strong>Dilutive</strong> when Acquirer P/E < Target P/E (you're paying a higher earnings multiple than your own — more expensive target earnings dilute your EPS)<br><br>
+<strong>Intuition:</strong> If your stock trades at 20× earnings and you pay 25× for the target, you're issuing $20 of earnings value to acquire $16 of earnings value — dilutive.<br><br>
+<strong>Reverse:</strong> If you trade at 25× and pay 20×, you're issuing $25 of value to buy $20 — accretive (you're using a premium currency).<br><br>
+<strong>Important:</strong> Purchase price P/E (not standalone) is what matters — the premium you pay determines the target's effective P/E in the deal.`
+      },
+      {
+        q: 'What are cost synergies vs. revenue synergies? Which are more credible and why?',
+        guidance: `<strong>Cost synergies</strong> — reductions in combined cost base:<br>
+• Headcount: eliminate overlapping functions (HR, finance, IT, legal)<br>
+• Facilities: close redundant offices, warehouses, plants<br>
+• Procurement: combined purchasing power lowers input costs<br>
+• IT systems: consolidate platforms<br><br>
+<strong>Revenue synergies</strong> — increases in combined revenue:<br>
+• Cross-sell each company's products to the other's customer base<br>
+• Bundle products/services, raise pricing power<br>
+• Enter new markets via the other's distribution<br><br>
+<strong>Cost synergies are more credible because:</strong><br>
+• Easier to identify, quantify, and execute<br>
+• Typically realised within 12–24 months<br>
+• Less dependent on customer/market behaviour<br><br>
+Revenue synergies are speculative — customers don't have to buy what you bundle, and execution risk is high. Markets discount revenue synergies heavily (or ignore them entirely) in deal modelling.`
+      },
+      {
+        q: 'What are breakeven synergies? How do you calculate them?',
+        guidance: `<strong>Breakeven synergies</strong> = the level of after-tax synergies required to make a deal exactly EPS-neutral (neither accretive nor dilutive).<br><br>
+<strong>Calculation:</strong><br>
+1. Run the A/D model without synergies → get the dilution (e.g., −$0.12)<br>
+2. Breakeven after-tax synergies = dilution × pro forma shares outstanding<br>
+3. Breakeven pre-tax synergies = after-tax ÷ (1 − tax rate)<br><br>
+<strong>Why it matters:</strong> Tells you how much value the deal needs to create just to not harm existing shareholders. If breakeven synergies are very high relative to the cost base of the target, the deal relies heavily on speculative synergy delivery — risky.<br><br>
+<strong>In interviews:</strong> After calculating dilution, always offer: "To break even on EPS, the deal would require approximately $Xm of pre-tax synergies, which represents Y% of the target's cost base — [feasible/aggressive]."
+`
+      }
+    ]
+  },
+  {
+    id:'lbo_tech', label:'LBO Technicals',
+    qs: [
+      {
+        q: 'What makes a good LBO candidate?',
+        guidance: `<strong>The ideal LBO candidate has:</strong><br><br>
+<strong>Cash flow profile:</strong> Stable, predictable, high FCF (can service debt). Low working capital intensity. Recurring revenue or contracted cash flows preferred.<br><br>
+<strong>Business characteristics:</strong> Strong market position or defensible moat. Low capex requirements (maximises FCF for debt repayment). Asset-light or hard assets that support secured debt. Non-cyclical (reduces covenant breach risk in downturns).<br><br>
+<strong>Operational levers:</strong> Management inefficiencies or margin improvement opportunity. Underperforming vs. peers (buy cheap, improve, sell higher). Platform for bolt-on acquisitions.<br><br>
+<strong>Exit path:</strong> Clear exit options in 3–7 years: strategic acquirer, IPO, or secondary buyout. Fragmented industry with multiple PE buyers.<br><br>
+<strong>Typical examples:</strong> Software (recurring SaaS revenue), food & beverage brands, healthcare services, industrials with stable demand.`
+      },
+      {
+        q: 'What are the three main LBO value creation drivers?',
+        guidance: `<strong>1. EBITDA Growth</strong> — expanding the earnings base:<br>
+• Revenue growth (organic or acquisitions)<br>
+• Margin improvement (cost cutting, pricing, operational efficiency)<br>
+• Management incentivisation (equity rollovers align management)<br><br>
+<strong>2. Multiple Expansion</strong> — buying at one multiple, exiting at a higher one:<br>
+• Re-rating as business improves quality of earnings<br>
+• Better market conditions at exit<br>
+• Less reliable — PE firms shouldn't underwrite it, but it's a real return driver when it happens<br><br>
+<strong>3. Debt Paydown (Leverage Effect)</strong> — FCF reduces debt, increasing equity value:<br>
+• Same enterprise value → lower debt → higher equity<br>
+• Most mechanically reliable driver — every dollar of FCF directly accretes to equity<br><br>
+<strong>Rough historical split:</strong> In strong vintages, EBITDA growth and multiple expansion each contribute ~40%, leverage effect ~20%. In weaker markets, leverage effect dominates.`
+      },
+      {
+        q: 'What is the difference between IRR and MoM? What are the limitations of each?',
+        guidance: `<strong>MoM (Money-on-Money Multiple):</strong> Exit equity ÷ Entry equity. Shows total magnitude of value created. Does NOT account for time.<br><br>
+<strong>IRR (Internal Rate of Return):</strong> Annualised, time-weighted return. A 3.0× MoM in 3 years is a much higher IRR than 3.0× in 7 years.<br><br>
+<strong>Use both together:</strong><br>
+• MoM shows "how much" — 2.5× MoM means you returned 2.5× your invested equity<br>
+• IRR shows "how fast" — accounts for timing, the cost of capital<br>
+• PE firms typically target 20%+ IRR and 2–3× MoM<br><br>
+<strong>Limitation of IRR:</strong> Can be gamed by early distributions (dividend recaps inflate IRR without proportional value creation). Favours short hold periods — a quick 1.5× can have higher IRR than a slower 3.0×.<br><br>
+<strong>Limitation of MoM:</strong> Ignores time — a 2.0× over 10 years is far less impressive than 2.0× over 3 years, but MoM treats them identically.`
+      }
+    ]
+  },
+  {
+    id:'defense', label:'Defensive Tactics',
+    qs: [
+      {
+        q: 'What is a shareholder rights plan (poison pill) and how does it work?',
+        guidance: `<strong>A poison pill</strong> (formally: Rights Plan) is an anti-takeover defence that makes hostile acquisition prohibitively expensive.<br><br>
+<strong>Mechanics:</strong> If a hostile acquirer accumulates more than a threshold stake (typically 15–20%), existing shareholders (excluding the acquirer) get the right to buy new shares at a large discount (typically 50%). This massively dilutes the hostile bidder's stake and economic interest.<br><br>
+<strong>Effect:</strong> The acquirer's stake gets diluted from, say, 20% to potentially 10% or less — making the takeover too expensive to proceed on the original terms.<br><br>
+<strong>Not permanent:</strong> The board can redeem the pill. Used to buy time — to negotiate better terms, find a white knight, or execute a defensive restructuring.<br><br>
+<strong>Governance view:</strong> Institutional investors and proxy advisors (ISS, Glass Lewis) generally oppose pills as shareholder-unfriendly. Companies increasingly adopt "short-duration" pills (expire in 1 year) to reduce governance criticism.`
+      },
+      {
+        q: 'What is a staggered (classified) board and why is it an effective takeover defence?',
+        guidance: `<strong>A staggered board</strong> divides directors into classes (typically 3), with only one class up for election each year.<br><br>
+<strong>Why it's effective:</strong> A hostile acquirer must win two consecutive annual shareholder votes to gain board majority — taking a minimum of 2 years. This window allows management to mount a defence, find alternatives, or simply outlast the acquirer.<br><br>
+<strong>Combination defence:</strong> Paired with a poison pill, a staggered board means the acquirer can't redeem the pill (needs board control) for at least 2 years — a very strong combination defence.<br><br>
+<strong>Governance trend:</strong> ISS and Glass Lewis now recommend against staggered boards as bad governance — concentrates power, reduces board accountability. Many companies have declassified in response to shareholder pressure. S&P 500 companies with staggered boards has declined significantly over the past 20 years.<br><br>
+<strong>Delaware law:</strong> A staggered board enshrined in a company's certificate of incorporation is extremely difficult to remove — requires a shareholder vote with supermajority in some cases.`
+      },
+      {
+        q: 'What is a white knight? What is a white squire?',
+        guidance: `<strong>White Knight:</strong> A friendly acquirer brought in by target management to outbid a hostile acquirer. Target prefers the white knight (better price, culture fit, fewer job cuts, continued management role).<br><br>
+<strong>White Squire:</strong> A friendly investor that acquires a significant — but not controlling — stake in the target to block the hostile acquirer without a full acquisition. Often a friendly PE firm, family office, or strategic partner.<br><br>
+<strong>Other defensive terminology to know:</strong><br>
+• <em>Pac-Man defence:</em> Target turns around and tries to acquire the hostile bidder<br>
+• <em>Crown jewel defence:</em> Target sells or spin-offs its most valuable asset to make itself less attractive<br>
+• <em>Leveraged recap:</em> Target borrows heavily to pay a special dividend, saddling itself with debt and making a buyout much harder to finance<br>
+• <em>Scorched earth:</em> Extreme measures to make the target unattractive — may destroy shareholder value<br><br>
+<strong>Fiduciary note:</strong> Boards must balance defending against a hostile bid vs. their duty to maximise shareholder value. Courts scrutinise defensive actions carefully.`
+      }
+    ]
+  }
+];
+
+function toggleMaQA() {
+  showMaQA = !showMaQA;
+  document.getElementById('maQAModal').classList.toggle('open', showMaQA);
+  updateToolsItemState('maQABtn', showMaQA);
+  if (showMaQA) renderMaQA();
+}
+
+function renderMaQA() {
+  const cats = document.getElementById('maQACats');
+  cats.innerHTML = MAQA_CATS.map((c,i) => {
+    const scores = c.qs.map((q,qi) => maQAScores[`${c.id}_${qi}`]).filter(Boolean);
+    const done = scores.length === c.qs.length;
+    return `<div class="behav-cat${i===maQACatIdx?' on':''}" onclick="maQACatIdx=${i};maQAQIdx=0;maQAPhase='question';clearMaQATimer();renderMaQA()">${c.label}${done?' ✓':''}</div>`;
+  }).join('');
+
+  const totalStrong = Object.values(maQAScores).filter(v=>v==='strong').length;
+  const totalOk = Object.values(maQAScores).filter(v=>v==='ok').length;
+  const totalWeak = Object.values(maQAScores).filter(v=>v==='weak').length;
+  document.getElementById('maQAStatsStrong').textContent = totalStrong;
+  document.getElementById('maQAStatsOk').textContent = totalOk;
+  document.getElementById('maQAStatsWeak').textContent = totalWeak;
+
+  const cat = MAQA_CATS[maQACatIdx];
+  const q = cat.qs[maQAQIdx];
+  const scoreKey = `${cat.id}_${maQAQIdx}`;
+  const savedScore = maQAScores[scoreKey];
+  const guidance = maQAPhase === 'guidance' || savedScore;
+  const timerDisplay = maQAPhase === 'timing' ? `<span class="behav-timer-display" id="maQATimerDisplay">0:00</span>` : '';
+
+  document.getElementById('maQABody').innerHTML = `
+    <div class="behav-q-card">
+      <div class="behav-q-num">${cat.label} · Question ${maQAQIdx+1} of ${cat.qs.length}</div>
+      <div class="behav-q-text">${q.q}</div>
+      <div class="behav-timer-row">
+        <button class="behav-timer-btn${maQAPhase==='timing'?' running':''}" onclick="toggleMaQATimer()">${maQAPhase==='timing'?'Stop Timer':'Start Think Timer'}</button>
+        ${timerDisplay}
+      </div>
+      ${!guidance ? `<button class="behav-reveal-btn" onclick="maQAPhase='guidance';clearMaQATimer();renderMaQA()">Reveal Answer →</button>` : ''}
+      <div class="behav-guidance${guidance?' show':''}">
+        <div class="behav-guidance-title">Model Answer</div>
+        <div class="behav-guidance-body">${q.guidance}</div>
+        <div class="behav-score-row">
+          <button class="behav-score-btn strong${savedScore==='strong'?' selected':''}" onclick="scoreMaQA('${scoreKey}','strong')">Nailed it ✓</button>
+          <button class="behav-score-btn ok${savedScore==='ok'?' selected':''}" onclick="scoreMaQA('${scoreKey}','ok')">Mostly ~</button>
+          <button class="behav-score-btn weak${savedScore==='weak'?' selected':''}" onclick="scoreMaQA('${scoreKey}','weak')">Missed it ✗</button>
+        </div>
+      </div>
+    </div>`;
+
+  const allQs = MAQA_CATS.flatMap(c => c.qs);
+  const globalIdx = MAQA_CATS.slice(0,maQACatIdx).reduce((a,c)=>a+c.qs.length,0) + maQAQIdx;
+  document.getElementById('maQAPrev').disabled = globalIdx === 0;
+  document.getElementById('maQANext').disabled = globalIdx === allQs.length - 1;
+  document.getElementById('maQANavPos').textContent = `${globalIdx+1} / ${allQs.length}`;
+}
+
+function scoreMaQA(key, score) {
+  maQAScores[key] = score;
+  localStorage.setItem('fm-maqa-scores', JSON.stringify(maQAScores));
+  renderMaQA();
+}
+
+function navMaQA(dir) {
+  clearMaQATimer();
+  maQAPhase = 'question';
+  const cat = MAQA_CATS[maQACatIdx];
+  if (dir === 1) {
+    if (maQAQIdx < cat.qs.length - 1) { maQAQIdx++; }
+    else if (maQACatIdx < MAQA_CATS.length - 1) { maQACatIdx++; maQAQIdx = 0; }
+  } else {
+    if (maQAQIdx > 0) { maQAQIdx--; }
+    else if (maQACatIdx > 0) { maQACatIdx--; maQAQIdx = MAQA_CATS[maQACatIdx].qs.length - 1; }
+  }
+  renderMaQA();
+}
+
+function toggleMaQATimer() {
+  if (maQAPhase === 'timing') { clearMaQATimer(); maQAPhase = 'question'; renderMaQA(); return; }
+  maQAPhase = 'timing'; maQAElapsed = 0; renderMaQA();
+  maQATimer = setInterval(() => {
+    maQAElapsed++;
+    const el = document.getElementById('maQATimerDisplay');
+    if (el) el.textContent = `${Math.floor(maQAElapsed/60)}:${String(maQAElapsed%60).padStart(2,'0')}`;
+  }, 1000);
+}
+
+function clearMaQATimer() {
+  if (maQATimer) { clearInterval(maQATimer); maQATimer = null; }
+}
+
+/* ============================================================
+   DEAL TRACKER
+============================================================ */
+function toggleDealTracker() {
+  showDealTracker = !showDealTracker;
+  document.getElementById('dealTrackerModal').classList.toggle('open', showDealTracker);
+  updateToolsItemState('dealTrackerBtn', showDealTracker);
+  if (showDealTracker) renderDealTracker();
+}
+
+function renderDealTracker() {
+  const body = document.getElementById('dtBody');
+  const addBtn = document.getElementById('dtAddBtn');
+  if (dtView === 'list') {
+    addBtn.style.display = 'block';
+    if (dealTracker.length === 0) {
+      body.innerHTML = `<div class="dt-empty">
+        <div class="dt-empty-icon">📋</div>
+        <div class="dt-empty-title">No deals tracked yet</div>
+        <div class="dt-empty-sub">Add deals you're following. Use this to prep your "tell me about a deal" answer and track notable transactions in your target sectors.</div>
+      </div>`;
+      return;
+    }
+    body.innerHTML = `<div class="dt-grid">${dealTracker.map(d => {
+      const typeCls = d.type==='M&A Acquisition'?'type-ma':d.type==='LBO'?'type-lbo':d.type==='IPO'?'type-ipo':'type-other';
+      return `<div class="dt-card">
+        <div class="dt-card-top">
+          <div>
+            <div class="dt-deal-name">${escHtml(d.buyer)}<span class="dt-deal-arrow">→</span>${escHtml(d.target)}</div>
+            <div class="dt-card-badges">
+              <span class="dt-badge ${typeCls}">${escHtml(d.type)}</span>
+              ${d.size?`<span class="dt-badge size">${escHtml(d.size)}</span>`:''}
+              ${d.multiple?`<span class="dt-badge size">${escHtml(d.multiple)}</span>`:''}
+              ${d.date?`<span class="dt-badge size">${escHtml(d.date)}</span>`:''}
+            </div>
+          </div>
+          <div class="dt-card-actions">
+            <button class="dt-action-btn" onclick="dtStartEdit(${d.id})">Edit</button>
+            <button class="dt-action-btn delete" onclick="dtDelete(${d.id})">Delete</button>
+          </div>
+        </div>
+        ${d.rationale?`<div class="dt-section"><div class="dt-section-lbl">Strategic Rationale</div><div class="dt-section-txt">${escHtml(d.rationale)}</div></div>`:''}
+        ${d.view?`<div class="dt-section"><div class="dt-section-lbl">Your View / Talking Points</div><div class="dt-section-txt highlight">${escHtml(d.view)}</div></div>`:''}
+      </div>`;
+    }).join('')}</div>`;
+  } else {
+    addBtn.style.display = 'none';
+    const editing = dtEditId ? dealTracker.find(d=>d.id===dtEditId) : null;
+    body.innerHTML = `<div class="dt-form">
+      <div class="dt-field-row">
+        <div class="dt-field"><label class="dt-label">Buyer / Acquirer</label><input class="dt-input" id="dtBuyer" placeholder="e.g. Microsoft" value="${editing?escHtml(editing.buyer):''}"></div>
+        <div class="dt-field"><label class="dt-label">Target</label><input class="dt-input" id="dtTarget" placeholder="e.g. Activision Blizzard" value="${editing?escHtml(editing.target):''}"></div>
+      </div>
+      <div class="dt-field-row">
+        <div class="dt-field"><label class="dt-label">Deal Type</label>
+          <select class="dt-select" id="dtType">
+            ${['M&A Acquisition','LBO','IPO','Debt Financing','Restructuring','Joint Venture','Other'].map(t=>`<option value="${t}"${editing&&editing.type===t?' selected':''}>${t}</option>`).join('')}
+          </select>
+        </div>
+        <div class="dt-field"><label class="dt-label">Deal Size</label><input class="dt-input" id="dtSize" placeholder="e.g. $68.7bn" value="${editing?escHtml(editing.size):''}"></div>
+      </div>
+      <div class="dt-field-row">
+        <div class="dt-field"><label class="dt-label">EV/EBITDA Multiple (optional)</label><input class="dt-input" id="dtMultiple" placeholder="e.g. 18× EV/EBITDA" value="${editing?escHtml(editing.multiple):''}"></div>
+        <div class="dt-field"><label class="dt-label">Date Announced / Closed</label><input class="dt-input" id="dtDate" placeholder="e.g. Jan 2024" value="${editing?escHtml(editing.date):''}"></div>
+      </div>
+      <div class="dt-field"><label class="dt-label">Strategic Rationale</label><textarea class="dt-textarea" id="dtRationale" placeholder="Why is the buyer doing this deal? Scale, synergies, market entry, vertical integration, talent...">${editing?escHtml(editing.rationale):''}</textarea></div>
+      <div class="dt-field"><label class="dt-label">Your View / Interview Talking Points</label><textarea class="dt-textarea" id="dtView" placeholder="Do you think it's a good deal? Key risks? Valuation thoughts? What makes this interesting to discuss...">${editing?escHtml(editing.view):''}</textarea></div>
+      <div class="dt-form-actions">
+        <button class="dt-cancel-btn" onclick="dtView='list';dtEditId=null;renderDealTracker()">Cancel</button>
+        <button class="dt-save-btn" onclick="dtSave()">${editing?'Save Changes':'Add Deal'}</button>
+      </div>
+    </div>`;
+  }
+}
+
+function escHtml(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+function dtStartEdit(id) { dtEditId = id; dtView = 'edit'; renderDealTracker(); }
+
+function dtDelete(id) {
+  dealTracker = dealTracker.filter(d => d.id !== id);
+  localStorage.setItem('fm-deal-tracker', JSON.stringify(dealTracker));
+  renderDealTracker();
+}
+
+function dtSave() {
+  const buyer = document.getElementById('dtBuyer').value.trim();
+  const target = document.getElementById('dtTarget').value.trim();
+  if (!buyer || !target) { alert('Buyer and Target are required.'); return; }
+  const deal = {
+    id: dtEditId || Date.now(),
+    buyer, target,
+    type: document.getElementById('dtType').value,
+    size: document.getElementById('dtSize').value.trim(),
+    multiple: document.getElementById('dtMultiple').value.trim(),
+    date: document.getElementById('dtDate').value.trim(),
+    rationale: document.getElementById('dtRationale').value.trim(),
+    view: document.getElementById('dtView').value.trim(),
+  };
+  if (dtEditId) { dealTracker = dealTracker.map(d => d.id === dtEditId ? deal : d); }
+  else { dealTracker.push(deal); }
+  localStorage.setItem('fm-deal-tracker', JSON.stringify(dealTracker));
+  dtView = 'list'; dtEditId = null;
+  renderDealTracker();
+}
+
+/* ============================================================
    MODEL BUILD DRILL
 ============================================================ */
 const DRILL_STAGES = ['Income Statement','Cash Flow Statement','Balance Sheet'];
@@ -7633,6 +8128,42 @@ function stopMockTimer() {
       </div>
       <button class="drill-next-btn" id="drillNextBtn" disabled>Next Stage →</button>
     </div>
+  </div>
+</div>
+
+<!-- M&A TECHNICAL Q&A MODAL -->
+<div class="behav-modal" id="maQAModal" onclick="if(event.target===this)toggleMaQA()">
+  <div class="behav-box">
+    <div class="drill-head">
+      <div><div class="fit-head-title">M&amp;A Technical Questions</div><div class="fit-head-sub">Valuation · deal mechanics · accretion/dilution · LBO · defensive tactics — reveal model answer · self-score</div></div>
+      <button class="modal-close" onclick="toggleMaQA()">✕</button>
+    </div>
+    <div class="behav-stats-bar">
+      <div class="behav-stat"><div class="behav-stat-num green" id="maQAStatsStrong">0</div><div class="behav-stat-lbl">Nailed it</div></div>
+      <div class="behav-stat"><div class="behav-stat-num amber" id="maQAStatsOk">0</div><div class="behav-stat-lbl">Mostly</div></div>
+      <div class="behav-stat"><div class="behav-stat-num red" id="maQAStatsWeak">0</div><div class="behav-stat-lbl">Missed</div></div>
+    </div>
+    <div class="behav-cats" id="maQACats"></div>
+    <div class="behav-body" id="maQABody"></div>
+    <div class="behav-nav">
+      <button class="behav-nav-arrow" id="maQAPrev" onclick="navMaQA(-1)">← Prev</button>
+      <span class="behav-nav-pos" id="maQANavPos">1 / 1</span>
+      <button class="behav-nav-arrow" id="maQANext" onclick="navMaQA(1)">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- DEAL TRACKER MODAL -->
+<div class="dt-modal" id="dealTrackerModal" onclick="if(event.target===this)toggleDealTracker()">
+  <div class="dt-box">
+    <div class="drill-head">
+      <div><div class="fit-head-title">Deal Tracker</div><div class="fit-head-sub">Log M&amp;A deals you're following — buyer, rationale, multiple, your view — prep your "tell me about a deal" answer</div></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="dt-add-btn" id="dtAddBtn" onclick="dtView='add';dtEditId=null;renderDealTracker()">+ Add Deal</button>
+        <button class="modal-close" onclick="toggleDealTracker()">✕</button>
+      </div>
+    </div>
+    <div class="dt-body" id="dtBody"></div>
   </div>
 </div>
 
