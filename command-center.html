@@ -145,6 +145,93 @@ body {
 }
 .btn-new:hover { background: var(--amber-l); transform: translateY(-1px); }
 .btn-new:active { transform: translateY(0); }
+.btn-ibprep {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  background: var(--s2);
+  border: 1px solid var(--b2);
+  border-radius: 3px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--t2);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all .15s;
+  position: relative;
+  overflow: hidden;
+}
+.btn-ibprep::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, var(--amber-bg), transparent);
+  opacity: 0;
+  transition: opacity .2s;
+}
+.btn-ibprep:hover {
+  color: var(--amber);
+  border-color: var(--amber-brd);
+  transform: translateY(-1px);
+}
+.btn-ibprep:hover::before { opacity: 1; }
+.btn-ibprep .ibprep-icon {
+  width: 16px; height: 16px;
+  border: 1px solid currentColor;
+  border-radius: 2px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 8px;
+  flex-shrink: 0;
+}
+.btn-ibprep .ibprep-arrow {
+  font-size: 11px;
+  transition: transform .15s;
+}
+.btn-ibprep:hover .ibprep-arrow { transform: translateX(3px); }
+
+/* ── EARNINGS STRIP ──────────────────────────────────────── */
+.cal-earnings {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--b2);
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  flex-shrink: 0;
+}
+.cal-earn-cell {
+  flex: 1;
+  padding: 10px 16px;
+  background: var(--s2);
+  border-right: 1px solid var(--b1);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.cal-earn-cell:last-child { border-right: none; }
+.cal-earn-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--t4);
+}
+.cal-earn-value {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--t1);
+  line-height: 1;
+}
+.cal-earn-value.received { color: #43A047; }
+.cal-earn-sub {
+  font-size: 9px;
+  color: var(--t4);
+}
 
 /* ── METRICS BAR ─────────────────────────────────────────── */
 .metrics {
@@ -1428,7 +1515,11 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
     <span class="hdr-date" id="hdrDate"></span>
     <span class="kbd-hint">⌘N new · ⌘Z undo</span>
     <button class="sort-btn" onclick="openCalendar()" style="padding:6px 12px;font-size:10px;font-weight:700;letter-spacing:.06em">📅 Calendar</button>
-    <a href="./financial-model.html" style="padding:6px 12px;border:1px solid var(--b2);border-radius:4px;font-size:10px;font-family:'Plus Jakarta Sans',sans-serif;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--t2);text-decoration:none;transition:color .12s,border-color .12s" onmouseover="this.style.color='var(--amber)';this.style.borderColor='var(--amber)'" onmouseout="this.style.color='var(--t2)';this.style.borderColor='var(--b2)'">IB Prep →</a>
+    <a href="./financial-model.html" class="btn-ibprep">
+      <span class="ibprep-icon">IB</span>
+      <span>IB Prep</span>
+      <span class="ibprep-arrow">→</span>
+    </a>
     <button class="btn-new" onclick="openNewCard()">+ New Task</button>
   </div>
 </header>
@@ -1600,6 +1691,23 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
       <button class="cal-close" onclick="closeCalendar()">×</button>
     </div>
     <div class="cal-body">
+      <div class="cal-earnings" id="calEarnings" style="display:none">
+        <div class="cal-earn-cell">
+          <div class="cal-earn-label">Received</div>
+          <div class="cal-earn-value received" id="calEarnReceived">$0</div>
+          <div class="cal-earn-sub" id="calEarnReceivedSub">0 payments</div>
+        </div>
+        <div class="cal-earn-cell">
+          <div class="cal-earn-label">Total Invoiced</div>
+          <div class="cal-earn-value" id="calEarnTotal">$0</div>
+          <div class="cal-earn-sub" id="calEarnTotalSub">0 invoices</div>
+        </div>
+        <div class="cal-earn-cell">
+          <div class="cal-earn-label">Outstanding</div>
+          <div class="cal-earn-value" id="calEarnOutstanding">$0</div>
+          <div class="cal-earn-sub">unpaid balance</div>
+        </div>
+      </div>
       <div class="cal-weekdays">
         <div class="cal-wd">Sun</div><div class="cal-wd">Mon</div><div class="cal-wd">Tue</div>
         <div class="cal-wd">Wed</div><div class="cal-wd">Thu</div><div class="cal-wd">Fri</div>
@@ -2671,6 +2779,53 @@ function calGoToday() {
   renderCalGrid();
 }
 
+function parsePayment(text) {
+  if (!text) return null;
+  // (Paid $1000/$2000) — partial payment
+  const partial = text.match(/\(Paid\s+\$?([\d,]+(?:\.\d+)?)\s*\/\s*\$?([\d,]+(?:\.\d+)?)\)/i);
+  if (partial) {
+    return {
+      received: parseFloat(partial[1].replace(/,/g, '')),
+      total:    parseFloat(partial[2].replace(/,/g, ''))
+    };
+  }
+  // (Paid $2000) — full payment
+  const full = text.match(/\(Paid\s+\$?([\d,]+(?:\.\d+)?)\)/i);
+  if (full) {
+    const amt = parseFloat(full[1].replace(/,/g, ''));
+    return { received: amt, total: amt };
+  }
+  return null;
+}
+
+function renderEarnings() {
+  let received = 0, total = 0, recCount = 0, invCount = 0;
+  const monthStart = new Date(calYear, calMonth, 1);
+  const monthEnd   = new Date(calYear, calMonth + 1, 0);
+  gCalEvents.forEach(ev => {
+    const dateStr = ev.start.date || (ev.start.dateTime || '').slice(0, 10);
+    if (!dateStr) return;
+    const d = new Date(dateStr + 'T00:00:00');
+    if (d < monthStart || d > monthEnd) return;
+    const pay = parsePayment(ev.summary) || parsePayment(ev.description);
+    if (!pay) return;
+    received += pay.received;
+    total    += pay.total;
+    recCount++;
+    if (pay.total > 0) invCount++;
+  });
+  const strip = document.getElementById('calEarnings');
+  if (!strip) return;
+  if (total === 0) { strip.style.display = 'none'; return; }
+  strip.style.display = 'flex';
+  const fmt = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  document.getElementById('calEarnReceived').textContent    = fmt(received);
+  document.getElementById('calEarnReceivedSub').textContent = recCount + (recCount === 1 ? ' payment' : ' payments');
+  document.getElementById('calEarnTotal').textContent       = fmt(total);
+  document.getElementById('calEarnTotalSub').textContent    = invCount + (invCount === 1 ? ' invoice' : ' invoices');
+  document.getElementById('calEarnOutstanding').textContent = fmt(total - received);
+}
+
 function placeEventsInLanes(events) {
   const sorted = [...events].sort((a, b) => {
     const lenB = b.endCol - b.startCol, lenA = a.endCol - a.startCol;
@@ -2765,6 +2920,7 @@ function renderCalGrid() {
     weekEl.innerHTML = html;
     grid.appendChild(weekEl);
   }
+  renderEarnings();
 }
 
 document.addEventListener('keydown', e => {
