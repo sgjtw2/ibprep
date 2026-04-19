@@ -2662,13 +2662,13 @@ function renderCalGrid() {
   const total  = startW + last.getDate();
   const cells  = Math.ceil(total / 7) * 7;
 
-  // Build event map: 'YYYY-MM-DD' → [title, ...]
+  // Build event map: 'YYYY-MM-DD' → [event, ...]
   const evMap = {};
   gCalEvents.forEach(ev => {
     const raw = ev.start.date || (ev.start.dateTime || '').slice(0, 10);
     if (!raw) return;
     if (!evMap[raw]) evMap[raw] = [];
-    evMap[raw].push(ev.summary || '(No title)');
+    evMap[raw].push(ev);
   });
 
   let html = '';
