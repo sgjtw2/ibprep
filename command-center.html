@@ -2482,11 +2482,20 @@ async function gFetch(url) {
 }
 
 async function loadCalendarEvents() {
-  const now   = new Date().toISOString();
-  const end   = new Date(Date.now() + 14 * 86400000).toISOString();
-  const url   = `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${encodeURIComponent(now)}&timeMax=${encodeURIComponent(end)}&singleEvents=true&orderBy=startTime&maxResults=15`;
-  const data  = await gFetch(url);
-  gCalEvents  = data.items || [];
+  const now  = new Date().toISOString();
+  const end  = new Date(Date.now() + 14 * 86400000).toISOString();
+  const calList = await gFetch('https://www.googleapis.com/calendar/v3/users/me/calendarList?maxResults=50');
+  const cals = (calList.items || []).filter(c => c.selected !== false && c.accessRole !== 'none');
+  const results = await Promise.all(cals.map(cal =>
+    gFetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(cal.id)}/events?timeMin=${encodeURIComponent(now)}&timeMax=${encodeURIComponent(end)}&singleEvents=true&orderBy=startTime&maxResults=50`)
+      .then(d => (d.items || []).map(ev => ({ ...ev, _calColor: cal.backgroundColor || null, _calName: cal.summary || '' })))
+      .catch(() => [])
+  ));
+  gCalEvents = results.flat().sort((a, b) => {
+    const ta = a.start.dateTime || a.start.date;
+    const tb = b.start.dateTime || b.start.date;
+    return ta < tb ? -1 : ta > tb ? 1 : 0;
+  });
 }
 
 async function loadGoogleTasks() {
@@ -2564,7 +2573,7 @@ function renderGPanel(mode) {
         const t = fmtEventTime(ev);
         return `<div class="g-event ${t.today ? 'g-event-today' : ''}">
           <div class="g-event-title">${esc(ev.summary || '(No title)')}</div>
-          <div class="g-event-time">${t.label}</div>
+          <div class="g-event-time">${t.label}${ev._calName ? ' · ' + esc(ev._calName) : ''}</div>
         </div>`;
       }).join('')
     : `<div class="g-empty">No upcoming events</div>`;
@@ -2679,7 +2688,11 @@ function renderCalGrid() {
     html += `<div class="cal-day${!isThis ? ' other-month' : ''}${isToday ? ' today' : ''}">
       <div class="cal-day-num">${isThis ? dayNum : ''}</div>
       <div class="cal-day-events">
-        ${shown.map(t => `<div class="cal-ev-pill" title="${esc(t)}">${esc(t)}</div>`).join('')}
+        ${shown.map(ev => {
+          const color = ev._calColor || '#1B4FD8';
+          const bg    = color + '22';
+          return `<div class="cal-ev-pill" title="${esc(ev.summary||'')}" style="background:${bg};border-color:${color}55;color:${color}">${esc(ev.summary||'(No title)')}</div>`;
+        }).join('')}
         ${more > 0 ? `<div class="cal-ev-more">+${more} more</div>` : ''}
       </div>
     </div>`;
