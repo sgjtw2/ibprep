@@ -2996,34 +2996,72 @@ function toggleCalEarnings() {
   renderEarnings();
 }
 
+function proratePayment(ev, pay) {
+  const startStr = ev.start.date || (ev.start.dateTime || '').slice(0, 10);
+  const endStr   = ev.end.date   || (ev.end.dateTime   || '').slice(0, 10);
+  if (!startStr || !endStr) return pay;
+
+  const evStart  = new Date(startStr + 'T00:00:00');
+  const endRaw   = new Date(endStr   + 'T00:00:00');
+  const evEnd    = ev.end.date ? new Date(endRaw - 86400000) : endRaw; // inclusive
+  const totalDays = Math.round((evEnd - evStart) / 86400000) + 1;
+  if (totalDays <= 1) return { ...pay, prorated: false };
+
+  const monthStart   = new Date(calYear, calMonth, 1);
+  const monthEnd     = new Date(calYear, calMonth + 1, 0);
+  const overlapStart = evStart < monthStart ? monthStart : evStart;
+  const overlapEnd   = evEnd   > monthEnd   ? monthEnd   : evEnd;
+  const daysInMonth  = Math.round((overlapEnd - overlapStart) / 86400000) + 1;
+
+  if (daysInMonth >= totalDays) return { ...pay, prorated: false };
+
+  const factor = daysInMonth / totalDays;
+  return {
+    received: pay.received * factor,
+    total:    pay.total    * factor,
+    prorated: true,
+    daysInMonth,
+    totalDays,
+  };
+}
+
 function renderEarnings() {
   const strip = document.getElementById('calEarnings');
   if (!strip) return;
   if (!calEarningsVisible) { strip.style.display = 'none'; return; }
 
-  let received = 0, total = 0, recCount = 0, invCount = 0;
+  let received = 0, total = 0, recCount = 0, invCount = 0, proratedCount = 0;
   const monthStart = new Date(calYear, calMonth, 1);
   const monthEnd   = new Date(calYear, calMonth + 1, 0);
+
   gCalMonthEvents.forEach(ev => {
-    const dateStr = ev.start.date || (ev.start.dateTime || '').slice(0, 10);
-    if (!dateStr) return;
-    const d = new Date(dateStr + 'T00:00:00');
-    if (d < monthStart || d > monthEnd) return;
+    const startStr = ev.start.date || (ev.start.dateTime || '').slice(0, 10);
+    if (!startStr) return;
+    const evStartDate = new Date(startStr + 'T00:00:00');
+    const endStr      = ev.end.date || (ev.end.dateTime || '').slice(0, 10);
+    const evEndRaw    = new Date(endStr + 'T00:00:00');
+    const evEnd       = ev.end.date ? new Date(evEndRaw - 86400000) : evEndRaw;
+    // Include event if it overlaps with the current month at all
+    if (evStartDate > monthEnd || evEnd < monthStart) return;
+
     const pay = parsePayment(ev.summary) || parsePayment(ev.description);
     if (!pay) return;
-    received += pay.received;
-    total    += pay.total;
+
+    const p = proratePayment(ev, pay);
+    received += p.received;
+    total    += p.total;
     recCount++;
-    if (pay.total > 0) invCount++;
+    if (p.total > 0) invCount++;
+    if (p.prorated) proratedCount++;
   });
 
   if (total === 0) { strip.style.display = 'none'; return; }
   strip.style.display = 'flex';
-  const fmt = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+  const fmt = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   document.getElementById('calEarnReceived').textContent    = fmt(received);
-  document.getElementById('calEarnReceivedSub').textContent = recCount + (recCount === 1 ? ' payment' : ' payments');
+  document.getElementById('calEarnReceivedSub').textContent = recCount + (recCount === 1 ? ' payment' : ' payments') + (proratedCount ? ` · ${proratedCount} prorated` : '');
   document.getElementById('calEarnTotal').textContent       = fmt(total);
-  document.getElementById('calEarnTotalSub').textContent    = invCount + (invCount === 1 ? ' invoice' : ' invoices');
+  document.getElementById('calEarnTotalSub').textContent    = invCount + (invCount === 1 ? ' invoice' : ' invoices') + (proratedCount ? ' · prorated' : '');
   document.getElementById('calEarnOutstanding').textContent = fmt(total - received);
 }
 
