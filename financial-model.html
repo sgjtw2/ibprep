@@ -981,6 +981,78 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
 .map-concept.open .map-concept-body { display:block; }
 .map-concept-body strong { color:var(--t1); }
 
+/* ── MODEL BUILD DRILL ────────────────────────────────── */
+.drill-modal { display:none; position:fixed; inset:0; z-index:400; background:rgba(0,0,0,.55); align-items:flex-start; justify-content:center; padding-top:30px; }
+.drill-modal.open { display:flex; }
+.drill-box { background:var(--bg); border:1px solid var(--b1); border-radius:8px; width:min(980px,97vw); max-height:92vh; display:flex; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,.4); }
+.drill-head { padding:14px 20px 12px; border-bottom:1px solid var(--b1); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+.drill-stages { display:flex; border-bottom:1px solid var(--b1); flex-shrink:0; }
+.drill-stage-tab { padding:9px 20px; font-family:'Syne',sans-serif; font-weight:700; font-size:9.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--t3); cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; display:flex; align-items:center; gap:6px; transition:color .12s; }
+.drill-stage-tab:hover { color:var(--t2); }
+.drill-stage-tab.on { color:var(--blue); border-bottom-color:var(--blue); }
+.drill-stage-tab.done { color:var(--green); }
+.drill-stage-tab.done.on { border-bottom-color:var(--green); }
+.drill-stage-check { width:14px; height:14px; border-radius:50%; background:var(--green); color:#fff; font-size:8px; display:none; align-items:center; justify-content:center; }
+.drill-stage-tab.done .drill-stage-check { display:flex; }
+.drill-layout { flex:1; overflow:hidden; display:flex; }
+.drill-assumptions { width:220px; flex-shrink:0; border-right:1px solid var(--b1); overflow-y:auto; padding:14px 14px; display:flex; flex-direction:column; gap:3px; }
+.drill-assumptions::-webkit-scrollbar { width:3px; }
+.drill-assumptions::-webkit-scrollbar-thumb { background:var(--b2); }
+.drill-asm-hdr { font-family:'Syne',sans-serif; font-weight:800; font-size:8px; letter-spacing:.14em; text-transform:uppercase; color:var(--blue); padding-bottom:6px; border-bottom:1px solid var(--b1); margin-bottom:4px; }
+.drill-asm-row { display:flex; justify-content:space-between; align-items:center; padding:3px 0; border-bottom:1px solid var(--b1); font-size:9.5px; }
+.drill-asm-row:last-child { border-bottom:none; }
+.drill-asm-label { color:var(--t3); }
+.drill-asm-val { font-family:'JetBrains Mono',monospace; color:var(--blue); font-weight:600; }
+.drill-content { flex:1; overflow-y:auto; padding:16px 20px; display:flex; flex-direction:column; gap:2px; }
+.drill-content::-webkit-scrollbar { width:3px; }
+.drill-content::-webkit-scrollbar-thumb { background:var(--b2); }
+.drill-section-hdr { font-family:'Syne',sans-serif; font-weight:800; font-size:8px; letter-spacing:.14em; text-transform:uppercase; color:var(--blue); padding:8px 0 5px; border-bottom:1px solid var(--b1); margin-bottom:4px; margin-top:8px; }
+.drill-section-hdr:first-child { margin-top:0; }
+.drill-row { display:flex; align-items:center; gap:8px; padding:4px 0; border-bottom:1px solid var(--b1); min-height:34px; }
+.drill-row:last-child { border-bottom:none; }
+.drill-row.total { background:var(--bbg); border-top:2px solid var(--b2) !important; border-bottom:2px solid var(--b2) !important; padding:5px 8px; border-radius:3px; margin:2px 0; }
+.drill-row.subtotal { border-top:1px solid var(--b2) !important; }
+.drill-row.check-row { background:rgba(22,163,74,.06); border:1px solid rgba(22,163,74,.2) !important; border-radius:3px; padding:5px 8px; margin-top:8px; }
+.drill-row-label { flex:1; font-size:10.5px; color:var(--t2); }
+.drill-row.total .drill-row-label { font-family:'Syne',sans-serif; font-weight:800; color:var(--t1); font-size:11px; }
+.drill-row.subtotal .drill-row-label { font-weight:600; color:var(--t1); }
+.drill-row-input { width:90px; flex-shrink:0; background:var(--s2); border:1px solid var(--b1); border-radius:3px; padding:4px 8px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--t1); text-align:right; outline:none; transition:border-color .12s; }
+.drill-row-input:focus { border-color:var(--bbrd); background:var(--bg); }
+.drill-row-input.correct { border-color:var(--green) !important; background:rgba(22,163,74,.06); color:var(--green); }
+.drill-row-input.wrong { border-color:var(--red) !important; background:rgba(220,38,38,.06); }
+.drill-row-input:disabled { background:var(--s1); color:var(--t3); cursor:not-allowed; }
+.drill-check-btn { width:28px; height:28px; border-radius:3px; border:1px solid var(--b1); background:var(--s2); color:var(--t3); font-size:11px; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all .12s; }
+.drill-check-btn:hover { border-color:var(--blue); color:var(--blue); }
+.drill-check-btn:disabled { opacity:.4; cursor:not-allowed; }
+.drill-hint-btn { width:22px; height:22px; border-radius:50%; border:1px solid var(--b2); background:none; color:var(--t3); font-size:10px; cursor:pointer; flex-shrink:0; font-family:'Syne',sans-serif; font-weight:800; transition:all .12s; }
+.drill-hint-btn:hover { border-color:var(--blue); color:var(--blue); }
+.drill-status { width:16px; flex-shrink:0; font-size:13px; text-align:center; }
+.drill-hint-box { display:none; padding:6px 8px; background:var(--bbg); border:1px solid var(--bbrd); border-radius:3px; font-size:9.5px; color:var(--t2); margin:0 0 4px 0; line-height:1.5; }
+.drill-hint-box.show { display:block; }
+.drill-attempts { font-size:8.5px; color:var(--red); margin-left:4px; display:none; }
+.drill-footer { flex-shrink:0; padding:12px 20px; border-top:1px solid var(--b1); display:flex; align-items:center; justify-content:space-between; }
+.drill-progress-wrap { display:flex; align-items:center; gap:10px; flex:1; }
+.drill-progress-bar { flex:1; max-width:200px; height:4px; background:var(--b1); border-radius:2px; overflow:hidden; }
+.drill-progress-fill { height:100%; background:var(--green); border-radius:2px; transition:width .3s; }
+.drill-progress-txt { font-size:9px; font-family:'JetBrains Mono',monospace; color:var(--t3); }
+.drill-next-btn { background:var(--blue); border:none; color:#fff; padding:8px 22px; border-radius:4px; font-family:'Syne',sans-serif; font-weight:800; font-size:10px; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; transition:background .12s; }
+.drill-next-btn:hover { background:var(--bluel); }
+.drill-next-btn:disabled { opacity:.4; cursor:not-allowed; }
+.drill-reset-btn { background:none; border:1px solid var(--b1); color:var(--t3); padding:7px 14px; border-radius:4px; font-family:'Syne',sans-serif; font-weight:700; font-size:9px; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; transition:all .12s; }
+.drill-reset-btn:hover { border-color:var(--b2); color:var(--t2); }
+.drill-complete-screen { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; padding:40px; text-align:center; }
+.drill-complete-title { font-family:'Syne',sans-serif; font-weight:800; font-size:28px; color:var(--green); }
+.drill-complete-sub { font-size:11px; color:var(--t2); line-height:1.7; max-width:440px; }
+.drill-score-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; width:100%; max-width:400px; }
+.drill-score-card { background:var(--s1); border:1px solid var(--b1); border-radius:6px; padding:14px; text-align:center; }
+.drill-score-num { font-family:'Syne',sans-serif; font-weight:800; font-size:24px; color:var(--t1); }
+.drill-score-lbl { font-size:8.5px; font-family:'Syne',sans-serif; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--t3); margin-top:3px; }
+@media (max-width:768px) {
+  .drill-modal { padding-top:0; align-items:flex-end; }
+  .drill-box { border-radius:12px 12px 0 0; max-height:92vh; width:100%; }
+  .drill-assumptions { display:none; }
+}
+
 /* ── ACCOUNTING BRAIN TEASERS ─────────────────────────── */
 .acct-modal { display:none; position:fixed; inset:0; z-index:400; background:rgba(0,0,0,.55); align-items:flex-start; justify-content:center; padding-top:40px; }
 .acct-modal.open { display:flex; }
@@ -1172,6 +1244,9 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
         </button>
         <button class="tools-item" id="acctBtn" onclick="toggleAcct();closeToolsMenu()">
           <span class="tools-item-icon">🧾</span>Accounting Drills<span class="tools-item-badge"></span>
+        </button>
+        <button class="tools-item" id="drillBtn" onclick="toggleDrill();closeToolsMenu()">
+          <span class="tools-item-icon">🏗️</span>Model Build Drill<span class="tools-item-badge"></span>
         </button>
         <button class="tools-item" id="mockBtn" onclick="toggleMock();closeToolsMenu()">
           <span class="tools-item-icon">🎙️</span>Mock Interview<span class="tools-item-badge"></span>
@@ -2670,6 +2745,9 @@ let showMath    = false;
 let showTracker = false;
 let showAcct    = false;
 let showMock    = false;
+let showDrill   = false;
+let drillStage  = 0;
+let drillState  = {};
 let acctCatIdx  = 0;
 let acctPracticed = JSON.parse(localStorage.getItem('fm-acct-practiced') || '{}');
 let mockMode = 'all', mockTimerLimit = 45, mockScreen = 'setup';
@@ -5309,6 +5387,215 @@ function renderPulseBody() {
 }
 
 /* ============================================================
+   MODEL BUILD DRILL
+============================================================ */
+const DRILL_STAGES = ['Income Statement','Cash Flow Statement','Balance Sheet'];
+
+const DRILL_ASM = [
+  { label:'Revenue', val:'$500m' },
+  { label:'Revenue Growth', val:'10%' },
+  { label:'COGS Margin', val:'40%' },
+  { label:'OpEx Margin', val:'25%' },
+  { label:'D&A', val:'$30m' },
+  { label:'Interest Expense', val:'$15m' },
+  { label:'Tax Rate', val:'25%' },
+  { label:'Capex', val:'$40m' },
+  { label:'NWC Increase', val:'$20m' },
+  { label:'Opening Cash', val:'$50m' },
+  { label:'Opening A/R', val:'$80m' },
+  { label:'Opening Inventory', val:'$60m' },
+  { label:'Opening PP&E (net)', val:'$200m' },
+  { label:'Opening A/P', val:'$40m' },
+  { label:'Opening LT Debt', val:'$150m' },
+  { label:'Opening Equity', val:'$200m' },
+];
+
+const DRILL_LINES = [
+  // Stage 0 — Income Statement
+  [
+    { id:'rev',    label:'Revenue',                     ans:500,    hint:'Given in assumptions.',                                   section:'Revenue',          type:'input'  },
+    { id:'cogs',   label:'Cost of Goods Sold (COGS)',   ans:-200,   hint:'Revenue × COGS margin = $500m × 40% = −$200m. Enter as negative.',  section:'',  type:'calc'   },
+    { id:'gp',     label:'Gross Profit',                ans:300,    hint:'Revenue + COGS = $500m + (−$200m) = $300m.',             section:'',             type:'sub'    },
+    { id:'opex',   label:'Operating Expenses (OpEx)',   ans:-125,   hint:'Revenue × OpEx margin = $500m × 25% = −$125m. Enter as negative.',  section:'',  type:'calc'   },
+    { id:'ebitda', label:'EBITDA',                      ans:175,    hint:'Gross Profit + OpEx = $300m + (−$125m) = $175m.',        section:'',             type:'sub'    },
+    { id:'da',     label:'Depreciation & Amortisation', ans:-30,    hint:'Given in assumptions = −$30m. Enter as negative.',       section:'',             type:'calc'   },
+    { id:'ebit',   label:'EBIT (Operating Profit)',     ans:145,    hint:'EBITDA + D&A = $175m + (−$30m) = $145m.',               section:'',             type:'sub'    },
+    { id:'int',    label:'Interest Expense',            ans:-15,    hint:'Given in assumptions = −$15m. Enter as negative.',       section:'',             type:'calc'   },
+    { id:'ebt',    label:'Earnings Before Tax (EBT)',   ans:130,    hint:'EBIT + Interest = $145m + (−$15m) = $130m.',            section:'',             type:'sub'    },
+    { id:'tax',    label:'Income Tax (25%)',            ans:-32.5,  hint:'EBT × Tax rate = $130m × 25% = −$32.5m. Enter as negative.',        section:'',  type:'calc'   },
+    { id:'ni',     label:'Net Income',                  ans:97.5,   hint:'EBT + Tax = $130m + (−$32.5m) = $97.5m.',              section:'',             type:'total'  },
+  ],
+  // Stage 1 — Cash Flow Statement
+  [
+    { id:'cfs_ni',   label:'Net Income (from IS)',        ans:97.5,  hint:'Linked directly from Income Statement net income = $97.5m.',         section:'Operating Activities', type:'link'  },
+    { id:'cfs_da',   label:'Add: D&A (non-cash)',         ans:30,    hint:'Add back D&A — it is non-cash, so we reverse it = +$30m.',           section:'',                    type:'calc'  },
+    { id:'cfs_nwc',  label:'Less: Increase in NWC',       ans:-20,   hint:'NWC increase = use of cash = −$20m. A/R up $20m → cash decreases.',  section:'',                    type:'calc'  },
+    { id:'cfs_cfo',  label:'Cash from Operations (CFO)',  ans:107.5, hint:'NI + D&A − NWC = $97.5 + $30 − $20 = $107.5m.',                    section:'',                    type:'sub'   },
+    { id:'cfs_capex',label:'Less: Capital Expenditure',   ans:-40,   hint:'Given in assumptions = −$40m. Enter as negative.',                   section:'Investing Activities', type:'calc' },
+    { id:'cfs_fcf',  label:'Free Cash Flow (FCF)',        ans:67.5,  hint:'CFO + Capex = $107.5m + (−$40m) = $67.5m.',                        section:'',                    type:'sub'   },
+    { id:'cfs_fin',  label:'Net Financing (debt/equity)', ans:0,     hint:'No new debt raised or repaid, no dividends = $0.',                   section:'Financing Activities', type:'calc' },
+    { id:'cfs_net',  label:'Net Change in Cash',          ans:67.5,  hint:'FCF + Financing = $67.5m + $0 = $67.5m.',                           section:'',                    type:'sub'   },
+    { id:'cfs_open', label:'Opening Cash',                ans:50,    hint:'Given in assumptions = $50m.',                                       section:'',                    type:'input' },
+    { id:'cfs_end',  label:'Ending Cash',                 ans:117.5, hint:'Opening Cash + Net Change = $50m + $67.5m = $117.5m.',              section:'',                    type:'total' },
+  ],
+  // Stage 2 — Balance Sheet
+  [
+    { id:'bs_cash',  label:'Cash & Equivalents',          ans:117.5, hint:'Linked from CFS Ending Cash = $117.5m.',                           section:'Assets',    type:'link'  },
+    { id:'bs_ar',    label:'Accounts Receivable',         ans:100,   hint:'Opening A/R + NWC increase = $80m + $20m = $100m.',               section:'',          type:'calc'  },
+    { id:'bs_inv',   label:'Inventory',                   ans:60,    hint:'Opening Inventory — unchanged this period = $60m.',               section:'',          type:'calc'  },
+    { id:'bs_ca',    label:'Total Current Assets',        ans:277.5, hint:'Cash + A/R + Inventory = $117.5 + $100 + $60 = $277.5m.',        section:'',          type:'sub'   },
+    { id:'bs_ppe',   label:'PP&E (net)',                  ans:210,   hint:'Opening PP&E + Capex − D&A = $200 + $40 − $30 = $210m.',         section:'',          type:'calc'  },
+    { id:'bs_ta',    label:'Total Assets',                ans:487.5, hint:'Current Assets + PP&E = $277.5 + $210 = $487.5m.',               section:'',          type:'total' },
+    { id:'bs_ap',    label:'Accounts Payable',            ans:40,    hint:'Opening A/P — unchanged this period = $40m.',                    section:'Liabilities', type:'calc' },
+    { id:'bs_debt',  label:'Long-Term Debt',              ans:150,   hint:'Opening Debt — no repayment or new issuance = $150m.',           section:'',          type:'calc'  },
+    { id:'bs_tl',    label:'Total Liabilities',           ans:190,   hint:'A/P + Long-Term Debt = $40 + $150 = $190m.',                    section:'',          type:'sub'   },
+    { id:'bs_eq',    label:'Equity (Retained Earnings)',  ans:297.5, hint:'Opening Equity + Net Income = $200 + $97.5 = $297.5m.',         section:'Equity',    type:'calc'  },
+    { id:'bs_tle',   label:'Total Liabilities + Equity',  ans:487.5, hint:'Total Liabilities + Equity = $190 + $297.5 = $487.5m.',         section:'',          type:'total' },
+    { id:'bs_chk',   label:'Balance Sheet Check (Assets − L+E)', ans:0, hint:'Total Assets − Total L+E = $487.5 − $487.5 = $0. Must equal zero!', section:'Check', type:'check' },
+  ],
+];
+
+function toggleDrill() {
+  showDrill = !showDrill;
+  document.getElementById('drillModal').classList.toggle('open', showDrill);
+  updateToolsItemState('drillBtn', showDrill);
+  if (showDrill && Object.keys(drillState).length === 0) initDrillState();
+  if (showDrill) renderDrill();
+}
+
+function initDrillState() {
+  drillState = {};
+  DRILL_LINES.forEach(stage => stage.forEach(line => {
+    drillState[line.id] = { status: null, attempts: 0, hintOpen: false };
+  }));
+}
+
+function resetDrill() {
+  drillStage = 0;
+  initDrillState();
+  renderDrill();
+}
+
+function renderDrill() {
+  const allCorrect = DRILL_LINES.every(stage => stage.every(l => drillState[l.id]?.status === 'correct'));
+  if (allCorrect) { renderDrillComplete(); return; }
+
+  const stageNav = document.getElementById('drillStageNav');
+  stageNav.innerHTML = DRILL_STAGES.map((t, i) => {
+    const done = DRILL_LINES[i].every(l => drillState[l.id]?.status === 'correct');
+    return `<div class="drill-stage-tab${i===drillStage?' on':''}${done?' done':''}" onclick="drillStage=${i};renderDrill()">
+      ${t}<span class="drill-stage-check">✓</span>
+    </div>`;
+  }).join('');
+
+  const lines = DRILL_LINES[drillStage];
+  const correct = lines.filter(l => drillState[l.id]?.status === 'correct').length;
+  const total = lines.length;
+
+  let html = `<div class="drill-assumptions" id="drillAsm">
+    <div class="drill-asm-hdr">Assumptions</div>
+    ${DRILL_ASM.map(a => `<div class="drill-asm-row"><span class="drill-asm-label">${a.label}</span><span class="drill-asm-val">${a.val}</span></div>`).join('')}
+  </div>
+  <div class="drill-content" id="drillContent">`;
+
+  let lastSection = null;
+  lines.forEach(line => {
+    const s = drillState[line.id];
+    if (line.section && line.section !== lastSection) {
+      html += `<div class="drill-section-hdr">${line.section}</div>`;
+      lastSection = line.section;
+    }
+    const isCorrect = s.status === 'correct';
+    const isWrong = s.status === 'wrong';
+    const showAnswer = s.attempts >= 2;
+    const rowClass = line.type === 'total' ? 'total' : line.type === 'sub' ? 'subtotal' : line.type === 'check' ? 'check-row' : '';
+    const inputVal = isCorrect ? line.ans : (s.userVal !== undefined ? s.userVal : '');
+    const statusIcon = isCorrect ? '✓' : isWrong ? '✗' : '';
+    const statusColor = isCorrect ? 'color:var(--green)' : 'color:var(--red)';
+
+    html += `<div>
+      ${s.hintOpen ? `<div class="drill-hint-box show">💡 ${line.hint}</div>` : ''}
+      <div class="drill-row ${rowClass}">
+        <div class="drill-row-label">${line.label}${showAnswer && !isCorrect ? ` <span style="color:var(--green);font-family:'JetBrains Mono',monospace;font-size:10px"> → ${line.ans}</span>` : ''}</div>
+        <input class="drill-row-input${isCorrect?' correct':isWrong?' wrong':''}" id="di-${line.id}" type="number" step="0.5" value="${inputVal}" ${isCorrect?'disabled':''} placeholder="?" onkeydown="if(event.key==='Enter')checkDrillLine('${line.id}')">
+        <button class="drill-check-btn" onclick="checkDrillLine('${line.id}')" ${isCorrect?'disabled':''} title="Check answer">→</button>
+        <button class="drill-hint-btn" onclick="toggleDrillHint('${line.id}')" title="Hint">?</button>
+        <div class="drill-status" style="${statusColor}">${statusIcon}</div>
+      </div>
+    </div>`;
+  });
+
+  html += `</div>`;
+  document.getElementById('drillLayout').innerHTML = html;
+
+  const pct = Math.round(correct / total * 100);
+  document.getElementById('drillProgressFill').style.width = pct + '%';
+  document.getElementById('drillProgressTxt').textContent = `${correct} / ${total} correct`;
+
+  const stageAllDone = lines.every(l => drillState[l.id]?.status === 'correct');
+  const nextBtn = document.getElementById('drillNextBtn');
+  if (drillStage < DRILL_STAGES.length - 1) {
+    nextBtn.textContent = 'Next Stage →';
+    nextBtn.disabled = !stageAllDone;
+    nextBtn.onclick = () => { drillStage++; renderDrill(); };
+  } else {
+    nextBtn.textContent = stageAllDone ? 'See Results →' : 'Finish Stage';
+    nextBtn.disabled = !stageAllDone;
+    nextBtn.onclick = renderDrillComplete;
+  }
+}
+
+function checkDrillLine(id) {
+  const line = DRILL_LINES.flat().find(l => l.id === id);
+  const input = document.getElementById('di-' + id);
+  if (!input || !line) return;
+  const val = parseFloat(input.value);
+  const s = drillState[id];
+  s.userVal = val;
+  s.attempts++;
+  if (Math.abs(val - line.ans) < 0.1) {
+    s.status = 'correct';
+  } else {
+    s.status = 'wrong';
+    if (s.attempts >= 2) s.hintOpen = true;
+  }
+  renderDrill();
+  setTimeout(() => {
+    const el = document.getElementById('di-' + id);
+    if (el) el.scrollIntoView({ behavior:'smooth', block:'center' });
+  }, 50);
+}
+
+function toggleDrillHint(id) {
+  drillState[id].hintOpen = !drillState[id].hintOpen;
+  renderDrill();
+}
+
+function renderDrillComplete() {
+  const allLines = DRILL_LINES.flat();
+  const correct = allLines.filter(l => drillState[l.id]?.status === 'correct').length;
+  const total = allLines.length;
+  const firstTry = allLines.filter(l => drillState[l.id]?.status === 'correct' && drillState[l.id]?.attempts === 1).length;
+  const hints = allLines.filter(l => drillState[l.id]?.hintOpen).length;
+
+  document.getElementById('drillStageNav').innerHTML = '';
+  document.getElementById('drillLayout').innerHTML = `
+    <div class="drill-complete-screen">
+      <div class="drill-complete-title">Model Complete ✓</div>
+      <div class="drill-complete-sub">You built a fully balanced 3-statement model from scratch. Income Statement → Cash Flow Statement → Balance Sheet all tie together correctly.</div>
+      <div class="drill-score-grid">
+        <div class="drill-score-card"><div class="drill-score-num" style="color:var(--green)">${correct}/${total}</div><div class="drill-score-lbl">Lines Correct</div></div>
+        <div class="drill-score-card"><div class="drill-score-num">${firstTry}</div><div class="drill-score-lbl">First Try</div></div>
+        <div class="drill-score-card"><div class="drill-score-num" style="color:${hints>3?'var(--red)':'var(--t1)'}">${hints}</div><div class="drill-score-lbl">Hints Used</div></div>
+      </div>
+      <div style="font-size:10px;color:var(--t3);max-width:400px;line-height:1.7">
+        <strong style="color:var(--t2)">Key takeaways:</strong> Net Income flows from IS → CFS (starting line) → BS (retained earnings). Ending cash from CFS plugs into BS cash. D&A is added back in CFS because it's non-cash. Balance sheet must always check to zero.
+      </div>
+    </div>`;
+  document.getElementById('drillNextBtn').style.display = 'none';
+}
+
+/* ============================================================
    ACCOUNTING BRAIN TEASERS
 ============================================================ */
 const ACCT_CATS = ['3-Statement Mechanics','Accrual & Timing','Goodwill & Intangibles','Deferred Taxes','Working Capital','LBO Accounting'];
@@ -5896,6 +6183,28 @@ function stopMockTimer() {
     <div class="tf-actions">
       <button class="tf-btn cancel" onclick="closeTrackerForm()">Cancel</button>
       <button class="tf-btn save" onclick="saveTrackerEntry()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODEL BUILD DRILL MODAL -->
+<div class="drill-modal" id="drillModal" onclick="if(event.target===this)toggleDrill()">
+  <div class="drill-box">
+    <div class="drill-head">
+      <div><div class="fit-head-title">Guided Model Build — TechCo Inc. FY2025E</div><div class="fit-head-sub">Build a full 3-statement model from scratch · enter each line · instant validation · hints on demand</div></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="drill-reset-btn" onclick="resetDrill()">Reset</button>
+        <button class="modal-close" onclick="toggleDrill()">✕</button>
+      </div>
+    </div>
+    <div class="drill-stages" id="drillStageNav"></div>
+    <div class="drill-layout" id="drillLayout"></div>
+    <div class="drill-footer">
+      <div class="drill-progress-wrap">
+        <div class="drill-progress-bar"><div class="drill-progress-fill" id="drillProgressFill" style="width:0%"></div></div>
+        <div class="drill-progress-txt" id="drillProgressTxt">0 / 0 correct</div>
+      </div>
+      <button class="drill-next-btn" id="drillNextBtn" disabled>Next Stage →</button>
     </div>
   </div>
 </div>
