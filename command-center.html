@@ -1209,6 +1209,7 @@ body {
   transition: all .12s;
 }
 .cal-today-btn:hover { color: var(--t2); border-color: var(--b3); }
+.cal-today-btn.on { color: var(--amber); border-color: var(--amber-brd); background: var(--amber-bg); }
 .cal-close {
   background: none;
   border: none;
@@ -1688,7 +1689,10 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
         <button class="cal-nav-btn" onclick="calShift(1)">›</button>
         <button class="cal-today-btn" onclick="calGoToday()">Today</button>
       </div>
-      <button class="cal-close" onclick="closeCalendar()">×</button>
+      <div style="display:flex;align-items:center;gap:8px">
+        <button class="cal-today-btn" id="calEarnToggle" onclick="toggleCalEarnings()">$ Summary</button>
+        <button class="cal-close" onclick="closeCalendar()">×</button>
+      </div>
     </div>
     <div class="cal-body">
       <div class="cal-earnings" id="calEarnings" style="display:none">
@@ -2757,8 +2761,9 @@ function showGError(msg) {
 }
 
 /* ── MONTHLY CALENDAR ── */
-let calYear  = new Date().getFullYear();
-let calMonth = new Date().getMonth(); // 0-indexed
+let calYear            = new Date().getFullYear();
+let calMonth           = new Date().getMonth();
+let calEarningsVisible = false;
 
 function openCalendar() {
   document.getElementById('calOverlay').classList.add('on');
@@ -2781,24 +2786,34 @@ function calGoToday() {
 
 function parsePayment(text) {
   if (!text) return null;
-  // (Paid $1000/$2000) — partial payment
+  const n = s => parseFloat(s.replace(/,/g, ''));
+  // (Paid $1000/$2000) — partial: received / total
   const partial = text.match(/\(Paid\s+\$?([\d,]+(?:\.\d+)?)\s*\/\s*\$?([\d,]+(?:\.\d+)?)\)/i);
-  if (partial) {
-    return {
-      received: parseFloat(partial[1].replace(/,/g, '')),
-      total:    parseFloat(partial[2].replace(/,/g, ''))
-    };
-  }
-  // (Paid $2000) — full payment
+  if (partial) return { received: n(partial[1]), total: n(partial[2]) };
+  // (Paid PS $344.25) — per-sitting, paid on completion
+  const ps = text.match(/\(Paid\s+PS\s+\$?([\d,]+(?:\.\d+)?)\)/i);
+  if (ps) return { received: n(ps[1]), total: n(ps[1]) };
+  // (Paid $2000) — full payment received
   const full = text.match(/\(Paid\s+\$?([\d,]+(?:\.\d+)?)\)/i);
-  if (full) {
-    const amt = parseFloat(full[1].replace(/,/g, ''));
-    return { received: amt, total: amt };
-  }
+  if (full) return { received: n(full[1]), total: n(full[1]) };
+  // ($650) — invoiced but not yet received
+  const invoiced = text.match(/\(\$\s*([\d,]+(?:\.\d+)?)\)/i);
+  if (invoiced) return { received: 0, total: n(invoiced[1]) };
   return null;
 }
 
+function toggleCalEarnings() {
+  calEarningsVisible = !calEarningsVisible;
+  const btn = document.getElementById('calEarnToggle');
+  if (btn) btn.classList.toggle('on', calEarningsVisible);
+  renderEarnings();
+}
+
 function renderEarnings() {
+  const strip = document.getElementById('calEarnings');
+  if (!strip) return;
+  if (!calEarningsVisible) { strip.style.display = 'none'; return; }
+
   let received = 0, total = 0, recCount = 0, invCount = 0;
   const monthStart = new Date(calYear, calMonth, 1);
   const monthEnd   = new Date(calYear, calMonth + 1, 0);
@@ -2814,11 +2829,10 @@ function renderEarnings() {
     recCount++;
     if (pay.total > 0) invCount++;
   });
-  const strip = document.getElementById('calEarnings');
-  if (!strip) return;
+
   if (total === 0) { strip.style.display = 'none'; return; }
   strip.style.display = 'flex';
-  const fmt = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  const fmt = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
   document.getElementById('calEarnReceived').textContent    = fmt(received);
   document.getElementById('calEarnReceivedSub').textContent = recCount + (recCount === 1 ? ' payment' : ' payments');
   document.getElementById('calEarnTotal').textContent       = fmt(total);
