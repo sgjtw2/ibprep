@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>if(!sessionStorage.getItem('cmd-auth-v1'))window.location.replace('./login.html');</script>
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#1B4FD8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="IB Prep">
 <title>Financial Models — CFI Standards</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
@@ -1051,6 +1055,54 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
   .acct-modal, .mock-modal { padding-top:0; align-items:flex-end; }
   .acct-box, .mock-box { border-radius:12px 12px 0 0; max-height:88vh; width:100%; }
 }
+
+/* ── MARKETS PULSE ────────────────────────────────────── */
+.pulse-modal { display:none; position:fixed; inset:0; z-index:400; background:rgba(0,0,0,.55); align-items:flex-start; justify-content:center; padding-top:40px; }
+.pulse-modal.open { display:flex; }
+.pulse-box { background:var(--bg); border:1px solid var(--b1); border-radius:8px; width:min(960px,96vw); max-height:88vh; display:flex; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,.4); }
+.pulse-head { padding:16px 20px 12px; border-bottom:1px solid var(--b1); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+.pulse-tabs { display:flex; border-bottom:1px solid var(--b1); flex-shrink:0; overflow-x:auto; }
+.pulse-tab { padding:9px 18px; font-family:'Syne',sans-serif; font-weight:700; font-size:9.5px; letter-spacing:.06em; text-transform:uppercase; color:var(--t3); cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; transition:color .12s; }
+.pulse-tab:hover { color:var(--t2); }
+.pulse-tab.on { color:var(--blue); border-bottom-color:var(--blue); }
+.pulse-body { flex:1; overflow-y:auto; padding:20px 22px; display:flex; flex-direction:column; gap:18px; }
+.pulse-body::-webkit-scrollbar { width:3px; }
+.pulse-body::-webkit-scrollbar-thumb { background:var(--b2); }
+.pulse-disclaimer { padding:8px 12px; background:rgba(217,119,6,.08); border:1px solid rgba(217,119,6,.25); border-radius:4px; font-size:9px; color:#D97706; font-family:'JetBrains Mono',monospace; }
+.pulse-section-hdr { font-family:'Syne',sans-serif; font-weight:800; font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--blue); padding-bottom:8px; border-bottom:1px solid var(--b1); }
+.pulse-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:10px; }
+.pulse-card { background:var(--s1); border:1px solid var(--b1); border-radius:6px; padding:13px 14px; display:flex; flex-direction:column; gap:4px; }
+.pulse-card-label { font-size:8.5px; font-family:'Syne',sans-serif; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--t3); }
+.pulse-card-value { font-family:'JetBrains Mono',monospace; font-size:18px; font-weight:600; color:var(--t1); margin-top:2px; }
+.pulse-card-change { font-family:'JetBrains Mono',monospace; font-size:9.5px; }
+.pulse-card-change.up { color:var(--green); }
+.pulse-card-change.dn { color:var(--red); }
+.pulse-card-change.nt { color:var(--t3); }
+.pulse-card-context { font-size:9px; color:var(--t3); line-height:1.5; margin-top:4px; }
+.pulse-card.bull { border-left:3px solid var(--green); }
+.pulse-card.bear { border-left:3px solid var(--red); }
+.pulse-card.neutral { border-left:3px solid var(--t3); }
+.pulse-card.watch { border-left:3px solid #D97706; }
+.pulse-regime { background:var(--s1); border:1px solid var(--b1); border-radius:6px; padding:16px 18px; display:flex; flex-direction:column; gap:10px; }
+.pulse-regime-title { font-family:'Syne',sans-serif; font-weight:800; font-size:12px; color:var(--t1); }
+.pulse-regime-body { font-size:10.5px; color:var(--t2); line-height:1.7; }
+.pulse-regime-body strong { color:var(--t1); }
+.pulse-table { width:100%; border-collapse:collapse; font-size:10.5px; }
+.pulse-table th { background:var(--s1); padding:8px 12px; border:1px solid var(--b1); font-family:'Syne',sans-serif; font-weight:700; font-size:8.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--t3); text-align:left; }
+.pulse-table td { padding:9px 12px; border:1px solid var(--b1); color:var(--t2); vertical-align:top; line-height:1.5; }
+.pulse-table tr:hover td { background:var(--s1); }
+.pulse-table .metric { font-family:'JetBrains Mono',monospace; color:var(--blue); font-weight:600; white-space:nowrap; }
+.pulse-table .val { font-family:'JetBrains Mono',monospace; color:var(--t1); font-weight:600; white-space:nowrap; }
+.pulse-tag { display:inline-block; font-size:8px; font-family:'Syne',sans-serif; font-weight:700; letter-spacing:.08em; text-transform:uppercase; padding:2px 6px; border-radius:2px; }
+.pulse-tag.bull { background:rgba(22,163,74,.12); color:var(--green); }
+.pulse-tag.bear { background:rgba(220,38,38,.1); color:var(--red); }
+.pulse-tag.neutral { background:var(--s2); color:var(--t3); }
+.pulse-tag.watch { background:rgba(217,119,6,.1); color:#D97706; }
+@media (max-width:768px) {
+  .pulse-modal { padding-top:0; align-items:flex-end; }
+  .pulse-box { border-radius:12px 12px 0 0; max-height:90vh; width:100%; }
+  .pulse-grid { grid-template-columns:1fr 1fr; }
+}
 </style>
 </head>
 <body>
@@ -1153,6 +1205,9 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
         </button>
         <button class="tools-item" id="resourceBtn" onclick="toggleResources();closeToolsMenu()">
           <span class="tools-item-icon">📚</span>Resource Hub<span class="tools-item-badge"></span>
+        </button>
+        <button class="tools-item" id="pulseBtn" onclick="togglePulse();closeToolsMenu()">
+          <span class="tools-item-icon">📡</span>Markets Pulse<span class="tools-item-badge"></span>
         </button>
       </div>
     </div>
@@ -4355,6 +4410,8 @@ let showCompRef   = false;
 let showResources = false;
 let compCity      = 'NYC';
 let resCatIdx     = 0;
+let showPulse     = false;
+let pulseTabIdx   = 0;
 
 const DEALS = [
   {
@@ -5133,6 +5190,125 @@ function toggleMAPConcept(i) {
 }
 
 /* ============================================================
+   MARKETS PULSE
+============================================================ */
+const PULSE_TABS = ['Overview','Rates & Credit','Equities','M&A Market','Economy'];
+
+const PULSE_DATA = {
+  overview: {
+    regime: {
+      title: 'Current Market Regime — Mid-2025 Onward',
+      body: `<strong>Rates:</strong> Fed has begun a cutting cycle after holding at 5.25–5.50% peak. 10Y Treasury yields remain elevated (~4.3–4.5%) as term premium has repriced higher — the yield curve has largely normalised after the deepest inversion in 40 years.<br><br>
+<strong>Credit:</strong> Investment grade and high yield spreads have tightened back toward cycle tights. Strong demand for yield, limited supply from leveraged issuers, and solid corporate fundamentals have compressed spreads. The leveraged loan market has reopened meaningfully for sponsor-backed deals.<br><br>
+<strong>Equities:</strong> S&P 500 has held near all-time highs, supported by AI-driven earnings growth in mega-cap tech and resilient consumer spending. Equity risk premium is near historical lows — stocks look expensive on a relative value basis vs. risk-free rates.<br><br>
+<strong>Deal market:</strong> M&A activity has been recovering from 2022–2023 trough as rates stabilise and financing markets reopen. Sponsor-driven LBO volumes remain below peak but are recovering. Strategic M&A is the primary driver of volumes.<br><br>
+<strong>What to watch:</strong> Fed rate path (pace of cuts), credit spread widening risks, AI M&A wave (hyperscaler acquisitions), geopolitical M&A approval risks (CFIUS, CMA).`
+    },
+    cards: [
+      { label:'Fed Funds Rate', value:'4.25–4.50%', change:'↓ Cutting cycle', dir:'nt', context:'Fed began cuts in late 2024. Markets pricing 2–3 more cuts ahead.', signal:'watch' },
+      { label:'10Y Treasury', value:'~4.35%', change:'↑ vs. 2023 avg', dir:'nt', context:'Elevated term premium. Key WACC input — higher rates = lower DCF values.', signal:'watch' },
+      { label:'2s10s Spread', value:'~+20bps', change:'↑ Uninverted', dir:'bull', context:'Yield curve normalising. Inversion historically preceded recession.', signal:'bull' },
+      { label:'S&P 500', value:'~5,500', change:'Near ATH', dir:'bull', context:'Driven by mega-cap tech AI earnings. Narrow market breadth a risk.', signal:'bull' },
+      { label:'VIX', value:'~16–18', change:'Low volatility', dir:'bull', context:'Complacency signal. Low VIX = cheap options, risk-on environment.', signal:'bull' },
+      { label:'HY Spreads', value:'~310bps', change:'↓ Tight', dir:'bull', context:'Near cycle tights. LBO financing accessible. Watch for widening.', signal:'bull' },
+      { label:'WTI Oil', value:'~$72/bbl', change:'Range-bound', dir:'nt', context:'OPEC+ managing supply. Energy M&A active on consolidation theme.', signal:'neutral' },
+      { label:'Gold', value:'~$2,900/oz', change:'↑ Near ATH', dir:'bull', context:'Geopolitical hedge + USD weakness. Central bank buying strong.', signal:'neutral' },
+    ]
+  },
+  rates: [
+    { metric:'Fed Funds Rate', value:'4.25–4.50%', signal:'watch', ibNote:'Directly drives WACC and LBO financing costs. Each 25bps cut reduces senior debt pricing, improving LBO returns. Watch the dot plot for pace of cuts.' },
+    { metric:'10Y US Treasury', value:'~4.35%', signal:'watch', ibNote:'The risk-free rate in CAPM. Higher 10Y = higher WACC = lower DCF values. Equity valuations are inversely sensitive. Used as the base rate for credit pricing.' },
+    { metric:'2Y US Treasury', value:'~4.15%', signal:'watch', ibNote:'Reflects near-term rate expectations. 2s10s spread is the key yield curve indicator. Deeply inverted 2s10s has historically predicted recessions within 12–18 months.' },
+    { metric:'2s10s Spread', value:'~+20bps', signal:'bull', ibNote:'Curve has normalised (was -110bps in late 2022 — deepest inversion since 1980s). Steepening curve = improving economic outlook, better for bank lending and deal financing.' },
+    { metric:'IG Credit Spreads (OAS)', value:'~95bps', signal:'bull', ibNote:'Investment grade spreads near cycle tights. Strong demand for yield. IG issuers can access cheap debt capital — supports M&A financing for investment-grade acquirers.' },
+    { metric:'HY Credit Spreads (OAS)', value:'~310bps', signal:'bull', ibNote:'High yield near tights. Key for LBO financing — HY bonds and leveraged loans price off SOFR + spread. Tight spreads = accessible financing = more sponsor activity.' },
+    { metric:'Leveraged Loan Spread (avg)', value:'~SOFR+350bps', signal:'bull', ibNote:'Pricing on new leveraged loans. At current SOFR (~4.3%) + 350bps = ~7.8% all-in — manageable for strong cash-flow businesses. Enables 5–6× leverage in LBOs.' },
+    { metric:'SOFR (3-month)', value:'~4.30%', signal:'watch', ibNote:'Replaced LIBOR as the floating rate benchmark. Most leveraged loans are SOFR-based. As Fed cuts, SOFR falls, directly reducing debt service on floating-rate LBO debt.' },
+    { metric:'US HY Default Rate (TTM)', value:'~2.5–3.0%', signal:'bull', ibNote:'Below long-run average (~4%). Low defaults = credit risk appetite remains healthy. Spike in defaults would widen HY spreads and freeze leveraged finance markets.' },
+  ],
+  equities: [
+    { metric:'S&P 500', value:'~5,500', signal:'bull', ibNote:'Near all-time highs driven by mega-cap tech AI earnings. Equity market strength supports M&A using stock consideration and improves seller valuation expectations.' },
+    { metric:'S&P 500 Fwd P/E', value:'~21–22×', signal:'watch', ibNote:'Above long-run average (~17×). Expensive on a historical basis — justified by AI growth premium or vulnerable to rate re-pricing. Watch for multiple compression.' },
+    { metric:'Equity Risk Premium', value:'~3.5%', signal:'watch', ibNote:'Near historical lows (long-run avg ~5%). Low ERP = stocks priced for perfection. Implies equity expected return barely compensates vs. risk-free rate at current prices.' },
+    { metric:'Nasdaq 100', value:'~19,500', signal:'bull', ibNote:'AI infrastructure build-out and hyperscaler capex driving mega-cap tech earnings. Active M&A in AI — acquisitions of model companies, data providers, infrastructure.' },
+    { metric:'VIX (Volatility Index)', value:'~16–18', signal:'bull', ibNote:'Below long-run average (~20). Low VIX = risk-on, low hedging cost, equity markets stable. VIX >30 signals stress — IPO windows close and M&A risk appetite falls sharply.' },
+    { metric:'Russell 2000 (Small Cap)', value:'~2,100', signal:'neutral', ibNote:'Underperforming large cap significantly. Small-caps are more rate-sensitive (more floating rate debt). Small-cap M&A valuations remain suppressed vs. large-cap.' },
+    { metric:'IPO Market', value:'Recovering', signal:'watch', ibNote:'IPO window has partially reopened after 2022–2023 shutdown. PE sponsors using IPOs as an exit route again. Watch S&P performance and VIX for window conditions.' },
+    { metric:'Buyback Yield (S&P 500)', value:'~2.2%', signal:'bull', ibNote:'Corporates returning cash via buybacks signals confidence in balance sheets. Strong FCF generation supports acquisition capacity for strategic buyers.' },
+  ],
+  manda: [
+    { metric:'Global M&A Volume (YTD)', value:'Recovering', signal:'watch', ibNote:'2022–2023 were historically weak years (rate shock + financing market freeze). 2024–2025 saw gradual recovery. Strategic M&A leads; PE sponsor activity lagging peak 2021 volumes.' },
+    { metric:'Average LBO Entry Multiple', value:'~10–11× EBITDA', signal:'watch', ibNote:'Down from ~13× peak in 2021. Higher financing costs compressed what PE can pay. As rates fall and spreads stay tight, entry multiples should gradually recover toward 11–12×.' },
+    { metric:'Average LBO Leverage', value:'~5.0–5.5× Net Debt/EBITDA', signal:'watch', ibNote:'Down from ~6–7× in 2021. Lenders tightened credit boxes post-rate shock. Gradually loosening as HY spreads tighten and SOFR falls. Senior debt typically 3.5–4.5×, mezz on top.' },
+    { metric:'PE Dry Powder', value:'~$3.9 trillion', signal:'bull', ibNote:'Record levels of committed-but-undeployed PE capital globally. Significant pressure on sponsors to deploy — this is a structural tailwind for M&A deal volumes as financing improves.' },
+    { metric:'PE Exit Backlog', value:'Elevated', signal:'watch', ibNote:'Many 2018–2021 vintage investments are past typical hold periods but unsold due to valuation gaps. As public markets recover and buyer/seller gap narrows, secondary and M&A exits will accelerate.' },
+    { metric:'Strategic vs. Sponsor M&A', value:'Strategic ~65%', signal:'bull', ibNote:'Strategic (corporate) M&A dominating deal volumes. Corporates using strong balance sheets and stock currency to consolidate. Sector themes: AI, healthcare, energy transition, defence.' },
+    { metric:'Cross-Border M&A Risk', value:'Elevated scrutiny', signal:'bear', ibNote:'CFIUS (US), CMA (UK), EC (EU) all increasingly interventionist. Chinese buyers blocked from US tech. Regulatory approval risk adds 3–6 months and bid uncertainty — priced into deal premiums.' },
+    { metric:'Avg Control Premium (Public)', value:'~28–35%', signal:'neutral', ibNote:'Premium paid over pre-announcement share price to acquire control. Reflects synergies + control value. Precedent transaction comps include this; trading comps do not — the gap is the implied premium.' },
+  ],
+  economy: [
+    { metric:'US GDP Growth (Real)', value:'~2.0–2.5%', signal:'bull', ibNote:'Resilient growth despite rate tightening cycle. "Soft landing" largely achieved. Strong consumer and government spending offsetting manufacturing weakness. Positive for corporate earnings.' },
+    { metric:'US CPI Inflation (YoY)', value:'~2.5–3.0%', signal:'watch', ibNote:'Above Fed 2% target but well below 9% peak. Services inflation sticky. Fed needs sustained progress toward 2% before deep cutting cycle. Inflation expectations anchored = positive.' },
+    { metric:'US Unemployment Rate', value:'~4.0–4.2%', signal:'neutral', ibNote:'Slight rise from <3.5% lows but historically still very low. Labour market resilience supports consumer spending. Large unemployment spike would hurt discretionary M&A and valuations.' },
+    { metric:'ISM Manufacturing PMI', value:'~48–50', signal:'watch', ibNote:'Near contraction/expansion border. Manufacturing has been weak while services held up. PMI <50 = contraction. Key leading indicator for industrial and materials M&A activity.' },
+    { metric:'US Consumer Confidence', value:'Moderate', signal:'neutral', ibNote:'Consumers cautious given elevated prices and rate environment, but employment strength providing support. Consumer confidence affects retail/consumer M&A valuations and multiples.' },
+    { metric:'Corporate Profit Margins (S&P)', value:'~12–13%', signal:'bull', ibNote:'Margins have held up despite cost pressures — pricing power and AI-driven productivity. High margins support strong EBITDA generation and FCF conversion, key for LBO debt service.' },
+    { metric:'US 10Y Breakeven Inflation', value:'~2.3–2.5%', signal:'neutral', ibNote:'Market-implied inflation expectations derived from TIPS vs. nominal Treasuries. Near Fed target — inflation expectations anchored. Relevant for long-horizon DCF terminal value assumptions.' },
+    { metric:'DXY (US Dollar Index)', value:'~103–105', signal:'neutral', ibNote:'Dollar remains strong but off 2022 peaks. Strong USD = US acquirers get more for dollar in cross-border deals. Can hurt US multinational earnings on translation. Watch for FX hedging costs in deals.' },
+  ]
+};
+
+function togglePulse() {
+  showPulse = !showPulse;
+  document.getElementById('pulseModal').classList.toggle('open', showPulse);
+  updateToolsItemState('pulseBtn', showPulse);
+  if (showPulse) renderPulse();
+}
+
+function renderPulse() {
+  const nav = document.getElementById('pulseNav');
+  nav.innerHTML = PULSE_TABS.map((t,i) =>
+    `<div class="pulse-tab${i===pulseTabIdx?' on':''}" onclick="setPulseTab(${i})">${t}</div>`
+  ).join('');
+  renderPulseBody();
+}
+
+function setPulseTab(i) { pulseTabIdx = i; renderPulse(); }
+
+function renderPulseBody() {
+  const body = document.getElementById('pulseBody');
+  const disclaimer = `<div class="pulse-disclaimer">⚠ Data is indicative as of mid-2025. Verify current values on Bloomberg, FRED, or WSJ Markets before interviews or client meetings.</div>`;
+
+  if (pulseTabIdx === 0) {
+    const d = PULSE_DATA.overview;
+    body.innerHTML = disclaimer +
+      `<div class="pulse-regime"><div class="pulse-regime-title">${d.regime.title}</div><div class="pulse-regime-body">${d.regime.body}</div></div>
+       <div class="pulse-section-hdr">Key Metrics at a Glance</div>
+       <div class="pulse-grid">${d.cards.map(c => `
+         <div class="pulse-card ${c.signal}">
+           <div class="pulse-card-label">${c.label}</div>
+           <div class="pulse-card-value">${c.value}</div>
+           <div class="pulse-card-change ${c.dir}">${c.change}</div>
+           <div class="pulse-card-context">${c.context}</div>
+         </div>`).join('')}</div>`;
+    return;
+  }
+
+  const maps = [null, 'rates', 'equities', 'manda', 'economy'];
+  const rows = PULSE_DATA[maps[pulseTabIdx]];
+  body.innerHTML = disclaimer +
+    `<table class="pulse-table">
+      <thead><tr><th>Metric</th><th>Level</th><th>Signal</th><th>IB Relevance</th></tr></thead>
+      <tbody>${rows.map(r => `<tr>
+        <td class="metric">${r.metric}</td>
+        <td class="val">${r.value}</td>
+        <td><span class="pulse-tag ${r.signal}">${r.signal}</span></td>
+        <td>${r.ibNote}</td>
+      </tr>`).join('')}</tbody>
+    </table>`;
+}
+
+/* ============================================================
    ACCOUNTING BRAIN TEASERS
 ============================================================ */
 const ACCT_CATS = ['3-Statement Mechanics','Accrual & Timing','Goodwill & Intangibles','Deferred Taxes','Working Capital','LBO Accounting'];
@@ -5724,6 +5900,18 @@ function stopMockTimer() {
   </div>
 </div>
 
+<!-- MARKETS PULSE MODAL -->
+<div class="pulse-modal" id="pulseModal" onclick="if(event.target===this)togglePulse()">
+  <div class="pulse-box">
+    <div class="pulse-head">
+      <div><div class="fit-head-title">Markets Pulse</div><div class="fit-head-sub">Rates · Credit · Equities · M&A Market · Economy — what every IB candidate needs to know</div></div>
+      <button class="modal-close" onclick="togglePulse()">✕</button>
+    </div>
+    <div class="pulse-tabs" id="pulseNav"></div>
+    <div class="pulse-body" id="pulseBody"></div>
+  </div>
+</div>
+
 <!-- ACCOUNTING BRAIN TEASERS MODAL -->
 <div class="acct-modal" id="acctModal" onclick="if(event.target===this)toggleAcct()">
   <div class="acct-box">
@@ -5755,5 +5943,6 @@ function stopMockTimer() {
   </div>
   <div class="rd-body" id="rdBody"></div>
 </div>
+<script>if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');</script>
 </body>
 </html>
