@@ -1811,6 +1811,11 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
           <div class="cal-earn-value" id="calEarnOutstanding">$0</div>
           <div class="cal-earn-sub">unpaid balance</div>
         </div>
+        <div class="cal-earn-cell" id="calEarnProratedCell" style="display:none">
+          <div class="cal-earn-label">Prorated</div>
+          <div class="cal-earn-value" style="color:var(--t2)" id="calEarnProrated">$0</div>
+          <div class="cal-earn-sub" id="calEarnProratedSub">cross-month events</div>
+        </div>
       </div>
       <div class="cal-weekdays">
         <div class="cal-wd">Sun</div><div class="cal-wd">Mon</div><div class="cal-wd">Tue</div>
@@ -3030,7 +3035,7 @@ function renderEarnings() {
   if (!strip) return;
   if (!calEarningsVisible) { strip.style.display = 'none'; return; }
 
-  let received = 0, total = 0, recCount = 0, invCount = 0, proratedCount = 0;
+  let received = 0, total = 0, recCount = 0, invCount = 0, proratedCount = 0, proratedTotal = 0;
   const monthStart = new Date(calYear, calMonth, 1);
   const monthEnd   = new Date(calYear, calMonth + 1, 0);
 
@@ -3052,17 +3057,25 @@ function renderEarnings() {
     total    += p.total;
     recCount++;
     if (p.total > 0) invCount++;
-    if (p.prorated) proratedCount++;
+    if (p.prorated) { proratedCount++; proratedTotal += p.total; }
   });
 
   if (total === 0) { strip.style.display = 'none'; return; }
   strip.style.display = 'flex';
   const fmt = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   document.getElementById('calEarnReceived').textContent    = fmt(received);
-  document.getElementById('calEarnReceivedSub').textContent = recCount + (recCount === 1 ? ' payment' : ' payments') + (proratedCount ? ` · ${proratedCount} prorated` : '');
+  document.getElementById('calEarnReceivedSub').textContent = recCount + (recCount === 1 ? ' payment' : ' payments');
   document.getElementById('calEarnTotal').textContent       = fmt(total);
-  document.getElementById('calEarnTotalSub').textContent    = invCount + (invCount === 1 ? ' invoice' : ' invoices') + (proratedCount ? ' · prorated' : '');
+  document.getElementById('calEarnTotalSub').textContent    = invCount + (invCount === 1 ? ' invoice' : ' invoices');
   document.getElementById('calEarnOutstanding').textContent = fmt(total - received);
+  const proratedCell = document.getElementById('calEarnProratedCell');
+  if (proratedCount > 0) {
+    proratedCell.style.display = '';
+    document.getElementById('calEarnProrated').textContent    = fmt(proratedTotal);
+    document.getElementById('calEarnProratedSub').textContent = proratedCount + (proratedCount === 1 ? ' event' : ' events') + ' across months';
+  } else {
+    proratedCell.style.display = 'none';
+  }
 }
 
 function placeEventsInLanes(events) {
