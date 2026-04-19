@@ -7,6 +7,7 @@
 <title>COMMAND CENTER</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 :root {
   --bg:        #000000;
@@ -1059,6 +1060,196 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
 ::-webkit-scrollbar { width: 3px; height: 3px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--b2); border-radius: 2px; }
+
+/* ── GOOGLE TAB ──────────────────────────────────────────── */
+.g-connect-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  padding: 36px 16px;
+  text-align: center;
+}
+.g-connect-icon {
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  background: var(--s2);
+  border: 1px solid var(--b2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px;
+}
+.g-connect-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--t1);
+  letter-spacing: .04em;
+}
+.g-connect-hint {
+  font-size: 10px;
+  color: var(--t3);
+  line-height: 1.5;
+  max-width: 200px;
+}
+.g-btn {
+  background: var(--amber);
+  border: none;
+  border-radius: 3px;
+  padding: 8px 18px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: #000;
+  cursor: pointer;
+  transition: background .12s;
+}
+.g-btn:hover { background: var(--amber-l); }
+.g-btn.secondary {
+  background: transparent;
+  border: 1px solid var(--b2);
+  color: var(--t3);
+  font-weight: 500;
+}
+.g-btn.secondary:hover { color: var(--t2); border-color: var(--b3); background: transparent; }
+.g-loaded {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+.g-user-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--b1);
+  flex-shrink: 0;
+}
+.g-user-name {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--t2);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.g-user-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #1E7A5A;
+}
+.g-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 0;
+}
+.g-section {
+  margin-bottom: 4px;
+}
+.g-section-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 12px 4px;
+}
+.g-section-title {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--t3);
+}
+.g-refresh {
+  background: none;
+  border: none;
+  color: var(--t4);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 0;
+  transition: color .12s;
+}
+.g-refresh:hover { color: var(--t2); }
+.g-event {
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--b0);
+  cursor: default;
+  transition: background .1s;
+}
+.g-event:hover { background: var(--s2); }
+.g-event-title {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--t1);
+  margin-bottom: 3px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.g-event-time {
+  font-size: 10px;
+  color: var(--t3);
+}
+.g-event-today .g-event-time { color: var(--amber); }
+.g-task {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--b0);
+  transition: background .1s;
+}
+.g-task:hover { background: var(--s2); }
+.g-task-check {
+  width: 13px; height: 13px;
+  border: 1px solid var(--b3);
+  border-radius: 2px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  cursor: pointer;
+  transition: all .12s;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px;
+  color: transparent;
+}
+.g-task-check:hover { border-color: var(--amber); color: var(--amber); }
+.g-task-info { flex: 1; min-width: 0; }
+.g-task-title {
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--t1);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.g-task-due {
+  font-size: 10px;
+  color: var(--t3);
+  margin-top: 2px;
+}
+.g-task-due.ov { color: var(--red); }
+.g-empty {
+  padding: 16px 12px;
+  font-size: 10px;
+  color: var(--t4);
+  text-align: center;
+}
+.g-loading {
+  padding: 12px;
+  font-size: 10px;
+  color: var(--t4);
+  text-align: center;
+}
+.g-error {
+  padding: 10px 12px;
+  font-size: 10px;
+  color: var(--red);
+  background: var(--red-bg);
+  border: 1px solid var(--red-brd);
+  margin: 8px 12px;
+  border-radius: 3px;
+}
 </style>
 </head>
 <body>
@@ -1140,6 +1331,7 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
       <button class="tab on" onclick="setTab('todos',this)">Todos</button>
       <button class="tab" onclick="setTab('notes',this)">Notes</button>
       <button class="tab" id="actTab" onclick="setTab('activity',this)">Activity</button>
+      <button class="tab" onclick="setTab('google',this)">Google</button>
       <button class="tab" onclick="setTab('subscriptions',this)">Notify</button>
     </div>
 
@@ -1166,6 +1358,18 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
         <span class="notes-empty-icon">⌗</span>
         <span>No notes yet</span>
         <span style="color:var(--t4)">Create a note to start writing</span>
+      </div>
+    </div>
+
+    <!-- GOOGLE -->
+    <div class="tab-pane" id="tab-google">
+      <div id="gPanel">
+        <div class="g-connect-wrap">
+          <div class="g-connect-icon">📅</div>
+          <div class="g-connect-label">Connect Google</div>
+          <div class="g-connect-hint">Link your Calendar and Tasks to see upcoming events and to-dos here.</div>
+          <button class="g-btn" id="gConnectBtn" onclick="connectGoogle()">Connect Account</button>
+        </div>
       </div>
     </div>
 
@@ -2039,6 +2243,209 @@ hydrate();
 seed();
 render();
 setInterval(() => { renderAct(); renderMetrics(); renderDate(); }, 60000);
+
+/* ============================================================
+   GOOGLE CALENDAR + TASKS
+============================================================ */
+const G_CLIENT_ID = '1091846037259-g1elmfo52jjhi5ensj8u45j55951eoo2.apps.googleusercontent.com';
+const G_SCOPES    = 'https://www.googleapis.com/auth/calendar.readonly https://www.googleapis.com/auth/tasks';
+
+let gTokenClient = null;
+let gAccessToken = sessionStorage.getItem('g-access-token') || null;
+let gCalEvents   = [];
+let gTaskItems   = [];
+let gTaskListId  = null;
+
+function initGoogleAuth() {
+  if (!window.google) { setTimeout(initGoogleAuth, 300); return; }
+  gTokenClient = google.accounts.oauth2.initTokenClient({
+    client_id: G_CLIENT_ID,
+    scope: G_SCOPES,
+    callback: async (resp) => {
+      if (resp.error) { showGError('Auth failed: ' + resp.error); return; }
+      gAccessToken = resp.access_token;
+      sessionStorage.setItem('g-access-token', gAccessToken);
+      renderGPanel('loading');
+      await loadGoogleData();
+    }
+  });
+  if (gAccessToken) {
+    renderGPanel('loading');
+    loadGoogleData();
+  }
+}
+
+function connectGoogle() {
+  if (!gTokenClient) { initGoogleAuth(); setTimeout(connectGoogle, 400); return; }
+  gTokenClient.requestAccessToken({ prompt: '' });
+}
+
+function disconnectGoogle() {
+  if (gAccessToken) {
+    try { google.accounts.oauth2.revoke(gAccessToken, () => {}); } catch(e) {}
+  }
+  gAccessToken = null;
+  gCalEvents = [];
+  gTaskItems = [];
+  gTaskListId = null;
+  sessionStorage.removeItem('g-access-token');
+  renderGPanel('connect');
+}
+
+async function loadGoogleData() {
+  try {
+    await Promise.all([loadCalendarEvents(), loadGoogleTasks()]);
+    renderGPanel('loaded');
+  } catch(e) {
+    if (e.status === 401) { disconnectGoogle(); return; }
+    showGError('Failed to load data. Try reconnecting.');
+  }
+}
+
+async function gFetch(url) {
+  const r = await fetch(url, { headers: { Authorization: 'Bearer ' + gAccessToken } });
+  if (!r.ok) { const err = new Error('HTTP ' + r.status); err.status = r.status; throw err; }
+  return r.json();
+}
+
+async function loadCalendarEvents() {
+  const now   = new Date().toISOString();
+  const end   = new Date(Date.now() + 14 * 86400000).toISOString();
+  const url   = `https://www.googleapis.com/calendar/v3/calendars/primary/events?timeMin=${encodeURIComponent(now)}&timeMax=${encodeURIComponent(end)}&singleEvents=true&orderBy=startTime&maxResults=15`;
+  const data  = await gFetch(url);
+  gCalEvents  = data.items || [];
+}
+
+async function loadGoogleTasks() {
+  const lists = await gFetch('https://www.googleapis.com/tasks/v1/users/@me/lists?maxResults=10');
+  const first = (lists.items || [])[0];
+  if (!first) { gTaskItems = []; return; }
+  gTaskListId = first.id;
+  const tasks = await gFetch(`https://www.googleapis.com/tasks/v1/lists/${gTaskListId}/tasks?showCompleted=false&showHidden=false&maxResults=30`);
+  gTaskItems  = (tasks.items || []).filter(t => t.status !== 'completed');
+}
+
+async function completeGTask(id) {
+  if (!gTaskListId) return;
+  await fetch(`https://www.googleapis.com/tasks/v1/lists/${gTaskListId}/tasks/${id}`, {
+    method: 'PATCH',
+    headers: { Authorization: 'Bearer ' + gAccessToken, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status: 'completed' })
+  });
+  gTaskItems = gTaskItems.filter(t => t.id !== id);
+  renderGPanel('loaded');
+}
+
+function fmtEventTime(ev) {
+  if (ev.start.date) {
+    const d = new Date(ev.start.date + 'T00:00:00');
+    const today = new Date(); today.setHours(0,0,0,0);
+    const diff  = Math.round((d - today) / 86400000);
+    if (diff === 0) return { label: 'Today', today: true };
+    if (diff === 1) return { label: 'Tomorrow', today: false };
+    return { label: d.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short' }), today: false };
+  }
+  const d = new Date(ev.start.dateTime);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const diff  = Math.round((d - today) / 86400000);
+  const time  = d.toLocaleTimeString('en-GB', { hour:'2-digit', minute:'2-digit' });
+  if (diff === 0) return { label: 'Today · ' + time, today: true };
+  if (diff === 1) return { label: 'Tomorrow · ' + time, today: false };
+  return { label: d.toLocaleDateString('en-GB', { weekday:'short', day:'numeric', month:'short' }) + ' · ' + time, today: false };
+}
+
+function fmtTaskDue(due) {
+  if (!due) return null;
+  const d    = new Date(due);
+  const now  = new Date(); now.setHours(0,0,0,0);
+  const diff = Math.round((d - now) / 86400000);
+  const ov   = diff < 0;
+  if (diff === 0) return { label: 'Due today', ov };
+  if (diff === 1) return { label: 'Due tomorrow', ov };
+  if (diff < 0)  return { label: 'Overdue · ' + d.toLocaleDateString('en-GB', { day:'numeric', month:'short' }), ov };
+  return { label: 'Due ' + d.toLocaleDateString('en-GB', { day:'numeric', month:'short' }), ov };
+}
+
+function renderGPanel(mode) {
+  const panel = document.getElementById('gPanel');
+  if (!panel) return;
+
+  if (mode === 'connect') {
+    panel.innerHTML = `
+      <div class="g-connect-wrap">
+        <div class="g-connect-icon">📅</div>
+        <div class="g-connect-label">Connect Google</div>
+        <div class="g-connect-hint">Link your Calendar and Tasks to see upcoming events and to-dos here.</div>
+        <button class="g-btn" onclick="connectGoogle()">Connect Account</button>
+      </div>`;
+    return;
+  }
+
+  if (mode === 'loading') {
+    panel.innerHTML = `<div class="g-loading">Loading Google data…</div>`;
+    return;
+  }
+
+  const calHTML = gCalEvents.length
+    ? gCalEvents.map(ev => {
+        const t = fmtEventTime(ev);
+        return `<div class="g-event ${t.today ? 'g-event-today' : ''}">
+          <div class="g-event-title">${esc(ev.summary || '(No title)')}</div>
+          <div class="g-event-time">${t.label}</div>
+        </div>`;
+      }).join('')
+    : `<div class="g-empty">No upcoming events</div>`;
+
+  const taskHTML = gTaskItems.length
+    ? gTaskItems.map(t => {
+        const due = fmtTaskDue(t.due);
+        return `<div class="g-task">
+          <div class="g-task-check" onclick="completeGTask('${esc(t.id)}')" title="Mark complete">✓</div>
+          <div class="g-task-info">
+            <div class="g-task-title">${esc(t.title || '(No title)')}</div>
+            ${due ? `<div class="g-task-due ${due.ov ? 'ov' : ''}">${due.label}</div>` : ''}
+          </div>
+        </div>`;
+      }).join('')
+    : `<div class="g-empty">No pending tasks</div>`;
+
+  panel.innerHTML = `
+    <div class="g-loaded">
+      <div class="g-user-bar">
+        <span class="g-user-name"><span class="g-user-dot"></span>Google Connected</span>
+        <button class="g-btn secondary" onclick="loadGoogleData()" title="Refresh">↻ Refresh</button>
+      </div>
+      <div class="g-scroll">
+        <div class="g-section">
+          <div class="g-section-hdr">
+            <span class="g-section-title">📅 Calendar · Next 14 days</span>
+          </div>
+          ${calHTML}
+        </div>
+        <div class="g-section">
+          <div class="g-section-hdr">
+            <span class="g-section-title">✓ Google Tasks</span>
+          </div>
+          ${taskHTML}
+        </div>
+        <div style="padding:12px;text-align:center">
+          <button class="g-btn secondary" onclick="disconnectGoogle()">Disconnect</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function showGError(msg) {
+  const panel = document.getElementById('gPanel');
+  if (!panel) return;
+  panel.innerHTML = `
+    <div class="g-error">${esc(msg)}</div>
+    <div class="g-connect-wrap">
+      <button class="g-btn" onclick="connectGoogle()">Try Again</button>
+    </div>`;
+}
+
+setTimeout(initGoogleAuth, 500);
 </script>
 </body>
 </html>
