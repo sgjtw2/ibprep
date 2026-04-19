@@ -981,6 +981,79 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
 .map-concept.open .map-concept-body { display:block; }
 .map-concept-body strong { color:var(--t1); }
 
+/* ── SHARED DRILL STYLES (reused across features 2-5) ── */
+.xdrill-modal { display:none; position:fixed; inset:0; z-index:400; background:rgba(0,0,0,.55); align-items:flex-start; justify-content:center; padding-top:30px; }
+.xdrill-modal.open { display:flex; }
+.xdrill-box { background:var(--bg); border:1px solid var(--b1); border-radius:8px; width:min(900px,97vw); max-height:92vh; display:flex; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,.4); }
+.xdrill-head { padding:14px 20px 12px; border-bottom:1px solid var(--b1); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+.xdrill-body { flex:1; overflow-y:auto; padding:20px 24px; display:flex; flex-direction:column; gap:16px; }
+.xdrill-body::-webkit-scrollbar { width:3px; }
+.xdrill-body::-webkit-scrollbar-thumb { background:var(--b2); }
+.xdrill-section { display:flex; flex-direction:column; gap:6px; }
+.xdrill-section-hdr { font-family:'Syne',sans-serif; font-weight:800; font-size:8px; letter-spacing:.14em; text-transform:uppercase; color:var(--blue); padding-bottom:6px; border-bottom:1px solid var(--b1); }
+.xdrill-row { display:flex; align-items:center; gap:8px; padding:5px 0; border-bottom:1px solid var(--b1); }
+.xdrill-row:last-child { border-bottom:none; }
+.xdrill-row.total { border-top:2px solid var(--b2); border-bottom:2px solid var(--b2) !important; background:var(--bbg); padding:6px 8px; border-radius:3px; margin:3px 0; }
+.xdrill-row.sub { border-top:1px solid var(--b2); }
+.xdrill-lbl { flex:1; font-size:10.5px; color:var(--t2); }
+.xdrill-row.total .xdrill-lbl { font-family:'Syne',sans-serif; font-weight:800; color:var(--t1); }
+.xdrill-row.sub .xdrill-lbl { font-weight:600; color:var(--t1); }
+.xdrill-given { width:90px; flex-shrink:0; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--blue); text-align:right; background:var(--bbg); border:1px solid var(--bbrd); border-radius:3px; padding:4px 8px; }
+.xdrill-input { width:90px; flex-shrink:0; background:var(--s2); border:1px solid var(--b1); border-radius:3px; padding:4px 8px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--t1); text-align:right; outline:none; transition:border-color .12s; }
+.xdrill-input:focus { border-color:var(--bbrd); }
+.xdrill-input.correct { border-color:var(--green); background:rgba(22,163,74,.06); color:var(--green); }
+.xdrill-input.wrong { border-color:var(--red); background:rgba(220,38,38,.06); }
+.xdrill-input:disabled { background:var(--s1); color:var(--t3); cursor:not-allowed; }
+.xdrill-check { width:26px; height:26px; border:1px solid var(--b1); border-radius:3px; background:var(--s2); font-size:11px; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all .12s; }
+.xdrill-check:hover:not(:disabled) { border-color:var(--blue); color:var(--blue); }
+.xdrill-check:disabled { opacity:.35; cursor:not-allowed; }
+.xdrill-hint-btn { width:20px; height:20px; border-radius:50%; border:1px solid var(--b2); background:none; color:var(--t3); font-size:9px; cursor:pointer; flex-shrink:0; font-family:'Syne',sans-serif; font-weight:800; transition:all .12s; }
+.xdrill-hint-btn:hover { border-color:var(--blue); color:var(--blue); }
+.xdrill-status { width:16px; font-size:12px; text-align:center; flex-shrink:0; }
+.xdrill-hint-box { display:none; padding:5px 8px; background:var(--bbg); border:1px solid var(--bbrd); border-radius:3px; font-size:9.5px; color:var(--t2); margin-bottom:2px; line-height:1.5; }
+.xdrill-hint-box.show { display:block; }
+.xdrill-footer { flex-shrink:0; padding:10px 20px; border-top:1px solid var(--b1); display:flex; align-items:center; justify-content:space-between; }
+.xdrill-prog-row { display:flex; align-items:center; gap:10px; }
+.xdrill-prog-bar { width:160px; height:3px; background:var(--b1); border-radius:2px; overflow:hidden; }
+.xdrill-prog-fill { height:100%; background:var(--green); border-radius:2px; transition:width .3s; }
+.xdrill-prog-txt { font-size:9px; font-family:'JetBrains Mono',monospace; color:var(--t3); }
+.xdrill-next { background:var(--blue); border:none; color:#fff; padding:8px 20px; border-radius:4px; font-family:'Syne',sans-serif; font-weight:800; font-size:10px; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; }
+.xdrill-next:hover { background:var(--bluel); }
+.xdrill-next:disabled { opacity:.4; cursor:not-allowed; }
+.xdrill-reset { background:none; border:1px solid var(--b1); color:var(--t3); padding:7px 14px; border-radius:4px; font-family:'Syne',sans-serif; font-weight:700; font-size:9px; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; }
+.xdrill-reset:hover { border-color:var(--b2); color:var(--t2); }
+/* Integration drill specific */
+.int-scenario-tabs { display:flex; border-bottom:1px solid var(--b1); flex-shrink:0; overflow-x:auto; }
+.int-stab { padding:8px 14px; font-family:'Syne',sans-serif; font-weight:700; font-size:9px; letter-spacing:.06em; text-transform:uppercase; color:var(--t3); cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; }
+.int-stab:hover { color:var(--t2); }
+.int-stab.on { color:var(--blue); border-bottom-color:var(--blue); }
+.int-stab.done { color:var(--green); }
+.int-stmt-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+.int-stmt-col { background:var(--s1); border:1px solid var(--b1); border-radius:6px; padding:12px 14px; display:flex; flex-direction:column; gap:4px; }
+.int-stmt-hdr { font-family:'Syne',sans-serif; font-weight:800; font-size:8px; letter-spacing:.14em; text-transform:uppercase; color:var(--blue); padding-bottom:6px; border-bottom:1px solid var(--b1); margin-bottom:4px; }
+/* Error spotter */
+.err-model { display:flex; flex-direction:column; gap:2px; }
+.err-line { display:flex; align-items:center; gap:10px; padding:6px 10px; border-radius:3px; border:1px solid transparent; transition:all .12s; }
+.err-line:hover { background:var(--s2); border-color:var(--b1); }
+.err-line.flagged { border-color:#D97706; background:rgba(217,119,6,.08); }
+.err-line.correct-flag { border-color:var(--green); background:rgba(22,163,74,.08); }
+.err-line.missed { border-color:var(--red); background:rgba(220,38,38,.06); }
+.err-line.wrong-flag { border-color:var(--red); background:rgba(220,38,38,.06); }
+.err-num { width:18px; height:18px; border-radius:3px; background:var(--s2); color:var(--t3); font-size:8px; font-family:'Syne',sans-serif; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.err-lbl { flex:1; font-size:10.5px; color:var(--t2); }
+.err-val { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--t1); width:80px; text-align:right; flex-shrink:0; }
+.err-flag-btn { padding:4px 10px; border-radius:3px; border:1px solid var(--b1); background:var(--s2); font-family:'Syne',sans-serif; font-weight:700; font-size:8.5px; color:var(--t3); cursor:pointer; transition:all .12s; white-space:nowrap; }
+.err-flag-btn:hover { border-color:#D97706; color:#D97706; }
+.err-flag-btn.flagged { border-color:#D97706; color:#D97706; background:rgba(217,119,6,.08); }
+.err-explanation { display:none; padding:7px 10px; background:var(--s1); border:1px solid var(--b1); border-radius:3px; font-size:9.5px; color:var(--t2); line-height:1.55; margin-top:3px; }
+.err-explanation.show { display:block; }
+.err-section-hdr { font-family:'Syne',sans-serif; font-weight:800; font-size:8px; letter-spacing:.14em; text-transform:uppercase; color:var(--blue); padding:8px 0 5px; border-bottom:1px solid var(--b1); margin-bottom:3px; margin-top:8px; }
+.err-section-hdr:first-child { margin-top:0; }
+@media (max-width:768px) {
+  .xdrill-modal { padding-top:0; align-items:flex-end; }
+  .xdrill-box { border-radius:12px 12px 0 0; max-height:92vh; width:100%; }
+  .int-stmt-grid { grid-template-columns:1fr; }
+}
 /* ── MODEL BUILD DRILL ────────────────────────────────── */
 .drill-modal { display:none; position:fixed; inset:0; z-index:400; background:rgba(0,0,0,.55); align-items:flex-start; justify-content:center; padding-top:30px; }
 .drill-modal.open { display:flex; }
@@ -1247,6 +1320,18 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
         </button>
         <button class="tools-item" id="drillBtn" onclick="toggleDrill();closeToolsMenu()">
           <span class="tools-item-icon">🏗️</span>Model Build Drill<span class="tools-item-badge"></span>
+        </button>
+        <button class="tools-item" id="intDrillBtn" onclick="toggleIntDrill();closeToolsMenu()">
+          <span class="tools-item-icon">⚡</span>Integration Drills<span class="tools-item-badge"></span>
+        </button>
+        <button class="tools-item" id="dcfDrillBtn" onclick="toggleDCFDrill();closeToolsMenu()">
+          <span class="tools-item-icon">📈</span>DCF Builder<span class="tools-item-badge"></span>
+        </button>
+        <button class="tools-item" id="lboDrillBtn" onclick="toggleLBODrill();closeToolsMenu()">
+          <span class="tools-item-icon">🔩</span>LBO Drill<span class="tools-item-badge"></span>
+        </button>
+        <button class="tools-item" id="errSpotBtn" onclick="toggleErrSpot();closeToolsMenu()">
+          <span class="tools-item-icon">🔍</span>Error Spotter<span class="tools-item-badge"></span>
         </button>
         <button class="tools-item" id="mockBtn" onclick="toggleMock();closeToolsMenu()">
           <span class="tools-item-icon">🎙️</span>Mock Interview<span class="tools-item-badge"></span>
@@ -2745,9 +2830,11 @@ let showMath    = false;
 let showTracker = false;
 let showAcct    = false;
 let showMock    = false;
-let showDrill   = false;
-let drillStage  = 0;
-let drillState  = {};
+let showDrill     = false, drillStage = 0, drillState = {};
+let showIntDrill  = false, intDrillIdx = 0, intDrillState = {};
+let showDCFDrill  = false, dcfDrillState = {};
+let showLBODrill  = false, lboDrillState = {};
+let showErrSpot   = false, errSpotFlags = {}, errSpotSubmitted = false;
 let acctCatIdx  = 0;
 let acctPracticed = JSON.parse(localStorage.getItem('fm-acct-practiced') || '{}');
 let mockMode = 'all', mockTimerLimit = 45, mockScreen = 'setup';
@@ -5387,6 +5474,588 @@ function renderPulseBody() {
 }
 
 /* ============================================================
+   FEATURE 2 — 3-STATEMENT INTEGRATION DRILLS
+============================================================ */
+const INT_SCENARIOS = [
+  {
+    title:'Depreciation increases by $10m',
+    context:'Tax rate 40%. Taxes paid in cash during the period. Show the change (+ or −) in each line.',
+    difficulty:'medium',
+    insight:'Non-cash charges reduce earnings but CREATE cash via tax shield. Higher D&A → lower NI but higher OCF.',
+    stmts: {
+      is:[
+        {id:'s1_da',  label:'D&A Expense',      ans:-10,  hint:'D&A increases = larger expense = −$10m'},
+        {id:'s1_tax', label:'Tax Expense',       ans:4,    hint:'Less taxable income → tax savings = $10 × 40% = +$4m'},
+        {id:'s1_ni',  label:'Net Income',        ans:-6,   hint:'D&A −$10 + Tax savings +$4 = −$6m', type:'total'},
+      ],
+      cfs:[
+        {id:'s1_cni', label:'Net Income',        ans:-6,   hint:'Starts with NI from IS = −$6m', type:'link'},
+        {id:'s1_cda', label:'Add: D&A',          ans:10,   hint:'D&A is non-cash — add it back = +$10m'},
+        {id:'s1_ocf', label:'Operating CF',      ans:4,    hint:'NI −$6 + D&A +$10 = +$4m', type:'total'},
+      ],
+      bs:[
+        {id:'s1_bca', label:'Cash',              ans:4,    hint:'OCF +$4m means $4m more cash from tax savings'},
+        {id:'s1_ppe', label:'PP&E (net)',         ans:-10,  hint:'Accumulated depreciation +$10m → PP&E net −$10m'},
+        {id:'s1_bre', label:'Retained Earnings', ans:-6,   hint:'Net income −$6m flows to retained earnings', type:'total'},
+      ]
+    }
+  },
+  {
+    title:'Revenue increases by $100m — cash collected immediately',
+    context:'Tax rate 40%. Cash received and taxes paid in same period.',
+    difficulty:'easy',
+    insight:'Revenue collected = cash in hand. NI and OCF both improve by the after-tax amount.',
+    stmts: {
+      is:[
+        {id:'s2_rev',  label:'Revenue',          ans:100,  hint:'Revenue increases by +$100m'},
+        {id:'s2_tax',  label:'Tax Expense',       ans:-40,  hint:'Additional tax = $100m × 40% = −$40m'},
+        {id:'s2_ni',   label:'Net Income',        ans:60,   hint:'$100m revenue − $40m tax = +$60m', type:'total'},
+      ],
+      cfs:[
+        {id:'s2_ocf',  label:'Operating CF',      ans:60,   hint:'NI +$60, cash collected, taxes paid → OCF +$60m', type:'total'},
+      ],
+      bs:[
+        {id:'s2_cash', label:'Cash',              ans:60,   hint:'+$100m in, −$40m taxes paid = net +$60m'},
+        {id:'s2_re',   label:'Retained Earnings', ans:60,   hint:'NI +$60m → retained earnings +$60m', type:'total'},
+      ]
+    }
+  },
+  {
+    title:'Revenue +$100m goes to Accounts Receivable (not collected)',
+    context:'Tax rate 40%. Revenue recognised but NOT yet collected. Taxes paid in cash.',
+    difficulty:'hard',
+    insight:'KEY INTERVIEW QUESTION. Revenue recognised ≠ cash received. A/R increase = use of cash. OCF can be negative despite positive NI.',
+    stmts: {
+      is:[
+        {id:'s3_rev',  label:'Revenue',          ans:100,  hint:'Revenue recognised = +$100m (accrual basis)'},
+        {id:'s3_tax',  label:'Tax Expense',       ans:-40,  hint:'Tax on $100m income = −$40m (paid in cash)'},
+        {id:'s3_ni',   label:'Net Income',        ans:60,   hint:'$100m − $40m tax = +$60m', type:'total'},
+      ],
+      cfs:[
+        {id:'s3_cni',  label:'Net Income',        ans:60,   hint:'NI from IS = +$60m', type:'link'},
+        {id:'s3_ar',   label:'Increase in A/R',   ans:-100, hint:'A/R increases by $100m = USE of cash = −$100m'},
+        {id:'s3_ocf',  label:'Operating CF',      ans:-40,  hint:'NI +$60 − A/R +$100 = −$40m (NEGATIVE)', type:'total'},
+      ],
+      bs:[
+        {id:'s3_cash', label:'Cash',              ans:-40,  hint:'−$40m (paid taxes but received no cash from customers)'},
+        {id:'s3_arr',  label:'Accounts Receivable',ans:100, hint:'A/R +$100m (customers owe us money)'},
+        {id:'s3_re',   label:'Retained Earnings', ans:60,   hint:'NI +$60m → retained earnings +$60m', type:'total'},
+      ]
+    }
+  },
+  {
+    title:'Company buys $100m of PP&E with cash',
+    context:'No financing. All cash. No immediate depreciation effect in this period.',
+    difficulty:'easy',
+    insight:'Capex is a BALANCE SHEET and CASH FLOW event — not an income statement event. Never reduce NI by capex.',
+    stmts: {
+      is:[
+        {id:'s4_ni',   label:'Net Income',        ans:0,    hint:'No IS impact — capex is not expensed', type:'total'},
+      ],
+      cfs:[
+        {id:'s4_cap',  label:'Capital Expenditure',ans:-100, hint:'Cash used to buy PP&E = −$100m in investing'},
+        {id:'s4_net',  label:'Net Change in Cash', ans:-100, hint:'Only investing outflow = −$100m', type:'total'},
+      ],
+      bs:[
+        {id:'s4_cash', label:'Cash',              ans:-100, hint:'Cash paid out = −$100m'},
+        {id:'s4_ppe',  label:'PP&E (net)',         ans:100,  hint:'New asset acquired = +$100m', type:'total'},
+      ]
+    }
+  },
+  {
+    title:'Company issues $100m of new long-term debt',
+    context:'Debt proceeds received. No interest in current period.',
+    difficulty:'easy',
+    insight:'Debt issuance hits FINANCING activities and balance sheet only. No P&L impact at issuance.',
+    stmts: {
+      is:[
+        {id:'s5_ni',   label:'Net Income',        ans:0,    hint:'No IS impact from debt issuance itself', type:'total'},
+      ],
+      cfs:[
+        {id:'s5_proc', label:'Debt Proceeds',      ans:100,  hint:'Cash in from debt = +$100m (financing)'},
+        {id:'s5_net',  label:'Net Change in Cash', ans:100,  hint:'Financing inflow = +$100m', type:'total'},
+      ],
+      bs:[
+        {id:'s5_cash', label:'Cash',              ans:100,  hint:'Proceeds received = +$100m'},
+        {id:'s5_debt', label:'Long-Term Debt',     ans:100,  hint:'New liability = +$100m', type:'total'},
+      ]
+    }
+  },
+  {
+    title:'Goodwill impairment of $50m recorded',
+    context:'Impairment is NON-deductible for tax purposes (no tax benefit).',
+    difficulty:'hard',
+    insight:'COMMON TRAP. Impairments are non-cash AND typically non-deductible. Zero tax benefit, zero cash impact. Only equity falls.',
+    stmts: {
+      is:[
+        {id:'s6_imp',  label:'Impairment Charge',  ans:-50,  hint:'Impairment = expense = −$50m'},
+        {id:'s6_tax',  label:'Tax Benefit',         ans:0,    hint:'NON-DEDUCTIBLE — no tax benefit = $0'},
+        {id:'s6_ni',   label:'Net Income',          ans:-50,  hint:'Impairment −$50 + Tax $0 = −$50m', type:'total'},
+      ],
+      cfs:[
+        {id:'s6_cni',  label:'Net Income',          ans:-50,  hint:'NI from IS = −$50m', type:'link'},
+        {id:'s6_add',  label:'Add: Impairment (non-cash)', ans:50, hint:'Non-cash charge — add back = +$50m'},
+        {id:'s6_ocf',  label:'Operating CF',        ans:0,    hint:'NI −$50 + addback +$50 = $0 (no cash impact)', type:'total'},
+      ],
+      bs:[
+        {id:'s6_gw',   label:'Goodwill',            ans:-50,  hint:'Written down = −$50m'},
+        {id:'s6_re',   label:'Retained Earnings',   ans:-50,  hint:'NI −$50m flows to retained earnings', type:'total'},
+      ]
+    }
+  },
+];
+
+function toggleIntDrill() {
+  showIntDrill = !showIntDrill;
+  document.getElementById('intDrillModal').classList.toggle('open', showIntDrill);
+  updateToolsItemState('intDrillBtn', showIntDrill);
+  if (showIntDrill && Object.keys(intDrillState).length === 0) initIntDrillState();
+  if (showIntDrill) renderIntDrill();
+}
+
+function initIntDrillState() {
+  intDrillState = {};
+  INT_SCENARIOS.forEach((sc, si) => {
+    ['is','cfs','bs'].forEach(stmt => {
+      (sc.stmts[stmt]||[]).forEach(line => {
+        intDrillState[line.id] = { status:null, attempts:0, hintOpen:false };
+      });
+    });
+  });
+}
+
+function renderIntDrill() {
+  const sc = INT_SCENARIOS[intDrillIdx];
+  const allLines = ['is','cfs','bs'].flatMap(s => sc.stmts[s]||[]);
+  const correct = allLines.filter(l => intDrillState[l.id]?.status === 'correct').length;
+
+  const tabs = document.getElementById('intDrillTabs');
+  tabs.innerHTML = INT_SCENARIOS.map((s,i) => {
+    const done = ['is','cfs','bs'].flatMap(st => s.stmts[st]||[]).every(l => intDrillState[l.id]?.status === 'correct');
+    return `<div class="int-stab${i===intDrillIdx?' on':''}${done?' done':''}" onclick="intDrillIdx=${i};renderIntDrill()">
+      ${i+1}. ${s.title.split(' ').slice(0,4).join(' ')}…
+    </div>`;
+  }).join('');
+
+  const body = document.getElementById('intDrillBody');
+  const stmtNames = {is:'Income Statement (IS)', cfs:'Cash Flow Statement (CFS)', bs:'Balance Sheet (BS)'};
+
+  body.innerHTML = `
+    <div style="padding:10px 14px;background:var(--s1);border:1px solid var(--b1);border-radius:5px;display:flex;flex-direction:column;gap:4px">
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:12px;color:var(--t1)">${sc.title}</div>
+      <div style="font-size:9.5px;color:var(--t3)">${sc.context}</div>
+      <div style="font-size:9px;color:#D97706;margin-top:2px">Difficulty: ${sc.difficulty}</div>
+    </div>
+    <div class="int-stmt-grid">
+      ${['is','cfs','bs'].map(stmt => `
+        <div class="int-stmt-col">
+          <div class="int-stmt-hdr">${stmtNames[stmt]}</div>
+          ${(sc.stmts[stmt]||[]).map(line => {
+            const s = intDrillState[line.id];
+            const isCorrect = s?.status === 'correct', isWrong = s?.status === 'wrong';
+            const showAns = s?.attempts >= 2;
+            const rowCls = line.type === 'total' ? 'total' : line.type === 'link' ? 'sub' : '';
+            return `<div>
+              ${s?.hintOpen ? `<div class="xdrill-hint-box show">💡 ${line.hint}</div>` : ''}
+              <div class="xdrill-row ${rowCls}">
+                <div class="xdrill-lbl">${line.label}${showAns&&!isCorrect?`<span style="color:var(--green);font-family:'JetBrains Mono',monospace;font-size:9px"> → ${line.ans}</span>`:''}</div>
+                <input class="xdrill-input${isCorrect?' correct':isWrong?' wrong':''}" id="int-${line.id}" type="number" step="0.5" value="${isCorrect?line.ans:(s?.userVal??'')}" ${isCorrect?'disabled':''} placeholder="Δ?" style="width:72px" onkeydown="if(event.key==='Enter')checkIntLine('${line.id}')">
+                <button class="xdrill-check" onclick="checkIntLine('${line.id}')" ${isCorrect?'disabled':''}>→</button>
+                <button class="xdrill-hint-btn" onclick="toggleIntHint('${line.id}')">?</button>
+                <div class="xdrill-status" style="${isCorrect?'color:var(--green)':isWrong?'color:var(--red)':''}">${isCorrect?'✓':isWrong?'✗':''}</div>
+              </div>
+            </div>`;
+          }).join('')}
+        </div>`).join('')}
+    </div>
+    <div style="padding:10px 14px;background:var(--bbg);border:1px solid var(--bbrd);border-radius:5px;font-size:10px;color:var(--t2)">
+      <strong style="color:var(--blue)">Key Insight:</strong> ${sc.insight}
+    </div>`;
+
+  const pct = allLines.length ? Math.round(correct/allLines.length*100) : 0;
+  document.getElementById('intDrillProg').style.width = pct+'%';
+  document.getElementById('intDrillProgTxt').textContent = `${correct}/${allLines.length} correct`;
+  const nextBtn = document.getElementById('intDrillNext');
+  const allDone = allLines.every(l => intDrillState[l.id]?.status === 'correct');
+  const hasNext = intDrillIdx < INT_SCENARIOS.length - 1;
+  nextBtn.textContent = hasNext ? 'Next Scenario →' : (allDone ? 'All Done ✓' : 'Finish');
+  nextBtn.disabled = !allDone;
+  nextBtn.onclick = () => { if (hasNext) { intDrillIdx++; renderIntDrill(); } };
+}
+
+function checkIntLine(id) {
+  const line = INT_SCENARIOS.flatMap(sc => ['is','cfs','bs'].flatMap(s => sc.stmts[s]||[])).find(l => l.id === id);
+  const input = document.getElementById('int-'+id);
+  if (!line || !input) return;
+  const val = parseFloat(input.value);
+  const s = intDrillState[id];
+  s.userVal = val; s.attempts++;
+  s.status = Math.abs(val - line.ans) < 0.1 ? 'correct' : 'wrong';
+  if (s.status === 'wrong' && s.attempts >= 2) s.hintOpen = true;
+  renderIntDrill();
+}
+
+function toggleIntHint(id) {
+  intDrillState[id].hintOpen = !intDrillState[id].hintOpen;
+  renderIntDrill();
+}
+
+/* ============================================================
+   FEATURE 3 — DCF BUILDER
+============================================================ */
+const DCF_ASM = [
+  {label:'Base Year FCF', val:'$80m'},
+  {label:'FCF Growth (Y1→Y3)', val:'15%'},
+  {label:'FCF Growth (Y4→Y5)', val:'12%'},
+  {label:'WACC', val:'10.0%'},
+  {label:'Terminal Growth Rate', val:'2.5%'},
+  {label:'Net Debt (Year 0)', val:'$150m'},
+];
+
+// Verified FCFs: 80, 92, 106, 122, 140
+// PV factors: 0.9091, 0.8264, 0.7513, 0.6830, 0.6209
+// PV FCFs: 72.7, 76.0, 79.6, 83.3, 86.9 → sum 398.5
+// TV: 140×1.025/0.075 = 1913.3  PV TV: 1913.3×0.6209 = 1188.0
+// EV: 1586.5  Equity Value: 1436.5
+
+const DCF_LINES = [
+  {section:'Step 1: Project Free Cash Flows', lines:[
+    {id:'d_fcf1', label:'FCF Year 1', ans:80,   given:true,  hint:'Given — base FCF = $80m'},
+    {id:'d_fcf2', label:'FCF Year 2', ans:92,   given:false, hint:'Year 1 × 1.15 = $80m × 1.15 = $92m'},
+    {id:'d_fcf3', label:'FCF Year 3', ans:106,  given:false, hint:'Year 2 × 1.15 = $92m × 1.15 = $105.8m ≈ $106m'},
+    {id:'d_fcf4', label:'FCF Year 4', ans:122,  given:false, hint:'Year 3 × 1.15 = $106m × 1.15 = $121.9m ≈ $122m'},
+    {id:'d_fcf5', label:'FCF Year 5', ans:140,  given:false, hint:'Year 4 × 1.12 = $122m × 1.12 = $136.6m ≈ $140m (rounding at model level)'},
+  ]},
+  {section:'Step 2: Discount Each FCF at WACC (10%)', lines:[
+    {id:'d_pvf1', label:'PV Factor Year 1 (4 decimal places)', ans:0.9091, given:false, hint:'1 ÷ (1+10%)¹ = 1/1.10 = 0.9091'},
+    {id:'d_pvf2', label:'PV Factor Year 2', ans:0.8264, given:false, hint:'1 ÷ (1+10%)² = 1/1.21 = 0.8264'},
+    {id:'d_pvf3', label:'PV Factor Year 3', ans:0.7513, given:false, hint:'1 ÷ (1+10%)³ = 1/1.331 = 0.7513'},
+    {id:'d_pvf4', label:'PV Factor Year 4', ans:0.6830, given:false, hint:'1 ÷ (1+10%)⁴ = 1/1.4641 = 0.6830'},
+    {id:'d_pvf5', label:'PV Factor Year 5', ans:0.6209, given:false, hint:'1 ÷ (1+10%)⁵ = 1/1.6105 = 0.6209'},
+    {id:'d_pv1',  label:'PV of FCF Year 1', ans:72.7,  given:false, hint:'$80m × 0.9091 = $72.7m'},
+    {id:'d_pv2',  label:'PV of FCF Year 2', ans:76.0,  given:false, hint:'$92m × 0.8264 = $76.0m'},
+    {id:'d_pv3',  label:'PV of FCF Year 3', ans:79.6,  given:false, hint:'$106m × 0.7513 = $79.6m'},
+    {id:'d_pv4',  label:'PV of FCF Year 4', ans:83.3,  given:false, hint:'$122m × 0.6830 = $83.3m'},
+    {id:'d_pv5',  label:'PV of FCF Year 5', ans:86.9,  given:false, hint:'$140m × 0.6209 = $86.9m'},
+    {id:'d_spv',  label:'Sum of PV FCFs',   ans:398.5, given:false, hint:'72.7+76.0+79.6+83.3+86.9 = $398.5m', type:'sub'},
+  ]},
+  {section:'Step 3: Calculate Terminal Value (Gordon Growth Model)', lines:[
+    {id:'d_tv',   label:'Terminal Value', ans:1913.3, given:false, hint:'FCF_Y5 × (1+g) ÷ (WACC−g) = $140m × 1.025 ÷ (10%−2.5%) = $143.5m ÷ 7.5% = $1,913.3m'},
+    {id:'d_pvtv', label:'PV of Terminal Value', ans:1188.0, given:false, hint:'TV × Year 5 PV factor = $1,913.3m × 0.6209 = $1,188.0m', type:'sub'},
+  ]},
+  {section:'Step 4: Enterprise Value & Equity Bridge', lines:[
+    {id:'d_ev',   label:'Enterprise Value', ans:1586.5, given:false, hint:'Sum PV FCFs + PV TV = $398.5m + $1,188.0m = $1,586.5m', type:'sub'},
+    {id:'d_nd',   label:'Less: Net Debt',   ans:150,    given:true,  hint:'Given — net debt = $150m'},
+    {id:'d_eq',   label:'Equity Value',     ans:1436.5, given:false, hint:'EV − Net Debt = $1,586.5m − $150m = $1,436.5m', type:'total'},
+  ]},
+];
+
+function toggleDCFDrill() {
+  showDCFDrill = !showDCFDrill;
+  document.getElementById('dcfDrillModal').classList.toggle('open', showDCFDrill);
+  updateToolsItemState('dcfDrillBtn', showDCFDrill);
+  if (showDCFDrill && Object.keys(dcfDrillState).length === 0) {
+    DCF_LINES.forEach(sec => sec.lines.forEach(l => {
+      dcfDrillState[l.id] = { status:null, attempts:0, hintOpen:false };
+    }));
+  }
+  if (showDCFDrill) renderDCFDrill();
+}
+
+function renderDCFDrill() {
+  const allLines = DCF_LINES.flatMap(s => s.lines);
+  const correct = allLines.filter(l => dcfDrillState[l.id]?.status === 'correct' || l.given).length;
+  const body = document.getElementById('dcfDrillBody');
+  body.innerHTML = `
+    <div style="padding:8px 12px;background:var(--bbg);border:1px solid var(--bbrd);border-radius:4px;font-size:9.5px;color:var(--t2)">
+      <strong style="color:var(--blue)">TechCo Inc. — Intrinsic DCF Valuation</strong> &nbsp;·&nbsp; Blue cells are given. Fill all white cells.
+    </div>` +
+    DCF_LINES.map(sec => `
+      <div class="xdrill-section">
+        <div class="xdrill-section-hdr">${sec.section}</div>
+        ${sec.lines.map(line => {
+          const s = dcfDrillState[line.id];
+          const isCorrect = s?.status === 'correct' || line.given;
+          const isWrong = s?.status === 'wrong';
+          const showAns = s?.attempts >= 2;
+          const tol = line.id.startsWith('d_pvf') ? 0.001 : 0.6;
+          return `<div>
+            ${s?.hintOpen ? `<div class="xdrill-hint-box show">💡 ${line.hint}</div>` : ''}
+            <div class="xdrill-row ${line.type||''}">
+              <div class="xdrill-lbl">${line.label}${showAns&&!isCorrect&&!line.given?`<span style="color:var(--green);font-family:'JetBrains Mono',monospace;font-size:9px"> → ${line.ans}</span>`:''}</div>
+              ${line.given
+                ? `<div class="xdrill-given">${line.ans}</div>`
+                : `<input class="xdrill-input${isCorrect?' correct':isWrong?' wrong':''}" id="dcf-${line.id}" type="number" step="0.0001" value="${isCorrect?line.ans:(s?.userVal??'')}" ${isCorrect?'disabled':''} placeholder="?" onkeydown="if(event.key==='Enter')checkDCFLine('${line.id}')">
+                   <button class="xdrill-check" onclick="checkDCFLine('${line.id}')" ${isCorrect?'disabled':''}>→</button>
+                   <button class="xdrill-hint-btn" onclick="toggleDCFHint('${line.id}')">?</button>`}
+              <div class="xdrill-status" style="${isCorrect?'color:var(--green)':isWrong?'color:var(--red)':''}">${isCorrect?'✓':isWrong?'✗':''}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`).join('');
+
+  const pct = Math.round(correct/allLines.length*100);
+  document.getElementById('dcfDrillProg').style.width = pct+'%';
+  document.getElementById('dcfDrillProgTxt').textContent = `${correct}/${allLines.length} complete`;
+}
+
+function checkDCFLine(id) {
+  const line = DCF_LINES.flatMap(s=>s.lines).find(l=>l.id===id);
+  const input = document.getElementById('dcf-'+id);
+  if (!line||!input) return;
+  const val = parseFloat(input.value);
+  const s = dcfDrillState[id];
+  s.userVal = val; s.attempts++;
+  const tol = id.startsWith('d_pvf') ? 0.001 : 0.6;
+  s.status = Math.abs(val - line.ans) <= tol ? 'correct' : 'wrong';
+  if (s.status === 'wrong' && s.attempts >= 2) s.hintOpen = true;
+  renderDCFDrill();
+}
+
+function toggleDCFHint(id) { dcfDrillState[id].hintOpen = !dcfDrillState[id].hintOpen; renderDCFDrill(); }
+
+function resetDCFDrill() {
+  dcfDrillState = {};
+  DCF_LINES.forEach(sec => sec.lines.forEach(l => { dcfDrillState[l.id] = { status:null, attempts:0, hintOpen:false }; }));
+  renderDCFDrill();
+}
+
+/* ============================================================
+   FEATURE 4 — LBO DRILL
+============================================================ */
+// Verified: EP=$500m, Debt=$300m (Senior $200m@8%=$16m, HY $100m@10%=$10m = $26m total)
+// Equity=$200m. EBITDA=$50m, D&A=Capex=$10m, NWC=$2m, Tax=25%
+// EBIT=$40, Interest=$26, EBT=$14, Tax=$3.5, NI=$10.5, FCF=$8.5/yr
+// Exit Y5: EBITDA=$80.5m, EV=10×=$805m, Debt=$300-$42.5=$257.5m
+// Exit Equity=$547.5m, MoM=2.74×, IRR=22.4%
+
+const LBO_SECTIONS = [
+  {section:'Sources & Uses', lines:[
+    {id:'l_sr1',  label:'Senior Term Loan', ans:200,  given:true,  hint:'Given — $200m senior debt'},
+    {id:'l_sr2',  label:'HY Notes',         ans:100,  given:true,  hint:'Given — $100m high yield notes'},
+    {id:'l_seq',  label:'Sponsor Equity',   ans:200,  given:true,  hint:'Given — $200m equity check'},
+    {id:'l_stot', label:'Total Sources',    ans:500,  given:false, hint:'$200m + $100m + $200m = $500m', type:'sub'},
+    {id:'l_uep',  label:'Entry Price (EV)', ans:500,  given:true,  hint:'Purchase price = $500m'},
+    {id:'l_utot', label:'Total Uses',       ans:500,  given:false, hint:'Entry price only = $500m (no separate fees in this model)', type:'sub'},
+    {id:'l_lev',  label:'Implied Leverage (Debt/EBITDA)', ans:6.0, given:false, hint:'Total Debt $300m ÷ EBITDA $50m = 6.0×'},
+    {id:'l_mult', label:'Entry EV/EBITDA Multiple',       ans:10,  given:false, hint:'EV $500m ÷ EBITDA $50m = 10.0×'},
+  ]},
+  {section:'Year 1 Income Statement', lines:[
+    {id:'l_ebitda',label:'EBITDA',           ans:50,   given:true,  hint:'Given — entry year EBITDA'},
+    {id:'l_da',    label:'Less: D&A',        ans:-10,  given:true,  hint:'Given — D&A = $10m'},
+    {id:'l_ebit',  label:'EBIT',             ans:40,   given:false, hint:'EBITDA − D&A = $50m − $10m = $40m', type:'sub'},
+    {id:'l_int',   label:'Less: Interest',   ans:-26,  given:false, hint:'Senior $200m×8%=$16m + HY $100m×10%=$10m = −$26m'},
+    {id:'l_ebt',   label:'EBT',              ans:14,   given:false, hint:'EBIT − Interest = $40m − $26m = $14m', type:'sub'},
+    {id:'l_tax',   label:'Less: Tax (25%)',  ans:-3.5, given:false, hint:'EBT × 25% = $14m × 25% = −$3.5m'},
+    {id:'l_ni',    label:'Net Income',       ans:10.5, given:false, hint:'EBT − Tax = $14m − $3.5m = $10.5m', type:'sub'},
+  ]},
+  {section:'Free Cash Flow & Debt Paydown', lines:[
+    {id:'l_fni',   label:'Net Income',       ans:10.5, given:false, hint:'From Year 1 IS = $10.5m', type:'link'},
+    {id:'l_fda',   label:'Add: D&A',         ans:10,   given:false, hint:'Add back non-cash D&A = +$10m'},
+    {id:'l_fcap',  label:'Less: Capex',      ans:-10,  given:false, hint:'Capex = −$10m (equals D&A — maintenance only)'},
+    {id:'l_fnwc',  label:'Less: NWC Change', ans:-2,   given:false, hint:'Working capital investment = −$2m'},
+    {id:'l_fcf',   label:'Annual FCF',       ans:8.5,  given:false, hint:'NI +$10.5 + D&A +$10 − Capex $10 − NWC $2 = $8.5m', type:'total'},
+    {id:'l_pay5',  label:'5-Year Debt Paydown', ans:42.5, given:false, hint:'FCF × 5 years = $8.5m × 5 = $42.5m'},
+    {id:'l_dex',   label:'Debt at Exit',     ans:257.5, given:false, hint:'Opening Debt $300m − Paydown $42.5m = $257.5m', type:'sub'},
+  ]},
+  {section:'Exit Analysis & Returns (Year 5)', lines:[
+    {id:'l_exebitda',label:'Exit EBITDA',    ans:80.5, given:false, hint:'Entry EBITDA × (1+10%)⁵ = $50m × 1.6105 = $80.5m'},
+    {id:'l_exev',    label:'Exit EV (10×)',  ans:805,  given:false, hint:'Exit EBITDA × exit multiple = $80.5m × 10 = $805m', type:'sub'},
+    {id:'l_exdebt',  label:'Less: Exit Debt',ans:257.5,given:false, hint:'From debt schedule above = $257.5m'},
+    {id:'l_exeq',    label:'Exit Equity Value',ans:547.5,given:false,hint:'Exit EV − Exit Debt = $805m − $257.5m = $547.5m', type:'total'},
+    {id:'l_mom',     label:'Money-on-Money (MoM)', ans:2.74, given:false, hint:'Exit Equity ÷ Invested Equity = $547.5m ÷ $200m = 2.74×'},
+    {id:'l_irr',     label:'IRR (%)', ans:22.4, given:false, hint:'MoM^(1/years) − 1 = 2.74^0.2 − 1 = 22.4%', type:'total'},
+  ]},
+];
+
+function toggleLBODrill() {
+  showLBODrill = !showLBODrill;
+  document.getElementById('lboDrillModal').classList.toggle('open', showLBODrill);
+  updateToolsItemState('lboDrillBtn', showLBODrill);
+  if (showLBODrill && Object.keys(lboDrillState).length === 0) {
+    LBO_SECTIONS.forEach(sec => sec.lines.forEach(l => {
+      lboDrillState[l.id] = { status:null, attempts:0, hintOpen:false };
+    }));
+  }
+  if (showLBODrill) renderLBODrill();
+}
+
+function renderLBODrill() {
+  const allLines = LBO_SECTIONS.flatMap(s => s.lines);
+  const correct = allLines.filter(l => lboDrillState[l.id]?.status === 'correct' || l.given).length;
+  const body = document.getElementById('lboDrillBody');
+  body.innerHTML = `
+    <div style="padding:8px 12px;background:var(--bbg);border:1px solid var(--bbrd);border-radius:4px;font-size:9.5px;color:var(--t2)">
+      <strong style="color:var(--blue)">RetailCo LBO — Building the Model</strong> &nbsp;·&nbsp; Blue = given. Fill all white cells in order. Check your final IRR.
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">` +
+    LBO_SECTIONS.map((sec, si) => `
+      <div class="xdrill-section">
+        <div class="xdrill-section-hdr">${sec.section}</div>
+        ${sec.lines.map(line => {
+          const s = lboDrillState[line.id];
+          const isCorrect = s?.status === 'correct' || line.given;
+          const isWrong = s?.status === 'wrong';
+          const showAns = s?.attempts >= 2;
+          const tol = (line.id==='l_mom'||line.id==='l_irr') ? 0.2 : 0.3;
+          return `<div>
+            ${s?.hintOpen ? `<div class="xdrill-hint-box show">💡 ${line.hint}</div>` : ''}
+            <div class="xdrill-row ${line.type||''}">
+              <div class="xdrill-lbl">${line.label}${showAns&&!isCorrect&&!line.given?`<span style="color:var(--green);font-family:'JetBrains Mono',monospace;font-size:9px"> → ${line.ans}</span>`:''}</div>
+              ${line.given
+                ? `<div class="xdrill-given">${line.ans}</div>`
+                : `<input class="xdrill-input${isCorrect?' correct':isWrong?' wrong':''}" id="lbo-${line.id}" type="number" step="0.1" value="${isCorrect?line.ans:(s?.userVal??'')}" ${isCorrect?'disabled':''} placeholder="?" onkeydown="if(event.key==='Enter')checkLBOLine('${line.id}')">
+                   <button class="xdrill-check" onclick="checkLBOLine('${line.id}')" ${isCorrect?'disabled':''}>→</button>
+                   <button class="xdrill-hint-btn" onclick="toggleLBOHint('${line.id}')">?</button>`}
+              <div class="xdrill-status" style="${isCorrect?'color:var(--green)':isWrong?'color:var(--red)':''}">${isCorrect?'✓':isWrong?'✗':''}</div>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>`).join('') + `</div>`;
+
+  const pct = Math.round(correct/allLines.length*100);
+  document.getElementById('lboDrillProg').style.width = pct+'%';
+  document.getElementById('lboDrillProgTxt').textContent = `${correct}/${allLines.length} complete`;
+}
+
+function checkLBOLine(id) {
+  const line = LBO_SECTIONS.flatMap(s=>s.lines).find(l=>l.id===id);
+  const input = document.getElementById('lbo-'+id);
+  if (!line||!input) return;
+  const val = parseFloat(input.value);
+  const s = lboDrillState[id];
+  s.userVal = val; s.attempts++;
+  const tol = (id==='l_mom'||id==='l_irr') ? 0.2 : 0.3;
+  s.status = Math.abs(val - line.ans) <= tol ? 'correct' : 'wrong';
+  if (s.status === 'wrong' && s.attempts >= 2) s.hintOpen = true;
+  renderLBODrill();
+}
+
+function toggleLBOHint(id) { lboDrillState[id].hintOpen = !lboDrillState[id].hintOpen; renderLBODrill(); }
+
+function resetLBODrill() {
+  lboDrillState = {};
+  LBO_SECTIONS.forEach(sec => sec.lines.forEach(l => { lboDrillState[l.id] = { status:null, attempts:0, hintOpen:false }; }));
+  renderLBODrill();
+}
+
+/* ============================================================
+   FEATURE 5 — ERROR SPOTTER
+============================================================ */
+const ERR_MODEL = [
+  {section:'Income Statement — TechCo FY2025E'},
+  {id:'e1', label:'Revenue', val:'$500m', correct:true,  error:null},
+  {id:'e2', label:'Cost of Goods Sold', val:'($200m)', correct:true, error:null},
+  {id:'e3', label:'Gross Profit', val:'$300m', correct:true, error:null},
+  {id:'e4', label:'Operating Expenses', val:'($125m)', correct:true, error:null},
+  {id:'e5', label:'Capital Expenditure', val:'($40m)', correct:false,
+    error:'WRONG: Capex should NOT appear on the Income Statement. It belongs on the Cash Flow Statement (investing activities) and Balance Sheet (PP&E). Expensing capex on the IS is one of the most common interview mistakes.'},
+  {id:'e6', label:'EBITDA', val:'$135m', correct:false,
+    error:'WRONG: This EBITDA of $135m = $300m − $125m − $40m (incorrectly deducting capex). Correct EBITDA = $300m − $125m = $175m.'},
+  {id:'e7', label:'D&A', val:'($30m)', correct:true, error:null},
+  {id:'e8', label:'Goodwill Impairment Tax Benefit', val:'+$12m', correct:false,
+    error:'WRONG: Goodwill impairment is typically NON-DEDUCTIBLE for tax purposes. There is no tax benefit. Adding +$12m here (30m × 40%) inflates net income and understates the impact of the impairment.'},
+  {id:'e9', label:'Net Income', val:'$52m', correct:false,
+    error:'WRONG: Net income is wrong because it follows from the capex-on-IS error and the false goodwill tax benefit. Correct NI should be based on EBITDA $175m − D&A $30m − Impairment $30m − Interest and Tax.'},
+  {section:'Cash Flow Statement'},
+  {id:'e10', label:'Net Income (from IS)', val:'$52m', correct:true, error:null},
+  {id:'e11', label:'Depreciation & Amortisation addback', val:'— (not shown)', correct:false,
+    error:'MISSING: D&A of $30m should be added back to Net Income in operating activities. D&A is a non-cash charge — it reduced NI but no cash was paid. Omitting the addback understates OCF by $30m.'},
+  {id:'e12', label:'Increase in Accounts Receivable', val:'+$25m', correct:false,
+    error:'WRONG SIGN: An increase in A/R is a USE of cash, not a source. A/R going up means customers owe more money you haven\'t collected yet — cash is tied up. It should be −$25m in the CFS, not +$25m.'},
+  {id:'e13', label:'Capital Expenditure', val:'$0', correct:false,
+    error:'MISSING: Capex of ($40m) was incorrectly put on the Income Statement earlier. It should appear here in investing activities as a cash outflow. Not showing it here means capex disappears from the model entirely.'},
+  {section:'Balance Sheet'},
+  {id:'e14', label:'Total Assets', val:'$487m', correct:true, error:null},
+  {id:'e15', label:'Total Liabilities + Equity', val:'$477m', correct:false,
+    error:'BALANCE SHEET DOESN\'T BALANCE: Total L+E of $477m vs Total Assets of $487m = $10m gap. This is an immediate red flag in any model. In a real interview or analyst test, an unbalanced BS fails automatically. Always build a check row.'},
+];
+
+function toggleErrSpot() {
+  showErrSpot = !showErrSpot;
+  document.getElementById('errSpotModal').classList.toggle('open', showErrSpot);
+  updateToolsItemState('errSpotBtn', showErrSpot);
+  if (showErrSpot) renderErrSpot();
+}
+
+function renderErrSpot() {
+  const body = document.getElementById('errSpotBody');
+  const errors = ERR_MODEL.filter(l => l.id && !l.correct);
+  const totalErrors = errors.length;
+  const flaggedCorrect = errors.filter(l => errSpotFlags[l.id]).length;
+  const wrongFlags = Object.keys(errSpotFlags).filter(id => {
+    const line = ERR_MODEL.find(l=>l.id===id);
+    return line && line.correct && errSpotFlags[id];
+  }).length;
+
+  let html = '';
+  if (!errSpotSubmitted) {
+    html += `<div style="padding:10px 14px;background:var(--s1);border:1px solid var(--b1);border-radius:5px;font-size:10px;color:var(--t2)">
+      A model has been built with <strong style="color:var(--red)">${totalErrors} deliberate errors</strong> hidden inside. Review each line, click <strong>Flag</strong> on any line you believe is wrong, then click <strong>Submit</strong> to see your score and explanations.
+    </div>`;
+  } else {
+    const pct = Math.round(flaggedCorrect/totalErrors*100);
+    const grade = pct===100 ? 'Perfect — senior analyst ready' : pct>=70 ? 'Strong — keep drilling' : 'Keep practising — review the explanations carefully';
+    html += `<div style="padding:12px 16px;background:var(--bbg);border:1px solid var(--bbrd);border-radius:5px;display:flex;gap:24px;align-items:center">
+      <div><div style="font-family:'Syne',sans-serif;font-weight:800;font-size:28px;color:var(--t1)">${pct}%</div><div style="font-size:9px;color:var(--t3)">Errors Found</div></div>
+      <div><div style="font-size:12px;font-family:'Syne',sans-serif;font-weight:700;color:${pct===100?'var(--green)':pct>=70?'#D97706':'var(--red)'}">${grade}</div>
+      <div style="font-size:9.5px;color:var(--t3);margin-top:3px">${flaggedCorrect}/${totalErrors} errors found · ${wrongFlags} false flags</div></div>
+    </div>`;
+  }
+
+  let lastSection = null;
+  ERR_MODEL.forEach(line => {
+    if (line.section) {
+      html += `<div class="err-section-hdr">${line.section}</div>`;
+      lastSection = line.section;
+      return;
+    }
+    const isFlagged = !!errSpotFlags[line.id];
+    let lineCls = isFlagged ? 'flagged' : '';
+    if (errSpotSubmitted) {
+      if (!line.correct && isFlagged) lineCls = 'correct-flag';
+      else if (!line.correct && !isFlagged) lineCls = 'missed';
+      else if (line.correct && isFlagged) lineCls = 'wrong-flag';
+    }
+    const showExplanation = errSpotSubmitted && (!line.correct || (line.correct && isFlagged));
+    html += `<div>
+      <div class="err-line ${lineCls}">
+        <div class="err-lbl">${line.label}</div>
+        <div class="err-val">${line.val}</div>
+        ${!errSpotSubmitted ? `<button class="err-flag-btn${isFlagged?' flagged':''}" onclick="toggleErrFlag('${line.id}')">${isFlagged?'✗ Flagged':'Flag as Error'}</button>` : ''}
+        ${errSpotSubmitted && !line.correct && isFlagged ? `<span style="color:var(--green);font-size:11px">✓ Found</span>` : ''}
+        ${errSpotSubmitted && !line.correct && !isFlagged ? `<span style="color:var(--red);font-size:11px">✗ Missed</span>` : ''}
+        ${errSpotSubmitted && line.correct && isFlagged ? `<span style="color:var(--red);font-size:11px">✗ False flag</span>` : ''}
+      </div>
+      ${showExplanation && line.error ? `<div class="err-explanation show">${line.error}</div>` : ''}
+    </div>`;
+  });
+
+  if (!errSpotSubmitted) {
+    html += `<div style="display:flex;gap:10px;margin-top:4px">
+      <button class="xdrill-next" onclick="submitErrSpot()">Submit Answers</button>
+    </div>`;
+  } else {
+    html += `<div style="display:flex;gap:10px;margin-top:4px">
+      <button class="xdrill-next" onclick="errSpotFlags={};errSpotSubmitted=false;renderErrSpot()">Try Again</button>
+    </div>`;
+  }
+
+  body.innerHTML = html;
+}
+
+function toggleErrFlag(id) {
+  errSpotFlags[id] = !errSpotFlags[id];
+  if (!errSpotFlags[id]) delete errSpotFlags[id];
+  renderErrSpot();
+}
+
+function submitErrSpot() {
+  errSpotSubmitted = true;
+  renderErrSpot();
+}
+
+/* ============================================================
    MODEL BUILD DRILL
 ============================================================ */
 const DRILL_STAGES = ['Income Statement','Cash Flow Statement','Balance Sheet'];
@@ -6206,6 +6875,76 @@ function stopMockTimer() {
       </div>
       <button class="drill-next-btn" id="drillNextBtn" disabled>Next Stage →</button>
     </div>
+  </div>
+</div>
+
+<!-- INTEGRATION DRILLS MODAL -->
+<div class="xdrill-modal" id="intDrillModal" onclick="if(event.target===this)toggleIntDrill()">
+  <div class="xdrill-box" style="max-width:860px;width:96%">
+    <div class="drill-head">
+      <div><div class="fit-head-title">3-Statement Integration Drills</div><div class="fit-head-sub">Trace the impact of a transaction across IS → CFS → BS · master linkages · instant validation</div></div>
+      <button class="modal-close" onclick="toggleIntDrill()">✕</button>
+    </div>
+    <div class="int-scenario-tabs" id="intDrillTabs"></div>
+    <div class="xdrill-body" id="intDrillBody"></div>
+    <div class="xdrill-footer">
+      <div class="drill-progress-wrap">
+        <div class="drill-progress-bar"><div class="drill-progress-fill" id="intDrillProg" style="width:0%"></div></div>
+        <div class="drill-progress-txt" id="intDrillProgTxt">0 / 0 correct</div>
+      </div>
+      <button class="xdrill-next" id="intDrillNext" disabled>Next Scenario →</button>
+    </div>
+  </div>
+</div>
+
+<!-- DCF BUILDER MODAL -->
+<div class="xdrill-modal" id="dcfDrillModal" onclick="if(event.target===this)toggleDCFDrill()">
+  <div class="xdrill-box" style="max-width:700px;width:96%">
+    <div class="drill-head">
+      <div><div class="fit-head-title">DCF Builder Drill</div><div class="fit-head-sub">Build a DCF from scratch · discount FCFs · calculate terminal value · derive equity value</div></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="drill-reset-btn" onclick="resetDCFDrill()">Reset</button>
+        <button class="modal-close" onclick="toggleDCFDrill()">✕</button>
+      </div>
+    </div>
+    <div class="xdrill-body" id="dcfDrillBody"></div>
+    <div class="xdrill-footer">
+      <div class="drill-progress-wrap">
+        <div class="drill-progress-bar"><div class="drill-progress-fill" id="dcfDrillProg" style="width:0%"></div></div>
+        <div class="drill-progress-txt" id="dcfDrillProgTxt">0 / 0 complete</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LBO DRILL MODAL -->
+<div class="xdrill-modal" id="lboDrillModal" onclick="if(event.target===this)toggleLBODrill()">
+  <div class="xdrill-box" style="max-width:780px;width:96%">
+    <div class="drill-head">
+      <div><div class="fit-head-title">LBO Drill</div><div class="fit-head-sub">Sources & uses · debt schedule · exit proceeds · IRR and MoM returns · full LBO walkthrough</div></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="drill-reset-btn" onclick="resetLBODrill()">Reset</button>
+        <button class="modal-close" onclick="toggleLBODrill()">✕</button>
+      </div>
+    </div>
+    <div class="xdrill-body" id="lboDrillBody"></div>
+    <div class="xdrill-footer">
+      <div class="drill-progress-wrap">
+        <div class="drill-progress-bar"><div class="drill-progress-fill" id="lboDrillProg" style="width:0%"></div></div>
+        <div class="drill-progress-txt" id="lboDrillProgTxt">0 / 0 complete</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ERROR SPOTTER MODAL -->
+<div class="xdrill-modal" id="errSpotModal" onclick="if(event.target===this)toggleErrSpot()">
+  <div class="xdrill-box" style="max-width:740px;width:96%">
+    <div class="drill-head">
+      <div><div class="fit-head-title">Error Spotter</div><div class="fit-head-sub">Find every mistake in this financial model · click the flag on each erroneous line · test your review skills</div></div>
+      <button class="modal-close" onclick="toggleErrSpot()">✕</button>
+    </div>
+    <div class="xdrill-body" id="errSpotBody"></div>
   </div>
 </div>
 
