@@ -1054,6 +1054,71 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
   .xdrill-box { border-radius:12px 12px 0 0; max-height:92vh; width:100%; }
   .int-stmt-grid { grid-template-columns:1fr; }
 }
+/* ── PAPER LBO ────────────────────────────────────────── */
+.plbo-scenario-tabs { display:flex; border-bottom:1px solid var(--b1); flex-shrink:0; overflow-x:auto; }
+.plbo-stab { padding:8px 16px; font-family:'Syne',sans-serif; font-weight:700; font-size:9px; letter-spacing:.06em; text-transform:uppercase; color:var(--t3); cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; }
+.plbo-stab:hover { color:var(--t2); }
+.plbo-stab.on { color:var(--blue); border-bottom-color:var(--blue); }
+.plbo-stab.done { color:var(--green); }
+.plbo-layout { display:grid; grid-template-columns:280px 1fr; gap:14px; }
+.plbo-assumptions { background:var(--s1); border:1px solid var(--b1); border-radius:6px; padding:12px 14px; }
+.plbo-asm-title { font-family:'Syne',sans-serif; font-weight:800; font-size:8px; letter-spacing:.14em; text-transform:uppercase; color:var(--blue); margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid var(--b1); }
+.plbo-asm-row { display:flex; justify-content:space-between; align-items:baseline; padding:3px 0; border-bottom:1px solid var(--b1); }
+.plbo-asm-row:last-child { border-bottom:none; }
+.plbo-asm-lbl { font-size:10px; color:var(--t2); }
+.plbo-asm-val { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:500; color:var(--t1); }
+.plbo-steps { display:flex; flex-direction:column; gap:6px; }
+.plbo-section-hdr { font-family:'Syne',sans-serif; font-weight:800; font-size:8px; letter-spacing:.14em; text-transform:uppercase; color:var(--blue); padding:6px 0 4px; border-bottom:1px solid var(--b1); }
+/* ── FIT QUESTIONS ─────────────────────────────────────── */
+.behav-modal { display:none; position:fixed; inset:0; z-index:400; background:rgba(0,0,0,.55); align-items:flex-start; justify-content:center; padding-top:30px; }
+.behav-modal.open { display:flex; }
+.behav-box { background:var(--bg); border:1px solid var(--b1); border-radius:8px; width:min(720px,97vw); max-height:92vh; display:flex; flex-direction:column; box-shadow:0 20px 60px rgba(0,0,0,.4); }
+.behav-cats { display:flex; border-bottom:1px solid var(--b1); flex-shrink:0; overflow-x:auto; }
+.behav-cat { padding:8px 14px; font-family:'Syne',sans-serif; font-weight:700; font-size:9px; letter-spacing:.06em; text-transform:uppercase; color:var(--t3); cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; }
+.behav-cat:hover { color:var(--t2); }
+.behav-cat.on { color:var(--blue); border-bottom-color:var(--blue); }
+.behav-body { flex:1; overflow-y:auto; padding:18px 20px; display:flex; flex-direction:column; gap:14px; }
+.behav-q-card { background:var(--s1); border:1px solid var(--b1); border-radius:8px; padding:18px 20px; }
+.behav-q-num { font-family:'Syne',sans-serif; font-weight:800; font-size:8px; letter-spacing:.14em; text-transform:uppercase; color:var(--t3); margin-bottom:8px; }
+.behav-q-text { font-family:'Syne',sans-serif; font-weight:700; font-size:16px; color:var(--t1); line-height:1.4; margin-bottom:14px; }
+.behav-timer-row { display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+.behav-timer-btn { padding:6px 14px; border-radius:4px; border:1px solid var(--b1); background:var(--s2); font-family:'Syne',sans-serif; font-weight:700; font-size:9px; letter-spacing:.08em; text-transform:uppercase; color:var(--t2); cursor:pointer; transition:all .12s; }
+.behav-timer-btn:hover { border-color:var(--blue); color:var(--blue); }
+.behav-timer-btn.running { border-color:#D97706; color:#D97706; background:rgba(217,119,6,.08); }
+.behav-timer-display { font-family:'JetBrains Mono',monospace; font-size:13px; font-weight:500; color:var(--t2); min-width:40px; }
+.behav-reveal-btn { width:100%; padding:10px; border-radius:5px; background:var(--bbg); border:1px solid var(--bbrd); font-family:'Syne',sans-serif; font-weight:700; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--blue); cursor:pointer; transition:all .15s; }
+.behav-reveal-btn:hover { background:var(--blue); color:#fff; }
+.behav-guidance { display:none; border:1px solid var(--b1); border-radius:6px; padding:14px 16px; background:var(--bg); }
+.behav-guidance.show { display:block; }
+.behav-guidance-title { font-family:'Syne',sans-serif; font-weight:800; font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--blue); margin-bottom:8px; }
+.behav-guidance-body { font-size:11px; color:var(--t2); line-height:1.7; }
+.behav-guidance-body strong { color:var(--t1); }
+.behav-score-row { display:flex; gap:8px; margin-top:12px; }
+.behav-score-btn { flex:1; padding:8px; border-radius:4px; border:1px solid var(--b1); background:none; font-family:'Syne',sans-serif; font-weight:700; font-size:9px; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; transition:all .12s; color:var(--t3); }
+.behav-score-btn:hover { opacity:.8; }
+.behav-score-btn.strong { border-color:var(--green); color:var(--green); }
+.behav-score-btn.strong.selected { background:var(--green); color:#fff; }
+.behav-score-btn.ok { border-color:#D97706; color:#D97706; }
+.behav-score-btn.ok.selected { background:#D97706; color:#fff; }
+.behav-score-btn.weak { border-color:var(--red); color:var(--red); }
+.behav-score-btn.weak.selected { background:var(--red); color:#fff; }
+.behav-nav { display:flex; align-items:center; justify-content:space-between; gap:8px; flex-shrink:0; padding:12px 20px; border-top:1px solid var(--b1); }
+.behav-nav-arrow { padding:8px 16px; border-radius:4px; border:1px solid var(--b1); background:var(--s2); font-family:'Syne',sans-serif; font-weight:700; font-size:9px; letter-spacing:.08em; text-transform:uppercase; color:var(--t2); cursor:pointer; transition:all .12s; }
+.behav-nav-arrow:hover { border-color:var(--blue); color:var(--blue); }
+.behav-nav-arrow:disabled { opacity:.3; cursor:not-allowed; }
+.behav-nav-pos { font-size:10px; color:var(--t3); }
+.behav-stats-bar { display:flex; gap:16px; padding:10px 20px; border-bottom:1px solid var(--b1); flex-shrink:0; }
+.behav-stat { display:flex; flex-direction:column; gap:2px; }
+.behav-stat-num { font-family:'JetBrains Mono',monospace; font-size:14px; font-weight:500; color:var(--t1); }
+.behav-stat-lbl { font-size:8px; letter-spacing:.1em; text-transform:uppercase; color:var(--t3); }
+.behav-stat-num.green { color:var(--green); }
+.behav-stat-num.amber { color:#D97706; }
+.behav-stat-num.red { color:var(--red); }
+@media (max-width:768px) {
+  .behav-modal { padding-top:0; align-items:flex-end; }
+  .behav-box { border-radius:12px 12px 0 0; max-height:92vh; width:100%; }
+  .plbo-layout { grid-template-columns:1fr; }
+}
 /* ── MODEL BUILD DRILL ────────────────────────────────── */
 .drill-modal { display:none; position:fixed; inset:0; z-index:400; background:rgba(0,0,0,.55); align-items:flex-start; justify-content:center; padding-top:30px; }
 .drill-modal.open { display:flex; }
@@ -1332,6 +1397,12 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
         </button>
         <button class="tools-item" id="errSpotBtn" onclick="toggleErrSpot();closeToolsMenu()">
           <span class="tools-item-icon">🔍</span>Error Spotter<span class="tools-item-badge"></span>
+        </button>
+        <button class="tools-item" id="paperLBOBtn" onclick="togglePaperLBO();closeToolsMenu()">
+          <span class="tools-item-icon">🧮</span>Paper LBO<span class="tools-item-badge"></span>
+        </button>
+        <button class="tools-item" id="behavBtn" onclick="toggleBehav();closeToolsMenu()">
+          <span class="tools-item-icon">🗣️</span>Fit Questions<span class="tools-item-badge"></span>
         </button>
         <button class="tools-item" id="mockBtn" onclick="toggleMock();closeToolsMenu()">
           <span class="tools-item-icon">🎙️</span>Mock Interview<span class="tools-item-badge"></span>
@@ -2835,6 +2906,9 @@ let showIntDrill  = false, intDrillIdx = 0, intDrillState = {};
 let showDCFDrill  = false, dcfDrillState = {};
 let showLBODrill  = false, lboDrillState = {};
 let showErrSpot   = false, errSpotFlags = {}, errSpotSubmitted = false;
+let showPaperLBO  = false, paperLBOIdx = 0, paperLBOState = {};
+let showBehav     = false, behavCatIdx = 0, behavQIdx = 0, behavPhase = 'question', behavTimer = null, behavElapsed = 0;
+let behavScores   = JSON.parse(localStorage.getItem('fm-behav-scores') || '{}');
 let acctCatIdx  = 0;
 let acctPracticed = JSON.parse(localStorage.getItem('fm-acct-practiced') || '{}');
 let mockMode = 'all', mockTimerLimit = 45, mockScreen = 'setup';
@@ -6056,6 +6130,458 @@ function submitErrSpot() {
 }
 
 /* ============================================================
+   PAPER LBO
+============================================================ */
+const PAPER_LBO_SCENARIOS = [
+  {
+    title: 'RetailCo — Steady Growth',
+    difficulty: 'Introductory',
+    context: 'RetailCo generates $50m EBITDA. A PE firm acquires it at 8× EV/EBITDA, financing with $250m senior debt at 8% interest. Annual FCF available for debt repayment is $18m. Hold period: 5 years, exit at 8× on $65m exit EBITDA.',
+    assumptions: [
+      { label:'Entry EBITDA', val:'$50m' },
+      { label:'Entry EV Multiple', val:'8.0×' },
+      { label:'Senior Debt', val:'$250m' },
+      { label:'Interest Rate', val:'8%' },
+      { label:'FCF / yr (after int & tax)', val:'$18m' },
+      { label:'Hold Period', val:'5 years' },
+      { label:'Exit EBITDA', val:'$65m' },
+      { label:'Exit Multiple', val:'8.0×' },
+    ],
+    steps: [
+      { id:'p1_ev',   section:'Entry', label:'Entry Enterprise Value', formula:'EBITDA × Entry Multiple', ans:400, hint:'$50m × 8.0 = $400m', unit:'$m' },
+      { id:'p1_eq',   section:'',      label:'Entry Equity (Sponsor Cost)', formula:'EV − Debt', ans:150, hint:'$400m − $250m = $150m', unit:'$m' },
+      { id:'p1_int',  section:'P&L',   label:'Annual Interest Expense', formula:'Debt × Rate', ans:20, hint:'$250m × 8% = $20m', unit:'$m' },
+      { id:'p1_rep',  section:'',      label:'Total Debt Repaid (5 yr)', formula:'FCF/yr × Hold Period', ans:90, hint:'$18m × 5 = $90m', unit:'$m' },
+      { id:'p1_xev',  section:'Exit',  label:'Exit Enterprise Value', formula:'Exit EBITDA × Exit Multiple', ans:520, hint:'$65m × 8.0 = $520m', unit:'$m' },
+      { id:'p1_xdbt', section:'',      label:'Exit Debt', formula:'Entry Debt − Repaid', ans:160, hint:'$250m − $90m = $160m', unit:'$m' },
+      { id:'p1_xeq',  section:'',      label:'Exit Equity', formula:'Exit EV − Exit Debt', ans:360, hint:'$520m − $160m = $360m', unit:'$m' },
+      { id:'p1_mom',  section:'Returns',label:'Money-on-Money (MoM)', formula:'Exit Equity ÷ Entry Equity', ans:2.4, hint:'$360m ÷ $150m = 2.4×', unit:'×', tol:0.05 },
+      { id:'p1_irr',  section:'',      label:'Approximate IRR', formula:'MoM^(1/years) − 1, as %', ans:19.1, hint:'2.4^0.2 − 1 = 19.1%', unit:'%', tol:0.5 },
+    ]
+  },
+  {
+    title: 'TechCo — High Leverage Deal',
+    difficulty: 'Intermediate',
+    context: 'TechCo has $100m EBITDA. Acquired at 10× with $600m of debt (6× leverage) at 8% interest. Annual FCF after interest and taxes is $35m. 5-year hold, exit at 9× on $130m EBITDA (5% CAGR growth).',
+    assumptions: [
+      { label:'Entry EBITDA', val:'$100m' },
+      { label:'Entry EV Multiple', val:'10.0×' },
+      { label:'Senior Debt', val:'$600m' },
+      { label:'Interest Rate', val:'8%' },
+      { label:'FCF / yr (after int & tax)', val:'$35m' },
+      { label:'Hold Period', val:'5 years' },
+      { label:'Exit EBITDA', val:'$130m' },
+      { label:'Exit Multiple', val:'9.0×' },
+    ],
+    steps: [
+      { id:'p2_ev',   section:'Entry', label:'Entry Enterprise Value', formula:'EBITDA × Entry Multiple', ans:1000, hint:'$100m × 10.0 = $1,000m', unit:'$m' },
+      { id:'p2_eq',   section:'',      label:'Entry Equity', formula:'EV − Debt', ans:400, hint:'$1,000m − $600m = $400m', unit:'$m' },
+      { id:'p2_int',  section:'P&L',   label:'Annual Interest Expense', formula:'Debt × Rate', ans:48, hint:'$600m × 8% = $48m', unit:'$m' },
+      { id:'p2_rep',  section:'',      label:'Total Debt Repaid (5 yr)', formula:'FCF/yr × Hold Period', ans:175, hint:'$35m × 5 = $175m', unit:'$m' },
+      { id:'p2_xev',  section:'Exit',  label:'Exit Enterprise Value', formula:'Exit EBITDA × Exit Multiple', ans:1170, hint:'$130m × 9.0 = $1,170m', unit:'$m' },
+      { id:'p2_xdbt', section:'',      label:'Exit Debt', formula:'Entry Debt − Repaid', ans:425, hint:'$600m − $175m = $425m', unit:'$m' },
+      { id:'p2_xeq',  section:'',      label:'Exit Equity', formula:'Exit EV − Exit Debt', ans:745, hint:'$1,170m − $425m = $745m', unit:'$m' },
+      { id:'p2_mom',  section:'Returns',label:'Money-on-Money (MoM)', formula:'Exit Equity ÷ Entry Equity', ans:1.86, hint:'$745m ÷ $400m = 1.86×', unit:'×', tol:0.05 },
+      { id:'p2_irr',  section:'',      label:'Approximate IRR', formula:'MoM^(1/years) − 1, as %', ans:13.2, hint:'1.86^0.2 − 1 = 13.2%', unit:'%', tol:0.5 },
+    ]
+  },
+  {
+    title: 'ManuCo — Value Creation Play',
+    difficulty: 'Advanced',
+    context: 'ManuCo has $80m EBITDA. Acquired at 7× with $320m debt at 8% interest. Strong FCF of $40m/yr allows fast deleveraging. 5-year hold. EBITDA grows to $110m (7% CAGR). Exit at 8×.',
+    assumptions: [
+      { label:'Entry EBITDA', val:'$80m' },
+      { label:'Entry EV Multiple', val:'7.0×' },
+      { label:'Senior Debt', val:'$320m' },
+      { label:'Interest Rate', val:'8%' },
+      { label:'FCF / yr (after int & tax)', val:'$40m' },
+      { label:'Hold Period', val:'5 years' },
+      { label:'Exit EBITDA', val:'$110m' },
+      { label:'Exit Multiple', val:'8.0×' },
+    ],
+    steps: [
+      { id:'p3_ev',   section:'Entry', label:'Entry Enterprise Value', formula:'EBITDA × Entry Multiple', ans:560, hint:'$80m × 7.0 = $560m', unit:'$m' },
+      { id:'p3_eq',   section:'',      label:'Entry Equity', formula:'EV − Debt', ans:240, hint:'$560m − $320m = $240m', unit:'$m' },
+      { id:'p3_int',  section:'P&L',   label:'Annual Interest Expense', formula:'Debt × Rate', ans:25.6, hint:'$320m × 8% = $25.6m', unit:'$m', tol:0.2 },
+      { id:'p3_rep',  section:'',      label:'Total Debt Repaid (5 yr)', formula:'FCF/yr × Hold Period', ans:200, hint:'$40m × 5 = $200m', unit:'$m' },
+      { id:'p3_xev',  section:'Exit',  label:'Exit Enterprise Value', formula:'Exit EBITDA × Exit Multiple', ans:880, hint:'$110m × 8.0 = $880m', unit:'$m' },
+      { id:'p3_xdbt', section:'',      label:'Exit Debt', formula:'Entry Debt − Repaid', ans:120, hint:'$320m − $200m = $120m', unit:'$m' },
+      { id:'p3_xeq',  section:'',      label:'Exit Equity', formula:'Exit EV − Exit Debt', ans:760, hint:'$880m − $120m = $760m', unit:'$m' },
+      { id:'p3_mom',  section:'Returns',label:'Money-on-Money (MoM)', formula:'Exit Equity ÷ Entry Equity', ans:3.17, hint:'$760m ÷ $240m = 3.17×', unit:'×', tol:0.05 },
+      { id:'p3_irr',  section:'',      label:'Approximate IRR', formula:'MoM^(1/years) − 1, as %', ans:25.9, hint:'3.17^0.2 − 1 = 25.9%', unit:'%', tol:0.5 },
+    ]
+  }
+];
+
+function togglePaperLBO() {
+  showPaperLBO = !showPaperLBO;
+  document.getElementById('paperLBOModal').classList.toggle('open', showPaperLBO);
+  updateToolsItemState('paperLBOBtn', showPaperLBO);
+  if (showPaperLBO && Object.keys(paperLBOState).length === 0) initPaperLBOState();
+  if (showPaperLBO) renderPaperLBO();
+}
+
+function initPaperLBOState() {
+  paperLBOState = {};
+  PAPER_LBO_SCENARIOS.forEach(sc => {
+    sc.steps.forEach(s => { paperLBOState[s.id] = { status:null, attempts:0, hintOpen:false, userVal:'' }; });
+  });
+}
+
+function renderPaperLBO() {
+  const sc = PAPER_LBO_SCENARIOS[paperLBOIdx];
+  const allSteps = sc.steps;
+  const correct = allSteps.filter(s => paperLBOState[s.id]?.status === 'correct').length;
+
+  const tabs = document.getElementById('paperLBOTabs');
+  tabs.innerHTML = PAPER_LBO_SCENARIOS.map((s,i) => {
+    const done = s.steps.every(st => paperLBOState[st.id]?.status === 'correct');
+    return `<div class="plbo-stab${i===paperLBOIdx?' on':''}${done?' done':''}" onclick="paperLBOIdx=${i};renderPaperLBO()">${i+1}. ${s.title}</div>`;
+  }).join('');
+
+  const body = document.getElementById('paperLBOBody');
+  let lastSection = null;
+  const stepsHtml = allSteps.map(step => {
+    const st = paperLBOState[step.id];
+    const isCorrect = st?.status === 'correct', isWrong = st?.status === 'wrong';
+    const showAns = st?.attempts >= 2;
+    let sectionHdr = '';
+    if (step.section && step.section !== lastSection) {
+      sectionHdr = `<div class="plbo-section-hdr">${step.section}</div>`;
+      lastSection = step.section;
+    }
+    return `${sectionHdr}
+      ${st?.hintOpen ? `<div class="xdrill-hint-box show">💡 ${step.hint}</div>` : ''}
+      <div class="xdrill-row">
+        <div style="flex:1;min-width:0">
+          <div class="xdrill-lbl">${step.label}${showAns&&!isCorrect?`<span style="color:var(--green);font-size:9px"> → ${step.ans}${step.unit}</span>`:''}</div>
+          <div style="font-size:9px;color:var(--t3);margin-top:1px">${step.formula}</div>
+        </div>
+        <input class="xdrill-input${isCorrect?' correct':isWrong?' wrong':''}" id="plbo-${step.id}" type="number" step="0.01" value="${isCorrect?step.ans:(st?.userVal??'')}" ${isCorrect?'disabled':''} placeholder="${step.unit}" style="width:80px" onkeydown="if(event.key==='Enter')checkPaperLBO('${step.id}')">
+        <button class="xdrill-check" onclick="checkPaperLBO('${step.id}')" ${isCorrect?'disabled':''}>→</button>
+        <button class="xdrill-hint-btn" onclick="togglePaperLBOHint('${step.id}')">?</button>
+        <div class="xdrill-status" style="${isCorrect?'color:var(--green)':isWrong?'color:var(--red)':''}">${isCorrect?'✓':isWrong?'✗':''}</div>
+      </div>`;
+  }).join('');
+
+  body.innerHTML = `
+    <div style="padding:8px 12px;background:var(--s1);border:1px solid var(--b1);border-radius:5px;font-size:9.5px;color:var(--t3);line-height:1.6">
+      <span style="color:var(--t2);font-weight:500">${sc.title}</span> · <span style="color:#D97706">${sc.difficulty}</span><br>${sc.context}
+    </div>
+    <div class="plbo-layout">
+      <div class="plbo-assumptions">
+        <div class="plbo-asm-title">Deal Assumptions</div>
+        ${sc.assumptions.map(a => `<div class="plbo-asm-row"><span class="plbo-asm-lbl">${a.label}</span><span class="plbo-asm-val">${a.val}</span></div>`).join('')}
+      </div>
+      <div class="plbo-steps">${stepsHtml}</div>
+    </div>`;
+
+  const pct = allSteps.length ? Math.round(correct/allSteps.length*100) : 0;
+  document.getElementById('paperLBOProg').style.width = pct+'%';
+  document.getElementById('paperLBOProgTxt').textContent = `${correct}/${allSteps.length} correct`;
+  const nextBtn = document.getElementById('paperLBONext');
+  const allDone = allSteps.every(s => paperLBOState[s.id]?.status === 'correct');
+  const hasNext = paperLBOIdx < PAPER_LBO_SCENARIOS.length - 1;
+  nextBtn.textContent = hasNext ? 'Next Scenario →' : allDone ? 'All Done ✓' : 'Finish';
+  nextBtn.disabled = !allDone;
+  nextBtn.onclick = () => { if (hasNext) { paperLBOIdx++; renderPaperLBO(); } };
+}
+
+function checkPaperLBO(id) {
+  const step = PAPER_LBO_SCENARIOS.flatMap(sc => sc.steps).find(s => s.id === id);
+  const input = document.getElementById('plbo-'+id);
+  if (!step || !input) return;
+  const val = parseFloat(input.value);
+  const st = paperLBOState[id];
+  const tol = step.tol ?? 0.1;
+  st.userVal = val; st.attempts++;
+  st.status = Math.abs(val - step.ans) <= tol ? 'correct' : 'wrong';
+  if (st.status === 'wrong' && st.attempts >= 2) st.hintOpen = true;
+  renderPaperLBO();
+}
+
+function togglePaperLBOHint(id) {
+  paperLBOState[id].hintOpen = !paperLBOState[id].hintOpen;
+  renderPaperLBO();
+}
+
+function resetPaperLBO() {
+  paperLBOState = {};
+  initPaperLBOState();
+  renderPaperLBO();
+}
+
+/* ============================================================
+   FIT / BEHAVIORAL QUESTIONS
+============================================================ */
+const BEHAV_CATS = [
+  {
+    id:'why_ib', label:'Why IB',
+    qs: [
+      {
+        q: 'Why investment banking?',
+        guidance: `<strong>Core themes to hit:</strong> intellectual interest in deals/capital markets, analytical rigor, direct exposure to how businesses grow and transform.<br><br>
+<strong>Structure (3 parts):</strong> (1) What drew you to finance/deals early on, (2) a specific experience that confirmed it (internship, deal case study, research), (3) why IB specifically vs. consulting, PE, or corporate finance.<br><br>
+<strong>Avoid:</strong> Generic "I love finance and want to learn" — needs specificity. Don't mention money as primary motivation.`
+      },
+      {
+        q: 'Why do you want to work in investment banking rather than consulting or corporate finance?',
+        guidance: `<strong>Key differentiators to articulate:</strong><br>
+• <em>IB vs. Consulting:</em> IB executes — you're on the deal, not advising. More quantitative, more market-driven, faster feedback loop.<br>
+• <em>IB vs. Corp Finance:</em> IB exposes you to dozens of companies and deal structures simultaneously; corp finance means depth in one company.<br><br>
+<strong>Best answers</strong> show you've thought about trade-offs seriously, not just picked the most prestigious option.`
+      },
+      {
+        q: 'What specifically interests you about M&A advisory vs. capital markets?',
+        guidance: `<strong>For M&A:</strong> Strategic thinking, valuation judgment, negotiation dynamics, helping CEOs make transformative decisions.<br>
+<strong>For Capital Markets (ECM/DCM):</strong> Market timing, investor relationships, pricing under uncertainty, structuring.<br><br>
+Pick the one you're interviewing for and be specific. Reference a recent transaction in that space — show you know the product.`
+      }
+    ]
+  },
+  {
+    id:'why_bank', label:'Why This Bank',
+    qs: [
+      {
+        q: 'Why Goldman Sachs / JPMorgan / Lazard / [Bank name]?',
+        guidance: `<strong>Structure (3 tiers):</strong><br>
+1. <em>Platform:</em> Specific strengths — league table position in your target group, deal flow, global vs. boutique positioning.<br>
+2. <em>People:</em> Name a specific MD, a conversation you had, something you learned that resonated.<br>
+3. <em>Culture / fit:</em> What you observed from networking — collaborative vs. competitive, analytical vs. relationship-driven.<br><br>
+<strong>Critical:</strong> Never give the same answer at two banks. Differentiate clearly. Research recent deals the bank advised on.`
+      },
+      {
+        q: 'What do you know about our recent deal activity?',
+        guidance: `<strong>Preparation required:</strong> Know 2–3 recent transactions the bank advised on. For each, know: deal type (M&A, IPO, LBO, debt financing), industry, deal size, strategic rationale.<br><br>
+<strong>Format:</strong> "[Bank] recently advised [Company] on its $Xbn acquisition of [Target]. I found this interesting because [strategic angle — market consolidation / cross-border / vertical integration / etc.]."<br><br>
+Shows you actually researched them, not just showing up with a generic answer.`
+      },
+      {
+        q: 'Where else are you interviewing, and why us over them?',
+        guidance: `<strong>Be honest but strategic:</strong> You can name other banks in the same tier (shows you're serious and calibrated), but pivot to why this bank specifically.<br><br>
+<strong>Frame:</strong> "I'm also speaking with [X and Y], but what draws me here is [specific differentiator — group culture, sector focus, deal type, a person you met]."<br><br>
+Avoid disparaging competitors. Focus on what makes this bank a better fit, not what's wrong with others.`
+      }
+    ]
+  },
+  {
+    id:'leadership', label:'Leadership',
+    qs: [
+      {
+        q: 'Tell me about a time you led a team through a difficult situation.',
+        guidance: `<strong>Framework:</strong> STAR — Situation, Task, Action, Result. Keep Situation/Task brief (30%), focus on Action (50%) and Result (20%).<br><br>
+<strong>What they want to see:</strong> You took ownership, made a clear decision under pressure, communicated well, and brought people along.<br><br>
+<strong>Red flags:</strong> "We decided as a team" (no individual ownership), vague outcomes ("it went well"), conflicts you avoided rather than resolved.`
+      },
+      {
+        q: 'Describe a situation where you had to influence someone without formal authority.',
+        guidance: `<strong>Core skill tested:</strong> Stakeholder management — critical in banking where you're junior but need senior buy-in.<br><br>
+<strong>Good examples:</strong> Convincing a professor/supervisor to change scope, aligning a reluctant team member on a project, getting a client to accept a different deal structure.<br><br>
+<strong>Key elements:</strong> How you understood their perspective, how you tailored your message, what compromise or solution you found, and the outcome.`
+      },
+      {
+        q: 'Give an example of when you had to deliver tough feedback or have a difficult conversation.',
+        guidance: `<strong>Shows:</strong> Maturity, directness, emotional intelligence — all valued in banking culture.<br><br>
+<strong>Structure:</strong> Why feedback was needed, how you prepared, how you framed it (specific not personal), how the person responded, what changed.<br><br>
+<strong>Avoid:</strong> Situations where you avoided the conversation, or where the outcome was purely negative with no resolution. Show you can be direct AND constructive.`
+      },
+      {
+        q: 'Tell me about a time you managed competing priorities under a tight deadline.',
+        guidance: `<strong>Very relevant to banking:</strong> This directly mirrors the analyst experience — multiple live deals, multiple teams, all urgent.<br><br>
+<strong>Key behaviours:</strong> Prioritisation framework (impact × urgency), proactive communication about capacity, delegating where possible, asking for help early.<br><br>
+<strong>Outcome:</strong> Quantify if possible. "Delivered X by Y deadline while also completing Z." Shows you can handle the pace.`
+      }
+    ]
+  },
+  {
+    id:'failure', label:'Failure & Growth',
+    qs: [
+      {
+        q: 'Tell me about your biggest professional failure or mistake.',
+        guidance: `<strong>What they're testing:</strong> Self-awareness, accountability, ability to learn. Not looking for perfection — looking for growth mindset.<br><br>
+<strong>Structure:</strong> (1) Set up the situation clearly, (2) be direct about what went wrong and your role in it — don't deflect, (3) what you learned, (4) concrete change you made as a result.<br><br>
+<strong>Calibrate the story:</strong> Serious enough to be credible, not so catastrophic it raises red flags. Academic or work context both fine.`
+      },
+      {
+        q: 'Describe a time you received critical feedback. How did you respond?',
+        guidance: `<strong>Core theme:</strong> Coachability — essential for a junior analyst who will receive constant redlines and corrections.<br><br>
+<strong>Best answers:</strong> Feedback that genuinely stung (shows it was real), how you initially felt vs. how you processed it, what specific action you took, measurable improvement.<br><br>
+<strong>Avoid:</strong> "I received feedback that I worked too hard" or any humble-brag disguised as self-criticism.`
+      },
+      {
+        q: 'Tell me about a time your analysis or recommendation turned out to be wrong.',
+        guidance: `<strong>For finance interviews specifically:</strong> This tests intellectual honesty and rigour.<br><br>
+<strong>Good examples:</strong> A model assumption that proved wrong, a market call that missed, underestimating a risk in a case.<br><br>
+<strong>Key beats:</strong> What led to the wrong conclusion, how you discovered the error, how you corrected it and communicated, what you changed in your process. Shows you'd catch errors before they become client problems.`
+      }
+    ]
+  },
+  {
+    id:'strengths', label:'Strengths & Fit',
+    qs: [
+      {
+        q: 'What is your greatest strength, and how will it make you effective as an analyst?',
+        guidance: `<strong>Connect strength directly to the analyst role.</strong><br><br>
+<strong>High-value strengths for IB:</strong> Attention to detail, ability to synthesise complex data quickly, working effectively under pressure, proactive communication, fast learner.<br><br>
+<strong>Structure:</strong> State it, give a concrete example (STAR), then explicitly link to what an analyst does day-to-day — "This means I'll be effective at building and stress-testing models / managing multiple stakeholders simultaneously."<br><br>
+Avoid generic answers like "I'm a hard worker." Everyone says that.`
+      },
+      {
+        q: 'What is your greatest weakness?',
+        guidance: `<strong>The classic trap:</strong> Don't say "I'm a perfectionist" or "I work too hard." Interviewers hate this.<br><br>
+<strong>Formula:</strong> (1) Real weakness that won't torpedo your candidacy, (2) context showing self-awareness, (3) specific steps you've taken to improve, (4) evidence of progress.<br><br>
+<strong>Examples that work:</strong> Public speaking anxiety (enrolled in a course, now presenting regularly), delegating (learned to trust teammates on a specific project), sometimes too detail-oriented at the cost of speed (now time-box detailed work).`
+      },
+      {
+        q: 'Where do you see yourself in 5 years?',
+        guidance: `<strong>Standard answer:</strong> Develop core technical skills and deal execution as an analyst, aim for associate promotion or MBA, longer-term keep options open between IBD, PE, or corporate strategy.<br><br>
+<strong>What banks actually want to hear:</strong> That you're committed to IB as a genuine first step, not just treating it as a PE feeder. Mention wanting to specialise in a sector or product.<br><br>
+<strong>Avoid:</strong> "I want to go to PE as soon as possible." True but signals you're already halfway out the door.`
+      },
+      {
+        q: 'Walk me through your resume.',
+        guidance: `<strong>This is your opening pitch — nail it.</strong><br><br>
+<strong>Structure (2–3 minutes max):</strong><br>
+• Start with most recent/relevant experience, work backwards only if there's a logical story<br>
+• For each role: what you did, one highlight or specific achievement, skill gained<br>
+• End with: "Which is why I'm particularly excited about this role because [specific bridge to IB]."<br><br>
+<strong>Practise until it's completely fluid.</strong> A hesitant walk-through is a red flag on fit. Aim for confident, concise, narrative — not a recitation of your CV.`
+      }
+    ]
+  },
+  {
+    id:'deal', label:'Deal Interest',
+    qs: [
+      {
+        q: 'Tell me about a deal you find interesting and why.',
+        guidance: `<strong>Must prepare 2–3 live examples before every interview.</strong><br><br>
+<strong>Structure:</strong><br>
+1. <em>What the deal is:</em> Buyer, target, size, deal type (M&A, LBO, IPO, debt)<br>
+2. <em>Strategic rationale:</em> Why is the buyer doing this? Scale, synergies, market entry, vertical integration, talent?<br>
+3. <em>Valuation angle:</em> Premium paid, implied multiple, how it compares to peers<br>
+4. <em>Your view:</em> Do you think it's a good deal? What risks do you see?<br><br>
+<strong>Avoid:</strong> Stale examples (3+ years old). Use something from the past 12 months.`
+      },
+      {
+        q: 'What sectors or industries are you most interested in covering, and why?',
+        guidance: `<strong>Banks want passionate, informed coverage bankers — not generalists.</strong><br><br>
+<strong>Best answers:</strong> Specific sector with genuine interest (not "tech because it's hot"), supported by relevant coursework, project, or work experience. Mention tailwinds and deal dynamics in that space.<br><br>
+<strong>Example:</strong> "Healthcare — I covered pharma M&A during my internship and found the combination of scientific complexity and regulatory risk particularly interesting. The wave of biotech consolidation post-COVID has created a lot of deal activity."<br><br>
+Match to the group you're interviewing for where possible.`
+      },
+      {
+        q: 'What do you think the most important macro or market factor is right now for M&A activity?',
+        guidance: `<strong>Tests market awareness and synthesis ability.</strong><br><br>
+<strong>Current themes to be fluent on:</strong> Interest rate direction and cost of debt, credit spreads and financing conditions, PE dry powder overhang, antitrust scrutiny trends, strategic vs. financial buyers, cross-border deal volumes.<br><br>
+<strong>Format:</strong> Name the factor clearly, explain the mechanism (how it affects deal activity), then give a specific example or data point. Conclude with your view on direction.<br><br>
+Keep it 60–90 seconds. Concise and informed beats long and vague.`
+      }
+    ]
+  }
+];
+
+function toggleBehav() {
+  showBehav = !showBehav;
+  document.getElementById('behavModal').classList.toggle('open', showBehav);
+  updateToolsItemState('behavBtn', showBehav);
+  if (showBehav) renderBehav();
+}
+
+function renderBehav() {
+  const cats = document.getElementById('behavCats');
+  cats.innerHTML = BEHAV_CATS.map((c,i) => {
+    const scores = c.qs.map((q,qi) => behavScores[`${c.id}_${qi}`]).filter(Boolean);
+    const done = scores.length === c.qs.length;
+    return `<div class="behav-cat${i===behavCatIdx?' on':''}" onclick="behavCatIdx=${i};behavQIdx=0;behavPhase='question';clearBehavTimer();renderBehav()">${c.label}${done?' ✓':''}</div>`;
+  }).join('');
+
+  const totalStrong = Object.values(behavScores).filter(v=>v==='strong').length;
+  const totalOk = Object.values(behavScores).filter(v=>v==='ok').length;
+  const totalWeak = Object.values(behavScores).filter(v=>v==='weak').length;
+  document.getElementById('behavStatsStrong').textContent = totalStrong;
+  document.getElementById('behavStatsOk').textContent = totalOk;
+  document.getElementById('behavStatsWeak').textContent = totalWeak;
+
+  const cat = BEHAV_CATS[behavCatIdx];
+  const q = cat.qs[behavQIdx];
+  const scoreKey = `${cat.id}_${behavQIdx}`;
+  const savedScore = behavScores[scoreKey];
+
+  const guidance = behavPhase === 'guidance' || savedScore;
+  const timerDisplay = behavPhase === 'timing' ? `<span class="behav-timer-display" id="behavTimerDisplay">0:00</span>` : '';
+
+  document.getElementById('behavBody').innerHTML = `
+    <div class="behav-q-card">
+      <div class="behav-q-num">${cat.label} · Question ${behavQIdx+1} of ${cat.qs.length}</div>
+      <div class="behav-q-text">${q.q}</div>
+      <div class="behav-timer-row">
+        <button class="behav-timer-btn${behavPhase==='timing'?' running':''}" onclick="toggleBehavTimer()">${behavPhase==='timing'?'Stop Timer':'Start Think Timer'}</button>
+        ${timerDisplay}
+      </div>
+      ${!guidance ? `<button class="behav-reveal-btn" onclick="behavPhase='guidance';clearBehavTimer();renderBehav()">Reveal Guidance →</button>` : ''}
+      <div class="behav-guidance${guidance?' show':''}">
+        <div class="behav-guidance-title">Strong Answer Framework</div>
+        <div class="behav-guidance-body">${q.guidance}</div>
+        <div class="behav-score-row">
+          <button class="behav-score-btn strong${savedScore==='strong'?' selected':''}" onclick="scoreBehav('${scoreKey}','strong')">Strong ✓</button>
+          <button class="behav-score-btn ok${savedScore==='ok'?' selected':''}" onclick="scoreBehav('${scoreKey}','ok')">Okay ~</button>
+          <button class="behav-score-btn weak${savedScore==='weak'?' selected':''}" onclick="scoreBehav('${scoreKey}','weak')">Weak ✗</button>
+        </div>
+      </div>
+    </div>`;
+
+  const prevBtn = document.getElementById('behavPrev');
+  const nextBtn = document.getElementById('behavNext');
+  const posEl = document.getElementById('behavNavPos');
+  const allQs = BEHAV_CATS.flatMap(c => c.qs);
+  const globalIdx = BEHAV_CATS.slice(0,behavCatIdx).reduce((a,c)=>a+c.qs.length,0) + behavQIdx;
+  prevBtn.disabled = globalIdx === 0;
+  nextBtn.disabled = globalIdx === allQs.length - 1;
+  posEl.textContent = `${globalIdx+1} / ${allQs.length}`;
+}
+
+function scoreBehav(key, score) {
+  behavScores[key] = score;
+  localStorage.setItem('fm-behav-scores', JSON.stringify(behavScores));
+  renderBehav();
+}
+
+function navBehav(dir) {
+  clearBehavTimer();
+  behavPhase = 'question';
+  const cat = BEHAV_CATS[behavCatIdx];
+  if (dir === 1) {
+    if (behavQIdx < cat.qs.length - 1) { behavQIdx++; }
+    else if (behavCatIdx < BEHAV_CATS.length - 1) { behavCatIdx++; behavQIdx = 0; }
+  } else {
+    if (behavQIdx > 0) { behavQIdx--; }
+    else if (behavCatIdx > 0) { behavCatIdx--; behavQIdx = BEHAV_CATS[behavCatIdx].qs.length - 1; }
+  }
+  renderBehav();
+}
+
+function toggleBehavTimer() {
+  if (behavPhase === 'timing') {
+    clearBehavTimer();
+    behavPhase = 'question';
+    renderBehav();
+    return;
+  }
+  behavPhase = 'timing';
+  behavElapsed = 0;
+  renderBehav();
+  behavTimer = setInterval(() => {
+    behavElapsed++;
+    const el = document.getElementById('behavTimerDisplay');
+    if (el) el.textContent = `${Math.floor(behavElapsed/60)}:${String(behavElapsed%60).padStart(2,'0')}`;
+  }, 1000);
+}
+
+function clearBehavTimer() {
+  if (behavTimer) { clearInterval(behavTimer); behavTimer = null; }
+}
+
+/* ============================================================
    MODEL BUILD DRILL
 ============================================================ */
 const DRILL_STAGES = ['Income Statement','Cash Flow Statement','Balance Sheet'];
@@ -6874,6 +7400,50 @@ function stopMockTimer() {
         <div class="drill-progress-txt" id="drillProgressTxt">0 / 0 correct</div>
       </div>
       <button class="drill-next-btn" id="drillNextBtn" disabled>Next Stage →</button>
+    </div>
+  </div>
+</div>
+
+<!-- PAPER LBO MODAL -->
+<div class="xdrill-modal" id="paperLBOModal" onclick="if(event.target===this)togglePaperLBO()">
+  <div class="xdrill-box" style="max-width:820px;width:96%">
+    <div class="drill-head">
+      <div><div class="fit-head-title">Paper LBO — Mental Math</div><div class="fit-head-sub">Entry equity · debt schedule · exit proceeds · MoM and IRR · build intuition for back-of-envelope LBO</div></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="drill-reset-btn" onclick="resetPaperLBO()">Reset</button>
+        <button class="modal-close" onclick="togglePaperLBO()">✕</button>
+      </div>
+    </div>
+    <div class="plbo-scenario-tabs" id="paperLBOTabs"></div>
+    <div class="xdrill-body" id="paperLBOBody"></div>
+    <div class="xdrill-footer">
+      <div class="drill-progress-wrap">
+        <div class="drill-progress-bar"><div class="drill-progress-fill" id="paperLBOProg" style="width:0%"></div></div>
+        <div class="drill-progress-txt" id="paperLBOProgTxt">0 / 0 correct</div>
+      </div>
+      <button class="xdrill-next" id="paperLBONext" disabled>Next Scenario →</button>
+    </div>
+  </div>
+</div>
+
+<!-- FIT QUESTIONS MODAL -->
+<div class="behav-modal" id="behavModal" onclick="if(event.target===this)toggleBehav()">
+  <div class="behav-box">
+    <div class="drill-head">
+      <div><div class="fit-head-title">Fit & Behavioral Questions</div><div class="fit-head-sub">Why IB · why this bank · leadership · failure · strengths · deal interest — reveal guidance · self-score</div></div>
+      <button class="modal-close" onclick="toggleBehav()">✕</button>
+    </div>
+    <div class="behav-stats-bar">
+      <div class="behav-stat"><div class="behav-stat-num green" id="behavStatsStrong">0</div><div class="behav-stat-lbl">Strong</div></div>
+      <div class="behav-stat"><div class="behav-stat-num amber" id="behavStatsOk">0</div><div class="behav-stat-lbl">Okay</div></div>
+      <div class="behav-stat"><div class="behav-stat-num red" id="behavStatsWeak">0</div><div class="behav-stat-lbl">Weak</div></div>
+    </div>
+    <div class="behav-cats" id="behavCats"></div>
+    <div class="behav-body" id="behavBody"></div>
+    <div class="behav-nav">
+      <button class="behav-nav-arrow" id="behavPrev" onclick="navBehav(-1)">← Prev</button>
+      <span class="behav-nav-pos" id="behavNavPos">1 / 1</span>
+      <button class="behav-nav-arrow" id="behavNext" onclick="navBehav(1)">Next →</button>
     </div>
   </div>
 </div>
