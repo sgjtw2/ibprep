@@ -1137,7 +1137,6 @@ body {
 .cal-weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 2px;
   margin-bottom: 4px;
 }
 .cal-wd {
@@ -1150,51 +1149,53 @@ body {
   padding: 4px 0;
 }
 .cal-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+/* Each week is one CSS grid — day cells + event bars share the same columns */
+.cal-week-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 3px;
+  column-gap: 3px;
+  row-gap: 2px;
 }
-.cal-day {
+.cal-day-num-cell {
+  grid-row: 1;
   background: var(--s2);
   border: 1px solid var(--b1);
-  border-radius: 4px;
-  min-height: 90px;
-  padding: 6px;
-  cursor: default;
-  transition: border-color .12s;
-  position: relative;
-}
-.cal-day:hover { border-color: var(--b3); }
-.cal-day.other-month { opacity: .3; }
-.cal-day.today {
-  border-color: var(--amber);
-  background: var(--amber-bg);
-}
-.cal-day-num {
+  border-radius: 4px 4px 0 0;
+  padding: 6px 8px 4px;
   font-size: 11px;
   font-weight: 700;
   color: var(--t3);
-  margin-bottom: 4px;
+  text-align: right;
 }
-.cal-day.today .cal-day-num { color: var(--amber); }
-.cal-day-events { display: flex; flex-direction: column; gap: 2px; }
-.cal-ev-pill {
+.cal-day-num-cell.other-month { opacity: .25; }
+.cal-day-num-cell.today {
+  color: var(--amber);
+  border-color: var(--amber);
+  background: var(--amber-bg);
+}
+.cal-ev-bar {
   font-size: 9px;
   font-weight: 600;
-  padding: 2px 5px;
-  border-radius: 2px;
-  background: var(--amber-bg);
-  border: 1px solid var(--amber-brd);
-  color: var(--amber);
+  color: #fff;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  height: 18px;
+  line-height: 18px;
   cursor: default;
+  opacity: .92;
+  transition: opacity .1s;
 }
-.cal-ev-more {
-  font-size: 9px;
-  color: var(--t4);
-  padding: 1px 5px;
+.cal-ev-bar:hover { opacity: 1; }
+.cal-week-spacer {
+  grid-column: 1 / 8;
+  height: 3px;
+  background: var(--b0);
+  border-radius: 0 0 4px 4px;
 }
 .cal-no-google {
   text-align: center;
@@ -1601,7 +1602,9 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
         <div class="cal-wd">Wed</div><div class="cal-wd">Thu</div><div class="cal-wd">Fri</div>
         <div class="cal-wd">Sat</div>
       </div>
-      <div class="cal-grid" id="calGrid"></div>
+      <div class="cal-grid" id="calGrid">
+        <div class="cal-no-google">Connect Google to see events</div>
+      </div>
     </div>
   </div>
 </div>
@@ -2650,63 +2653,95 @@ function calGoToday() {
   renderCalGrid();
 }
 
+function placeEventsInLanes(events) {
+  const sorted = [...events].sort((a, b) => {
+    const lenB = b.endCol - b.startCol, lenA = a.endCol - a.startCol;
+    return lenB !== lenA ? lenB - lenA : a.startCol - b.startCol;
+  });
+  const lanes = [];
+  return sorted.map(item => {
+    let lane = 0;
+    while (true) {
+      if (!lanes[lane]) lanes[lane] = [];
+      const conflict = lanes[lane].some(p => item.startCol <= p.endCol && item.endCol >= p.startCol);
+      if (!conflict) { lanes[lane].push({ startCol: item.startCol, endCol: item.endCol }); return { ...item, lane }; }
+      lane++;
+    }
+  });
+}
+
 function renderCalGrid() {
   const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   document.getElementById('calMonthLabel').textContent = MONTHS[calMonth] + ' ' + calYear;
 
-  const grid   = document.getElementById('calGrid');
-  const today  = new Date();
-  const first  = new Date(calYear, calMonth, 1);
-  const last   = new Date(calYear, calMonth + 1, 0);
-  const startW = first.getDay(); // 0=Sun
-  const total  = startW + last.getDate();
-  const cells  = Math.ceil(total / 7) * 7;
+  const grid     = document.getElementById('calGrid');
+  const today    = new Date();
+  const first    = new Date(calYear, calMonth, 1);
+  const last     = new Date(calYear, calMonth + 1, 0);
+  const startW   = first.getDay();
+  const numWeeks = Math.ceil((startW + last.getDate()) / 7);
 
-  // Build event map: 'YYYY-MM-DD' → [event, ...] — expand multi-day events
-  const evMap = {};
-  gCalEvents.forEach(ev => {
-    const startStr = ev.start.date || (ev.start.dateTime || '').slice(0, 10);
-    const endStr   = ev.end.date   || (ev.end.dateTime   || '').slice(0, 10);
-    if (!startStr) return;
-    const start = new Date(startStr + 'T00:00:00');
-    // end.date is exclusive for all-day events; subtract 1 day
-    const endRaw = new Date(endStr + 'T00:00:00');
-    const end    = ev.end.date ? new Date(endRaw - 86400000) : endRaw;
-    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-      const key = d.toISOString().slice(0, 10);
-      if (!evMap[key]) evMap[key] = [];
-      evMap[key].push(ev);
-    }
-  });
+  grid.innerHTML = '';
 
-  let html = '';
-  for (let i = 0; i < cells; i++) {
-    const dayNum  = i - startW + 1;
-    const isThis  = dayNum >= 1 && dayNum <= last.getDate();
-    const d       = new Date(calYear, calMonth, dayNum);
-    const key     = d.toISOString().slice(0, 10);
-    const isToday = isThis &&
-      today.getFullYear() === calYear &&
-      today.getMonth()    === calMonth &&
-      today.getDate()     === dayNum;
-    const evs     = isThis ? (evMap[key] || []) : [];
-    const shown   = evs.slice(0, 3);
-    const more    = evs.length - shown.length;
+  for (let w = 0; w < numWeeks; w++) {
+    const weekDates = Array.from({ length: 7 }, (_, d) =>
+      new Date(calYear, calMonth, 1 - startW + w * 7 + d)
+    );
+    const weekStart = weekDates[0];
+    const weekEnd   = weekDates[6];
 
-    html += `<div class="cal-day${!isThis ? ' other-month' : ''}${isToday ? ' today' : ''}">
-      <div class="cal-day-num">${isThis ? dayNum : ''}</div>
-      <div class="cal-day-events">
-        ${shown.map(ev => {
-          const color = ev._calColor || '#1B4FD8';
-          const bg    = color + '22';
-          return `<div class="cal-ev-pill" title="${esc(ev.summary||'')}" style="background:${bg};border-color:${color}55;color:${color}">${esc(ev.summary||'(No title)')}</div>`;
-        }).join('')}
-        ${more > 0 ? `<div class="cal-ev-more">+${more} more</div>` : ''}
-      </div>
-    </div>`;
+    // Collect events overlapping this week
+    const weekEvs = [];
+    gCalEvents.forEach(ev => {
+      const startStr = ev.start.date || (ev.start.dateTime || '').slice(0, 10);
+      const endStr   = ev.end.date   || (ev.end.dateTime   || '').slice(0, 10);
+      if (!startStr) return;
+      const evStart = new Date(startStr + 'T00:00:00');
+      const endRaw  = new Date(endStr   + 'T00:00:00');
+      const evEnd   = ev.end.date ? new Date(endRaw - 86400000) : endRaw;
+      if (evStart > weekEnd || evEnd < weekStart) return;
+      const startCol       = evStart < weekStart ? 1 : Math.round((evStart - weekStart) / 86400000) + 1;
+      const endCol         = evEnd   > weekEnd   ? 7 : Math.round((evEnd   - weekStart) / 86400000) + 1;
+      const continuesLeft  = evStart < weekStart;
+      const continuesRight = evEnd   > weekEnd;
+      weekEvs.push({ ev, startCol, endCol, continuesLeft, continuesRight });
+    });
+
+    const placed = placeEventsInLanes(weekEvs);
+
+    let html = '';
+
+    // Day number cells — row 1
+    weekDates.forEach((date, col) => {
+      const isThisMonth = date.getMonth() === calMonth;
+      const isToday     = date.toDateString() === today.toDateString();
+      html += `<div class="cal-day-num-cell${!isThisMonth ? ' other-month' : ''}${isToday ? ' today' : ''}" style="grid-column:${col+1};grid-row:1">${date.getDate()}</div>`;
+    });
+
+    // Event bars — rows 2+
+    placed.forEach(({ ev, startCol, endCol, continuesLeft, continuesRight, lane }) => {
+      const color = ev._calColor || '#1B4FD8';
+      const rTL   = continuesLeft  ? '0' : '3px';
+      const rTR   = continuesRight ? '0' : '3px';
+      const rBR   = continuesRight ? '0' : '3px';
+      const rBL   = continuesLeft  ? '0' : '3px';
+      const pL    = continuesLeft  ? '4px' : '7px';
+      const pR    = continuesRight ? '4px' : '7px';
+      html += `<div class="cal-ev-bar"
+        style="grid-column:${startCol}/${endCol+1};grid-row:${lane+2};background:${color};border-radius:${rTL} ${rTR} ${rBR} ${rBL};padding:0 ${pR} 0 ${pL}"
+        title="${esc(ev.summary||'')}">
+        ${continuesLeft ? '◂ ' : ''}${esc(ev.summary||'(No title)')}${continuesRight ? ' ▸' : ''}
+      </div>`;
+    });
+
+    // Bottom border strip
+    html += `<div class="cal-week-spacer"></div>`;
+
+    const weekEl = document.createElement('div');
+    weekEl.className = 'cal-week-grid';
+    weekEl.innerHTML = html;
+    grid.appendChild(weekEl);
   }
-
-  grid.innerHTML = html || '<div class="cal-no-google">Connect Google to see events</div>';
 }
 
 document.addEventListener('keydown', e => {
