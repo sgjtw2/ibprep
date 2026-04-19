@@ -1054,6 +1054,27 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
   .xdrill-box { border-radius:12px 12px 0 0; max-height:92vh; width:100%; }
   .int-stmt-grid { grid-template-columns:1fr; }
 }
+/* ── M&A ACCRETION/DILUTION ───────────────────────────── */
+.ma-scenario-tabs { display:flex; border-bottom:1px solid var(--b1); flex-shrink:0; overflow-x:auto; }
+.ma-stab { padding:8px 16px; font-family:'Syne',sans-serif; font-weight:700; font-size:9px; letter-spacing:.06em; text-transform:uppercase; color:var(--t3); cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; }
+.ma-stab:hover { color:var(--t2); }
+.ma-stab.on { color:var(--blue); border-bottom-color:var(--blue); }
+.ma-stab.done { color:var(--green); }
+.ma-layout { display:grid; grid-template-columns:260px 1fr; gap:14px; }
+.ma-assumptions { background:var(--s1); border:1px solid var(--b1); border-radius:6px; padding:12px 14px; }
+.ma-asm-title { font-family:'Syne',sans-serif; font-weight:800; font-size:8px; letter-spacing:.14em; text-transform:uppercase; margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid var(--b1); }
+.ma-asm-title.blue { color:var(--blue); }
+.ma-asm-title.green { color:var(--green); margin-top:12px; }
+.ma-asm-row { display:flex; justify-content:space-between; align-items:baseline; padding:3px 0; border-bottom:1px solid var(--b1); }
+.ma-asm-row:last-child { border-bottom:none; }
+.ma-asm-lbl { font-size:10px; color:var(--t2); }
+.ma-asm-val { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:500; color:var(--t1); }
+.ma-steps { display:flex; flex-direction:column; gap:6px; }
+.ma-section-hdr { font-family:'Syne',sans-serif; font-weight:800; font-size:8px; letter-spacing:.14em; text-transform:uppercase; color:var(--blue); padding:6px 0 4px; border-bottom:1px solid var(--b1); }
+.ma-verdict { display:flex; align-items:center; gap:10px; padding:10px 14px; border-radius:6px; font-family:'Syne',sans-serif; font-weight:800; font-size:12px; letter-spacing:.04em; }
+.ma-verdict.accretive { background:rgba(22,163,74,.1); border:1px solid rgba(22,163,74,.3); color:var(--green); }
+.ma-verdict.dilutive { background:rgba(220,38,38,.08); border:1px solid rgba(220,38,38,.25); color:var(--red); }
+@media (max-width:768px) { .ma-layout { grid-template-columns:1fr; } }
 /* ── PAPER LBO ────────────────────────────────────────── */
 .plbo-scenario-tabs { display:flex; border-bottom:1px solid var(--b1); flex-shrink:0; overflow-x:auto; }
 .plbo-stab { padding:8px 16px; font-family:'Syne',sans-serif; font-weight:700; font-size:9px; letter-spacing:.06em; text-transform:uppercase; color:var(--t3); cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; }
@@ -1397,6 +1418,9 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
         </button>
         <button class="tools-item" id="errSpotBtn" onclick="toggleErrSpot();closeToolsMenu()">
           <span class="tools-item-icon">🔍</span>Error Spotter<span class="tools-item-badge"></span>
+        </button>
+        <button class="tools-item" id="maDrillBtn" onclick="toggleMaDrill();closeToolsMenu()">
+          <span class="tools-item-icon">🤝</span>M&amp;A Accretion/Dilution<span class="tools-item-badge"></span>
         </button>
         <button class="tools-item" id="paperLBOBtn" onclick="togglePaperLBO();closeToolsMenu()">
           <span class="tools-item-icon">🧮</span>Paper LBO<span class="tools-item-badge"></span>
@@ -2906,6 +2930,7 @@ let showIntDrill  = false, intDrillIdx = 0, intDrillState = {};
 let showDCFDrill  = false, dcfDrillState = {};
 let showLBODrill  = false, lboDrillState = {};
 let showErrSpot   = false, errSpotFlags = {}, errSpotSubmitted = false;
+let showMaDrill   = false, maDrillIdx = 0, maDrillState = {};
 let showPaperLBO  = false, paperLBOIdx = 0, paperLBOState = {};
 let showBehav     = false, behavCatIdx = 0, behavQIdx = 0, behavPhase = 'question', behavTimer = null, behavElapsed = 0;
 let behavScores   = JSON.parse(localStorage.getItem('fm-behav-scores') || '{}');
@@ -6130,6 +6155,213 @@ function submitErrSpot() {
 }
 
 /* ============================================================
+   M&A ACCRETION / DILUTION
+============================================================ */
+const MA_SCENARIOS = [
+  {
+    title: 'TechCo Acquires DataCo — All Cash',
+    difficulty: 'Introductory',
+    context: 'TechCo acquires DataCo for $500m in an all-cash deal financed with new debt. Determine whether the deal is accretive or dilutive to TechCo\'s EPS.',
+    acqAsm: [
+      { label:'Acquirer Net Income', val:'$200m' },
+      { label:'Shares Outstanding', val:'100m' },
+      { label:'Standalone EPS', val:'$2.00' },
+    ],
+    dealAsm: [
+      { label:'Target Net Income', val:'$50m' },
+      { label:'Purchase Price (all cash)', val:'$500m' },
+      { label:'Debt Interest Rate', val:'5%' },
+      { label:'Tax Rate', val:'20%' },
+      { label:'Stock Consideration', val:'None' },
+    ],
+    steps: [
+      { id:'m1_eps',     section:'Standalone',  label:'Acquirer Standalone EPS',     formula:'Acquirer NI ÷ Shares',               ans:2.00, hint:'$200m ÷ 100m = $2.00', unit:'$', tol:0.01 },
+      { id:'m1_int',     section:'Deal Cost',   label:'Annual Interest Expense',      formula:'Purchase Price × Interest Rate',     ans:25,   hint:'$500m × 5% = $25m', unit:'$m' },
+      { id:'m1_atcost',  section:'',            label:'After-Tax Financing Cost',     formula:'Interest × (1 − Tax Rate)',          ans:20,   hint:'$25m × (1 − 20%) = $20m', unit:'$m' },
+      { id:'m1_pfni',    section:'Pro Forma',   label:'Pro Forma Net Income',         formula:'Acq NI + Target NI − Financing Cost',ans:230,  hint:'$200m + $50m − $20m = $230m', unit:'$m' },
+      { id:'m1_newsh',   section:'',            label:'New Shares Issued',            formula:'All cash → no shares issued',        ans:0,    hint:'All-cash deal: no new equity issued = 0', unit:'m' },
+      { id:'m1_pfsh',    section:'',            label:'Pro Forma Shares Outstanding', formula:'Acq Shares + New Shares',            ans:100,  hint:'100m + 0 = 100m', unit:'m' },
+      { id:'m1_pfeps',   section:'',            label:'Pro Forma EPS',                formula:'Pro Forma NI ÷ Pro Forma Shares',    ans:2.30, hint:'$230m ÷ 100m = $2.30', unit:'$', tol:0.01 },
+      { id:'m1_acc',     section:'Result',      label:'EPS Accretion / (Dilution)',   formula:'Pro Forma EPS − Standalone EPS',     ans:0.30, hint:'$2.30 − $2.00 = +$0.30', unit:'$', tol:0.01 },
+      { id:'m1_pct',     section:'',            label:'% Accretion / (Dilution)',     formula:'EPS Change ÷ Standalone EPS × 100', ans:15,   hint:'+$0.30 ÷ $2.00 = +15%', unit:'%', tol:0.5 },
+    ],
+    verdict: 'accretive',
+    insight: 'All-cash deals are accretive when the target\'s after-tax earnings yield (Target NI / Price) exceeds the after-tax cost of debt. Here: $50m/$500m = 10% yield vs. 4% after-tax debt cost — accretive.'
+  },
+  {
+    title: 'MegaCorp Acquires GrowthCo — All Stock',
+    difficulty: 'Intermediate',
+    context: 'MegaCorp acquires GrowthCo for $1,000m in an all-stock deal. MegaCorp\'s share price is $40. No financing cost, but new shares dilute EPS.',
+    acqAsm: [
+      { label:'Acquirer Net Income', val:'$200m' },
+      { label:'Shares Outstanding', val:'100m' },
+      { label:'Standalone EPS', val:'$2.00' },
+      { label:'Acquirer Share Price', val:'$40' },
+    ],
+    dealAsm: [
+      { label:'Target Net Income', val:'$40m' },
+      { label:'Purchase Price (all stock)', val:'$1,000m' },
+      { label:'Debt Financing Cost', val:'None' },
+      { label:'Tax Rate', val:'N/A' },
+    ],
+    steps: [
+      { id:'m2_eps',     section:'Standalone',  label:'Acquirer Standalone EPS',     formula:'Acquirer NI ÷ Shares',               ans:2.00,  hint:'$200m ÷ 100m = $2.00', unit:'$', tol:0.01 },
+      { id:'m2_int',     section:'Deal Cost',   label:'Annual Interest Expense',      formula:'All stock → no debt, no interest',   ans:0,     hint:'All-stock deal: no debt raised = $0', unit:'$m' },
+      { id:'m2_atcost',  section:'',            label:'After-Tax Financing Cost',     formula:'$0 × (1 − tax rate)',                ans:0,     hint:'$0 interest = $0 after-tax cost', unit:'$m' },
+      { id:'m2_pfni',    section:'Pro Forma',   label:'Pro Forma Net Income',         formula:'Acq NI + Target NI − Financing Cost',ans:240,   hint:'$200m + $40m − $0 = $240m', unit:'$m' },
+      { id:'m2_newsh',   section:'',            label:'New Shares Issued',            formula:'Purchase Price ÷ Acquirer Share Price',ans:25,   hint:'$1,000m ÷ $40 = 25m new shares', unit:'m' },
+      { id:'m2_pfsh',    section:'',            label:'Pro Forma Shares Outstanding', formula:'Acq Shares + New Shares',            ans:125,   hint:'100m + 25m = 125m', unit:'m' },
+      { id:'m2_pfeps',   section:'',            label:'Pro Forma EPS',                formula:'Pro Forma NI ÷ Pro Forma Shares',    ans:1.92,  hint:'$240m ÷ 125m = $1.92', unit:'$', tol:0.01 },
+      { id:'m2_acc',     section:'Result',      label:'EPS Accretion / (Dilution)',   formula:'Pro Forma EPS − Standalone EPS',     ans:-0.08, hint:'$1.92 − $2.00 = −$0.08', unit:'$', tol:0.01 },
+      { id:'m2_pct',     section:'',            label:'% Accretion / (Dilution)',     formula:'EPS Change ÷ Standalone EPS × 100', ans:-4,    hint:'−$0.08 ÷ $2.00 = −4%', unit:'%', tol:0.5 },
+    ],
+    verdict: 'dilutive',
+    insight: 'All-stock deals are dilutive when the target\'s P/E (purchase price / target NI) exceeds the acquirer\'s P/E. GrowthCo P/E: $1,000m/$40m = 25×. MegaCorp P/E: $40/$2.00 = 20×. Paying a higher multiple = dilutive.'
+  },
+  {
+    title: 'GlobalBank Acquires RegionalCo — Mixed + Synergies',
+    difficulty: 'Advanced',
+    context: 'GlobalBank acquires RegionalCo for $1,000m — 40% cash ($400m debt at 5%), 60% stock ($600m). Synergies of $24m pre-tax. GlobalBank share price $40, tax rate 25%.',
+    acqAsm: [
+      { label:'Acquirer Net Income', val:'$400m' },
+      { label:'Shares Outstanding', val:'200m' },
+      { label:'Standalone EPS', val:'$2.00' },
+      { label:'Acquirer Share Price', val:'$40' },
+    ],
+    dealAsm: [
+      { label:'Target Net Income', val:'$70m' },
+      { label:'Cash Consideration', val:'$400m (debt at 5%)' },
+      { label:'Stock Consideration', val:'$600m' },
+      { label:'Pre-Tax Synergies', val:'$24m' },
+      { label:'Tax Rate', val:'25%' },
+    ],
+    steps: [
+      { id:'m3_eps',    section:'Standalone',  label:'Acquirer Standalone EPS',        formula:'Acquirer NI ÷ Shares',                     ans:2.00, hint:'$400m ÷ 200m = $2.00', unit:'$', tol:0.01 },
+      { id:'m3_int',    section:'Deal Cost',   label:'Annual Interest Expense',         formula:'Cash Portion × Interest Rate',              ans:20,   hint:'$400m × 5% = $20m', unit:'$m' },
+      { id:'m3_atcost', section:'',            label:'After-Tax Financing Cost',        formula:'Interest × (1 − Tax Rate)',                 ans:15,   hint:'$20m × (1 − 25%) = $15m', unit:'$m' },
+      { id:'m3_atsyn',  section:'',            label:'After-Tax Synergies',             formula:'Pre-Tax Synergies × (1 − Tax Rate)',        ans:18,   hint:'$24m × (1 − 25%) = $18m', unit:'$m' },
+      { id:'m3_pfni',   section:'Pro Forma',   label:'Pro Forma Net Income',            formula:'Acq NI + Target NI − Cost + Synergies',    ans:473,  hint:'$400m + $70m − $15m + $18m = $473m', unit:'$m' },
+      { id:'m3_newsh',  section:'',            label:'New Shares Issued',               formula:'Stock Consideration ÷ Acquirer Price',     ans:15,   hint:'$600m ÷ $40 = 15m new shares', unit:'m' },
+      { id:'m3_pfsh',   section:'',            label:'Pro Forma Shares Outstanding',    formula:'Acq Shares + New Shares',                  ans:215,  hint:'200m + 15m = 215m', unit:'m' },
+      { id:'m3_pfeps',  section:'',            label:'Pro Forma EPS',                   formula:'Pro Forma NI ÷ Pro Forma Shares',          ans:2.20, hint:'$473m ÷ 215m = $2.20', unit:'$', tol:0.01 },
+      { id:'m3_acc',    section:'Result',      label:'EPS Accretion / (Dilution)',      formula:'Pro Forma EPS − Standalone EPS',           ans:0.20, hint:'$2.20 − $2.00 = +$0.20', unit:'$', tol:0.01 },
+      { id:'m3_pct',    section:'',            label:'% Accretion / (Dilution)',        formula:'EPS Change ÷ Standalone EPS × 100',       ans:10,   hint:'+$0.20 ÷ $2.00 = +10%', unit:'%', tol:0.5 },
+    ],
+    verdict: 'accretive',
+    insight: 'Mixed deals blend financing effects: cash portion benefits from leverage when target yield > after-tax debt cost; stock portion is dilutive if target P/E > acquirer P/E. Synergies tip marginal deals from dilutive to accretive — always stress-test them.'
+  }
+];
+
+function toggleMaDrill() {
+  showMaDrill = !showMaDrill;
+  document.getElementById('maDrillModal').classList.toggle('open', showMaDrill);
+  updateToolsItemState('maDrillBtn', showMaDrill);
+  if (showMaDrill && Object.keys(maDrillState).length === 0) initMaDrillState();
+  if (showMaDrill) renderMaDrill();
+}
+
+function initMaDrillState() {
+  maDrillState = {};
+  MA_SCENARIOS.forEach(sc => {
+    sc.steps.forEach(s => { maDrillState[s.id] = { status:null, attempts:0, hintOpen:false, userVal:'' }; });
+  });
+}
+
+function renderMaDrill() {
+  const sc = MA_SCENARIOS[maDrillIdx];
+  const allSteps = sc.steps;
+  const correct = allSteps.filter(s => maDrillState[s.id]?.status === 'correct').length;
+  const allDone = allSteps.every(s => maDrillState[s.id]?.status === 'correct');
+
+  const tabs = document.getElementById('maDrillTabs');
+  tabs.innerHTML = MA_SCENARIOS.map((s,i) => {
+    const done = s.steps.every(st => maDrillState[st.id]?.status === 'correct');
+    return `<div class="ma-stab${i===maDrillIdx?' on':''}${done?' done':''}" onclick="maDrillIdx=${i};renderMaDrill()">${i+1}. ${s.title.split(' — ')[0]}</div>`;
+  }).join('');
+
+  const body = document.getElementById('maDrillBody');
+  let lastSection = null;
+  const stepsHtml = allSteps.map(step => {
+    const st = maDrillState[step.id];
+    const isCorrect = st?.status === 'correct', isWrong = st?.status === 'wrong';
+    const showAns = st?.attempts >= 2;
+    let sectionHdr = '';
+    if (step.section && step.section !== lastSection) {
+      sectionHdr = `<div class="ma-section-hdr">${step.section}</div>`;
+      lastSection = step.section;
+    }
+    return `${sectionHdr}
+      ${st?.hintOpen ? `<div class="xdrill-hint-box show">💡 ${step.hint}</div>` : ''}
+      <div class="xdrill-row">
+        <div style="flex:1;min-width:0">
+          <div class="xdrill-lbl">${step.label}${showAns&&!isCorrect?`<span style="color:var(--green);font-size:9px"> → ${step.ans}${step.unit}</span>`:''}</div>
+          <div style="font-size:9px;color:var(--t3);margin-top:1px">${step.formula}</div>
+        </div>
+        <input class="xdrill-input${isCorrect?' correct':isWrong?' wrong':''}" id="ma-${step.id}" type="number" step="0.01" value="${isCorrect?step.ans:(st?.userVal??'')}" ${isCorrect?'disabled':''} placeholder="${step.unit}" style="width:80px" onkeydown="if(event.key==='Enter')checkMaDrill('${step.id}')">
+        <button class="xdrill-check" onclick="checkMaDrill('${step.id}')" ${isCorrect?'disabled':''}>→</button>
+        <button class="xdrill-hint-btn" onclick="toggleMaDrillHint('${step.id}')">?</button>
+        <div class="xdrill-status" style="${isCorrect?'color:var(--green)':isWrong?'color:var(--red)':''}">${isCorrect?'✓':isWrong?'✗':''}</div>
+      </div>`;
+  }).join('');
+
+  const verdictHtml = allDone ? `
+    <div class="ma-verdict ${sc.verdict}">
+      ${sc.verdict === 'accretive' ? '▲ ACCRETIVE' : '▼ DILUTIVE'}
+      <span style="font-weight:400;font-size:10px;color:inherit;opacity:.8">${sc.verdict === 'accretive' ? 'Deal increases acquirer EPS' : 'Deal decreases acquirer EPS'}</span>
+    </div>` : '';
+
+  body.innerHTML = `
+    <div style="padding:8px 12px;background:var(--s1);border:1px solid var(--b1);border-radius:5px;font-size:9.5px;color:var(--t3);line-height:1.6">
+      <span style="color:var(--t2);font-weight:500">${sc.title}</span> · <span style="color:#D97706">${sc.difficulty}</span><br>${sc.context}
+    </div>
+    <div class="ma-layout">
+      <div>
+        <div class="ma-assumptions">
+          <div class="ma-asm-title blue">Acquirer</div>
+          ${sc.acqAsm.map(a=>`<div class="ma-asm-row"><span class="ma-asm-lbl">${a.label}</span><span class="ma-asm-val">${a.val}</span></div>`).join('')}
+          <div class="ma-asm-title green">Deal Terms</div>
+          ${sc.dealAsm.map(a=>`<div class="ma-asm-row"><span class="ma-asm-lbl">${a.label}</span><span class="ma-asm-val">${a.val}</span></div>`).join('')}
+        </div>
+      </div>
+      <div class="ma-steps">${stepsHtml}${verdictHtml}</div>
+    </div>
+    ${allDone?`<div style="padding:10px 14px;background:var(--bbg);border:1px solid var(--bbrd);border-radius:5px;font-size:10px;color:var(--t2)"><strong style="color:var(--blue)">Key Insight:</strong> ${sc.insight}</div>`:''}`;
+
+  const pct = allSteps.length ? Math.round(correct/allSteps.length*100) : 0;
+  document.getElementById('maDrillProg').style.width = pct+'%';
+  document.getElementById('maDrillProgTxt').textContent = `${correct}/${allSteps.length} correct`;
+  const nextBtn = document.getElementById('maDrillNext');
+  const hasNext = maDrillIdx < MA_SCENARIOS.length - 1;
+  nextBtn.textContent = hasNext ? 'Next Scenario →' : allDone ? 'All Done ✓' : 'Finish';
+  nextBtn.disabled = !allDone;
+  nextBtn.onclick = () => { if (hasNext) { maDrillIdx++; renderMaDrill(); } };
+}
+
+function checkMaDrill(id) {
+  const step = MA_SCENARIOS.flatMap(sc => sc.steps).find(s => s.id === id);
+  const input = document.getElementById('ma-'+id);
+  if (!step || !input) return;
+  const val = parseFloat(input.value);
+  const st = maDrillState[id];
+  const tol = step.tol ?? 0.1;
+  st.userVal = val; st.attempts++;
+  st.status = Math.abs(val - step.ans) <= tol ? 'correct' : 'wrong';
+  if (st.status === 'wrong' && st.attempts >= 2) st.hintOpen = true;
+  renderMaDrill();
+}
+
+function toggleMaDrillHint(id) {
+  maDrillState[id].hintOpen = !maDrillState[id].hintOpen;
+  renderMaDrill();
+}
+
+function resetMaDrill() {
+  maDrillState = {};
+  initMaDrillState();
+  renderMaDrill();
+}
+
+/* ============================================================
    PAPER LBO
 ============================================================ */
 const PAPER_LBO_SCENARIOS = [
@@ -7400,6 +7632,28 @@ function stopMockTimer() {
         <div class="drill-progress-txt" id="drillProgressTxt">0 / 0 correct</div>
       </div>
       <button class="drill-next-btn" id="drillNextBtn" disabled>Next Stage →</button>
+    </div>
+  </div>
+</div>
+
+<!-- M&A ACCRETION/DILUTION MODAL -->
+<div class="xdrill-modal" id="maDrillModal" onclick="if(event.target===this)toggleMaDrill()">
+  <div class="xdrill-box" style="max-width:840px;width:96%">
+    <div class="drill-head">
+      <div><div class="fit-head-title">M&amp;A Accretion / Dilution</div><div class="fit-head-sub">All-cash · all-stock · mixed deals · synergies · build pro forma EPS and determine deal impact</div></div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="drill-reset-btn" onclick="resetMaDrill()">Reset</button>
+        <button class="modal-close" onclick="toggleMaDrill()">✕</button>
+      </div>
+    </div>
+    <div class="ma-scenario-tabs" id="maDrillTabs"></div>
+    <div class="xdrill-body" id="maDrillBody"></div>
+    <div class="xdrill-footer">
+      <div class="drill-progress-wrap">
+        <div class="drill-progress-bar"><div class="drill-progress-fill" id="maDrillProg" style="width:0%"></div></div>
+        <div class="drill-progress-txt" id="maDrillProgTxt">0 / 0 correct</div>
+      </div>
+      <button class="xdrill-next" id="maDrillNext" disabled>Next Scenario →</button>
     </div>
   </div>
 </div>
