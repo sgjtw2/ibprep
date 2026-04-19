@@ -9,40 +9,40 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:        #090907;
-  --s1:        #0f0f0d;
-  --s2:        #141412;
-  --card:      #1a1a17;
-  --card-h:    #202020;
-  --b0:        #1e1e1b;
-  --b1:        #272724;
-  --b2:        #333330;
-  --b3:        #424240;
-  --t1:        #f0efe9;
-  --t2:        #8c8b84;
-  --t3:        #52524e;
-  --t4:        #333330;
-  --amber:     #d98a20;
-  --amber-l:   #f0a030;
-  --amber-bg:  rgba(217,138,32,0.10);
-  --amber-brd: rgba(217,138,32,0.22);
-  --red:       #c93c2e;
+  --bg:        #000000;
+  --s1:        #080C14;
+  --s2:        #0C1220;
+  --card:      #080C14;
+  --card-h:    #0C1220;
+  --b0:        #0E1828;
+  --b1:        #162038;
+  --b2:        #1E2E4A;
+  --b3:        #2A3E5C;
+  --t1:        #EEF2FF;
+  --t2:        #8898B8;
+  --t3:        #4A5A78;
+  --t4:        #2A3850;
+  --amber:     #1B4FD8;
+  --amber-l:   #2D63F0;
+  --amber-bg:  rgba(27,79,216,0.10);
+  --amber-brd: rgba(27,79,216,0.22);
+  --red:       #C93C2E;
   --red-bg:    rgba(201,60,46,0.10);
   --red-brd:   rgba(201,60,46,0.22);
-  --blue:      #3478b0;
-  --blue-bg:   rgba(52,120,176,0.10);
-  --blue-brd:  rgba(52,120,176,0.22);
-  --green:     #3d7554;
-  --green-bg:  rgba(61,117,84,0.10);
-  --green-brd: rgba(61,117,84,0.22);
-  --yellow:    #b89840;
+  --blue:      #1B4FD8;
+  --blue-bg:   rgba(27,79,216,0.10);
+  --blue-brd:  rgba(27,79,216,0.22);
+  --green:     #1E7A5A;
+  --green-bg:  rgba(30,122,90,0.10);
+  --green-brd: rgba(30,122,90,0.22);
+  --yellow:    #1B4FD8;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow: hidden; }
 body {
   background: var(--bg);
   color: var(--t1);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 12px;
   display: flex;
   flex-direction: column;
@@ -101,7 +101,7 @@ body {
   border-radius: 4px;
   padding: 6px 10px 6px 28px;
   color: var(--t1);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 11px;
   outline: none;
   transition: border-color .15s;
@@ -114,7 +114,7 @@ body {
   border: 1px solid var(--b1);
   border-radius: 3px;
   padding: 5px 9px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 10px;
   letter-spacing: .04em;
   color: var(--t3);
@@ -247,7 +247,7 @@ body {
   border: 1px solid var(--b1);
   border-radius: 3px;
   padding: 4px 8px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 9px;
   letter-spacing: .06em;
   color: var(--t3);
@@ -506,7 +506,7 @@ body {
   border-radius: 3px;
   padding: 6px 9px;
   color: var(--t1);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 11px;
   outline: none;
   transition: border-color .15s;
@@ -519,7 +519,7 @@ body {
   border-radius: 3px;
   padding: 6px 11px;
   color: var(--amber);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 16px;
   cursor: pointer;
   transition: all .12s;
@@ -665,7 +665,7 @@ body {
   border: none;
   padding: 11px 13px;
   color: var(--t2);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 11px;
   line-height: 1.65;
   outline: none;
@@ -707,7 +707,7 @@ body {
 .act-clr {
   background: none;
   border: none;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 9px;
   color: var(--t4);
   cursor: pointer;
@@ -784,7 +784,7 @@ body {
   border-radius: 3px;
   padding: 6px 8px;
   color: var(--t1);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 10px;
   outline: none;
   transition: border-color .15s;
@@ -864,7 +864,7 @@ body {
 }
 .sub-item-value {
   color: var(--t2);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   word-break: break-all;
 }
 .sub-item-remove {
@@ -951,7 +951,7 @@ body {
   border-radius: 3px;
   padding: 8px 10px;
   color: var(--t1);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 11px;
   outline: none;
   transition: border-color .15s;
@@ -974,7 +974,7 @@ body {
   border: 1px solid var(--b1);
   border-radius: 3px;
   padding: 7px 14px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 11px;
   color: var(--t2);
   cursor: pointer;
@@ -1047,7 +1047,7 @@ body {
   background: none;
   border: none;
   color: var(--amber);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: 'Plus Jakarta Sans', sans-serif;
   font-size: 10px;
   cursor: pointer;
   text-decoration: underline;
@@ -1127,6 +1127,7 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
       <span class="panel-title">Kanban Board</span>
       <div class="panel-actions">
         <button class="sort-btn" id="sortToggle" onclick="toggleSort()">⇅ Priority Sort</button>
+        <button class="sort-btn" id="hideDoneBtn" onclick="toggleHideDone()">◻ Hide Done</button>
         <button class="icon-btn" onclick="openNewCard()" title="New task">+</button>
       </div>
     </div>
@@ -1315,6 +1316,7 @@ let S = {
   q:        ''
 };
 
+let hideDone = false;
 let editId   = null;   // card being edited
 let noteId   = null;   // note being edited
 let ctxId    = null;   // card for context menu
@@ -1616,6 +1618,7 @@ function renderKanban() {
   const board = document.getElementById('kbBoard');
   board.innerHTML = '';
   COLS.forEach(col => {
+    if (hideDone && col.id === 'done') return;
     const cards = filteredCards(col.id);
     const total = S.cards.filter(c => c.status === col.id && !c.archived).length;
     const el = document.createElement('div');
@@ -1930,6 +1933,13 @@ function toggleFilter(k) {
 function toggleSort() {
   S.sortPri = !S.sortPri;
   document.getElementById('sortToggle').classList.toggle('on', S.sortPri);
+  renderKanban();
+}
+function toggleHideDone() {
+  hideDone = !hideDone;
+  const btn = document.getElementById('hideDoneBtn');
+  btn.classList.toggle('on', hideDone);
+  btn.textContent = hideDone ? '◼ Show Done' : '◻ Hide Done';
   renderKanban();
 }
 
