@@ -2901,15 +2901,29 @@ function showGError(msg) {
 }
 
 /* ── MONTHLY CALENDAR ── */
-let calYear            = new Date().getFullYear();
-let calMonth           = new Date().getMonth();
-let calEarningsVisible = false;
-let calHiddenIds       = new Set();  // calendar IDs hidden by user
+let calYear               = new Date().getFullYear();
+let calMonth              = new Date().getMonth();
+let calEarningsVisible    = false;
+let calHiddenIds          = new Set();
+let calDefaultFilterDone  = false;
+
+function applyDefaultCalFilter() {
+  if (calDefaultFilterDone || !gCalList) return;
+  calDefaultFilterDone = true;
+  // Hide everything except the doggo calendar
+  gCalList.forEach(cal => {
+    if (!/doggo/i.test(cal.summary)) calHiddenIds.add(cal.id);
+  });
+}
 
 function openCalendar() {
   document.getElementById('calOverlay').classList.add('on');
   renderCalGrid();
-  loadCalendarMonth(calYear, calMonth).then(() => { renderCalGrid(); renderCalFilterList(); });
+  loadCalendarMonth(calYear, calMonth).then(() => {
+    applyDefaultCalFilter();
+    renderCalGrid();
+    renderCalFilterList();
+  });
 }
 function closeCalendar() {
   document.getElementById('calOverlay').classList.remove('on');
