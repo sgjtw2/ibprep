@@ -3175,12 +3175,15 @@ async function renderYearView() {
   const fmt = n => n === 0 ? '—' : '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const now = new Date();
 
-  let totalReceived = 0, totalEarned = 0, totalOutstanding = 0;
+  let totalReceived = 0, totalEarned = 0, totalOutstanding = 0, activeMonths = 0;
   const rows = MONTHS.map((name, m) => {
     const e = calcMonthEarnings(events, calYear, m);
     totalReceived    += e.received;
     totalEarned      += e.total;
     totalOutstanding += e.outstanding;
+    // Count months up to and including current month (for current year), or all 12 for past years
+    const isPast = new Date(calYear, m + 1, 0) <= now;
+    if (isPast && e.total > 0) activeMonths++;
     const isCur = calYear === now.getFullYear() && m === now.getMonth();
     const isFut = new Date(calYear, m, 1) > now;
     return `<tr class="${isCur ? 'cur-month' : ''}" style="${isFut ? 'opacity:.45' : ''}">
@@ -3208,6 +3211,12 @@ async function renderYearView() {
           <td class="received-col">${fmt(totalReceived)}</td>
           <td>${fmt(totalEarned)}</td>
           <td class="${totalOutstanding > 0 ? 'outstanding-col' : ''}">${fmt(totalOutstanding)}</td>
+        </tr>
+        <tr class="total-row" style="opacity:.7;font-style:italic">
+          <td>Monthly Avg <span style="font-size:9px;font-weight:400;color:var(--t4)">(${activeMonths} active months)</span></td>
+          <td class="received-col">${activeMonths ? fmt(totalReceived / activeMonths) : '—'}</td>
+          <td>${activeMonths ? fmt(totalEarned / activeMonths) : '—'}</td>
+          <td>${'—'}</td>
         </tr>
       </tbody>
     </table>`;
