@@ -1458,6 +1458,96 @@ body {
   font-size: 11px;
 }
 
+/* ── YEAR VIEW ───────────────────────────────────────────── */
+.cal-view-toggle {
+  display: flex;
+  gap: 2px;
+  background: var(--s2);
+  border: 1px solid var(--b2);
+  border-radius: 4px;
+  padding: 2px;
+}
+.cal-view-btn {
+  background: transparent;
+  border: none;
+  border-radius: 3px;
+  padding: 4px 10px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  color: var(--t3);
+  cursor: pointer;
+  transition: all .12s;
+}
+.cal-view-btn.on { background: var(--amber); color: #000; }
+.cal-year-view { padding: 0 0 8px; }
+.cal-year-hdr {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0 14px;
+}
+.cal-year-title {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--t1);
+}
+.cal-year-loading {
+  text-align: center;
+  padding: 32px;
+  font-size: 11px;
+  color: var(--t4);
+}
+.cal-year-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--b1);
+  border-radius: 5px;
+  overflow: hidden;
+}
+.cal-year-table th {
+  background: var(--s2);
+  padding: 9px 14px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--t3);
+  text-align: right;
+  border-bottom: 1px solid var(--b1);
+  white-space: nowrap;
+}
+.cal-year-table th:first-child { text-align: left; }
+.cal-year-table td {
+  padding: 9px 14px;
+  font-size: 11px;
+  color: var(--t2);
+  text-align: right;
+  border-bottom: 1px solid var(--b0);
+  white-space: nowrap;
+}
+.cal-year-table td:first-child {
+  text-align: left;
+  font-weight: 600;
+  color: var(--t1);
+}
+.cal-year-table tr:last-child td { border-bottom: none; }
+.cal-year-table tr.total-row td {
+  background: var(--s2);
+  border-top: 1px solid var(--b2);
+  font-weight: 700;
+  color: var(--t1);
+  font-size: 12px;
+}
+.cal-year-table tr.cur-month td { background: var(--amber-bg); }
+.cal-year-table tr.cur-month td:first-child { color: var(--amber); }
+.cal-year-table td.received-col { color: #43A047; font-weight: 600; }
+.cal-year-table td.outstanding-col { color: var(--red); }
+.cal-year-table tr:hover td { background: var(--s2); }
+.cal-year-table tr.total-row:hover td { background: var(--s2); }
+
 /* ── MISC ────────────────────────────────────────────────── */
 mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; padding: 0 2px; }
 ::-webkit-scrollbar { width: 3px; height: 3px; }
@@ -1851,6 +1941,10 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
         <span class="cal-month-label" id="calMonthLabel"></span>
         <button class="cal-nav-btn" onclick="calShift(1)">›</button>
         <button class="cal-today-btn" onclick="calGoToday()">Today</button>
+        <div class="cal-view-toggle">
+          <button class="cal-view-btn on" id="calViewMonth" onclick="setCalView('month')">Month</button>
+          <button class="cal-view-btn" id="calViewYear" onclick="setCalView('year')">Year</button>
+        </div>
       </div>
       <div style="display:flex;align-items:center;gap:8px">
         <div class="cal-filter-wrap">
@@ -1911,8 +2005,15 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
         <div class="cal-wd">Wed</div><div class="cal-wd">Thu</div><div class="cal-wd">Fri</div>
         <div class="cal-wd">Sat</div>
       </div>
-      <div class="cal-grid" id="calGrid">
-        <div class="cal-no-google">Connect Google to see events</div>
+      <div id="calMonthView">
+        <div class="cal-grid" id="calGrid">
+          <div class="cal-no-google">Connect Google to see events</div>
+        </div>
+      </div>
+      <div id="calYearView" style="display:none">
+        <div class="cal-year-view" id="calYearContent">
+          <div class="cal-year-loading">Loading yearly data…</div>
+        </div>
       </div>
     </div>
   </div>
@@ -2992,9 +3093,11 @@ function showGError(msg) {
 /* ── MONTHLY CALENDAR ── */
 let calYear               = new Date().getFullYear();
 let calMonth              = new Date().getMonth();
+let calView               = 'month';
 let calEarningsVisible    = false;
 let calHiddenIds          = new Set();
 let calDefaultFilterDone  = false;
+let gCalYearCache         = {};  // { '2025': [events...] }
 
 function applyDefaultCalFilter() {
   if (calDefaultFilterDone || !gCalList) return;
@@ -3005,19 +3108,129 @@ function applyDefaultCalFilter() {
   });
 }
 
+function setCalView(view) {
+  calView = view;
+  document.getElementById('calViewMonth').classList.toggle('on', view === 'month');
+  document.getElementById('calViewYear').classList.toggle('on', view === 'year');
+  document.getElementById('calMonthView').style.display  = view === 'month' ? '' : 'none';
+  document.getElementById('calYearView').style.display   = view === 'year'  ? '' : 'none';
+  // Earnings strip only in month view
+  document.getElementById('calEarnings').style.display   = (view === 'month' && calEarningsVisible) ? 'flex' : 'none';
+  if (view === 'year') {
+    document.getElementById('calMonthLabel').textContent = String(calYear);
+    renderYearView();
+  } else {
+    renderCalGrid();
+  }
+}
+
+async function loadCalendarYear(year) {
+  if (gCalYearCache[year]) return gCalYearCache[year];
+  if (!gAccessToken) return [];
+  const cals      = await getCalList();
+  const rangeStart = new Date(year, 0, 1).toISOString();
+  const rangeEnd   = new Date(year + 1, 0, 1).toISOString();
+  const results    = await Promise.all(cals.map(cal =>
+    gFetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(cal.id)}/events?timeMin=${encodeURIComponent(rangeStart)}&timeMax=${encodeURIComponent(rangeEnd)}&singleEvents=true&orderBy=startTime&maxResults=500`)
+      .then(d => tagEvents(d.items || [], cal)).catch(() => [])
+  ));
+  gCalYearCache[year] = sortByTime(results.flat());
+  return gCalYearCache[year];
+}
+
+function calcMonthEarnings(events, year, month) {
+  const monthStart = new Date(year, month, 1);
+  const monthEnd   = new Date(year, month + 1, 0);
+  let received = 0, total = 0;
+  events.forEach(ev => {
+    const startStr = ev.start.date || (ev.start.dateTime || '').slice(0, 10);
+    const endStr   = ev.end.date   || (ev.end.dateTime   || '').slice(0, 10);
+    if (!startStr) return;
+    const evStart = new Date(startStr + 'T00:00:00');
+    const endRaw  = new Date(endStr   + 'T00:00:00');
+    const evEnd   = ev.end.date ? new Date(endRaw - 86400000) : endRaw;
+    if (evStart > monthEnd || evEnd < monthStart) return;
+    if (calHiddenIds.has(ev._calId)) return;
+    const pay = parsePayment(ev.summary) || parsePayment(ev.description);
+    if (!pay) return;
+    // Temporarily set calYear/calMonth for proratePayment
+    const origYear = calYear, origMonth = calMonth;
+    calYear = year; calMonth = month;
+    const p = proratePayment(ev, pay);
+    calYear = origYear; calMonth = origMonth;
+    received += p.received;
+    total    += p.total;
+  });
+  return { received, total, outstanding: total - received };
+}
+
+async function renderYearView() {
+  const content = document.getElementById('calYearContent');
+  if (!content) return;
+  content.innerHTML = '<div class="cal-year-loading">Loading ' + calYear + ' data…</div>';
+  document.getElementById('calMonthLabel').textContent = String(calYear);
+
+  const events = await loadCalendarYear(calYear);
+  const MONTHS  = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const fmt = n => n === 0 ? '—' : '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const now = new Date();
+
+  let totalReceived = 0, totalEarned = 0, totalOutstanding = 0;
+  const rows = MONTHS.map((name, m) => {
+    const e = calcMonthEarnings(events, calYear, m);
+    totalReceived    += e.received;
+    totalEarned      += e.total;
+    totalOutstanding += e.outstanding;
+    const isCur = calYear === now.getFullYear() && m === now.getMonth();
+    const isFut = new Date(calYear, m, 1) > now;
+    return `<tr class="${isCur ? 'cur-month' : ''}" style="${isFut ? 'opacity:.45' : ''}">
+      <td>${name}</td>
+      <td class="received-col">${fmt(e.received)}</td>
+      <td>${fmt(e.total)}</td>
+      <td class="${e.outstanding > 0 ? 'outstanding-col' : ''}">${fmt(e.outstanding)}</td>
+    </tr>`;
+  }).join('');
+
+  content.innerHTML = `
+    <table class="cal-year-table">
+      <thead>
+        <tr>
+          <th>Month</th>
+          <th>Received</th>
+          <th>Earned</th>
+          <th>Outstanding</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${rows}
+        <tr class="total-row">
+          <td>Total ${calYear}</td>
+          <td class="received-col">${fmt(totalReceived)}</td>
+          <td>${fmt(totalEarned)}</td>
+          <td class="${totalOutstanding > 0 ? 'outstanding-col' : ''}">${fmt(totalOutstanding)}</td>
+        </tr>
+      </tbody>
+    </table>`;
+}
+
 function openCalendar() {
   document.getElementById('calOverlay').classList.add('on');
-  renderCalGrid();
+  if (calView === 'month') renderCalGrid();
+  else renderYearView();
   loadCalendarMonth(calYear, calMonth).then(() => {
     applyDefaultCalFilter();
-    renderCalGrid();
-    renderCalFilterList();
+    if (calView === 'month') { renderCalGrid(); renderCalFilterList(); }
   });
 }
 function closeCalendar() {
   document.getElementById('calOverlay').classList.remove('on');
 }
 async function calShift(dir) {
+  if (calView === 'year') {
+    calYear += dir;
+    renderYearView();
+    return;
+  }
   calMonth += dir;
   if (calMonth > 11) { calMonth = 0; calYear++; }
   if (calMonth < 0)  { calMonth = 11; calYear--; }
@@ -3028,6 +3241,7 @@ async function calShift(dir) {
 async function calGoToday() {
   calYear  = new Date().getFullYear();
   calMonth = new Date().getMonth();
+  if (calView === 'year') { renderYearView(); return; }
   renderCalGrid();
   await loadCalendarMonth(calYear, calMonth);
   renderCalGrid();
@@ -3098,6 +3312,7 @@ function parsePayment(text) {
 }
 
 function toggleCalEarnings() {
+  if (calView === 'year') return; // earnings strip is month-only
   calEarningsVisible = !calEarningsVisible;
   const btn = document.getElementById('calEarnToggle');
   if (btn) btn.classList.toggle('on', calEarningsVisible);
