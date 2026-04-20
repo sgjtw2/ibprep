@@ -301,15 +301,24 @@ body {
   display: flex;
   flex-direction: column;
   gap: 3px;
+  cursor: pointer;
+  position: relative;
+  transition: background .12s;
 }
 .cal-earn-cell:last-child { border-right: none; }
+.cal-earn-cell:hover { background: var(--card-h); }
+.cal-earn-cell.open { background: var(--card-h); }
 .cal-earn-label {
   font-size: 9px;
   font-weight: 700;
   letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--t4);
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
+.cal-earn-label::after { content: '▾'; font-size: 8px; opacity: .5; }
 .cal-earn-value {
   font-family: 'Plus Jakarta Sans', sans-serif;
   font-weight: 700;
@@ -321,6 +330,68 @@ body {
 .cal-earn-sub {
   font-size: 9px;
   color: var(--t4);
+}
+.cal-earn-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  min-width: 240px;
+  max-width: 320px;
+  background: var(--s1);
+  border: 1px solid var(--b2);
+  border-radius: 5px;
+  box-shadow: 0 10px 32px rgba(0,0,0,.6);
+  z-index: 400;
+  overflow: hidden;
+}
+.cal-earn-dropdown.on { display: block; }
+.cal-earn-drop-hdr {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--b1);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--t3);
+}
+.cal-earn-drop-list { max-height: 220px; overflow-y: auto; }
+.cal-earn-drop-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--b0);
+  transition: background .1s;
+}
+.cal-earn-drop-row:last-child { border-bottom: none; }
+.cal-earn-drop-row:hover { background: var(--s2); }
+.cal-earn-drop-name {
+  font-size: 11px;
+  color: var(--t2);
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.cal-earn-drop-meta {
+  font-size: 9px;
+  color: var(--t4);
+  white-space: nowrap;
+}
+.cal-earn-drop-amt {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--t1);
+  white-space: nowrap;
+}
+.cal-earn-drop-empty {
+  padding: 12px;
+  font-size: 10px;
+  color: var(--t4);
+  text-align: center;
 }
 
 /* ── METRICS BAR ─────────────────────────────────────────── */
@@ -1796,25 +1867,41 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
     </div>
     <div class="cal-body">
       <div class="cal-earnings" id="calEarnings" style="display:none">
-        <div class="cal-earn-cell">
+        <div class="cal-earn-cell" onclick="toggleEarnDrop('received',event)">
           <div class="cal-earn-label">Received</div>
           <div class="cal-earn-value received" id="calEarnReceived">$0</div>
           <div class="cal-earn-sub" id="calEarnReceivedSub">0 payments</div>
+          <div class="cal-earn-dropdown" id="earnDrop-received">
+            <div class="cal-earn-drop-hdr">Received Payments</div>
+            <div class="cal-earn-drop-list" id="earnList-received"></div>
+          </div>
         </div>
-        <div class="cal-earn-cell">
+        <div class="cal-earn-cell" onclick="toggleEarnDrop('total',event)">
           <div class="cal-earn-label">Earned This Month</div>
           <div class="cal-earn-value" id="calEarnTotal">$0</div>
           <div class="cal-earn-sub" id="calEarnTotalSub">0 invoices</div>
+          <div class="cal-earn-dropdown" id="earnDrop-total">
+            <div class="cal-earn-drop-hdr">All Earnings</div>
+            <div class="cal-earn-drop-list" id="earnList-total"></div>
+          </div>
         </div>
-        <div class="cal-earn-cell">
+        <div class="cal-earn-cell" onclick="toggleEarnDrop('outstanding',event)">
           <div class="cal-earn-label">Outstanding</div>
           <div class="cal-earn-value" id="calEarnOutstanding">$0</div>
           <div class="cal-earn-sub">unpaid balance</div>
+          <div class="cal-earn-dropdown" id="earnDrop-outstanding">
+            <div class="cal-earn-drop-hdr">Unpaid Invoices</div>
+            <div class="cal-earn-drop-list" id="earnList-outstanding"></div>
+          </div>
         </div>
-        <div class="cal-earn-cell" id="calEarnProratedCell" style="display:none">
+        <div class="cal-earn-cell" id="calEarnProratedCell" style="display:none" onclick="toggleEarnDrop('prorated',event)">
           <div class="cal-earn-label">Prorated</div>
           <div class="cal-earn-value" style="color:var(--t2)" id="calEarnProrated">$0</div>
           <div class="cal-earn-sub" id="calEarnProratedSub">cross-month events</div>
+          <div class="cal-earn-dropdown" id="earnDrop-prorated">
+            <div class="cal-earn-drop-hdr">Prorated Events</div>
+            <div class="cal-earn-drop-list" id="earnList-prorated"></div>
+          </div>
         </div>
       </div>
       <div class="cal-weekdays">
@@ -3050,6 +3137,7 @@ function renderEarnings() {
   if (!calEarningsVisible) { strip.style.display = 'none'; return; }
 
   let received = 0, total = 0, recCount = 0, invCount = 0, proratedCount = 0, proratedTotal = 0;
+  const breakdown = { received: [], total: [], outstanding: [], prorated: [] };
   const monthStart = new Date(calYear, calMonth, 1);
   const monthEnd   = new Date(calYear, calMonth + 1, 0);
 
@@ -3066,12 +3154,19 @@ function renderEarnings() {
     const pay = parsePayment(ev.summary) || parsePayment(ev.description);
     if (!pay) return;
 
-    const p = proratePayment(ev, pay);
+    const p    = proratePayment(ev, pay);
+    const date = (ev.start.date || (ev.start.dateTime || '').slice(0, 10));
+    const title = ev.summary || '(No title)';
+    const fmt2 = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     received += p.received;
     total    += p.total;
     recCount++;
     if (p.total > 0) invCount++;
     if (p.prorated) { proratedCount++; proratedTotal += p.total; }
+    breakdown.total.push({ title, date, amt: p.total, meta: p.prorated ? `${p.daysInMonth}/${p.totalDays} days` : null });
+    if (p.received > 0)              breakdown.received.push({ title, date, amt: p.received });
+    if (p.total > p.received)        breakdown.outstanding.push({ title, date, amt: p.total - p.received });
+    if (p.prorated)                  breakdown.prorated.push({ title, date, amt: p.total, meta: `${p.daysInMonth} of ${p.totalDays} days` });
   });
 
   if (total === 0) { strip.style.display = 'none'; return; }
@@ -3090,7 +3185,51 @@ function renderEarnings() {
   } else {
     proratedCell.style.display = 'none';
   }
+
+  // Populate dropdown lists
+  const fmtDate = d => { const dt = new Date(d + 'T00:00:00'); return dt.toLocaleDateString('en-GB', { day:'numeric', month:'short' }); };
+  const rowHtml = (item) => `<div class="cal-earn-drop-row">
+    <span class="cal-earn-drop-name">${esc(item.title)}</span>
+    <span class="cal-earn-drop-meta">${item.meta ? esc(item.meta) + ' · ' : ''}${fmtDate(item.date)}</span>
+    <span class="cal-earn-drop-amt">${fmt(item.amt)}</span>
+  </div>`;
+  ['received','total','outstanding','prorated'].forEach(key => {
+    const el = document.getElementById('earnList-' + key);
+    if (!el) return;
+    el.innerHTML = breakdown[key].length
+      ? breakdown[key].map(rowHtml).join('')
+      : '<div class="cal-earn-drop-empty">No items</div>';
+  });
 }
+
+let earnDropOpen = null;
+function toggleEarnDrop(key, e) {
+  e.stopPropagation();
+  const drop = document.getElementById('earnDrop-' + key);
+  const cell = drop?.closest('.cal-earn-cell');
+  // Close if already open
+  if (earnDropOpen === key) {
+    drop.classList.remove('on');
+    cell?.classList.remove('open');
+    earnDropOpen = null;
+    return;
+  }
+  // Close any open dropdown
+  if (earnDropOpen) {
+    document.getElementById('earnDrop-' + earnDropOpen)?.classList.remove('on');
+    document.querySelector('.cal-earn-cell.open')?.classList.remove('open');
+  }
+  drop?.classList.add('on');
+  cell?.classList.add('open');
+  earnDropOpen = key;
+}
+document.addEventListener('click', () => {
+  if (earnDropOpen) {
+    document.getElementById('earnDrop-' + earnDropOpen)?.classList.remove('on');
+    document.querySelector('.cal-earn-cell.open')?.classList.remove('open');
+    earnDropOpen = null;
+  }
+});
 
 function placeEventsInLanes(events) {
   const sorted = [...events].sort((a, b) => {
