@@ -289,10 +289,12 @@ body {
   gap: 0;
   border: 1px solid var(--b2);
   border-radius: 4px;
-  overflow: hidden;
+  overflow: visible;
   margin-bottom: 12px;
   flex-shrink: 0;
 }
+.cal-earn-cell:first-child { border-radius: 4px 0 0 4px; }
+.cal-earn-cell:last-child  { border-radius: 0 4px 4px 0; border-right: none; }
 .cal-earn-cell {
   flex: 1;
   padding: 10px 16px;
