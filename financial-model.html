@@ -416,25 +416,27 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
 
 /* ── GLOSSARY PANEL ───────────────────────────────────────── */
 .gloss-panel { width:0; flex-shrink:0; background:var(--s1); border-left:1px solid var(--b1); overflow:hidden; transition:width .2s ease; display:flex; flex-direction:column; }
-.gloss-panel.open { width:290px; }
-.gloss-search-wrap { padding:10px 12px; border-bottom:1px solid var(--b1); flex-shrink:0; }
-.gloss-search { width:100%; box-sizing:border-box; background:var(--bg); border:1px solid var(--b1); border-radius:3px; padding:5px 9px; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--t1); outline:none; }
+.gloss-panel.open { width:380px; }
+.gloss-search-wrap { padding:10px 14px; border-bottom:1px solid var(--b1); flex-shrink:0; }
+.gloss-search { width:100%; box-sizing:border-box; background:var(--bg); border:1px solid var(--b1); border-radius:3px; padding:6px 10px; font-family:Arial,sans-serif; font-size:11px; color:var(--t1); outline:none; }
 .gloss-search:focus { border-color:var(--bbrd); }
-.gloss-scroll { flex:1; overflow-y:auto; padding:10px 12px; display:flex; flex-direction:column; gap:2px; }
+.gloss-scroll { flex:1; overflow-y:auto; padding:10px 14px; display:flex; flex-direction:column; gap:0; }
 .gloss-scroll::-webkit-scrollbar { width:3px; }
 .gloss-scroll::-webkit-scrollbar-thumb { background:var(--b2); }
-.gloss-cat { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:8px; letter-spacing:.14em; text-transform:uppercase; color:var(--blue); padding:8px 0 4px; border-bottom:1px solid var(--b1); margin-bottom:4px; }
-.gloss-cat:first-child { padding-top:2px; }
-.gloss-item { border-radius:3px; overflow:hidden; margin-bottom:2px; }
-.gloss-term { padding:7px 8px; font-family:Arial,Helvetica,sans-serif !important; font-weight:700; font-size:13px !important; color:#1E293B !important; cursor:pointer; display:flex; justify-content:space-between; align-items:center; opacity:1 !important; visibility:visible !important; }
-[data-theme="dark"] .gloss-term { color:#EEF2FF !important; }
+.gloss-cat { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:9px; letter-spacing:.12em; text-transform:uppercase; color:var(--blue); padding:10px 0 5px; border-bottom:1px solid var(--b1); margin-bottom:4px; }
+.gloss-cat:first-child { padding-top:4px; }
+.gloss-item { border-radius:3px; margin-bottom:1px; }
+.gloss-term { padding:9px 10px; font-family:Arial,Helvetica,sans-serif; font-weight:700; font-size:13px; color:#1E293B; cursor:pointer; display:flex; justify-content:space-between; align-items:center; gap:8px; min-height:38px; }
+[data-theme="dark"] .gloss-term { color:#EEF2FF; }
+.gloss-term-text { flex:1; min-width:0; white-space:normal; line-height:1.4; }
 .gloss-term:hover { background:var(--s2); }
-.gloss-item.open .gloss-term { background:var(--bbg); color:#1B4FD8 !important; }
-.gloss-def { display:none; padding:7px 8px 10px; font-family:Arial,Helvetica,sans-serif !important; font-size:12px !important; color:#334155 !important; line-height:1.65; background:var(--s2); border-top:1px solid var(--b1); opacity:1 !important; visibility:visible !important; }
-[data-theme="dark"] .gloss-def { color:#8898B8 !important; }
+.gloss-item.open .gloss-term { background:var(--bbg); color:#1B4FD8; }
+.gloss-item.open .gloss-term .gloss-term-text { color:#1B4FD8; }
+.gloss-def { display:none; padding:9px 10px 12px; font-family:Arial,Helvetica,sans-serif; font-size:12px; color:#334155; line-height:1.7; background:var(--s2); border-top:1px solid var(--b1); }
+[data-theme="dark"] .gloss-def { color:#8898B8; }
 .gloss-item.open .gloss-def { display:block; }
-.gloss-arrow { font-size:8px; color:var(--t3); transition:transform .12s; }
-.gloss-item.open .gloss-arrow { transform:rotate(180deg); color:var(--blue); }
+.gloss-arrow { font-size:10px; color:var(--t3); transition:transform .12s; flex-shrink:0; }
+.gloss-item.open .gloss-arrow { transform:rotate(180deg); color:#1B4FD8; }
 .tbtn.gloss-on { border-color:var(--bbrd); color:var(--blue); background:var(--bbg); }
 
 /* ── FIT Q&A ─────────────────────────────────────────────── */
@@ -858,7 +860,7 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
   .qa-panel.open { width:min(340px,92vw); }
   .gloss-panel { position:fixed; top:0; right:0; bottom:0; z-index:350;
     width:0; transition:width .2s ease; }
-  .gloss-panel.open { width:min(340px,92vw); }
+  .gloss-panel.open { width:min(400px,94vw); }
 
   /* Panel backdrop */
   .panel-backdrop { display:none; position:fixed; inset:0; z-index:340;
@@ -955,7 +957,7 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
   .steps-panel.open { width:260px; }
   .guide-panel.open { width:260px; }
   .qa-panel.open    { width:300px; }
-  .gloss-panel.open { width:300px; }
+  .gloss-panel.open { width:380px; }
 
   /* Tools menu */
   .tools-menu { width:260px; }
@@ -3496,7 +3498,7 @@ function renderGloss(filter) {
     html += `<div class="gloss-cat">${cat.cat}</div>`;
     terms.forEach(t => {
       html += `<div class="gloss-item" id="gi-${idx}">
-        <div class="gloss-term" onclick="toggleGlossItem('gi-${idx}')">${t.t}<span class="gloss-arrow">▼</span></div>
+        <div class="gloss-term" onclick="toggleGlossItem('gi-${idx}')"><span class="gloss-term-text">${t.t}</span><span class="gloss-arrow">▼</span></div>
         <div class="gloss-def">${t.d}</div></div>`;
       idx++;
     });
