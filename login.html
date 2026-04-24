@@ -27,16 +27,25 @@ html, body { height: 100%; }
   --t3:      #2E3D58;
 }
 [data-theme="light"] {
-  --bg:      #FFFFFF;
-  --panel:   #F8FAFC;
-  --border:  #E2E8F0;
-  --border2: #CBD5E1;
+  --bg:      #F1F5F9;
+  --panel:   #E8EDF5;
+  --border:  #CBD5E1;
+  --border2: #94A3B8;
   --gold:    #1B4FD8;
   --gold-l:  #2D63F0;
   --gold-bg: rgba(27,79,216,0.06);
   --t1:      #0F172A;
-  --t2:      #475569;
-  --t3:      #94A3B8;
+  --t2:      #334155;
+  --t3:      #64748B;
+}
+[data-theme="light"] .field-input {
+  background: #FFFFFF;
+  border-bottom: 1px solid var(--border2);
+  padding: 10px 8px;
+}
+[data-theme="light"] .signin {
+  background: #FFFFFF;
+  border-left: 1px solid var(--border);
 }
 .login-theme-btn {
   position: fixed; top: 14px; right: 16px; z-index: 10;
@@ -496,8 +505,8 @@ body {
 
 <script>
 // Account 1 — full access (Command Center + IB Prep)
-const ADMIN_EMAIL_HASH = 'f6f9b3d2b87dfec2c4e0e6e5c1e5e2b8a8b0c7e3d9f4a2b1c6e8d0f5a3b7c9e1';
-const ADMIN_PASS_HASH  = 'b90ffe41645e72faaf9bc1dfa34305cb9192b3f43e7d4a96667c472009cbb65b';
+const ADMIN_EMAIL_HASH = '78d3a4b8480efba7785048848554d943f605ece94959784bf1f34b5bcd755e7f';
+const ADMIN_PASS_HASH  = 'b03ddf3ca2e714a6548e7495e2a03f5e824eaac9837cd7f159c67b90fb4b7342';
 
 // Account 2 — IB Prep only
 const IBPREP_EMAIL_HASH = '0925f997eb0d742678f66d2da134d15d842d57722af5f7605c4785cb5358831b';
