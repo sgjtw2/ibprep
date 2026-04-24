@@ -1386,6 +1386,33 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
 .sb-btn-save:hover { opacity:.85; }
 .sb-btn-delete { background:none; border:1px solid var(--b1); color:var(--t3); padding:8px 14px; border-radius:4px; font-family:'Plus Jakarta Sans',sans-serif; font-size:9px; cursor:pointer; }
 .sb-btn-delete:hover { border-color:var(--red); color:var(--red); }
+.sb-view-tabs { display:flex; border-bottom:1px solid var(--b1); background:var(--s1); flex-shrink:0; }
+.sb-view-tab { padding:10px 18px; font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:9px; letter-spacing:.08em; text-transform:uppercase; color:var(--t3); border:none; background:none; cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px; white-space:nowrap; transition:color .12s; }
+.sb-view-tab:hover { color:var(--t2); }
+.sb-view-tab.on { color:var(--blue); border-bottom-color:var(--blue); }
+.sb-guide { flex:1; overflow-y:auto; padding:20px 24px; display:flex; flex-direction:column; gap:18px; }
+.sb-guide::-webkit-scrollbar { width:3px; } .sb-guide::-webkit-scrollbar-thumb { background:var(--b2); }
+.sb-guide-section { background:var(--s1); border:1px solid var(--b1); border-radius:6px; padding:16px 18px; }
+.sb-guide-h { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:9px; letter-spacing:.14em; text-transform:uppercase; color:var(--blue); margin-bottom:12px; }
+.sb-guide-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.sb-guide-block { background:var(--bg); border:1px solid var(--b1); border-radius:4px; padding:10px 12px; }
+.sb-guide-block-label { font-size:8px; letter-spacing:.1em; text-transform:uppercase; font-weight:800; color:var(--blue); margin-bottom:3px; }
+.sb-guide-block-range { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--t3); margin-bottom:6px; }
+.sb-guide-block-text { font-size:10.5px; color:var(--t2); line-height:1.6; }
+.sb-guide-tips { display:flex; flex-direction:column; gap:8px; }
+.sb-guide-tip { display:flex; gap:10px; font-size:10.5px; color:var(--t2); line-height:1.55; }
+.sb-guide-tip-icon { flex-shrink:0; font-weight:800; color:var(--green); margin-top:1px; }
+.sb-guide-tip.avoid .sb-guide-tip-icon { color:var(--red); }
+.sb-guide-tip.avoid { color:var(--t3); }
+.sb-example-card { border:1px solid var(--bbrd); border-radius:6px; background:var(--bbg); padding:16px 18px; }
+.sb-example-title { font-weight:800; font-size:13px; color:var(--t1); margin-bottom:3px; }
+.sb-example-cat { font-size:8px; letter-spacing:.1em; text-transform:uppercase; color:var(--blue); margin-bottom:14px; }
+.sb-example-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.sb-example-field { background:var(--bg); border:1px solid var(--b1); border-radius:4px; padding:10px 12px; }
+.sb-example-field-label { font-size:8px; letter-spacing:.1em; text-transform:uppercase; font-weight:800; color:var(--blue); margin-bottom:6px; }
+.sb-example-field-text { font-size:10.5px; color:var(--t2); line-height:1.6; }
+.sb-use-btn { background:var(--blue); border:none; color:#fff; padding:9px 20px; border-radius:4px; font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:9px; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; }
+.sb-use-btn:hover { opacity:.85; }
 /* ── VALUATION ASSUMPTIONS ─────────────────────────────── */
 .va-tabs { display:flex; border-bottom:1px solid var(--b1); flex-shrink:0; overflow-x:auto; }
 .va-tab { padding:9px 14px; font-size:9px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--t3); cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; font-family:'Plus Jakarta Sans',sans-serif; }
@@ -3301,7 +3328,7 @@ let showErrSpot   = false, errSpotFlags = {}, errSpotSubmitted = false;
 let showMaDrill   = false, maDrillIdx = 0, maDrillState = {};
 let showPaperLBO  = false, paperLBOIdx = 0, paperLBOState = {};
 let showModelBuilder = false, mbModel = null, mbStep = 0, mbStepState = {};
-let showStoryBank = false, sbEditId = null, sbCat = 'all';
+let showStoryBank = false, sbEditId = null, sbCat = 'all', sbView = 'stories';
 let showValAssump = false, vaTab = 'dcf';
 let showBehav     = false, behavCatIdx = 0, behavQIdx = 0, behavPhase = 'question', behavTimer = null, behavElapsed = 0;
 let behavScores   = JSON.parse(localStorage.getItem('fm-behav-scores') || '{}');
@@ -7657,6 +7684,7 @@ function toggleStoryBank() {
     modal.classList.add('open');
     sbCat = 'all';
     sbEditId = null;
+    sbView = 'stories';
     renderStoryBank();
   } else {
     modal.classList.remove('open');
@@ -7672,9 +7700,19 @@ const SB_CATS = ['Leadership','Team','Conflict','Failure','Success','Initiative'
 
 function renderStoryBank() {
   const stories = sbGetStories();
-  const filtered = sbCat === 'all' ? stories : stories.filter(s => s.cat === sbCat);
-  const modal = document.getElementById('storyBankModal');
   const body = document.getElementById('storyBankBody');
+
+  const tabBar = `<div class="sb-view-tabs">
+    <button class="sb-view-tab${sbView==='stories'?' on':''}" onclick="sbView='stories';renderStoryBank()">My Stories</button>
+    <button class="sb-view-tab${sbView==='guide'?' on':''}" onclick="sbView='guide';renderStoryBank()">Guide &amp; Examples</button>
+  </div>`;
+
+  if (sbView === 'guide') {
+    body.innerHTML = tabBar + `<div class="sb-guide">${sbGuideHTML()}</div>`;
+    return;
+  }
+
+  const filtered = sbCat === 'all' ? stories : stories.filter(s => s.cat === sbCat);
 
   const sidebarItems = ['all', ...SB_CATS].map(c => {
     const count = c === 'all' ? stories.length : stories.filter(s => s.cat === c).length;
@@ -7723,7 +7761,7 @@ function renderStoryBank() {
     editorHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--t3);font-size:14px;">Select a story to edit, or create a new one.</div>`;
   }
 
-  body.innerHTML = `
+  body.innerHTML = tabBar + `
     <div class="sb-layout">
       <div class="sb-sidebar">
         <button class="sb-new-btn" onclick="sbNew()">+ New Story</button>
@@ -7732,6 +7770,93 @@ function renderStoryBank() {
       </div>
       <div class="sb-editor">${editorHTML}</div>
     </div>`;
+}
+
+function sbGuideHTML() {
+  return `
+    <div class="sb-guide-section">
+      <div class="sb-guide-h">STAR Format — How to Structure Each Section</div>
+      <div class="sb-guide-grid">
+        <div class="sb-guide-block">
+          <div class="sb-guide-block-label">S — Situation</div>
+          <div class="sb-guide-block-range">50–80 words · ~15 seconds</div>
+          <div class="sb-guide-block-text">Set the scene in 2–3 sentences: company, your role, timeframe, and business context. Keep it brief — interviewers want to reach the action quickly. Avoid long preambles.</div>
+        </div>
+        <div class="sb-guide-block">
+          <div class="sb-guide-block-label">T — Task</div>
+          <div class="sb-guide-block-range">30–50 words · ~10 seconds</div>
+          <div class="sb-guide-block-text">State your specific responsibility. Make it clear this was YOUR task — use "I was responsible for" not "we were asked to." Crisp and direct.</div>
+        </div>
+        <div class="sb-guide-block">
+          <div class="sb-guide-block-label">A — Action</div>
+          <div class="sb-guide-block-range">100–150 words · ~60 seconds</div>
+          <div class="sb-guide-block-text">The heart of the story — spend 60% here. 3–5 specific steps YOU took. Name tools, frameworks, stakeholders. Show analytical rigour and initiative. Avoid "we" — own every action.</div>
+        </div>
+        <div class="sb-guide-block">
+          <div class="sb-guide-block-label">R — Result</div>
+          <div class="sb-guide-block-range">50–80 words · ~20 seconds</div>
+          <div class="sb-guide-block-text">Quantify where possible (%, $, time saved). State the business impact. Close with what you learned and how it connects to why you want IB.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sb-guide-section">
+      <div class="sb-guide-h">Lateral Transition — Wealth Management → Investment Banking</div>
+      <div class="sb-guide-tips">
+        <div class="sb-guide-tip"><span class="sb-guide-tip-icon">✓</span><span><strong>Lead with deal exposure.</strong> Any M&amp;A situations with HNW clients, capital raises, estate transactions, or business sale advisory — these are the closest analogs to IB work and should lead every relevant story.</span></div>
+        <div class="sb-guide-tip"><span class="sb-guide-tip-icon">✓</span><span><strong>Reframe WM as a strength.</strong> You understand how capital allocators think and you've managed complex client relationships under pressure. Frame this as commercial awareness bankers rarely have — not as a gap.</span></div>
+        <div class="sb-guide-tip"><span class="sb-guide-tip-icon">✓</span><span><strong>Show technical commitment.</strong> Your CFA and CAIA progress is a strong signal. Reference specific concepts you've applied — DCF, WACC, multiples — to show you're not just "interested in finance" but actively closing the technical gap.</span></div>
+        <div class="sb-guide-tip"><span class="sb-guide-tip-icon">✓</span><span><strong>Own the "why switch" narrative.</strong> "I want to move from advising on capital to helping deploy it through transactions" is decisive. Bankers respect clarity of purpose — vague answers like "I want more challenges" raise red flags.</span></div>
+        <div class="sb-guide-tip avoid"><span class="sb-guide-tip-icon">✗</span><span><strong>Never apologise for your background.</strong> Don't say "I know I don't have a traditional IB background, but…" — it signals insecurity. Lead with what makes your path distinctive, not what it lacks.</span></div>
+        <div class="sb-guide-tip avoid"><span class="sb-guide-tip-icon">✗</span><span><strong>No vague results.</strong> "The client was happy" or "the project went well" are not results. Every story needs a number, a dollar figure, or a measurable outcome to land with interviewers.</span></div>
+      </div>
+    </div>
+
+    <div class="sb-guide-section">
+      <div class="sb-guide-h">Example Story — WM to IB Lateral (IB Motivation)</div>
+      <div class="sb-example-card">
+        <div class="sb-example-title">The M&amp;A Situation That Confirmed My Direction</div>
+        <div class="sb-example-cat">IB Motivation · ~110 seconds delivery</div>
+        <div class="sb-example-grid">
+          <div class="sb-example-field">
+            <div class="sb-example-field-label">S — Situation</div>
+            <div class="sb-example-field-text">As a Wealth Manager, I was advising a long-term client — a family business owner — on his personal portfolio. In early 2024, he received an unsolicited acquisition approach from a strategic buyer and asked me to help him assess whether the offer was fair, even though formal M&amp;A advisory sat outside my day-to-day mandate.</div>
+          </div>
+          <div class="sb-example-field">
+            <div class="sb-example-field-label">T — Task</div>
+            <div class="sb-example-field-text">I needed to build a credible valuation framework for his business — a $20M revenue manufacturing firm — and help him understand the deal mechanics well enough to negotiate confidently. I also had to determine what I could contribute directly versus when to bring in specialist advisors.</div>
+          </div>
+          <div class="sb-example-field">
+            <div class="sb-example-field-label">A — Action</div>
+            <div class="sb-example-field-text">I built a DCF model using three years of audited financials, benchmarked EBITDA margins against public industrials comparables, and identified four precedent transactions in the sector to triangulate a valuation range. I flagged that the initial offer implied 6.2× EBITDA — below the 7–9× range in precedents. I prepared a one-page deal summary and facilitated an introduction to our firm's corporate finance team. In the negotiation prep, I outlined the buyer's likely synergy rationale — cost consolidation and geographic coverage — so the client could anticipate counter-arguments and defend a higher price.</div>
+          </div>
+          <div class="sb-example-field">
+            <div class="sb-example-field-label">R — Result</div>
+            <div class="sb-example-field-text">The client sold at a 13% premium to the initial offer — approximately $2.6M of additional value. Beyond the outcome, I spent 70+ hours on that engagement outside my formal remit, and every hour felt more purposeful than routine portfolio advisory. That experience — combined with the technical grounding I was building through the CFA — confirmed that I want to build a career on the execution side of transactions, not managing the resulting wealth.</div>
+          </div>
+        </div>
+        <button class="sb-use-btn" onclick="sbLoadExample()">Use This as a Template →</button>
+      </div>
+    </div>`;
+}
+
+function sbLoadExample() {
+  sbView = 'stories';
+  const stories = sbGetStories();
+  const id = 'sb-' + Date.now();
+  stories.unshift({
+    id,
+    title: 'The M&A Situation That Confirmed My Direction',
+    cat: 'IB Motivation',
+    situation: 'As a Wealth Manager, I was advising a long-term client — a family business owner — on his personal portfolio. In early 2024, he received an unsolicited acquisition approach from a strategic buyer and asked me to help him assess whether the offer was fair, even though formal M&A advisory sat outside my day-to-day mandate.',
+    task: 'I needed to build a credible valuation framework for his business — a $20M revenue manufacturing firm — and help him understand the deal mechanics well enough to negotiate confidently. I also had to determine what I could contribute directly versus when to bring in specialist advisors.',
+    action: 'I built a DCF model using three years of audited financials, benchmarked EBITDA margins against public industrials comparables, and identified four precedent transactions in the sector to triangulate a valuation range. I flagged that the initial offer implied 6.2× EBITDA — below the 7–9× range in precedents. I prepared a one-page deal summary and facilitated an introduction to our firm\'s corporate finance team. In the negotiation prep, I outlined the buyer\'s likely synergy rationale — cost consolidation and geographic coverage — so the client could anticipate counter-arguments and defend a higher price.',
+    result: 'The client sold at a 13% premium to the initial offer — approximately $2.6M of additional value. Beyond the outcome, I spent 70+ hours on that engagement outside my formal remit, and every hour felt more purposeful than routine portfolio advisory. That experience — combined with the technical grounding I was building through the CFA — confirmed that I want to build a career on the execution side of transactions, not managing the resulting wealth.'
+  });
+  sbSaveStories(stories);
+  sbEditId = id;
+  sbCat = 'IB Motivation';
+  renderStoryBank();
 }
 
 function sbNew() {
@@ -9633,7 +9758,7 @@ function stopMockTimer() {
       <div><div class="fit-head-title">📖 Story Bank</div><div class="fit-head-sub">STAR-format behavioral stories for IB interviews — organised, editable, word-counted</div></div>
       <button class="modal-close" onclick="toggleStoryBank()">✕</button>
     </div>
-    <div class="xdrill-body" id="storyBankBody" style="padding:0;gap:0;flex-direction:row;overflow:hidden;min-height:480px"></div>
+    <div class="xdrill-body" id="storyBankBody" style="padding:0;gap:0;flex-direction:column;overflow:hidden;min-height:480px"></div>
   </div>
 </div>
 
