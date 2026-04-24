@@ -38,6 +38,43 @@
   --green-brd: rgba(30,122,90,0.22);
   --yellow:    #1B4FD8;
 }
+[data-theme="light"] {
+  --bg:        #FFFFFF;
+  --s1:        #F8FAFC;
+  --s2:        #F1F5F9;
+  --card:      #F8FAFC;
+  --card-h:    #F1F5F9;
+  --b0:        #E2E8F0;
+  --b1:        #E2E8F0;
+  --b2:        #CBD5E1;
+  --b3:        #94A3B8;
+  --t1:        #0F172A;
+  --t2:        #475569;
+  --t3:        #94A3B8;
+  --t4:        #CBD5E1;
+  --amber:     #1B4FD8;
+  --amber-l:   #2D63F0;
+  --amber-bg:  rgba(27,79,216,0.06);
+  --amber-brd: rgba(27,79,216,0.20);
+  --red:       #DC2626;
+  --red-bg:    rgba(220,38,38,0.07);
+  --red-brd:   rgba(220,38,38,0.20);
+  --blue:      #1B4FD8;
+  --blue-bg:   rgba(27,79,216,0.06);
+  --blue-brd:  rgba(27,79,216,0.20);
+  --green:     #16A34A;
+  --green-bg:  rgba(22,163,74,0.07);
+  --green-brd: rgba(22,163,74,0.20);
+  --yellow:    #1B4FD8;
+}
+.theme-toggle {
+  width: 30px; height: 30px;
+  background: var(--s2); border: 1px solid var(--b1);
+  border-radius: 6px; cursor: pointer; font-size: 14px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; transition: background .15s;
+}
+.theme-toggle:hover { background: var(--b1); }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow: hidden; }
 body {
@@ -1769,6 +1806,7 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
     <span class="hdr-date" id="hdrDate"></span>
     <span class="kbd-hint">⌘N new · ⌘Z undo</span>
     <button class="sort-btn" onclick="openCalendar()" style="padding:6px 12px;font-size:10px;font-weight:700;letter-spacing:.06em">📅 Calendar</button>
+    <button class="theme-toggle" id="themeToggleBtn" onclick="toggleCCTheme()" title="Toggle light/dark">☀️</button>
     <a href="./financial-model.html" class="btn-ibprep">
       <span class="ibprep-icon">IB</span>
       <span>IB Prep</span>
@@ -3563,6 +3601,24 @@ document.addEventListener('keydown', e => {
 });
 
 setTimeout(initGoogleAuth, 500);
+
+// ── THEME TOGGLE ─────────────────────────────────────────
+(function() {
+  const saved = localStorage.getItem('cc-theme');
+  if (saved === 'light') { document.documentElement.setAttribute('data-theme','light'); document.getElementById('themeToggleBtn').textContent='🌙'; }
+})();
+function toggleCCTheme() {
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  if (isLight) {
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.setItem('cc-theme','dark');
+    document.getElementById('themeToggleBtn').textContent='☀️';
+  } else {
+    document.documentElement.setAttribute('data-theme','light');
+    localStorage.setItem('cc-theme','light');
+    document.getElementById('themeToggleBtn').textContent='🌙';
+  }
+}
 </script>
 </body>
 </html>

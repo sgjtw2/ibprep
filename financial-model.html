@@ -1324,6 +1324,95 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
 .mb-complete-l { font-size:7.5px; color:var(--t3); text-transform:uppercase; letter-spacing:.1em; margin-top:2px; }
 .mb-back-sel { background:none; border:1px solid var(--b1); color:var(--t2); padding:8px 18px; border-radius:4px; font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:10px; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; margin-top:4px; }
 .mb-back-sel:hover { border-color:var(--b2); }
+/* ── STORY BANK ───────────────────────────────────────── */
+.sb-layout { display:flex; flex:1; overflow:hidden; }
+.sb-sidebar { width:220px; flex-shrink:0; border-right:1px solid var(--b1); display:flex; flex-direction:column; overflow:hidden; }
+.sb-sidebar-top { padding:10px 12px; border-bottom:1px solid var(--b1); flex-shrink:0; }
+.sb-search { width:100%; background:var(--s2); border:1px solid var(--b1); border-radius:4px; padding:6px 10px; font-family:'Plus Jakarta Sans',sans-serif; font-size:10px; color:var(--t1); outline:none; }
+.sb-search::placeholder { color:var(--t3); }
+.sb-cats { padding:8px 0; border-bottom:1px solid var(--b1); flex-shrink:0; }
+.sb-cat { padding:5px 14px; font-size:9.5px; color:var(--t3); cursor:pointer; display:flex; align-items:center; justify-content:space-between; transition:color .12s; }
+.sb-cat:hover { color:var(--t2); }
+.sb-cat.on,.sb-cat.active { color:var(--blue); font-weight:700; background:var(--bbg); }
+.sb-cat-count { font-size:8px; background:var(--b1); color:var(--t3); padding:1px 5px; border-radius:10px; }
+.sb-list { flex:1; overflow-y:auto; padding:6px 0; }
+.sb-list::-webkit-scrollbar { width:3px; } .sb-list::-webkit-scrollbar-thumb { background:var(--b2); }
+.sb-story-item { padding:8px 14px; cursor:pointer; border-left:2px solid transparent; transition:all .12s; }
+.sb-story-item:hover { background:var(--s2); }
+.sb-story-item.on,.sb-story-item.active { border-left-color:var(--blue); background:var(--bbg); }
+.sb-item-title { font-size:10px; font-weight:700; color:var(--t1); margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sb-item-cat { font-size:8px; letter-spacing:.08em; text-transform:uppercase; color:var(--t3); }
+.sb-add-btn { margin:8px 12px; padding:7px; background:var(--blue); border:none; color:#fff; font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:9px; letter-spacing:.08em; text-transform:uppercase; border-radius:4px; cursor:pointer; width:calc(100% - 24px); }
+.sb-add-btn:hover { background:var(--bluel); }
+.sb-main { flex:1; overflow-y:auto; display:flex; flex-direction:column; }
+.sb-main::-webkit-scrollbar { width:3px; } .sb-main::-webkit-scrollbar-thumb { background:var(--b2); }
+.sb-empty { display:flex; flex-direction:column; align-items:center; justify-content:center; flex:1; gap:8px; padding:32px; text-align:center; }
+.sb-empty-icon { font-size:36px; }
+.sb-empty-h { font-size:12px; font-weight:700; color:var(--t2); }
+.sb-empty-sub { font-size:10px; color:var(--t3); }
+.sb-editor { padding:18px 22px; flex:1; display:flex; flex-direction:column; gap:0; }
+.sb-editor-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-shrink:0; }
+.sb-editor-title { font-weight:800; font-size:13px; color:var(--t1); }
+.sb-del-btn { background:none; border:1px solid var(--b1); color:var(--t3); font-size:9px; padding:4px 10px; border-radius:4px; cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif; }
+.sb-del-btn:hover { border-color:var(--red); color:var(--red); }
+.sb-form-row { margin-bottom:12px; }
+.sb-form-label { font-size:8px; letter-spacing:.12em; text-transform:uppercase; color:var(--t3); font-weight:700; margin-bottom:4px; display:flex; justify-content:space-between; }
+.sb-form-label span { font-size:8px; color:var(--t3); text-transform:none; letter-spacing:0; font-weight:400; }
+.sb-input { width:100%; background:var(--s2); border:1px solid var(--b1); border-radius:4px; padding:7px 10px; font-family:'Plus Jakarta Sans',sans-serif; font-size:11px; color:var(--t1); outline:none; transition:border-color .12s; }
+.sb-input:focus { border-color:var(--bbrd); }
+.sb-textarea { width:100%; background:var(--s2); border:1px solid var(--b1); border-radius:4px; padding:8px 10px; font-family:'Plus Jakarta Sans',sans-serif; font-size:11px; color:var(--t1); outline:none; resize:vertical; min-height:72px; transition:border-color .12s; line-height:1.5; }
+.sb-textarea:focus { border-color:var(--bbrd); }
+.sb-star-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.sb-wc { font-size:8px; color:var(--t3); margin-top:3px; }
+.sb-wc.ok { color:var(--green); } .sb-wc.warn { color:var(--red); }
+.sb-save-btn { background:var(--blue); border:none; color:#fff; padding:9px 20px; border-radius:4px; font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:10px; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; align-self:flex-start; margin-top:4px; }
+.sb-save-btn:hover { background:var(--bluel); }
+.sb-tip { background:var(--bbg); border:1px solid var(--bbrd); border-radius:4px; padding:8px 12px; font-size:9px; color:var(--t2); line-height:1.6; margin-bottom:12px; }
+.sb-tip strong { color:var(--blue); }
+.sb-new-btn { margin:10px 12px; padding:8px; background:var(--blue); border:none; color:#fff; font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:9px; letter-spacing:.08em; text-transform:uppercase; border-radius:4px; cursor:pointer; width:calc(100% - 24px); }
+.sb-new-btn:hover { opacity:.85; }
+.sb-story-title { font-size:10px; font-weight:700; color:var(--t1); margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.sb-story-meta { font-size:8px; letter-spacing:.06em; color:var(--t3); text-transform:uppercase; }
+.sb-editor-header { display:flex; gap:8px; align-items:center; margin-bottom:12px; flex-shrink:0; }
+.sb-title-input { flex:1; background:var(--s2); border:1px solid var(--b1); border-radius:4px; padding:7px 10px; font-family:'Plus Jakarta Sans',sans-serif; font-size:12px; font-weight:700; color:var(--t1); outline:none; }
+.sb-title-input:focus { border-color:var(--bbrd); }
+.sb-cat-select { background:var(--s2); border:1px solid var(--b1); border-radius:4px; padding:7px 10px; font-family:'Plus Jakarta Sans',sans-serif; font-size:10px; color:var(--t2); outline:none; cursor:pointer; }
+.sb-star-block { display:flex; flex-direction:column; gap:4px; }
+.sb-star-label { font-size:8px; letter-spacing:.12em; text-transform:uppercase; font-weight:800; color:var(--blue); }
+.sb-editor-footer { display:flex; gap:8px; margin-top:12px; flex-shrink:0; }
+.sb-btn-save { background:var(--blue); border:none; color:#fff; padding:8px 18px; border-radius:4px; font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:9px; letter-spacing:.08em; text-transform:uppercase; cursor:pointer; }
+.sb-btn-save:hover { opacity:.85; }
+.sb-btn-delete { background:none; border:1px solid var(--b1); color:var(--t3); padding:8px 14px; border-radius:4px; font-family:'Plus Jakarta Sans',sans-serif; font-size:9px; cursor:pointer; }
+.sb-btn-delete:hover { border-color:var(--red); color:var(--red); }
+/* ── VALUATION ASSUMPTIONS ─────────────────────────────── */
+.va-tabs { display:flex; border-bottom:1px solid var(--b1); flex-shrink:0; overflow-x:auto; }
+.va-tab { padding:9px 14px; font-size:9px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--t3); cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; font-family:'Plus Jakarta Sans',sans-serif; }
+.va-tab:hover { color:var(--t2); }
+.va-tab.on,.va-tab.active { color:var(--blue); border-bottom-color:var(--blue); }
+.va-body { flex:1; overflow-y:auto; padding:0; display:flex; flex-direction:column; }
+.va-body::-webkit-scrollbar { width:3px; } .va-body::-webkit-scrollbar-thumb { background:var(--b2); }
+.va-section { border:1px solid var(--b1); border-radius:6px; overflow:hidden; }
+.va-section-hdr { background:var(--s2); padding:8px 14px; font-size:8px; letter-spacing:.12em; text-transform:uppercase; font-weight:800; color:var(--blue); border-bottom:1px solid var(--b1); }
+.va-table { width:100%; border-collapse:collapse; font-size:10px; }
+.va-table th { background:var(--s1); padding:6px 12px; text-align:left; font-size:8px; letter-spacing:.1em; text-transform:uppercase; color:var(--t3); font-weight:600; border-bottom:1px solid var(--b1); }
+.va-table td { padding:8px 12px; border-bottom:1px solid var(--b1); vertical-align:top; line-height:1.5; }
+.va-table tr:last-child td { border-bottom:none; }
+.va-table td:first-child { font-weight:700; color:var(--t1); white-space:nowrap; width:150px; }
+.va-table td:nth-child(2) { font-family:'JetBrains Mono',monospace; color:var(--blue); font-size:9.5px; width:130px; }
+.va-table td:nth-child(3) { color:var(--t2); }
+.va-rule { display:flex; gap:6px; margin-bottom:4px; font-size:9.5px; color:var(--t2); }
+.va-rule::before { content:'→'; color:var(--blue); font-weight:800; flex-shrink:0; }
+.va-warn { font-size:9px; color:var(--red); margin-top:4px; }
+.va-legend { display:grid; grid-template-columns:180px 160px 1fr 1fr; gap:0; padding:6px 14px; background:var(--s2); font-size:8px; letter-spacing:.1em; text-transform:uppercase; color:var(--t3); font-weight:700; border-bottom:1px solid var(--b1); flex-shrink:0; }
+.va-row { display:grid; grid-template-columns:180px 160px 1fr 1fr; gap:0; padding:10px 14px; border-bottom:1px solid var(--b1); font-size:11px; align-items:start; }
+.va-row:last-child { border-bottom:none; }
+.va-row:hover { background:var(--s1); }
+.va-col-name { font-weight:700; color:var(--t1); padding-right:12px; }
+.va-col-range { padding-right:12px; }
+.va-badge { font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--blue); }
+.va-col-derive { color:var(--t2); line-height:1.55; padding-right:12px; font-size:10.5px; }
+.va-col-pitfall { color:var(--t2); line-height:1.55; font-size:10.5px; }
+.va-pitfall-icon { color:var(--red); margin-right:4px; }
 /* ── PAPER LBO ────────────────────────────────────────── */
 .plbo-scenario-tabs { display:flex; border-bottom:1px solid var(--b1); flex-shrink:0; overflow-x:auto; }
 .plbo-stab { padding:8px 16px; font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:9px; letter-spacing:.06em; text-transform:uppercase; color:var(--t3); cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; }
@@ -1722,9 +1811,15 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
           <button class="tools-item" id="resourceBtn" onclick="toggleResources();closeToolsMenu()">
             <span class="tools-item-icon">📚</span>Resource Hub<span class="tools-item-badge"></span>
           </button>
+          <button class="tools-item" id="valAssumpBtn" onclick="toggleValAssump();closeToolsMenu()">
+            <span class="tools-item-icon">🎯</span>Valuation Assumptions<span class="tools-item-badge">NEW</span>
+          </button>
         </div>
         <!-- CAREER TAB -->
         <div class="tools-tab-content hidden" id="ttab-career">
+          <button class="tools-item" id="storyBankBtn" onclick="toggleStoryBank();closeToolsMenu()">
+            <span class="tools-item-icon">📖</span>Story Bank<span class="tools-item-badge">NEW</span>
+          </button>
           <button class="tools-item" id="roadmapBtn" onclick="toggleRoadmap();closeToolsMenu()">
             <span class="tools-item-icon">🗺️</span>IB Roadmap<span class="tools-item-badge"></span>
           </button>
@@ -3204,6 +3299,8 @@ let showErrSpot   = false, errSpotFlags = {}, errSpotSubmitted = false;
 let showMaDrill   = false, maDrillIdx = 0, maDrillState = {};
 let showPaperLBO  = false, paperLBOIdx = 0, paperLBOState = {};
 let showModelBuilder = false, mbModel = null, mbStep = 0, mbStepState = {};
+let showStoryBank = false, sbEditId = null, sbCat = 'all';
+let showValAssump = false, vaTab = 'dcf';
 let showBehav     = false, behavCatIdx = 0, behavQIdx = 0, behavPhase = 'question', behavTimer = null, behavElapsed = 0;
 let behavScores   = JSON.parse(localStorage.getItem('fm-behav-scores') || '{}');
 let showMaQA      = false, maQACatIdx = 0, maQAQIdx = 0, maQAPhase = 'question', maQATimer = null, maQAElapsed = 0;
@@ -7549,6 +7646,226 @@ function renderMBComplete() {
 }
 
 /* ============================================================
+   STORY BANK
+============================================================ */
+function toggleStoryBank() {
+  showStoryBank = !showStoryBank;
+  const modal = document.getElementById('storyBankModal');
+  if (showStoryBank) {
+    modal.classList.add('active');
+    sbCat = 'all';
+    sbEditId = null;
+    renderStoryBank();
+  } else {
+    modal.classList.remove('active');
+  }
+}
+
+function sbGetStories() {
+  try { return JSON.parse(localStorage.getItem('ib-stories') || '[]'); } catch { return []; }
+}
+function sbSaveStories(arr) { localStorage.setItem('ib-stories', JSON.stringify(arr)); }
+
+const SB_CATS = ['Leadership','Team','Conflict','Failure','Success','Initiative','IB Motivation','Other'];
+
+function renderStoryBank() {
+  const stories = sbGetStories();
+  const filtered = sbCat === 'all' ? stories : stories.filter(s => s.cat === sbCat);
+  const modal = document.getElementById('storyBankModal');
+  const body = document.getElementById('storyBankBody');
+
+  const sidebarItems = ['all', ...SB_CATS].map(c => {
+    const count = c === 'all' ? stories.length : stories.filter(s => s.cat === c).length;
+    return `<div class="sb-cat${sbCat===c?' active':''}" onclick="sbCat='${c}';sbEditId=null;renderStoryBank()">${c==='all'?'All Stories':c} <span class="sb-cat-count">${count}</span></div>`;
+  }).join('');
+
+  const storyList = filtered.length === 0
+    ? `<div style="color:var(--t3);padding:16px;font-size:13px;">No stories yet. Click + New Story to add one.</div>`
+    : filtered.map(s => `
+      <div class="sb-story-item${sbEditId===s.id?' active':''}" onclick="sbEdit('${s.id}')">
+        <div class="sb-story-title">${s.title||'Untitled'}</div>
+        <div class="sb-story-meta">${s.cat} · ${s.situation ? s.situation.length : 0} chars</div>
+      </div>`).join('');
+
+  let editorHTML = '';
+  if (sbEditId) {
+    const st = stories.find(s => s.id === sbEditId) || {};
+    editorHTML = `
+      <div class="sb-editor-header">
+        <input class="sb-title-input" id="sbTitleInput" value="${(st.title||'').replace(/"/g,'&quot;')}" placeholder="Story title…">
+        <select class="sb-cat-select" id="sbCatSelect">${SB_CATS.map(c=>`<option${st.cat===c?' selected':''}>${c}</option>`).join('')}</select>
+      </div>
+      <div class="sb-star-grid">
+        <div class="sb-star-block">
+          <div class="sb-star-label">S — Situation</div>
+          <textarea class="sb-textarea" id="sbSituation" placeholder="Set the scene. What was the context or background?">${st.situation||''}</textarea>
+        </div>
+        <div class="sb-star-block">
+          <div class="sb-star-label">T — Task</div>
+          <textarea class="sb-textarea" id="sbTask" placeholder="What was your responsibility or goal?">${st.task||''}</textarea>
+        </div>
+        <div class="sb-star-block">
+          <div class="sb-star-label">A — Action</div>
+          <textarea class="sb-textarea" id="sbAction" placeholder="What specific steps did you take?">${st.action||''}</textarea>
+        </div>
+        <div class="sb-star-block">
+          <div class="sb-star-label">R — Result</div>
+          <textarea class="sb-textarea" id="sbResult" placeholder="What was the outcome? Use numbers where possible.">${st.result||''}</textarea>
+        </div>
+      </div>
+      <div class="sb-editor-footer">
+        <button class="sb-btn-save" onclick="sbSave()">Save Story</button>
+        <button class="sb-btn-delete" onclick="sbDelete('${sbEditId}')">Delete</button>
+      </div>`;
+  } else {
+    editorHTML = `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--t3);font-size:14px;">Select a story to edit, or create a new one.</div>`;
+  }
+
+  body.innerHTML = `
+    <div class="sb-layout">
+      <div class="sb-sidebar">
+        <button class="sb-new-btn" onclick="sbNew()">+ New Story</button>
+        <div class="sb-cats">${sidebarItems}</div>
+        <div class="sb-list">${storyList}</div>
+      </div>
+      <div class="sb-editor">${editorHTML}</div>
+    </div>`;
+}
+
+function sbNew() {
+  const stories = sbGetStories();
+  const id = 'sb-' + Date.now();
+  const cat = sbCat === 'all' ? 'Other' : sbCat;
+  stories.unshift({ id, title: '', cat, situation: '', task: '', action: '', result: '' });
+  sbSaveStories(stories);
+  sbEditId = id;
+  sbCat = cat;
+  renderStoryBank();
+}
+
+function sbEdit(id) {
+  sbEditId = id;
+  renderStoryBank();
+}
+
+function sbSave() {
+  const stories = sbGetStories();
+  const idx = stories.findIndex(s => s.id === sbEditId);
+  if (idx === -1) return;
+  stories[idx].title = document.getElementById('sbTitleInput').value.trim();
+  stories[idx].cat = document.getElementById('sbCatSelect').value;
+  stories[idx].situation = document.getElementById('sbSituation').value;
+  stories[idx].task = document.getElementById('sbTask').value;
+  stories[idx].action = document.getElementById('sbAction').value;
+  stories[idx].result = document.getElementById('sbResult').value;
+  sbSaveStories(stories);
+  sbCat = stories[idx].cat;
+  renderStoryBank();
+}
+
+function sbDelete(id) {
+  if (!confirm('Delete this story?')) return;
+  const stories = sbGetStories().filter(s => s.id !== id);
+  sbSaveStories(stories);
+  sbEditId = null;
+  renderStoryBank();
+}
+
+/* ============================================================
+   VALUATION ASSUMPTIONS
+============================================================ */
+function toggleValAssump() {
+  showValAssump = !showValAssump;
+  const modal = document.getElementById('valAssumpModal');
+  if (showValAssump) {
+    modal.classList.add('active');
+    renderValAssump(vaTab);
+  } else {
+    modal.classList.remove('active');
+  }
+}
+
+const VA_DATA = {
+  dcf: {
+    label: 'DCF',
+    sections: [
+      { title: 'Revenue Growth Rate', range: '3–10% (mature), 10–30%+ (growth)', derive: 'Historical CAGR + management guidance + industry consensus. Weight recent 3yr trend. Sanity-check against GDP and market share assumptions.', pitfall: 'Don\'t blindly extrapolate peak years. Fade growth toward terminal rate.' },
+      { title: 'EBITDA Margin', range: '15–35% (industrials), 20–45% (software)', derive: 'Historical average adjusted for non-recurring items. Apply operating leverage if revenue grows. Benchmark vs peers.', pitfall: 'Margins often compress in reality. Avoid hockey-stick margin expansion without justification.' },
+      { title: 'D&A (% of Revenue)', range: '2–5% typical', derive: 'PP&E balance × depreciation rate, or as % of capex. Check if D&A > capex (potential balance sheet issue).', pitfall: 'Don\'t assume D&A is constant if capex is changing significantly.' },
+      { title: 'Capex (% of Revenue)', range: '2–8% (asset-light), 8–20% (capital-intensive)', derive: 'Historical capex/revenue. Split maintenance vs growth capex. Check management guidance.', pitfall: 'Maintenance capex must be funded to sustain the business — don\'t omit it in terminal year.' },
+      { title: 'Change in Working Capital', range: '±1–3% of revenue change', derive: 'DSO × revenue / 365 for AR; DPO × COGS / 365 for AP; DIO × COGS / 365 for inventory. Model each line separately.', pitfall: 'Growing companies consume cash through working capital — a positive NWC change is a cash outflow.' },
+      { title: 'WACC', range: '7–12% (US large-cap)', derive: 'WACC = (E/V)×Ke + (D/V)×Kd×(1-t). Ke from CAPM: Rf + β×ERP. Use levered beta re-levered to target structure. ERP ≈ 5–6%.', pitfall: 'Don\'t use current leverage — use target/industry-average leverage for WACC.' },
+      { title: 'Terminal Growth Rate', range: '1.5–3% (US), ≈ long-run GDP', derive: 'Should not exceed long-run nominal GDP growth. Often set at inflation + real GDP (2–2.5%).', pitfall: 'A TGR above 3% implies the company eventually grows larger than the economy — red flag.' },
+      { title: 'Tax Rate', range: '21–27% (US)', derive: 'Effective tax rate from historical filings, not statutory rate. Use blended if international operations.', pitfall: 'NOLs can reduce near-term taxes — model them explicitly rather than using a flat rate.' },
+    ]
+  },
+  lbo: {
+    label: 'LBO',
+    sections: [
+      { title: 'Entry EV / EBITDA Multiple', range: '7–12× (buyout avg)', derive: 'Comparable LBO transactions in same sector. Current public comps less a 10–20% private discount. Negotiated price.', pitfall: 'Higher entry multiples compress returns — test returns sensitivity to ±1× on entry.' },
+      { title: 'Leverage (Debt/EBITDA)', range: '4–6× total debt typical', derive: 'Lender appetite based on sector, cash flow stability, and rate environment. Check debt/EBITDA and interest coverage covenants.', pitfall: 'Over-levering leaves no cushion for downside. Always test at 1× lower leverage.' },
+      { title: 'Debt Structure', range: 'TL-B: L+300–500bps; HY: 6–10%', derive: 'Term Loan B (floating, amortizes 1%/yr), Revolver, possibly HY or mezzanine. Source from leveraged finance market comps.', pitfall: 'Don\'t forget mandatory amortization and cash sweep provisions in free cash flow.' },
+      { title: 'Revenue & EBITDA Growth', range: 'Conservative: 3–7% revenue, stable margins', derive: 'Same as DCF but PE sponsors run conservative base case. Identify operational improvements (cost cuts, pricing, M&A).', pitfall: 'Don\'t assume margin improvement without a specific operational lever.' },
+      { title: 'Exit Multiple', range: 'Usually = entry multiple (conservative)', derive: 'Equal to entry is safest assumption. Can use current comps if justified. Holding period affects multiple (mean reversion).', pitfall: 'Assuming multiple expansion to justify returns is aggressive — model exit = entry as base case.' },
+      { title: 'Holding Period', range: '3–7 years (avg 5)', derive: 'Standard assumption is 5 years. Earlier exits increase IRR if returns are good; longer holds reduce it.', pitfall: 'IRR is highly sensitive to exit timing — always show returns at yr 3, 4, 5, 6.' },
+      { title: 'IRR Target', range: '20–25%+ (PE hurdle)', derive: 'MoM and IRR are co-primary metrics. 2× MoM in 5yr ≈ 15% IRR; 3× ≈ 25% IRR.', pitfall: 'Don\'t confuse gross IRR (pre-fee) with net IRR (post-fees/carry) — LPs care about net.' },
+      { title: 'Management Rollover / Equity', range: '5–20% of equity to mgmt', derive: 'Aligns management incentives. Reduces PE equity check. Structured as rollover of existing equity or option pool.', pitfall: 'Dilution from management options reduces sponsor equity value at exit.' },
+    ]
+  },
+  ma: {
+    label: 'M&A / Accretion-Dilution',
+    sections: [
+      { title: 'Purchase Price / Premium', range: '20–40% premium to unaffected price', derive: 'CCA of precedent transactions in sector. DCF value of synergies. Negotiated price. 1-day, 30-day, 52-wk high premiums.', pitfall: 'Premium > 40% typically requires exceptional synergies to justify to shareholders.' },
+      { title: 'Deal Consideration Mix', range: 'All-cash, all-stock, or blended', derive: 'Cash: immediate EPS drag via interest cost. Stock: dilution but no cash outflow. Blended: balance of risk sharing.', pitfall: 'Stock deals require exchange ratio negotiation and are subject to market price fluctuation until close.' },
+      { title: 'Synergies (Revenue)', range: '1–5% of combined revenue', derive: 'Cross-sell, new markets, pricing power. Must justify with specific initiatives. Usually phased in over 2–3 years.', pitfall: 'Revenue synergies are highly uncertain — many bankers exclude them from base case accretion.' },
+      { title: 'Synergies (Cost)', range: '3–10% of target cost base', derive: 'Headcount reduction, procurement savings, facility consolidation. More reliable than revenue synergies.', pitfall: 'One-time restructuring costs to achieve synergies must be shown separately, not netted.' },
+      { title: 'Financing Rate (Cash deals)', range: 'Current debt market: 5–7% fixed', derive: 'Marginal cost of new debt. Blended rate if using revolver + term debt. After-tax cost of debt = rate × (1-t).', pitfall: 'Interest expense reduces net income — cash deals that look EPS-neutral can easily be dilutive if borrowing costs are high.' },
+      { title: 'Goodwill & Intangibles', range: 'Goodwill = Purchase Price – FMV of Net Assets', derive: 'PP allocation: appraiser values identifiable intangibles (brand, technology, customer relationships) and allocates remainder to goodwill.', pitfall: 'Intangibles are amortized (reducing EPS), goodwill is not — but goodwill impairment is a risk.' },
+      { title: 'Amortization of Intangibles', range: '5–20yr useful life, straight-line', derive: 'Intangible value ÷ useful life = annual D&A add-on. Tax-deductible in asset deals, not in stock deals.', pitfall: 'In a stock deal, intangible amortization is non-cash but reduces GAAP EPS — creates EPS dilution optics.' },
+      { title: 'Accretion / Dilution Threshold', range: 'EPS-neutral at min, target 3–5% accretive yr2', derive: 'PF EPS = (combined net income + synergies – interest – amortization) / PF diluted shares. Compare to standalone EPS.', pitfall: 'Deals can be EPS-accretive but value-destructive if the price paid exceeds synergy NPV.' },
+    ]
+  },
+  comps: {
+    label: 'Trading Comps',
+    sections: [
+      { title: 'Peer Selection', range: 'N/A — qualitative', derive: 'Similar business model, end market, revenue mix, geography, growth profile, margins. Aim for 6–12 comps. Sort by relevance.', pitfall: 'Avoid forcing dissimilar peers. One true comp beats ten loose ones.' },
+      { title: 'Enterprise Value', range: 'Market Cap + Net Debt + Preferred + Minorities', derive: 'EV = Mkt Cap + Total Debt – Cash & Equivalents + Preferred Stock + Minority Interest. Use diluted shares (treasury stock method).', pitfall: 'Ensure all components are on same date. Stale debt figures distort EV.' },
+      { title: 'EV / Revenue', range: '1–3× (industrials), 4–15× (SaaS)', derive: 'Use NTM revenue from consensus estimates. Best for high-growth companies with negative EBITDA.', pitfall: 'Doesn\'t capture profitability differences — pair with margin analysis.' },
+      { title: 'EV / EBITDA', range: '6–10× (industrials), 15–25× (software)', derive: 'Use NTM EBITDA from consensus. Adjust for non-recurring items. Most commonly used multiple in IB.', pitfall: 'EBITDA ≠ cash flow — high capex businesses should also use EV/EBIT or EV/NOPAT.' },
+      { title: 'P / E', range: '12–20× (mature), 25–50× (growth)', derive: 'Use NTM EPS (consensus). Distorted by capital structure (leverage) and tax rates — use alongside EV multiples.', pitfall: 'Companies with losses cannot use P/E. Non-cash charges (amortization) depress GAAP EPS.' },
+      { title: 'P / Book', range: '1–3× (banks, insurance)', derive: 'Primarily used for financials. Book value = total equity. Adjusted for intangibles = tangible book.', pitfall: 'Accounting choices significantly impact book value — normalize before comparing.' },
+      { title: 'Calendarization', range: 'Adjust fiscal year-ends to same calendar', derive: 'If FY ends Mar 31, roll forward: NTM EBITDA = last 9 months + next 3 months of estimates. Use stub periods carefully.', pitfall: 'Mixing fiscal periods inflates or deflates multiples — always calendarize to the same NTM window.' },
+      { title: 'Mean vs Median', range: 'Use median to exclude outliers', derive: 'Median is more robust than mean when the comp set has outliers. Show 25th–75th percentile range as well.', pitfall: 'Don\'t cherry-pick the mean or median that produces the most favorable valuation.' },
+    ]
+  }
+};
+
+function renderValAssump(tab) {
+  vaTab = tab;
+  const tabNav = document.getElementById('vaTabNav');
+  const body = document.getElementById('vaBody');
+
+  tabNav.innerHTML = Object.entries(VA_DATA).map(([k,v]) =>
+    `<button class="va-tab${vaTab===k?' active on':''}" onclick="renderValAssump('${k}')">${v.label}</button>`
+  ).join('');
+
+  const data = VA_DATA[tab];
+  const rows = data.sections.map(s => `
+    <div class="va-row">
+      <div class="va-col-name">${s.title}</div>
+      <div class="va-col-range"><span class="va-badge">${s.range}</span></div>
+      <div class="va-col-derive">${s.derive}</div>
+      <div class="va-col-pitfall"><span class="va-pitfall-icon">⚠</span> ${s.pitfall}</div>
+    </div>`).join('');
+
+  body.innerHTML = `
+    <div class="va-legend">
+      <span>Assumption</span><span>Typical Range</span><span>How to Derive</span><span>Common Pitfall</span>
+    </div>
+    <div class="va-table">${rows}</div>`;
+}
+
+/* ============================================================
    FIT / BEHAVIORAL QUESTIONS
 ============================================================ */
 const BEHAV_CATS = [
@@ -9306,6 +9623,30 @@ function stopMockTimer() {
   </div>
   <div class="rd-body" id="rdBody"></div>
 </div>
+
+<!-- STORY BANK MODAL -->
+<div class="xdrill-modal" id="storyBankModal" onclick="if(event.target===this)toggleStoryBank()">
+  <div class="xdrill-box" style="max-width:920px;width:97%;max-height:88vh">
+    <div class="xdrill-head">
+      <div><div class="fit-head-title">📖 Story Bank</div><div class="fit-head-sub">STAR-format behavioral stories for IB interviews — organised, editable, word-counted</div></div>
+      <button class="modal-close" onclick="toggleStoryBank()">✕</button>
+    </div>
+    <div class="xdrill-body" id="storyBankBody" style="padding:0;gap:0;flex-direction:row;overflow:hidden;min-height:480px"></div>
+  </div>
+</div>
+
+<!-- VALUATION ASSUMPTIONS MODAL -->
+<div class="xdrill-modal" id="valAssumpModal" onclick="if(event.target===this)toggleValAssump()">
+  <div class="xdrill-box" style="max-width:860px;width:97%;max-height:88vh">
+    <div class="xdrill-head">
+      <div><div class="fit-head-title">🎯 Valuation Assumptions</div><div class="fit-head-sub">How to derive, benchmark, and defend key assumptions across DCF, LBO, M&A, and Comps</div></div>
+      <button class="modal-close" onclick="toggleValAssump()">✕</button>
+    </div>
+    <div class="va-tabs" id="vaTabNav"></div>
+    <div class="va-body" id="vaBody"></div>
+  </div>
+</div>
+
 <script>if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');</script>
 </body>
 </html>

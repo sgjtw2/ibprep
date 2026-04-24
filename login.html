@@ -26,6 +26,26 @@ html, body { height: 100%; }
   --t2:      #7888AA;
   --t3:      #2E3D58;
 }
+[data-theme="light"] {
+  --bg:      #FFFFFF;
+  --panel:   #F8FAFC;
+  --border:  #E2E8F0;
+  --border2: #CBD5E1;
+  --gold:    #1B4FD8;
+  --gold-l:  #2D63F0;
+  --gold-bg: rgba(27,79,216,0.06);
+  --t1:      #0F172A;
+  --t2:      #475569;
+  --t3:      #94A3B8;
+}
+.login-theme-btn {
+  position: fixed; top: 14px; right: 16px; z-index: 10;
+  background: var(--panel); border: 1px solid var(--border2);
+  color: var(--t2); font-size: 14px; width: 32px; height: 32px;
+  border-radius: 6px; cursor: pointer; display: flex;
+  align-items: center; justify-content: center; transition: background .15s;
+}
+.login-theme-btn:hover { background: var(--border); }
 
 body {
   background: var(--bg);
@@ -406,6 +426,7 @@ body {
 </style>
 </head>
 <body>
+<button class="login-theme-btn" id="loginThemeBtn" onclick="toggleLoginTheme()" title="Toggle theme">☀️</button>
 
 <!-- LEFT: BRAND -->
 <div class="brand">
@@ -537,6 +558,25 @@ function doSSO() {
 
 document.getElementById('email').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('password').focus(); });
 document.getElementById('password').addEventListener('keydown', e => { if (e.key === 'Enter') doSignIn(); });
+
+(function() {
+  if (localStorage.getItem('cc-theme') === 'light') {
+    document.documentElement.setAttribute('data-theme','light');
+    document.getElementById('loginThemeBtn').textContent = '🌙';
+  }
+})();
+function toggleLoginTheme() {
+  const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+  if (isLight) {
+    document.documentElement.removeAttribute('data-theme');
+    localStorage.setItem('cc-theme','dark');
+    document.getElementById('loginThemeBtn').textContent = '☀️';
+  } else {
+    document.documentElement.setAttribute('data-theme','light');
+    localStorage.setItem('cc-theme','light');
+    document.getElementById('loginThemeBtn').textContent = '🌙';
+  }
+}
 </script>
 </body>
 </html>
