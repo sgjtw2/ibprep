@@ -1,4 +1,4 @@
-const CACHE = 'ibprep-v4';
+const CACHE = 'ibprep-v5';
 const ASSETS = ['/login.html', '/command-center.html', '/financial-model.html', '/manifest.json'];
 
 self.addEventListener('install', e => {
