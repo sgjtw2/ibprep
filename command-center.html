@@ -1780,6 +1780,72 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
   margin: 8px 12px;
   border-radius: 3px;
 }
+
+/* ══════════════════════════════════════════════════════════
+   MOBILE  ≤ 768px  (Pixel 8 / Android Chrome)
+══════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+
+  /* Allow full-page scroll */
+  html, body { height: auto; overflow: auto; }
+
+  /* ── HEADER: sticky, single compact row ── */
+  .hdr {
+    position: sticky; top: 0; z-index: 200;
+    height: auto; flex-wrap: wrap; padding: 8px 10px; gap: 6px;
+  }
+  .logo { font-size: 11px; }
+  /* Search goes full-width on its own row */
+  .search-wrap { order: 10; flex: 0 0 100%; max-width: none; }
+  .hdr-filters  { order: 11; }
+  .fltr { font-size: 9px; padding: 4px 7px; }
+  /* Right-side: push to auto margin, hide non-essential items */
+  .hdr-right { margin-left: auto; gap: 6px; flex-wrap: nowrap; }
+  .kbd-hint { display: none; }
+  .hdr-date { display: none; }
+  .sort-btn  { font-size: 9px; padding: 4px 8px; }
+  .btn-new   { font-size: 9px; padding: 6px 10px; }
+
+  /* ── METRICS: horizontal scroll strip ── */
+  .metrics {
+    display: flex; overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-bottom: 1px solid var(--b1);
+  }
+  .metrics::-webkit-scrollbar { display: none; }
+  .met { flex: 0 0 100px; padding: 10px 12px; border-right: 1px solid var(--b1); }
+  .met:last-child { border-right: none; }
+
+  /* ── WORKSPACE: stack kanban above sidebar ── */
+  .workspace {
+    display: flex; flex-direction: column;
+    overflow: visible; height: auto;
+  }
+
+  /* Kanban */
+  .kb-section {
+    overflow: visible; height: auto;
+    border-right: none; border-bottom: 1px solid var(--b1);
+  }
+  .panel-hdr { position: sticky; top: 100px; z-index: 99; }
+  .kb-board {
+    overflow-x: auto; overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    height: auto; min-height: 280px;
+  }
+  .kb-col { flex: 0 0 240px; height: auto; overflow: visible; }
+  .col-cards { overflow-y: visible; max-height: none; }
+
+  /* Sidebar / tabs */
+  .sidebar { overflow: visible; height: auto; border-top: none; }
+  .tabs {
+    position: sticky; top: 100px; z-index: 98;
+    background: var(--s1);
+  }
+  .tab { font-size: 8.5px; padding: 10px 4px; }
+  .tab-pane { overflow: visible; height: auto; min-height: 200px; }
+  .todo-list, .act-list { overflow: visible; height: auto; max-height: none; }
+}
 </style>
 </head>
 <body>
