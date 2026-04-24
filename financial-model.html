@@ -3415,7 +3415,7 @@ const GLOSSARY = [
     { t:'CAGR', d:'Compound Annual Growth Rate = (End / Start)^(1/n) − 1. The smoothed annualised growth rate over a period. The standard way to express multi-year growth. Always clarify the start/end year and whether organic or includes acquisitions.' },
   ]},
   { cat:'M&A', terms:[
-    { t:'Accretion / Dilution', d:'Change in acquirer\'s EPS after an acquisition. Accretive = PF EPS > standalone EPS. Dilutive = PF EPS < standalone EPS. The primary board-level go/no-go metric. Accretion does not equal value creation — a deal can be accretive and economically value-destructive.' },
+    { t:'Accretion / Dilution', d:'Change in acquirer\'s EPS after an acquisition. Accretive = PF EPS &gt; standalone EPS. Dilutive = PF EPS &lt; standalone EPS. The primary board-level go/no-go metric. Accretion does not equal value creation — a deal can be accretive and economically value-destructive.' },
     { t:'Control Premium', d:'Percentage paid above the target\'s pre-announcement share price. Typically 20–40% in strategic M&A. Reflects the value of control (ability to change management, strategy, capital allocation) and expected synergies shared with the target.' },
     { t:'Synergies', d:'Value created by the combination of two businesses that neither could achieve independently. Cost synergies (headcount cuts, facility consolidation) are more credible. Revenue synergies (cross-selling, market access) are harder to achieve and should be discounted 30–50%.' },
     { t:'PPA (Purchase Price Allocation)', d:'Accounting requirement to allocate an acquisition price premium to identifiable intangible assets (customer lists, IP, brand) and goodwill. Intangibles are amortised (depressing GAAP earnings). Goodwill is not amortised — only impaired if value declines.' },
@@ -3438,7 +3438,7 @@ const GLOSSARY = [
   { cat:'DCF / Valuation', terms:[
     { t:'WACC', d:'Weighted Average Cost of Capital = CoE × (E/V) + CoD × (1−t) × (D/V). The discount rate for UFCF in a DCF. Represents the blended required return for all capital providers. +1% increase in WACC reduces DCF equity value by ~15–25%.' },
     { t:'CAPM', d:'Capital Asset Pricing Model: Cost of Equity = Rf + β × ERP. The standard model for estimating the return equity investors require. Criticized for relying on historical beta and a single risk factor, but remains the industry standard for Cost of Equity.' },
-    { t:'Beta (β)', d:'Measures a stock\'s systematic risk relative to the market. β = 1 moves with market. β > 1 amplifies moves (cyclical). β < 1 is defensive (utilities). Must be unlevered from comparables and relevered at target capital structure for use in WACC.' },
+    { t:'Beta (β)', d:'Measures a stock\'s systematic risk relative to the market. β = 1 moves with market. β &gt; 1 amplifies moves (cyclical). β &lt; 1 is defensive (utilities). Must be unlevered from comparables and relevered at target capital structure for use in WACC.' },
     { t:'Terminal Value', d:'Present value of all cash flows beyond the explicit forecast period (Years 6 to ∞). Typically 60–80% of total DCF Enterprise Value. Calculated via Gordon Growth (FCF×(1+g)/(WACC−g)) or Exit Multiple (Terminal EBITDA × peer multiple).' },
     { t:'UFCF (Unlevered FCF)', d:'Free cash flow available to ALL capital providers before any financing = NOPAT + D&A − Capex − ΔNWC = EBIT(1−t) + D&A − Capex − ΔNWC. Capital-structure neutral — discounted at WACC to get Enterprise Value.' },
     { t:'Equity Risk Premium (ERP)', d:'The additional return equity investors require above the risk-free rate. ~5–6% for the US (Damodaran implied estimate). Higher ERP = higher WACC = lower DCF. Reflects the extra compensation for holding equities vs risk-free bonds.' },
@@ -7652,12 +7652,12 @@ function toggleStoryBank() {
   showStoryBank = !showStoryBank;
   const modal = document.getElementById('storyBankModal');
   if (showStoryBank) {
-    modal.classList.add('active');
+    modal.classList.add('open');
     sbCat = 'all';
     sbEditId = null;
     renderStoryBank();
   } else {
-    modal.classList.remove('active');
+    modal.classList.remove('open');
   }
 }
 
@@ -7778,10 +7778,10 @@ function toggleValAssump() {
   showValAssump = !showValAssump;
   const modal = document.getElementById('valAssumpModal');
   if (showValAssump) {
-    modal.classList.add('active');
+    modal.classList.add('open');
     renderValAssump(vaTab);
   } else {
-    modal.classList.remove('active');
+    modal.classList.remove('open');
   }
 }
 
