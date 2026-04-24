@@ -1248,6 +1248,82 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
 .ma-verdict.accretive { background:rgba(22,163,74,.1); border:1px solid rgba(22,163,74,.3); color:var(--green); }
 .ma-verdict.dilutive { background:rgba(220,38,38,.08); border:1px solid rgba(220,38,38,.25); color:var(--red); }
 @media (max-width:768px) { .ma-layout { grid-template-columns:1fr; } }
+/* ── MODEL BUILDER ────────────────────────────────────── */
+.mb-selection { display:flex; gap:14px; padding:24px; }
+.mb-card { flex:1; border:1px solid var(--b1); border-radius:8px; padding:20px 22px; cursor:pointer; transition:all .15s; }
+.mb-card:hover { border-color:var(--blue); background:var(--bbg); transform:translateY(-1px); }
+.mb-card-icon { font-size:28px; margin-bottom:10px; }
+.mb-card-title { font-weight:800; font-size:14px; color:var(--t1); margin-bottom:3px; }
+.mb-card-co { font-size:10px; color:var(--blue); font-family:'JetBrains Mono',monospace; margin-bottom:8px; }
+.mb-card-bullets { display:flex; flex-direction:column; gap:3px; }
+.mb-card-bullet { font-size:9.5px; color:var(--t2); display:flex; align-items:center; gap:5px; }
+.mb-card-bullet::before { content:'→'; color:var(--blue); font-weight:800; font-size:9px; }
+.mb-layout { display:flex; flex:1; overflow:hidden; }
+.mb-left { width:43%; border-right:1px solid var(--b1); display:flex; flex-direction:column; overflow:hidden; flex-shrink:0; }
+.mb-right { flex:1; overflow-y:auto; background:var(--s1); }
+.mb-right::-webkit-scrollbar { width:3px; } .mb-right::-webkit-scrollbar-thumb { background:var(--b2); }
+.mb-step-hdr { padding:12px 16px 10px; border-bottom:1px solid var(--b1); flex-shrink:0; }
+.mb-step-num { font-size:8px; letter-spacing:.14em; text-transform:uppercase; color:var(--blue); font-weight:700; margin-bottom:2px; }
+.mb-step-title { font-weight:800; font-size:13px; color:var(--t1); margin-bottom:4px; }
+.mb-step-narrative { font-size:10px; color:var(--t2); line-height:1.6; }
+.mb-step-body { flex:1; overflow-y:auto; padding:12px 16px; }
+.mb-step-body::-webkit-scrollbar { width:3px; } .mb-step-body::-webkit-scrollbar-thumb { background:var(--b2); }
+.mb-assumptions { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:10px; }
+.mb-assumption { font-size:9px; background:var(--s2); border:1px solid var(--b1); border-radius:3px; padding:2px 7px; color:var(--t2); font-family:'JetBrains Mono',monospace; }
+.mb-input-tbl { width:100%; border-collapse:collapse; }
+.mb-input-tbl th { font-size:7.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--t3); padding:3px 4px; text-align:right; border-bottom:1px solid var(--b1); }
+.mb-input-tbl th:first-child { text-align:left; }
+.mb-input-tbl td { padding:3px 3px; vertical-align:middle; }
+.mb-input-tbl td:first-child { font-size:9.5px; color:var(--t2); padding-right:6px; white-space:nowrap; }
+.mb-input-tbl tr.mb-total-row td:first-child { font-weight:700; color:var(--t1); }
+.mb-input-tbl tr.mb-total-row td { border-top:1px solid var(--b2); }
+.mb-cell { width:60px; background:var(--s2); border:1px solid var(--b1); border-radius:3px; padding:3px 5px; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--t1); text-align:right; outline:none; transition:border-color .12s; }
+.mb-cell:focus { border-color:var(--bbrd); }
+.mb-cell.ok { border-color:var(--green); background:rgba(22,163,74,.06); color:var(--green); }
+.mb-cell.bad { border-color:var(--red); background:rgba(220,38,38,.05); }
+.mb-cell:disabled { background:var(--s1); color:var(--t3); cursor:not-allowed; border-color:var(--b1); }
+.mb-hint-row td { font-size:8.5px; color:var(--t3); padding:1px 3px 4px; font-family:'JetBrains Mono',monospace; }
+.mb-scalar-rows { display:flex; flex-direction:column; gap:0; }
+.mb-srow { display:flex; align-items:center; gap:8px; padding:6px 0; border-bottom:1px solid var(--b1); }
+.mb-srow-lbl { flex:1; font-size:10px; color:var(--t2); }
+.mb-srow-hint { font-size:8.5px; color:var(--t3); font-family:'JetBrains Mono',monospace; margin-top:2px; }
+.mb-srow.total .mb-srow-lbl { font-weight:700; color:var(--t1); }
+.mb-footer { flex-shrink:0; padding:9px 16px; border-top:1px solid var(--b1); display:flex; align-items:center; justify-content:space-between; background:var(--bg); }
+.mb-dots { display:flex; gap:4px; align-items:center; }
+.mb-dot { width:7px; height:7px; border-radius:50%; background:var(--b1); transition:all .2s; flex-shrink:0; }
+.mb-dot.done { background:var(--green); }
+.mb-dot.active { background:var(--blue); width:18px; border-radius:4px; }
+.mb-nav { display:flex; gap:6px; }
+.mb-back { background:none; border:1px solid var(--b1); color:var(--t3); padding:6px 12px; border-radius:4px; font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:9px; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; }
+.mb-back:hover { border-color:var(--b2); color:var(--t2); }
+.mb-check { background:var(--s2); border:1px solid var(--b1); color:var(--t2); padding:6px 14px; border-radius:4px; font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:9px; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; transition:all .12s; }
+.mb-check:hover { border-color:var(--blue); color:var(--blue); }
+.mb-next { background:var(--blue); border:none; color:#fff; padding:6px 14px; border-radius:4px; font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:9px; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; display:none; }
+.mb-next:hover { background:var(--bluel); }
+.mb-next.show { display:block; }
+.mb-model-panel { padding:12px 14px; }
+.mb-model-hdr { font-size:8px; letter-spacing:.12em; text-transform:uppercase; color:var(--t3); margin-bottom:8px; font-weight:700; }
+.mb-mtbl { width:100%; border-collapse:collapse; font-family:'JetBrains Mono',monospace; font-size:9.5px; }
+.mb-mtbl th { font-size:7.5px; color:var(--t3); text-align:right; padding:3px 5px; font-weight:500; border-bottom:1px solid var(--b1); }
+.mb-mtbl th:first-child { text-align:left; }
+.mb-mtbl td { padding:3px 5px; text-align:right; border-bottom:1px solid rgba(0,0,0,.04); }
+[data-theme=dark] .mb-mtbl td { border-bottom-color:rgba(255,255,255,.04); }
+.mb-mtbl td:first-child { text-align:left; font-family:'Plus Jakarta Sans',sans-serif; font-size:9px; color:var(--t2); }
+.mb-mtbl .v-done { color:var(--green); }
+.mb-mtbl .v-cur  { color:var(--blue); font-style:italic; }
+.mb-mtbl .v-fut  { color:var(--b2); }
+.mb-mtbl .sec-hdr td { font-family:'Plus Jakarta Sans',sans-serif; font-weight:800; font-size:7.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--blue); padding-top:8px; border-bottom:1px solid var(--b1); border-top:none; }
+.mb-mtbl .row-total td { font-weight:700; color:var(--t1); border-top:1px solid var(--b2); }
+.mb-complete { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:32px 24px; gap:10px; text-align:center; }
+.mb-complete-icon { font-size:44px; }
+.mb-complete-h { font-weight:800; font-size:17px; color:var(--t1); }
+.mb-complete-sub { font-size:10.5px; color:var(--t2); max-width:340px; line-height:1.6; }
+.mb-complete-vals { display:flex; gap:12px; margin-top:10px; flex-wrap:wrap; justify-content:center; }
+.mb-complete-val { background:var(--s2); border:1px solid var(--b1); border-radius:6px; padding:10px 14px; min-width:90px; }
+.mb-complete-v { font-family:'JetBrains Mono',monospace; font-weight:600; font-size:15px; color:var(--blue); }
+.mb-complete-l { font-size:7.5px; color:var(--t3); text-transform:uppercase; letter-spacing:.1em; margin-top:2px; }
+.mb-back-sel { background:none; border:1px solid var(--b1); color:var(--t2); padding:8px 18px; border-radius:4px; font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:10px; letter-spacing:.06em; text-transform:uppercase; cursor:pointer; margin-top:4px; }
+.mb-back-sel:hover { border-color:var(--b2); }
 /* ── PAPER LBO ────────────────────────────────────────── */
 .plbo-scenario-tabs { display:flex; border-bottom:1px solid var(--b1); flex-shrink:0; overflow-x:auto; }
 .plbo-stab { padding:8px 16px; font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:9px; letter-spacing:.06em; text-transform:uppercase; color:var(--t3); cursor:pointer; border-bottom:2px solid transparent; white-space:nowrap; }
@@ -1573,6 +1649,9 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
           </button>
           <button class="tools-item" id="maProcessBtn" onclick="toggleMAProcess();closeToolsMenu()">
             <span class="tools-item-icon">🔄</span>M&amp;A Deal Process<span class="tools-item-badge"></span>
+          </button>
+          <button class="tools-item" id="modelBuilderBtn" onclick="toggleModelBuilder();closeToolsMenu()">
+            <span class="tools-item-icon">🏗️</span>Model Builder<span class="tools-item-badge">GUIDED</span>
           </button>
         </div>
         <!-- DRILLS TAB -->
@@ -3124,6 +3203,7 @@ let showLBODrill  = false, lboDrillState = {};
 let showErrSpot   = false, errSpotFlags = {}, errSpotSubmitted = false;
 let showMaDrill   = false, maDrillIdx = 0, maDrillState = {};
 let showPaperLBO  = false, paperLBOIdx = 0, paperLBOState = {};
+let showModelBuilder = false, mbModel = null, mbStep = 0, mbStepState = {};
 let showBehav     = false, behavCatIdx = 0, behavQIdx = 0, behavPhase = 'question', behavTimer = null, behavElapsed = 0;
 let behavScores   = JSON.parse(localStorage.getItem('fm-behav-scores') || '{}');
 let showMaQA      = false, maQACatIdx = 0, maQAQIdx = 0, maQAPhase = 'question', maQATimer = null, maQAElapsed = 0;
@@ -6751,6 +6831,707 @@ function resetPaperLBO() {
 }
 
 /* ============================================================
+   MODEL BUILDER — 5 MODELS
+============================================================ */
+const MB_DCF = {
+  id:'dcf', title:'DCF Valuation — AquaCorp Inc.', company:'AquaCorp Inc.', sector:'Consumer Staples · $320m Base Revenue',
+  yrs:['Y1','Y2','Y3','Y4','Y5'],
+  ans:{
+    rev:   [358.4,394.2,425.8,455.6,482.9],
+    ebitda:[86.0, 94.6, 102.2,109.3,115.9],
+    da:    [17.9, 19.7, 21.3, 22.8, 24.1 ],
+    ebit:  [68.1, 74.9, 80.9, 86.6, 91.7 ],
+    nopat: [51.1, 56.2, 60.7, 64.9, 68.8 ],
+    capex: [28.7, 31.5, 34.1, 36.5, 38.6 ],
+    dnwc:  [7.2,  7.9,  8.5,  9.1,  9.7  ],
+    ufcf:  [33.2, 36.5, 39.4, 42.2, 44.7 ],
+    pvf:   [0.913,0.834,0.762,0.696,0.635],
+    pvfcf: [30.3, 30.4, 30.0, 29.3, 28.4 ],
+    tv:654.1, pvtv:415.4, ev:563.7, eqv:478.7, price:15.96,
+  },
+  steps:[
+    { id:'s1', title:'Revenue Forecast',
+      narrative:'Every model starts with the <strong>revenue build</strong>. Apply the given growth rates to project AquaCorp\'s revenue for 5 years. This is the foundation everything else is derived from.',
+      formula:'Revenue<sub>n</sub> = Revenue<sub>n−1</sub> × (1 + g<sub>n</sub>)',
+      assumptions:['Base Revenue (Y0): $320m','Growth rates: 12% / 10% / 8% / 7% / 6%'],
+      rows:[{key:'rev',label:'Revenue ($m)',tol:0.6,hints:['320×1.12=358.4','358.4×1.10=394.2','394.2×1.08=425.8','425.8×1.07=455.6','455.6×1.06=482.9']}],
+    },
+    { id:'s2', title:'EBITDA',
+      narrative:'Apply the EBITDA margin to revenue. EBITDA is the core operating metric in IB — capital-structure neutral, used in every valuation multiple (EV/EBITDA).',
+      formula:'EBITDA = Revenue × Margin %',
+      assumptions:['EBITDA margin: 24% of revenue'],
+      rows:[{key:'ebitda',label:'EBITDA ($m)',tol:0.5,hints:['358.4×24%=86.0','394.2×24%=94.6','425.8×24%=102.2','455.6×24%=109.3','482.9×24%=115.9']}],
+    },
+    { id:'s3', title:'D&A & EBIT',
+      narrative:'Subtract D&A from EBITDA to get EBIT. D&A is a <em>non-cash charge</em> — we add it back later in the FCF bridge. EBIT is operating profit after all non-cash charges.',
+      formula:'EBIT = EBITDA − D&A',
+      assumptions:['D&A: 5% of revenue'],
+      rows:[
+        {key:'da',  label:'D&A ($m)', tol:0.5,hints:['358.4×5%=17.9','394.2×5%=19.7','425.8×5%=21.3','455.6×5%=22.8','482.9×5%=24.1']},
+        {key:'ebit',label:'EBIT ($m)',tol:0.5,hints:['86.0−17.9=68.1','94.6−19.7=74.9','102.2−21.3=80.9','109.3−22.8=86.6','115.9−24.1=91.7'],isTotal:true},
+      ],
+    },
+    { id:'s4', title:'NOPAT, CapEx, ΔNWC & UFCF',
+      narrative:'Build <strong>unlevered free cash flow</strong>. UFCF is capital-structure neutral — available to ALL providers. It\'s discounted at WACC to get Enterprise Value.',
+      formula:'UFCF = NOPAT + D&A − CapEx − ΔNWC',
+      assumptions:['Tax rate: 25%','CapEx: 8% of revenue','ΔNWC: 2% of revenue'],
+      rows:[
+        {key:'nopat',label:'NOPAT ($m)',  tol:0.5,hints:['EBIT×75%: 68.1×0.75=51.1','74.9×0.75=56.2','80.9×0.75=60.7','86.6×0.75=64.9','91.7×0.75=68.8']},
+        {key:'capex',label:'CapEx ($m)',  tol:0.5,hints:['Rev×8%: 358.4×8%=28.7','394.2×8%=31.5','425.8×8%=34.1','455.6×8%=36.5','482.9×8%=38.6']},
+        {key:'dnwc', label:'ΔNWC ($m)',   tol:0.5,hints:['Rev×2%: 358.4×2%=7.2','394.2×2%=7.9','425.8×2%=8.5','455.6×2%=9.1','482.9×2%=9.7']},
+        {key:'ufcf', label:'UFCF ($m)',   tol:0.6,hints:['NOPAT+D&A−CapEx−ΔNWC: 51.1+17.9−28.7−7.2=33.2','36.5','39.4','42.2','44.7'],isTotal:true},
+      ],
+    },
+    { id:'s5', title:'Discount Factors & PV of FCFs',
+      narrative:'Discount each year\'s UFCF back to today using WACC. The sum of PVs represents the value from the <strong>explicit forecast period</strong> — typically only 20–40% of total DCF value.',
+      formula:'PV Factor = 1 / (1 + WACC)<sup>t</sup> · PV(FCF) = UFCF × PV Factor',
+      assumptions:['WACC: 9.5%'],
+      rows:[
+        {key:'pvf',  label:'PV Factor',     tol:0.005,hints:['1/1.095¹=0.913','1/1.095²=0.834','1/1.095³=0.762','1/1.095⁴=0.696','1/1.095⁵=0.635']},
+        {key:'pvfcf',label:'PV of UFCF ($m)',tol:0.5,hints:['33.2×0.913=30.3','36.5×0.834=30.4','39.4×0.762=30.0','42.2×0.696=29.3','44.7×0.635=28.4'],isTotal:true},
+      ],
+    },
+    { id:'s6', title:'Terminal Value & Equity Bridge',
+      narrative:'Terminal Value captures <em>all cash flows beyond Year 5</em> — typically 60–80% of total EV. Use Gordon Growth, then bridge EV → Equity Value → share price.',
+      formula:'TV = FCF₅ × (1+g) / (WACC−g)',
+      assumptions:['TGR: 2.5%','WACC: 9.5%','Net Debt: $85m','Shares: 30m'],
+      scalar:true,
+      scalarRows:[
+        {key:'tv',   label:'Terminal Value ($m)',       hint:'44.7 × 1.025 / (0.095−0.025) = 44.7 × 1.025 / 0.07 = 654.1',tol:4},
+        {key:'pvtv', label:'PV of Terminal Value ($m)', hint:'TV × Y5 PV Factor: 654.1 × 0.635 = 415.4',tol:4},
+        {key:'ev',   label:'Enterprise Value ($m)',     hint:'Sum PV FCFs (148.4) + PV(TV) (415.4) = 563.7',tol:5,isTotal:true},
+        {key:'eqv',  label:'Equity Value ($m)',         hint:'EV − Net Debt: 563.7 − 85.0 = 478.7',tol:5},
+        {key:'price',label:'Implied Share Price ($)',   hint:'Equity Value ÷ Shares: 478.7 / 30 = $15.96',tol:0.2,isTotal:true},
+      ],
+    },
+  ],
+  modelRows:[
+    {sec:'Revenue'},
+    {key:'rev',   label:'Revenue ($m)'},
+    {sec:'Profitability'},
+    {key:'ebitda',label:'EBITDA ($m)'},
+    {key:'da',    label:'D&A ($m)'},
+    {key:'ebit',  label:'EBIT ($m)',  isTotal:true},
+    {sec:'Free Cash Flow'},
+    {key:'nopat', label:'NOPAT ($m)'},
+    {key:'capex', label:'CapEx ($m)'},
+    {key:'dnwc',  label:'ΔNWC ($m)'},
+    {key:'ufcf',  label:'UFCF ($m)', isTotal:true},
+    {sec:'Discount'},
+    {key:'pvf',   label:'PV Factor'},
+    {key:'pvfcf', label:'PV of UFCF ($m)',isTotal:true},
+    {sec:'Valuation (Scalar)'},
+    {key:'tv',    label:'Terminal Value ($m)',scalar:true},
+    {key:'pvtv',  label:'PV of TV ($m)',    scalar:true},
+    {key:'ev',    label:'Enterprise Value ($m)',scalar:true,isTotal:true},
+    {key:'eqv',   label:'Equity Value ($m)', scalar:true},
+    {key:'price', label:'Share Price ($)',   scalar:true,isTotal:true},
+  ],
+};
+
+const MB_LBO = {
+  id:'lbo', title:'LBO Analysis — RetailCo Inc.', company:'RetailCo Inc.', sector:'Retail · $525m Entry (7.0× EBITDA)',
+  yrs:['Y1','Y2','Y3','Y4','Y5'],
+  ans:{
+    totDebt:315, equity:210, lev:4.2, entMult:7.0,
+    ebitdaY:[79.5,84.3,89.3,94.7,100.4],
+    ebitY:  [54.5,59.3,64.3,69.7,75.4],
+    totInt: [19.1,18.0,16.9,15.8,14.7],
+    tlabal: [180, 160, 140, 120, 100 ],
+    niY:    [26.6,31.0,35.6,40.5,45.5],
+    fcfY:   [16.6,21.0,25.6,30.5,35.5],
+    exitEbitda:100.4, exitEV:702.8, exitDebt:215, exitEq:487.8, mom:2.32, irr:18.3,
+  },
+  steps:[
+    { id:'l1', title:'Sources & Uses',
+      narrative:'Set up the <strong>transaction structure</strong>. Identify where the money comes from (sources) and where it goes (uses). The two sides must balance. Then calculate entry leverage and purchase multiple.',
+      formula:'Equity = Entry EV − Total Debt · Leverage = Debt / EBITDA',
+      assumptions:['Entry EV: $525m','Entry EBITDA: $75m','TLA: $200m @ 5.5%','TLB: $115m @ 7.0%'],
+      scalar:true,
+      scalarRows:[
+        {key:'totDebt',label:'Total Debt ($m)',     hint:'TLA $200m + TLB $115m = $315m',tol:0.5},
+        {key:'equity', label:'Sponsor Equity ($m)', hint:'Entry EV − Total Debt: $525m − $315m = $210m',tol:0.5},
+        {key:'lev',    label:'Entry Leverage (×)',  hint:'Total Debt / EBITDA: $315m / $75m = 4.2×',tol:0.1},
+        {key:'entMult',label:'Entry EV/EBITDA (×)', hint:'Entry EV / EBITDA: $525m / $75m = 7.0×',tol:0.1,isTotal:true},
+      ],
+    },
+    { id:'l2', title:'Income Statement (5 Years)',
+      narrative:'Project EBITDA, then subtract D&A to get EBIT. In an LBO, D&A is typically fixed — the PE firm didn\'t change the assets, only the capital structure.',
+      formula:'EBIT = EBITDA − D&A',
+      assumptions:['Entry EBITDA: $75m','Revenue growth: 6% per year','D&A: $25m (fixed)'],
+      rows:[
+        {key:'ebitdaY',label:'EBITDA ($m)',tol:0.4,hints:['75×1.06=79.5','79.5×1.06=84.3','84.3×1.06=89.3','89.3×1.06=94.7','94.7×1.06=100.4']},
+        {key:'ebitY',  label:'EBIT ($m)',  tol:0.4,hints:['79.5−25=54.5','84.3−25=59.3','89.3−25=64.3','94.7−25=69.7','100.4−25=75.4'],isTotal:true},
+      ],
+    },
+    { id:'l3', title:'Debt Schedule & Interest',
+      narrative:'Track the <strong>TLA balance</strong> as it amortises $20m/year. Calculate total interest expense using beginning-of-year balances. TLB has no scheduled amortisation — bullet at maturity.',
+      formula:'Interest = TLA Bal × 5.5% + $115m × 7.0%',
+      assumptions:['TLA: $200m → amorts $20m/yr','TLB: $115m @ 7.0% (no amort)'],
+      rows:[
+        {key:'tlabal',label:'TLA Balance EOY ($m)',tol:0.5,hints:['200−20=180','180−20=160','160−20=140','140−20=120','120−20=100']},
+        {key:'totInt',label:'Total Interest ($m)', tol:0.3,hints:['200×5.5%+115×7%=19.1','180×5.5%+115×7%=18.0','160×5.5%+115×7%=16.9','140×5.5%+115×7%=15.8','120×5.5%+115×7%=14.7']},
+      ],
+    },
+    { id:'l4', title:'Free Cash Flow',
+      narrative:'Calculate <strong>levered FCF</strong> — cash available after interest and capex. This is what the company actually generates to service debt and create equity value. FCF = NI + D&A − CapEx − ΔNWC.',
+      formula:'FCF = NI + D&A − CapEx − ΔNWC',
+      assumptions:['Tax: 25%','D&A: $25m','CapEx: $30m','ΔNWC: $5m'],
+      rows:[
+        {key:'niY',  label:'Net Income ($m)',tol:0.5,hints:['(EBIT−Int)×75%: (54.5−19.1)×0.75=26.6','(59.3−18.0)×0.75=31.0','(64.3−16.9)×0.75=35.6','(69.7−15.8)×0.75=40.5','(75.4−14.7)×0.75=45.5']},
+        {key:'fcfY', label:'FCF ($m)',       tol:0.5,hints:['NI+D&A−CapEx−NWC: 26.6+25−30−5=16.6','31.0+25−30−5=21.0','35.6+25−30−5=25.6','40.5+25−30−5=30.5','45.5+25−30−5=35.5'],isTotal:true},
+      ],
+    },
+    { id:'l5', title:'Exit & Returns',
+      narrative:'Calculate exit proceeds at Year 5 and measure PE returns. MoM (money-on-money) shows how much equity grew. IRR annualises that growth — the key metric for LPs.',
+      formula:'Exit Equity = Exit EV − Exit Debt · MoM = Exit Eq / Entry Eq · IRR = MoM^(1/5) − 1',
+      assumptions:['Exit multiple: 7.0× EBITDA','Exit debt: TLB $115m + TLA $100m = $215m'],
+      scalar:true,
+      scalarRows:[
+        {key:'exitEbitda',label:'Exit EBITDA ($m)',    hint:'Y5 EBITDA: 75 × 1.06⁵ = 100.4',tol:0.5},
+        {key:'exitEV',    label:'Exit EV ($m)',         hint:'Exit EBITDA × 7.0× = 100.4 × 7 = 702.8',tol:1,isTotal:true},
+        {key:'exitDebt',  label:'Exit Debt ($m)',       hint:'TLA $100m + TLB $115m = $215m',tol:0.5},
+        {key:'exitEq',    label:'Exit Equity ($m)',     hint:'Exit EV − Exit Debt: 702.8 − 215 = 487.8',tol:1,isTotal:true},
+        {key:'mom',       label:'MoM (×)',              hint:'Exit Eq / Entry Eq: 487.8 / 210 = 2.32×',tol:0.05},
+        {key:'irr',       label:'IRR (%)',              hint:'MoM^(1/5) − 1: 2.32^0.2 − 1 = 18.3%',tol:0.3,isTotal:true},
+      ],
+    },
+  ],
+  modelRows:[
+    {sec:'Sources & Uses'},
+    {key:'totDebt',label:'Total Debt ($m)',   scalar:true},
+    {key:'equity', label:'Sponsor Equity ($m)',scalar:true},
+    {key:'lev',    label:'Leverage (×)',       scalar:true},
+    {key:'entMult',label:'Entry Multiple (×)', scalar:true,isTotal:true},
+    {sec:'Projections (Y1–Y5)'},
+    {key:'ebitdaY',label:'EBITDA ($m)'},
+    {key:'ebitY',  label:'EBIT ($m)',  isTotal:true},
+    {key:'totInt', label:'Interest ($m)'},
+    {key:'tlabal', label:'TLA Balance EOY ($m)'},
+    {sec:'Returns'},
+    {key:'niY',    label:'Net Income ($m)'},
+    {key:'fcfY',   label:'FCF ($m)',   isTotal:true},
+    {sec:'Exit'},
+    {key:'exitEbitda',label:'Exit EBITDA ($m)',scalar:true},
+    {key:'exitEV',    label:'Exit EV ($m)',   scalar:true,isTotal:true},
+    {key:'exitDebt',  label:'Exit Debt ($m)', scalar:true},
+    {key:'exitEq',    label:'Exit Equity ($m)',scalar:true,isTotal:true},
+    {key:'mom',       label:'MoM (×)',        scalar:true},
+    {key:'irr',       label:'IRR (%)',        scalar:true,isTotal:true},
+  ],
+};
+
+/* ── 3-STATEMENT MODEL — TechCorp Inc. ── */
+const MB_3S = {
+  id:'3s', title:'3-Statement Model — TechCorp Inc.', company:'TechCorp Inc.', sector:'Enterprise Software',
+  yrs:['Value'],
+  ans:{
+    cogs:196, gp:364, ebitda:229, ebit:214, ebt:206, tax:51.5, ni:154.5,
+    cfo:161.5, fcf:136.5, netCash:126.5, cashEnd:206.5,
+    reEnd:374.5, bsCheck:144.5,
+  },
+  steps:[
+    { id:'t1', title:'Income Statement',
+      narrative:'Build the IS top-down: Revenue − COGS = Gross Profit, then subtract OpEx and D&A to reach EBIT. Apply interest and tax to get Net Income — the key linkage row to the other two statements.',
+      formula:'Gross Profit = Revenue − COGS · EBIT = Gross Profit − OpEx − D&A · NI = (EBIT − Interest) × (1 − Tax)',
+      assumptions:['Revenue: $560m (given)','COGS: 35% of revenue','OpEx (SG&A + R&D): $135m (given)','D&A: $15m (given)','Interest: $8m (given)','Tax rate: 25%'],
+      scalar:true,
+      scalarRows:[
+        {key:'cogs',  label:'COGS ($m)',          hint:'Revenue × 35%: 560 × 0.35 = 196',      tol:0.5},
+        {key:'gp',    label:'Gross Profit ($m)',   hint:'Revenue − COGS: 560 − 196 = 364',        tol:0.5,isTotal:true},
+        {key:'ebitda',label:'EBITDA ($m)',          hint:'Gross Profit − OpEx: 364 − 135 = 229',  tol:0.5},
+        {key:'ebit',  label:'EBIT ($m)',            hint:'EBITDA − D&A: 229 − 15 = 214',          tol:0.5,isTotal:true},
+        {key:'ebt',   label:'EBT ($m)',             hint:'EBIT − Interest: 214 − 8 = 206',        tol:0.5},
+        {key:'tax',   label:'Tax ($m)',             hint:'EBT × 25%: 206 × 0.25 = 51.5',         tol:0.5},
+        {key:'ni',    label:'Net Income ($m)',      hint:'EBT − Tax: 206 − 51.5 = 154.5',         tol:0.5,isTotal:true},
+      ],
+    },
+    { id:'t2', title:'Cash Flow from Operations',
+      narrative:'Start with Net Income (linked from IS), add back non-cash D&A, then subtract the increase in NWC. An increase in working capital is a <em>use of cash</em> — the company needs more capital tied up in operations.',
+      formula:'CFO = Net Income + D&A − ΔNWC',
+      assumptions:['NI: links from IS','D&A: $15m','ΔNWC: +$8m increase (outflow)'],
+      scalar:true,
+      scalarRows:[
+        {key:'cfo',label:'Cash Flow from Operations ($m)',hint:'NI + D&A − ΔNWC: 154.5 + 15 − 8 = 161.5',tol:0.5,isTotal:true},
+      ],
+    },
+    { id:'t3', title:'CapEx, FCF & Financing',
+      narrative:'Subtract CapEx from CFO to get Free Cash Flow. Then account for debt repayment to arrive at the net change in cash. Ending cash links to the Balance Sheet — the critical BS plug.',
+      formula:'FCF = CFO − CapEx · Ending Cash = Starting Cash + Net Cash Change',
+      assumptions:['CapEx: $25m','Debt repayment: $10m','Starting cash: $80m'],
+      scalar:true,
+      scalarRows:[
+        {key:'fcf',     label:'Free Cash Flow ($m)',       hint:'CFO − CapEx: 161.5 − 25 = 136.5',          tol:0.5,isTotal:true},
+        {key:'netCash', label:'Net Change in Cash ($m)',   hint:'FCF − Debt Repaid: 136.5 − 10 = 126.5',    tol:0.5},
+        {key:'cashEnd', label:'Ending Cash ($m)',          hint:'Starting Cash + Net Change: 80 + 126.5 = 206.5',tol:0.5,isTotal:true},
+      ],
+    },
+    { id:'t4', title:'Balance Sheet Links & Check',
+      narrative:'The three statements connect through two key links: (1) Net Income → Retained Earnings, (2) Ending Cash → Cash on BS. The BS must balance: ΔAssets = ΔLiabilities + ΔEquity.',
+      formula:'ΔRE = +NI (no dividends) · ΔAssets = ΔCash + ΔPPE + ΔNWC = ΔDebt + ΔRE',
+      assumptions:['Starting RE: $220m','No dividends paid','Verify: ΔAssets = ΔLiab + ΔEquity'],
+      scalar:true,
+      scalarRows:[
+        {key:'reEnd',   label:'Ending Retained Earnings ($m)',  hint:'Starting RE + NI: 220 + 154.5 = 374.5',  tol:0.5},
+        {key:'bsCheck', label:'ΔTotal Assets (= ΔLiab + ΔEquity, $m)', hint:'ΔCash $126.5 + ΔPPE (CapEx−D&A) $10 + ΔNWC $8 = 144.5 = ΔDebt −$10 + ΔRE +$154.5',tol:1,isTotal:true},
+      ],
+    },
+  ],
+  modelRows:[
+    {sec:'Income Statement'},
+    {key:'cogs',  label:'COGS ($m)',         scalar:true},
+    {key:'gp',    label:'Gross Profit ($m)', scalar:true,isTotal:true},
+    {key:'ebitda',label:'EBITDA ($m)',        scalar:true},
+    {key:'ebit',  label:'EBIT ($m)',          scalar:true,isTotal:true},
+    {key:'ni',    label:'Net Income ($m)',    scalar:true,isTotal:true},
+    {sec:'Cash Flow Statement'},
+    {key:'cfo',    label:'Cash from Ops ($m)',  scalar:true,isTotal:true},
+    {key:'fcf',    label:'Free Cash Flow ($m)', scalar:true,isTotal:true},
+    {key:'cashEnd',label:'Ending Cash ($m)',    scalar:true,isTotal:true},
+    {sec:'Balance Sheet'},
+    {key:'reEnd',   label:'Retained Earnings ($m)',scalar:true},
+    {key:'bsCheck', label:'ΔAssets = ΔL+E ($m)', scalar:true,isTotal:true},
+  ],
+};
+
+/* ── M&A ACCRETION / DILUTION — GlobalTech / TargetSoft ── */
+const MB_MA = {
+  id:'ma', title:'M&A Accretion/Dilution — GlobalTech & TargetSoft', company:'GlobalTech / TargetSoft', sector:'Technology M&A',
+  yrs:['Value'],
+  ans:{
+    cashSplit:300, stockSplit:300, newShares:7.5, pfShares:107.5,
+    intAfterTax:9, synAfterTax:22.5,
+    pfNI:263.5, pfEPS:2.45, epsChg:0.45, accretion:22.5,
+  },
+  steps:[
+    { id:'m1', title:'Deal Structure & Consideration',
+      narrative:'Structure the deal: how much is paid in cash vs. stock? Stock consideration creates new shares for the acquirer — these dilute the existing shareholder base and reduce pro-forma EPS.',
+      formula:'New Shares = Stock Consideration / Acquirer Share Price',
+      assumptions:['Purchase price: $600m (given)','Financing: 50% cash / 50% stock','Acquirer share price: $40 (given)','Existing shares: 100m (given)'],
+      scalar:true,
+      scalarRows:[
+        {key:'cashSplit', label:'Cash Consideration ($m)',  hint:'Purchase price × 50%: 600 × 0.50 = 300',          tol:0.5},
+        {key:'stockSplit',label:'Stock Consideration ($m)', hint:'Purchase price × 50%: 600 × 0.50 = 300',          tol:0.5},
+        {key:'newShares', label:'New Shares Issued (m)',    hint:'Stock Consideration / Share Price: 300 / 40 = 7.5',tol:0.1},
+        {key:'pfShares',  label:'Pro Forma Shares (m)',     hint:'Existing + New: 100 + 7.5 = 107.5',               tol:0.1,isTotal:true},
+      ],
+    },
+    { id:'m2', title:'P&L Adjustments',
+      narrative:'Two adjustments hit Pro Forma Net Income: (1) interest cost on cash used — a <em>negative</em> impact; (2) synergies — a <em>positive</em>. Both are on an after-tax basis since they flow through the income statement.',
+      formula:'After-tax = Pre-tax × (1 − Tax Rate)',
+      assumptions:['Interest on $300m cash @ 4%','Pre-tax synergies: $30m','Tax rate: 25%'],
+      scalar:true,
+      scalarRows:[
+        {key:'intAfterTax', label:'After-tax Interest Cost ($m)',  hint:'300 × 4% × (1−25%): 12 × 0.75 = 9.0',  tol:0.2},
+        {key:'synAfterTax', label:'After-tax Synergies ($m)',      hint:'30 × (1−25%): 30 × 0.75 = 22.5',        tol:0.2,isTotal:true},
+      ],
+    },
+    { id:'m3', title:'Pro Forma Net Income',
+      narrative:'Build Pro Forma NI by combining acquirer and target standalone earnings, then applying the two adjustments. Every dollar of NI that changes flows directly into the EPS accretion/dilution calculation.',
+      formula:'PF NI = Acquirer NI + Target NI − After-tax Interest + After-tax Synergies',
+      assumptions:['GlobalTech standalone NI: $200m (given)','TargetSoft NI: $50m (given)'],
+      scalar:true,
+      scalarRows:[
+        {key:'pfNI',label:'Pro Forma Net Income ($m)',hint:'200 + 50 − 9 + 22.5 = 263.5',tol:0.5,isTotal:true},
+      ],
+    },
+    { id:'m4', title:'Pro Forma EPS & Accretion',
+      narrative:'Divide Pro Forma NI by the new diluted share count. Compare to standalone EPS. A higher PF EPS = accretive. If the deal is dilutive, the board needs to be convinced that synergies or strategic rationale justify the dilution.',
+      formula:'PF EPS = PF NI / PF Shares · Accretion % = (PF EPS − SA EPS) / SA EPS',
+      assumptions:['Standalone EPS: $2.00 (NI $200m ÷ 100m shares)','PF Shares: from Step 1'],
+      scalar:true,
+      scalarRows:[
+        {key:'pfEPS',    label:'Pro Forma EPS ($)',      hint:'PF NI / PF Shares: 263.5 / 107.5 = 2.45',          tol:0.05,isTotal:true},
+        {key:'epsChg',   label:'EPS Change ($)',          hint:'PF EPS − SA EPS: 2.45 − 2.00 = 0.45',             tol:0.05},
+        {key:'accretion',label:'Accretion / Dilution (%)',hint:'EPS Change / SA EPS: 0.45 / 2.00 × 100 = 22.5%',  tol:0.5,isTotal:true},
+      ],
+    },
+  ],
+  modelRows:[
+    {sec:'Deal Structure'},
+    {key:'cashSplit', label:'Cash Consideration ($m)',  scalar:true},
+    {key:'stockSplit',label:'Stock Consideration ($m)', scalar:true},
+    {key:'newShares', label:'New Shares Issued (m)',    scalar:true},
+    {key:'pfShares',  label:'Pro Forma Shares (m)',     scalar:true,isTotal:true},
+    {sec:'P&L Adjustments'},
+    {key:'intAfterTax',label:'After-tax Interest ($m)', scalar:true},
+    {key:'synAfterTax',label:'After-tax Synergies ($m)',scalar:true,isTotal:true},
+    {sec:'Returns'},
+    {key:'pfNI',     label:'Pro Forma NI ($m)',         scalar:true,isTotal:true},
+    {key:'pfEPS',    label:'Pro Forma EPS ($)',         scalar:true,isTotal:true},
+    {key:'epsChg',   label:'EPS Change ($)',            scalar:true},
+    {key:'accretion',label:'Accretion / Dilution (%)', scalar:true,isTotal:true},
+  ],
+};
+
+/* ── COMPARABLE COMPANIES — TechPeer Group ── */
+const MB_COMPS = {
+  id:'comps', title:'Trading Comps — TechPeer Group', company:'TechPeer Group (3 Peers)', sector:'Enterprise Software — Valuing DataSoft Inc.',
+  yrs:['AppCo','CloudBase','DataSys'],
+  ans:{
+    ev:      [3600, 2000, 5600],
+    evRev:   [4.50, 4.35, 4.67],
+    evEbitda:[18.0, 17.4, 18.2],
+    pe:      [26.7, 27.1, 26.6],
+    tgtEvRev:1575, tgtEvEbitda:1530, tgtPE:1335, midEV:1545, midEq:1425,
+  },
+  steps:[
+    { id:'c1', title:'Enterprise Value Build',
+      narrative:'Calculate EV for each comparable company. EV = Market Cap + Net Debt. This is the capital-structure-neutral value of the business — what you\'d pay to own the whole thing, debt included.',
+      formula:'Enterprise Value = Market Cap + Net Debt',
+      assumptions:['AppCo: MCap $3,200m, Net Debt $400m','CloudBase: MCap $1,840m, Net Debt $160m','DataSys: MCap $5,060m, Net Debt $540m'],
+      rows:[{key:'ev',label:'Enterprise Value ($m)',tol:0.5,hints:['3200+400=3600','1840+160=2000','5060+540=5600']}],
+    },
+    { id:'c2', title:'EV / Revenue Multiples',
+      narrative:'Divide each company\'s EV by its revenue. EV/Revenue is used for high-growth or early-stage companies where EBITDA is low or negative. It\'s a cruder metric — use alongside EBITDA multiples.',
+      formula:'EV / Revenue = Enterprise Value / Annual Revenue',
+      assumptions:['AppCo Revenue: $800m','CloudBase Revenue: $460m','DataSys Revenue: $1,200m'],
+      rows:[{key:'evRev',label:'EV/Revenue (×)',tol:0.05,hints:['3600/800=4.50','2000/460=4.35','5600/1200=4.67']}],
+    },
+    { id:'c3', title:'EV / EBITDA Multiples',
+      narrative:'The primary valuation multiple in IB. EV/EBITDA is capital-structure neutral and strips out non-cash charges — making it comparable across companies with different D&A policies and debt levels.',
+      formula:'EV / EBITDA = Enterprise Value / EBITDA',
+      assumptions:['AppCo EBITDA: $200m','CloudBase EBITDA: $115m','DataSys EBITDA: $308m'],
+      rows:[{key:'evEbitda',label:'EV/EBITDA (×)',tol:0.1,hints:['3600/200=18.0','2000/115=17.4','5600/308=18.2']}],
+    },
+    { id:'c4', title:'P/E Multiples & Target Valuation',
+      narrative:'Calculate P/E for each peer, then apply median multiples to value the target DataSoft Inc. The valuation range from multiple methodologies gives you a "football field" — IB never uses a single number.',
+      formula:'P/E = Market Cap / Net Income · Implied EV = Target Metric × Median Multiple',
+      assumptions:['AppCo NI: $120m, MCap: $3,200m','CloudBase NI: $68m, MCap: $1,840m','DataSys NI: $190m, MCap: $5,060m','DataSoft: Rev $350m, EBITDA $85m, NI $50m, Net Debt $120m'],
+      rows:[{key:'pe',label:'P/E Multiple (×)',tol:0.2,hints:['3200/120=26.7','1840/68=27.1','5060/190=26.6']}],
+    },
+    { id:'c5', title:'Implied Valuation of DataSoft',
+      narrative:'Apply the median peer multiples to DataSoft\'s financials. Each methodology gives a different implied EV. The midpoint of the range is your central estimate — but always present the full range to the board.',
+      formula:'Implied EV = DataSoft Metric × Median Multiple',
+      assumptions:['Median EV/Rev: 4.50×','Median EV/EBITDA: 18.0×','Median P/E: 26.7× (→ Equity, add Net Debt for EV)','DataSoft Net Debt: $120m'],
+      scalar:true,
+      scalarRows:[
+        {key:'tgtEvRev',  label:'Implied EV via EV/Rev ($m)',    hint:'DataSoft Rev × 4.50: 350 × 4.50 = 1,575',       tol:5},
+        {key:'tgtEvEbitda',label:'Implied EV via EV/EBITDA ($m)',hint:'DataSoft EBITDA × 18.0: 85 × 18.0 = 1,530',     tol:5},
+        {key:'tgtPE',     label:'Implied Equity via P/E ($m)',   hint:'DataSoft NI × 26.7: 50 × 26.7 = 1,335',         tol:8,isTotal:true},
+        {key:'midEV',     label:'Midpoint EV ($m)',              hint:'Average of EV methods: (1575+1530)/2 = 1,552 — accept ~1,540-1,570',tol:20},
+        {key:'midEq',     label:'Implied Equity Value ($m)',     hint:'Midpoint EV − Net Debt: ~1,552 − 120 = 1,432 — accept ~1,410-1,455',tol:25,isTotal:true},
+      ],
+    },
+  ],
+  modelRows:[
+    {sec:'EV Build'},
+    {key:'ev',      label:'Enterprise Value ($m)'},
+    {sec:'Multiples'},
+    {key:'evRev',   label:'EV / Revenue (×)'},
+    {key:'evEbitda',label:'EV / EBITDA (×)'},
+    {key:'pe',      label:'P/E (×)'},
+    {sec:'DataSoft Implied Value'},
+    {key:'tgtEvRev',   label:'Implied EV via EV/Rev ($m)',    scalar:true},
+    {key:'tgtEvEbitda',label:'Implied EV via EV/EBITDA ($m)', scalar:true},
+    {key:'tgtPE',      label:'Implied Equity via P/E ($m)',   scalar:true,isTotal:true},
+    {key:'midEV',      label:'Midpoint EV ($m)',              scalar:true},
+    {key:'midEq',      label:'Implied Equity ($m)',           scalar:true,isTotal:true},
+  ],
+};
+
+const MB_ALL = { dcf:MB_DCF, lbo:MB_LBO, '3s':MB_3S, ma:MB_MA, comps:MB_COMPS };
+
+const MB_CARDS = [
+  { id:'3s',    icon:'📋', title:'3-Statement Model',     co:'TechCorp Inc. — Enterprise Software',     steps:4, path:'IS → CFS → FCF → BS Link' },
+  { id:'dcf',   icon:'📈', title:'DCF Valuation',          co:'AquaCorp Inc. — Consumer Staples',        steps:6, path:'Revenue → EBITDA → UFCF → TV → Price' },
+  { id:'lbo',   icon:'🔩', title:'LBO Analysis',           co:'RetailCo Inc. — Retail · $525m Entry',   steps:5, path:'S&U → P&L → Debt Sched → FCF → Returns' },
+  { id:'ma',    icon:'🤝', title:'M&A Accretion/Dilution', co:'GlobalTech acquires TargetSoft · $600m',  steps:4, path:'Deal → Adjustments → PF NI → PF EPS' },
+  { id:'comps', icon:'📊', title:'Trading Comps',           co:'TechPeer Group — Valuing DataSoft Inc.', steps:5, path:'EV → Rev × → EBITDA × → P/E → Target' },
+];
+
+function toggleModelBuilder() {
+  showModelBuilder = !showModelBuilder;
+  document.getElementById('modelBuilderModal').classList.toggle('open', showModelBuilder);
+  updateToolsItemState('modelBuilderBtn', showModelBuilder);
+  if (showModelBuilder && !mbModel) renderMBSelection();
+}
+
+function renderMBSelection() {
+  document.getElementById('modelBuilderSubtitle').textContent = 'Choose a model to build from scratch, step by step';
+  document.getElementById('modelBuilderBody').innerHTML =
+    `<div style="padding:18px;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;overflow-y:auto;width:100%">
+      ${MB_CARDS.map(c => `
+        <div class="mb-card" onclick="selectMBModel('${c.id}')">
+          <div class="mb-card-icon">${c.icon}</div>
+          <div class="mb-card-title">${c.title}</div>
+          <div class="mb-card-co">${c.co}</div>
+          <div class="mb-card-bullets">
+            <div class="mb-card-bullet">${c.steps} guided steps</div>
+            <div class="mb-card-bullet">${c.path}</div>
+          </div>
+        </div>`).join('')}
+    </div>`;
+}
+
+function selectMBModel(type) {
+  mbModel = MB_ALL[type];
+  mbStep = 0;
+  mbStepState = {};
+  renderMBStep();
+}
+
+function mbStepKey(stepId, fieldKey, colIdx) {
+  return colIdx !== undefined ? `${stepId}_${fieldKey}_${colIdx}` : `${stepId}_${fieldKey}`;
+}
+
+function isMBStepDone(step) {
+  const fields = step.scalar ? step.scalarRows : step.rows;
+  return fields.every(r => {
+    if (step.scalar || r.scalar) {
+      const k = mbStepKey(step.id, r.key);
+      return mbStepState[k]?.status === 'ok';
+    } else {
+      return mbModel.yrs.every((_,i) => mbStepState[mbStepKey(step.id, r.key, i)]?.status === 'ok');
+    }
+  });
+}
+
+function renderMBStep() {
+  const step = mbModel.steps[mbStep];
+  const totalSteps = mbModel.steps.length;
+  const done = isMBStepDone(step);
+  const isLast = mbStep === totalSteps - 1;
+
+  document.getElementById('modelBuilderSubtitle').textContent = `${mbModel.title} · Step ${mbStep+1} of ${totalSteps}`;
+
+  // Dots
+  const dots = mbModel.steps.map((s, i) => {
+    const cls = i < mbStep ? 'mb-dot done' : i === mbStep ? 'mb-dot active' : 'mb-dot';
+    return `<div class="${cls}"></div>`;
+  }).join('');
+
+  const leftHTML = renderMBLeft(step, done, isLast);
+  const rightHTML = renderMBRight();
+
+  document.getElementById('modelBuilderBody').innerHTML = `
+    <div class="mb-layout">
+      <div class="mb-left">
+        <div class="mb-step-hdr">
+          <div class="mb-step-num">Step ${mbStep+1} of ${totalSteps} — ${mbModel.company}</div>
+          <div class="mb-step-title">${step.title}</div>
+          <div class="mb-step-narrative">${step.narrative}</div>
+          ${step.formula ? `<div style="font-family:'JetBrains Mono',monospace;font-size:8.5px;background:var(--bbg);border:1px solid var(--bbrd);color:var(--blue);padding:3px 8px;border-radius:3px;display:inline-block;margin-top:5px">${step.formula}</div>` : ''}
+        </div>
+        <div class="mb-step-body">
+          <div class="mb-assumptions">${step.assumptions.map(a=>`<span class="mb-assumption">${a}</span>`).join('')}</div>
+          ${leftHTML}
+        </div>
+        <div class="mb-footer">
+          <div class="mb-dots">${dots}</div>
+          <div class="mb-nav">
+            ${mbStep > 0 ? `<button class="mb-back" onclick="mbBack()">← Back</button>` : `<button class="mb-back" onclick="mbBackToSelect()">⊞ Models</button>`}
+            <button class="mb-check" onclick="mbCheck()">Check ✓</button>
+            <button class="mb-next show" id="mbNextBtn" style="${done?'':'display:none'}" onclick="mbNext()">${isLast ? 'Finish 🎉' : 'Next Step →'}</button>
+          </div>
+        </div>
+      </div>
+      <div class="mb-right">
+        <div class="mb-model-panel">
+          <div class="mb-model-hdr">Running Model — ${mbModel.company}</div>
+          ${rightHTML}
+        </div>
+      </div>
+    </div>`;
+}
+
+function renderMBLeft(step, done, isLast) {
+  if (step.scalar) {
+    return `<div class="mb-scalar-rows">${step.scalarRows.map(r => {
+      const k = mbStepKey(step.id, r.key);
+      const st = mbStepState[k] || {};
+      const cls = st.status === 'ok' ? 'ok' : st.status === 'bad' ? 'bad' : '';
+      const showHint = st.attempts >= 2 && st.status !== 'ok';
+      return `<div class="mb-srow${r.isTotal?' total':''}">
+        <div>
+          <div class="mb-srow-lbl">${r.label}</div>
+          ${showHint ? `<div class="mb-srow-hint">💡 ${r.hint}</div>` : ''}
+        </div>
+        <input class="mb-cell mb-scalar-input ${cls}" id="mbi_${step.id}_${r.key}" type="number" step="0.01"
+          value="${st.status==='ok' ? mbModel.ans[r.key] : (st.userVal??'')}"
+          ${st.status==='ok'?'disabled':''} placeholder="?"
+          onkeydown="if(event.key==='Enter')mbCheck()"
+          style="width:100px">
+        <span style="color:${st.status==='ok'?'var(--green)':st.status==='bad'?'var(--red)':'transparent'};font-size:12px">${st.status==='ok'?'✓':st.status==='bad'?'✗':'✓'}</span>
+      </div>`;
+    }).join('')}</div>`;
+  }
+
+  const yrs = mbModel.yrs;
+  const rows = step.rows;
+  return `<table class="mb-input-tbl">
+    <thead><tr>
+      <th></th>
+      ${yrs.map(y=>`<th>${y}</th>`).join('')}
+    </tr></thead>
+    <tbody>
+    ${rows.map(r => {
+      const showHints = yrs.some((_,i) => (mbStepState[mbStepKey(step.id, r.key, i)]?.attempts||0) >= 2 && mbStepState[mbStepKey(step.id, r.key, i)]?.status !== 'ok');
+      let html = `<tr class="${r.isTotal?'mb-total-row':''}">
+        <td>${r.label}</td>
+        ${yrs.map((_,i) => {
+          const k = mbStepKey(step.id, r.key, i);
+          const st = mbStepState[k] || {};
+          const cls = st.status === 'ok' ? 'ok' : st.status === 'bad' ? 'bad' : '';
+          const ans = mbModel.ans[r.key][i];
+          return `<td><input class="mb-cell ${cls}" id="mbi_${step.id}_${r.key}_${i}" type="number" step="0.001"
+            value="${st.status==='ok' ? ans : (st.userVal??'')}"
+            ${st.status==='ok'?'disabled':''} placeholder="?"
+            onkeydown="if(event.key==='Enter')mbCheck()"></td>`;
+        }).join('')}
+      </tr>`;
+      if (showHints) {
+        html += `<tr class="mb-hint-row"><td></td>${yrs.map((_,i) => {
+          const k = mbStepKey(step.id, r.key, i);
+          const st = mbStepState[k] || {};
+          return `<td style="text-align:right;color:var(--t3);font-size:8px;font-family:'JetBrains Mono',monospace">${(st.attempts||0)>=2 && st.status!=='ok' ? r.hints[i] : ''}</td>`;
+        }).join('')}</tr>`;
+      }
+      return html;
+    }).join('')}
+    </tbody>
+  </table>`;
+}
+
+function renderMBRight() {
+  const rows = mbModel.modelRows;
+  const stepKeys = mbModel.steps.map(s => s.id);
+  const curStepId = mbModel.steps[mbStep].id;
+  const doneStepIds = new Set(stepKeys.slice(0, mbStep).filter((_,i) => isMBStepDone(mbModel.steps[i]) || i < mbStep));
+
+  // Which step owns which key?
+  const keyStepMap = {};
+  mbModel.steps.forEach(s => {
+    const fields = s.scalar ? s.scalarRows : (s.rows || []);
+    fields.forEach(r => { keyStepMap[r.key] = s.id; });
+  });
+
+  const stepOrder = stepKeys;
+  const curStepIdx = stepOrder.indexOf(curStepId);
+
+  function keyStatus(key) {
+    const owner = keyStepMap[key];
+    if (!owner) return 'future';
+    const ownerIdx = stepOrder.indexOf(owner);
+    if (ownerIdx < curStepIdx) return 'done';
+    if (ownerIdx === curStepIdx) return 'current';
+    return 'future';
+  }
+
+  function fmtVal(key, i, scalar) {
+    const ans = scalar ? mbModel.ans[key] : mbModel.ans[key]?.[i];
+    return ans !== undefined ? (typeof ans === 'number' ? (Math.abs(ans) < 10 ? ans.toFixed(2) : ans.toFixed(1)) : ans) : '—';
+  }
+
+  const yrs = mbModel.yrs;
+  let html = `<table class="mb-mtbl">
+    <thead><tr><th>Line Item</th>${yrs.map(y=>`<th>${y}</th>`).join('')}</tr></thead>
+    <tbody>`;
+
+  rows.forEach(row => {
+    if (row.sec) {
+      html += `<tr class="sec-hdr"><td colspan="${1+yrs.length}">${row.sec}</td></tr>`;
+      return;
+    }
+    const status = keyStatus(row.key);
+    const cls = status === 'done' ? 'v-done' : status === 'current' ? 'v-cur' : 'v-fut';
+    const rowCls = row.isTotal ? 'row-total' : '';
+    if (row.scalar) {
+      const val = status !== 'future' ? fmtVal(row.key, null, true) : '—';
+      html += `<tr class="${rowCls}"><td>${row.label}</td><td class="${cls}" colspan="${yrs.length}" style="text-align:center">${val}</td></tr>`;
+    } else {
+      html += `<tr class="${rowCls}"><td>${row.label}</td>${yrs.map((_,i) => {
+        const val = status !== 'future' ? fmtVal(row.key, i) : '—';
+        return `<td class="${cls}">${val}</td>`;
+      }).join('')}</tr>`;
+    }
+  });
+
+  html += '</tbody></table>';
+  return html;
+}
+
+function mbCheck() {
+  const step = mbModel.steps[mbStep];
+  const fields = step.scalar ? step.scalarRows : step.rows;
+  fields.forEach(r => {
+    if (step.scalar || r.scalar) {
+      const k = mbStepKey(step.id, r.key);
+      if (!mbStepState[k]) mbStepState[k] = {};
+      const st = mbStepState[k];
+      if (st.status === 'ok') return;
+      const el = document.getElementById(`mbi_${step.id}_${r.key}`);
+      if (!el) return;
+      const val = parseFloat(el.value);
+      if (isNaN(val)) { st.status = 'bad'; st.attempts = (st.attempts||0)+1; return; }
+      st.userVal = val; st.attempts = (st.attempts||0)+1;
+      const ans = mbModel.ans[r.key];
+      st.status = Math.abs(val - ans) <= (r.tol||0.5) ? 'ok' : 'bad';
+    } else {
+      mbModel.yrs.forEach((_, i) => {
+        const k = mbStepKey(step.id, r.key, i);
+        if (!mbStepState[k]) mbStepState[k] = {};
+        const st = mbStepState[k];
+        if (st.status === 'ok') return;
+        const el = document.getElementById(`mbi_${step.id}_${r.key}_${i}`);
+        if (!el) return;
+        const val = parseFloat(el.value);
+        if (isNaN(val)) { st.status = 'bad'; st.attempts = (st.attempts||0)+1; return; }
+        st.userVal = val; st.attempts = (st.attempts||0)+1;
+        const ans = mbModel.ans[r.key][i];
+        st.status = Math.abs(val - ans) <= (r.tol||0.5) ? 'ok' : 'bad';
+      });
+    }
+  });
+  renderMBStep();
+  if (isMBStepDone(step)) {
+    // Scroll next button into view
+    setTimeout(() => { const n = document.getElementById('mbNextBtn'); if(n) n.scrollIntoView({behavior:'smooth',block:'nearest'}); }, 50);
+  }
+}
+
+function mbNext() {
+  if (!isMBStepDone(mbModel.steps[mbStep])) return;
+  if (mbStep === mbModel.steps.length - 1) { renderMBComplete(); return; }
+  mbStep++;
+  renderMBStep();
+}
+
+function mbBack() {
+  if (mbStep > 0) { mbStep--; renderMBStep(); }
+}
+
+function mbBackToSelect() {
+  mbModel = null; mbStep = 0; mbStepState = {};
+  renderMBSelection();
+}
+
+function renderMBComplete() {
+  const ans = mbModel.ans;
+  let summaryHTML = '';
+  if (mbModel.id === 'dcf') {
+    summaryHTML = `
+      <div class="mb-complete-val"><div class="mb-complete-v">$${ans.ev.toFixed(0)}m</div><div class="mb-complete-l">Enterprise Value</div></div>
+      <div class="mb-complete-val"><div class="mb-complete-v">$${ans.price.toFixed(2)}</div><div class="mb-complete-l">Share Price</div></div>
+      <div class="mb-complete-val"><div class="mb-complete-v">${ans.pvtv.toFixed(0)}/${ans.ev.toFixed(0)}</div><div class="mb-complete-l">TV as % of EV</div></div>`;
+  } else {
+    summaryHTML = `
+      <div class="mb-complete-val"><div class="mb-complete-v">${ans.mom.toFixed(2)}×</div><div class="mb-complete-l">MoM Return</div></div>
+      <div class="mb-complete-val"><div class="mb-complete-v">${ans.irr.toFixed(1)}%</div><div class="mb-complete-l">IRR</div></div>
+      <div class="mb-complete-val"><div class="mb-complete-v">$${ans.exitEq.toFixed(0)}m</div><div class="mb-complete-l">Exit Equity</div></div>`;
+  }
+  document.getElementById('modelBuilderSubtitle').textContent = `${mbModel.title} — Complete`;
+  document.getElementById('modelBuilderBody').innerHTML = `
+    <div class="mb-complete">
+      <div class="mb-complete-icon">🎉</div>
+      <div class="mb-complete-h">Model Complete</div>
+      <div class="mb-complete-sub">You built a full ${mbModel.id === 'dcf' ? 'DCF Valuation' : 'LBO Analysis'} for ${mbModel.company} from scratch. Review the key outputs below.</div>
+      <div class="mb-complete-vals">${summaryHTML}</div>
+      <button class="mb-back-sel" onclick="mbBackToSelect()">⊞ Build Another Model</button>
+    </div>`;
+}
+
+/* ============================================================
    FIT / BEHAVIORAL QUESTIONS
 ============================================================ */
 const BEHAV_CATS = [
@@ -8483,6 +9264,20 @@ function stopMockTimer() {
       <button class="modal-close" onclick="toggleMock()">✕</button>
     </div>
     <div class="mock-body" id="mockBody"></div>
+  </div>
+</div>
+
+<!-- MODEL BUILDER MODAL -->
+<div class="xdrill-modal" id="modelBuilderModal" onclick="if(event.target===this)toggleModelBuilder()">
+  <div class="xdrill-box" style="max-width:1020px;width:97%;max-height:88vh">
+    <div class="xdrill-head">
+      <div>
+        <div class="fit-head-title">🏗️ Model Builder</div>
+        <div class="fit-head-sub" id="modelBuilderSubtitle">Step-by-step guided model construction</div>
+      </div>
+      <button class="modal-close" onclick="toggleModelBuilder()">✕</button>
+    </div>
+    <div class="xdrill-body" id="modelBuilderBody" style="padding:0;gap:0;flex-direction:row;overflow:hidden;min-height:480px"></div>
   </div>
 </div>
 
