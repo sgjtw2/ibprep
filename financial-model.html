@@ -1728,6 +1728,16 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
   .pulse-box { border-radius:12px 12px 0 0; max-height:90vh; width:100%; }
   .pulse-grid { grid-template-columns:1fr 1fr; }
 }
+
+/* ── PAPER LBO TIMER ─────────────────────────────────── */
+.plbo-timer-wrap { display:flex; align-items:center; gap:7px; padding:4px 10px; background:var(--s1); border:1px solid var(--b1); border-radius:5px; }
+.plbo-timer-display { font-family:'JetBrains Mono',monospace; font-size:19px; font-weight:700; color:var(--t1); min-width:50px; text-align:center; }
+.plbo-timer-display.warn { color:#D97706; }
+.plbo-timer-display.crit { color:var(--red); animation:tick .5s step-end infinite; }
+@keyframes tick { 0%,100%{opacity:1} 50%{opacity:.4} }
+.plbo-timer-btn { padding:4px 9px; border:1px solid var(--b1); border-radius:3px; background:none; font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:8px; letter-spacing:.06em; text-transform:uppercase; color:var(--t3); cursor:pointer; transition:all .12s; }
+.plbo-timer-btn.go { border-color:var(--green); color:var(--green); }
+.plbo-timer-btn.pause { border-color:#D97706; color:#D97706; }
 </style>
 </head>
 <body>
@@ -1740,6 +1750,8 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
   <button class="mtab"    id="mtab3" onclick="setModel(3)">M&amp;A / Accretion</button>
   <button class="mtab"    id="mtab4" onclick="setModel(4)">Comps Analysis</button>
   <button class="mtab"    id="mtab5" onclick="setModel(5)">Restructuring</button>
+  <button class="mtab"    id="mtab6" onclick="setModel(6)">SOTP</button>
+  <button class="mtab"    id="mtab7" onclick="setModel(7)">DDM</button>
   <div class="mbar-spacer"></div>
   <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" title="Toggle light / dark">☀️</button>
 </div>
@@ -2822,6 +2834,195 @@ const SHEETS_RX_ORIG = [
 ];
 
 /* ============================================================
+   SOTP — SUM-OF-THE-PARTS VALUATION
+============================================================ */
+const YEARS_SOTP = ['Cloud SW','Industrials','Consumer','Corp HQ','TOTAL'];
+const HIST_SOTP  = [];
+const PROJ_SOTP  = [0,1,2,3,4];
+
+const SHEETS_SOTP_ORIG = [
+{
+  name:'Segment Overview',
+  rows:[
+    {type:T.TITLE, label:'SEGMENT OVERVIEW — CongloCo Holdings Inc. (LTM 2024, $M)', values:[]},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'REVENUE'},
+    {type:T.ROW, label:'Revenue ($M)', indent:0, values:[172,310,215,null,697], cfi:[C.INPUT,C.INPUT,C.INPUT,C.NONE,C.FORMULA], format:F.NUM, formula:'TOTAL = $172 + $310 + $215 = $697m'},
+    {type:T.ROW, label:'  Revenue Growth (YoY %)', indent:1, values:[.18,.05,.03,null,.08], format:F.PCT, formula:'Cloud SW +18%; Industrials +5%; Consumer +3%; blended +8%'},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'EBITDA'},
+    {type:T.ROW, label:'EBITDA ($M)', indent:0, values:[60,62,32,-15,139], cfi:[C.INPUT,C.INPUT,C.INPUT,C.INPUT,C.FORMULA], format:F.NUM, formula:'Corp HQ = unallocated group overhead (cash cost, not a revenue segment)'},
+    {type:T.PCT, label:'  EBITDA Margin %', values:[.349,.200,.149,null,.199], format:F.PCT},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'SEGMENT CONTEXT'},
+    {type:T.ROW, label:'Business Description', indent:1, values:['SaaS / Cloud Platform','Industrial OEM Equip.','Multi-channel Retail','Group Overhead',null], format:F.NONE},
+    {type:T.ROW, label:'Valuation Metric', indent:1, values:['EV/EBITDA','EV/EBITDA','EV/EBITDA','Cost Penalty',null], format:F.NONE},
+    {type:T.ROW, label:'Peer Multiple Range', indent:1, values:['12–18×','7–10×','5–7×','10× penalty',null], format:F.NONE, formula:'Position within range depends on growth and margin vs sector peers'},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'WHY SUM-OF-THE-PARTS?'},
+    {type:T.ROW, label:'vs Blended multiple', indent:1, values:[null,null,null,null,null], format:F.NONE, formula:'A blended 8.8× on $154m segment EBITDA = $1,355m EV — vs SOTP $1,528m segment EV. The cloud business earns 14× because of 18% growth, 35% margin, and SaaS revenue quality. Forcing a retail multiple on it destroys $240m of value. SOTP is always the right framework when segments have materially different growth, margin, or risk profiles.'},
+    {type:T.ROW, label:'Conglomerate discount', indent:1, values:[null,null,null,null,null], format:F.NONE, formula:'Listed conglomerates trade at a 10–20% discount to their SOTP because investors can already buy the pure-plays directly. The discount widens when management complexity is high or cross-subsidies exist. This is the core argument for spin-offs (GE, 3M, Honeywell): unlocking the conglomerate discount by giving each segment its own investor base.'},
+  ]
+},
+{
+  name:'SOTP Build',
+  rows:[
+    {type:T.TITLE, label:'SUM-OF-THE-PARTS VALUATION — CongloCo Holdings Inc. ($M)', values:[]},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'STEP 1 — SEGMENT EBITDA BASIS (LTM 2024)'},
+    {type:T.ROW, label:'LTM EBITDA ($M)', indent:1, values:[60,62,32,-15,139], cfi:[C.LINK,C.LINK,C.LINK,C.LINK,C.FORMULA], format:F.NUM},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'STEP 2 — MULTIPLES APPLIED'},
+    {type:T.ROW, label:'EV/EBITDA Multiple', indent:1, values:[14.0,8.0,6.0,10.0,null], cfi:[C.INPUT,C.INPUT,C.INPUT,C.INPUT,C.NONE], format:F.NUM, formula:'Cloud SW 14×: SaaS comps, high growth · Industrials 8×: mid-cycle peers · Consumer 6×: low-growth retail · Corp HQ: 10× penalty on overhead'},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'STEP 3 — SEGMENT ENTERPRISE VALUES'},
+    {type:T.ROW, label:'Segment EV ($M)', indent:1, values:[840,496,192,-150,1378], cfi:[C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA], format:F.NUM, formula:'= EBITDA × Multiple · Cloud: $60m×14×=$840m · Ind: $62m×8×=$496m · Cons: $32m×6×=$192m'},
+    {type:T.PCT, label:'  % of Total Segment EV', values:[.609,.360,.139,-0.109,1.000], format:F.PCT},
+    {type:T.BLANK},
+    {type:T.TOTAL, label:'TOTAL SEGMENT EV', values:[null,null,null,null,1378], cfi:[C.NONE,C.NONE,C.NONE,C.NONE,C.FORMULA], format:F.NUM, formula:'$840 + $496 + $192 − $150 = $1,378m'},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'STEP 4 — EV TO EQUITY BRIDGE'},
+    {type:T.ROW, label:'Total Segment EV ($M)', indent:1, values:[null,null,null,null,1378], cfi:[C.NONE,C.NONE,C.NONE,C.NONE,C.LINK], format:F.NUM},
+    {type:T.ROW, label:'Less: Total Financial Debt ($M)', indent:1, negative:true, values:[null,null,null,null,450], cfi:[C.NONE,C.NONE,C.NONE,C.NONE,C.INPUT], format:F.NUM, formula:'Total drawn bank debt + bonds (excludes operating liabilities)'},
+    {type:T.ROW, label:'Plus: Cash & Equivalents ($M)', indent:1, values:[null,null,null,null,80], cfi:[C.NONE,C.NONE,C.NONE,C.NONE,C.INPUT], format:F.NUM},
+    {type:T.SUBTOTAL, label:'Net Debt ($M)', values:[null,null,null,null,370], cfi:[C.NONE,C.NONE,C.NONE,C.NONE,C.FORMULA], format:F.NUM},
+    {type:T.BLANK},
+    {type:T.SUBTOTAL, label:'Equity Value ($M)', values:[null,null,null,null,1008], cfi:[C.NONE,C.NONE,C.NONE,C.NONE,C.FORMULA], format:F.NUM, formula:'= Total EV − Net Debt = $1,378m − $370m'},
+    {type:T.ROW, label:'Shares Outstanding (M)', indent:1, values:[null,null,null,null,50], cfi:[C.NONE,C.NONE,C.NONE,C.NONE,C.INPUT], format:F.NUM},
+    {type:T.OUTPUT, label:'Implied Share Price ($)', values:[null,null,null,null,20.16], cfi:[C.NONE,C.NONE,C.NONE,C.NONE,C.FORMULA], format:F.NUM, formula:'= $1,008m / 50m shares = $20.16'},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'CONGLOMERATE DISCOUNT CHECK'},
+    {type:T.ROW, label:'Blended Multiple EV ($M)', indent:1, values:[null,null,null,null,1222], format:F.NUM, formula:'= $139m net EBITDA × 8.8× blended — what market assigns without segment clarity'},
+    {type:T.ROW, label:'SOTP Premium ($M)', indent:1, values:[null,null,null,null,156], cfi:[C.NONE,C.NONE,C.NONE,C.NONE,C.FORMULA], format:F.NUM, formula:'= SOTP $1,378m − Blended $1,222m — value unlocked by segment-specific multiples'},
+    {type:T.ROW, label:'Conglomerate Discount %', indent:1, values:[null,null,null,null,.113], cfi:[C.NONE,C.NONE,C.NONE,C.NONE,C.FORMULA], format:F.PCT, formula:'= $156m / $1,378m = 11.3% — academic comps suggest 10–20% for diversified holding cos'},
+  ]
+},
+{
+  name:'Sensitivity',
+  rows:[
+    {type:T.TITLE, label:'SOTP SENSITIVITY — Implied Share Price ($) · Segment Multiples by Scenario', values:[]},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'MULTIPLE ASSUMPTIONS (Bear → Scenario 2 → Base → Scenario 4 → Bull)'},
+    {type:T.ROW, label:'Cloud SW EV/EBITDA', indent:1, values:[12.0,13.0,14.0,15.0,16.0], cfi:[C.INPUT,C.INPUT,C.INPUT,C.INPUT,C.INPUT], format:F.NUM},
+    {type:T.ROW, label:'Industrials EV/EBITDA', indent:1, values:[7.0,7.5,8.0,8.5,9.0], cfi:[C.INPUT,C.INPUT,C.INPUT,C.INPUT,C.INPUT], format:F.NUM},
+    {type:T.ROW, label:'Consumer EV/EBITDA', indent:1, values:[5.0,5.5,6.0,6.5,7.0], cfi:[C.INPUT,C.INPUT,C.INPUT,C.INPUT,C.INPUT], format:F.NUM},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'SEGMENT EVs ($M) BY SCENARIO'},
+    {type:T.ROW, label:'Cloud SW EV ($M)', indent:1, values:[720,780,840,900,960], cfi:[C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA], format:F.NUM},
+    {type:T.ROW, label:'Industrials EV ($M)', indent:1, values:[434,465,496,527,558], cfi:[C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA], format:F.NUM},
+    {type:T.ROW, label:'Consumer EV ($M)', indent:1, values:[160,176,192,208,224], cfi:[C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA], format:F.NUM},
+    {type:T.ROW, label:'Corp HQ EV ($M)', indent:1, negative:true, values:[-150,-150,-150,-150,-150], format:F.NUM},
+    {type:T.SUBTOTAL, label:'Total Segment EV ($M)', values:[1164,1271,1378,1485,1592], cfi:[C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA], format:F.NUM},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'EQUITY BRIDGE ($M)'},
+    {type:T.ROW, label:'Less: Net Debt ($M)', indent:1, negative:true, values:[370,370,370,370,370], format:F.NUM},
+    {type:T.SUBTOTAL, label:'Equity Value ($M)', values:[794,901,1008,1115,1222], cfi:[C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA], format:F.NUM},
+    {type:T.OUTPUT, label:'Implied Share Price ($)', values:[15.88,18.02,20.16,22.30,24.44], cfi:[C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA], format:F.NUM, formula:'Bear $15.88 → Base $20.16 → Bull $24.44 — $8.56 range driven by Cloud SW multiple (12× vs 16×)'},
+  ]
+}
+];
+
+/* ============================================================
+   DDM — DIVIDEND DISCOUNT MODEL
+============================================================ */
+const YEARS_DDM = ['2024A','2025E','2026E','2027E','2028E','2029E'];
+const HIST_DDM  = [0];
+const PROJ_DDM  = [1,2,3,4,5];
+
+const SHEETS_DDM_ORIG = [
+{
+  name:'Assumptions',
+  rows:[
+    {type:T.TITLE, label:'DDM ASSUMPTIONS — BankCo Financial Group', values:[]},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'COST OF EQUITY BUILD (CAPM)'},
+    {type:T.ROW, label:'Risk-Free Rate (10yr UST)', indent:1, values:[.045,null,null,null,null,null], cfi:[C.INPUT], format:F.PCT, formula:'Current 10yr US Treasury yield — the most important macro input in bank valuation'},
+    {type:T.ROW, label:'Equity Risk Premium (ERP)', indent:1, values:[.055,null,null,null,null,null], cfi:[C.INPUT], format:F.PCT, formula:'~5.5% implied ERP (Damodaran) — the required premium above risk-free for holding equities'},
+    {type:T.ROW, label:'Beta (Levered)', indent:1, values:[0.80,null,null,null,null,null], cfi:[C.INPUT], format:F.NUM, formula:'Regional banks β ≈ 0.8 — less cyclical than investment banks (β ~1.2) but rate-sensitive'},
+    {type:T.TOTAL, label:'Cost of Equity (CoE)', values:[.090,null,null,null,null,null], cfi:[C.FORMULA], format:F.PCT, formula:'= Rf + β × ERP = 4.5% + 0.8 × 5.5% = 9.0%'},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'GROWTH & PAYOUT ASSUMPTIONS'},
+    {type:T.ROW, label:'Net Income Growth Rate (g_ni)', indent:1, values:[.07,null,null,null,null,null], cfi:[C.INPUT], format:F.PCT, formula:'7% p.a. — NIM expansion, loan volume growth, and operating efficiency improvements'},
+    {type:T.ROW, label:'Dividend Payout Ratio', indent:1, values:[.45,null,null,null,null,null], cfi:[C.INPUT], format:F.PCT, formula:'45% payout — standard for well-capitalised US regional bank. Basel III CET1 buffers constrain distributions.'},
+    {type:T.ROW, label:'Terminal Dividend Growth (g)', indent:1, values:[.030,null,null,null,null,null], cfi:[C.INPUT], format:F.PCT, formula:'3.0% terminal — tied to long-run nominal GDP growth. Must remain < CoE or TV → ∞'},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'SHARE DATA'},
+    {type:T.ROW, label:'Shares Outstanding (M)', indent:1, values:[200,null,null,null,null,null], cfi:[C.INPUT], format:F.NUM},
+    {type:T.ROW, label:'Current Share Price ($)', indent:1, values:[18.50,null,null,null,null,null], cfi:[C.INPUT], format:F.NUM, formula:'Market price — compare to DDM implied value to assess over/undervaluation'},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'WHY DDM FOR BANKS?'},
+    {type:T.ROW, label:'Not DCF — why?', indent:1, values:[null,null,null,null,null,null], format:F.NONE, formula:'Banks use debt (deposits, wholesale funding) as raw material — you cannot separate "financial debt" from "operating debt." EV = Equity + Debt is meaningless when debt IS the business. EBITDA is irrelevant. FCF is undefined — lending is the investing activity. Dividends represent the actual sustainable cash return to equity holders after Basel III capital retention.'},
+    {type:T.ROW, label:'Key DDM insight', indent:1, values:[null,null,null,null,null,null], format:F.NONE, formula:'Gordon Growth: P = DPS / (CoE − g). If ROE > CoE, the bank creates value and P/BV > 1.0×. If ROE < CoE, it destroys value and P/BV < 1.0×. This is why high-ROE banks (JPMorgan ~17% ROE) trade at P/BV ~2.0× while low-ROE banks trade near book value. DDM and P/BV are two sides of the same model.'},
+  ]
+},
+{
+  name:'DDM Build',
+  rows:[
+    {type:T.TITLE, label:'DIVIDEND DISCOUNT MODEL — BankCo Financial Group ($)', values:[]},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'EARNINGS FORECAST'},
+    {type:T.ROW, label:'Net Income ($M)', indent:0, values:[400,428,458,490,524,561], cfi:[C.INPUT,C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA], format:F.NUM, formula:'Proj: = Prior Year × (1 + 7%)'},
+    {type:T.ROW, label:'Shares Outstanding (M)', indent:1, values:[200,200,200,200,200,200], cfi:[C.INPUT,C.INPUT,C.INPUT,C.INPUT,C.INPUT,C.INPUT], format:F.NUM},
+    {type:T.ROW, label:'EPS — Diluted ($)', indent:1, values:[2.00,2.14,2.29,2.45,2.62,2.81], cfi:[C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA], format:F.NUM, formula:'= Net Income ($M) / Shares (M)'},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'DIVIDEND FORECAST'},
+    {type:T.ROW, label:'Dividend Payout Ratio', indent:1, values:[.45,.45,.45,.45,.45,.45], cfi:[C.INPUT,C.INPUT,C.INPUT,C.INPUT,C.INPUT,C.INPUT], format:F.PCT},
+    {type:T.ROW, label:'Dividends Per Share (DPS) ($)', indent:1, values:[0.90,0.96,1.03,1.10,1.18,1.26], cfi:[C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA], format:F.NUM, formula:'= EPS × Payout Ratio'},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'PRESENT VALUE OF DIVIDENDS  (CoE = 9.0%)'},
+    {type:T.ROW, label:'Discount Period (n)', indent:1, values:[null,1,2,3,4,5], format:F.NUM, formula:'n=1 to 5 for projected dividends; 2024A already paid'},
+    {type:T.ROW, label:'PV Factor  [1 / (1.09)^n]', indent:1, values:[null,0.917,0.842,0.772,0.708,0.650], cfi:[C.NONE,C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA], format:F.NUM, formula:'= 1 / (1+CoE)^n — shrinks each future dollar into today\'s equivalent'},
+    {type:T.ROW, label:'PV of DPS ($)', indent:1, values:[null,0.88,0.87,0.85,0.84,0.82], cfi:[C.NONE,C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA,C.FORMULA], format:F.NUM, formula:'= DPS × PV Factor'},
+    {type:T.SUBTOTAL, label:'Sum PV(Dividends)  2025E–2029E ($)', values:[null,4.26,null,null,null,null], cfi:[C.NONE,C.FORMULA], format:F.NUM, formula:'Sum of 5 discounted DPS values = $4.26'},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'TERMINAL VALUE  (Gordon Growth)'},
+    {type:T.ROW, label:'Terminal DPS 2030E ($)', indent:1, values:[null,null,null,null,null,1.30], cfi:[C.NONE,C.NONE,C.NONE,C.NONE,C.NONE,C.FORMULA], format:F.NUM, formula:'= DPS 2029E × (1+g) = $1.26 × 1.03 = $1.298'},
+    {type:T.ROW, label:'Terminal Growth Rate (g)', indent:1, values:[null,null,null,null,null,.030], cfi:[C.NONE,C.NONE,C.NONE,C.NONE,C.NONE,C.LINK], format:F.PCT},
+    {type:T.ROW, label:'CoE − g  (Capitalisation Rate)', indent:1, values:[null,null,null,null,null,.060], cfi:[C.NONE,C.NONE,C.NONE,C.NONE,C.NONE,C.FORMULA], format:F.PCT, formula:'= 9.0% − 3.0% = 6.0% — this spread is the key sensitivity driver. A 1% change here moves TV by ~16%.'},
+    {type:T.SUBTOTAL, label:'Terminal Value (at end 2029E) ($)', values:[null,null,null,null,null,21.63], cfi:[C.NONE,C.NONE,C.NONE,C.NONE,C.NONE,C.FORMULA], format:F.NUM, formula:'= $1.298 / 6.0% = $21.63 — the perpetuity value of all dividends beyond 2029'},
+    {type:T.ROW, label:'PV of Terminal Value ($)', indent:1, values:[null,null,null,null,null,14.06], cfi:[C.NONE,C.NONE,C.NONE,C.NONE,C.NONE,C.FORMULA], format:F.NUM, formula:'= $21.63 × 0.650 = $14.06 — TV is 77% of total value'},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'EQUITY VALUE PER SHARE'},
+    {type:T.ROW, label:'Sum PV Dividends ($)', indent:1, values:[null,4.26,null,null,null,null], cfi:[C.NONE,C.FORMULA], format:F.NUM},
+    {type:T.ROW, label:'PV of Terminal Value ($)', indent:1, values:[null,14.06,null,null,null,null], cfi:[C.NONE,C.LINK], format:F.NUM},
+    {type:T.OUTPUT, label:'DDM Implied Share Price ($)', values:[null,18.32,null,null,null,null], cfi:[C.NONE,C.FORMULA], format:F.NUM, formula:'$4.26 + $14.06 = $18.32 vs market $18.50 → 1.0% premium → roughly fairly valued'},
+    {type:T.ROW, label:'Current Market Price ($)', indent:1, values:[null,18.50,null,null,null,null], cfi:[C.NONE,C.INPUT], format:F.NUM},
+    {type:T.PCT, label:'  Premium / (Discount) to DDM', values:[null,.010,null,null,null,null], cfi:[C.NONE,C.FORMULA], format:F.PCT, formula:'= ($18.50 − $18.32) / $18.32 = 1.0% premium'},
+  ]
+},
+{
+  name:'Sensitivity',
+  rows:[
+    {type:T.TITLE, label:'DDM SENSITIVITY — Implied Share Price ($) · CoE vs Terminal Growth Rate', values:[]},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'BEAR  (High CoE / Low Terminal Growth)'},
+    {type:T.ROW, label:'CoE 10.5%, g 2.5%', indent:1, values:[null,13.88,null,null,null,null], format:F.NUM, formula:'PV dividends $4.09 + PV TV $9.80 = $13.88'},
+    {type:T.ROW, label:'CoE 10.5%, g 3.0%', indent:1, values:[null,14.60,null,null,null,null], format:F.NUM},
+    {type:T.ROW, label:'CoE 10.5%, g 3.5%', indent:1, values:[null,15.39,null,null,null,null], format:F.NUM},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'BASE  (CoE 9.0% / g 3.0%)'},
+    {type:T.ROW, label:'CoE 9.5%, g 2.5%', indent:1, values:[null,15.92,null,null,null,null], format:F.NUM},
+    {type:T.ROW, label:'CoE 9.5%, g 3.0%', indent:1, values:[null,16.88,null,null,null,null], format:F.NUM},
+    {type:T.ROW, label:'CoE 9.5%, g 3.5%', indent:1, values:[null,18.00,null,null,null,null], format:F.NUM},
+    {type:T.ROW, label:'CoE 9.0%, g 2.0%', indent:1, values:[null,16.18,null,null,null,null], format:F.NUM},
+    {type:T.ROW, label:'CoE 9.0%, g 2.5%', indent:1, values:[null,17.16,null,null,null,null], format:F.NUM},
+    {type:T.OUTPUT, label:'CoE 9.0%, g 3.0%  ← BASE', values:[null,18.32,null,null,null,null], cfi:[C.NONE,C.FORMULA], format:F.NUM},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'BULL  (Low CoE / High Terminal Growth)'},
+    {type:T.ROW, label:'CoE 8.0%, g 2.0%', indent:1, values:[null,18.95,null,null,null,null], format:F.NUM},
+    {type:T.ROW, label:'CoE 8.0%, g 2.5%', indent:1, values:[null,20.35,null,null,null,null], format:F.NUM},
+    {type:T.ROW, label:'CoE 8.0%, g 3.0%', indent:1, values:[null,22.04,null,null,null,null], format:F.NUM},
+    {type:T.ROW, label:'CoE 7.5%, g 2.0%', indent:1, values:[null,20.71,null,null,null,null], format:F.NUM},
+    {type:T.ROW, label:'CoE 7.5%, g 2.5%', indent:1, values:[null,22.43,null,null,null,null], format:F.NUM},
+    {type:T.ROW, label:'CoE 7.5%, g 3.0%', indent:1, values:[null,24.53,null,null,null,null], format:F.NUM, formula:'PV dividends $4.43 + PV TV $20.10 = $24.53'},
+    {type:T.BLANK},
+    {type:T.SECTION, label:'SENSITIVITY INSIGHT'},
+    {type:T.ROW, label:'Terminal value = 77% of base price', indent:1, values:[null,null,null,null,null,null], format:F.NONE, formula:'PV of Terminal Value ($14.06) = 77% of total implied price ($18.32). DDM is a terminal value machine — the explicit dividends are almost irrelevant. This makes DDM highly sensitive to (CoE − g): a 1.5% change in the spread swings the price by ~$6–8. Rate hikes compress this via rising Rf → rising CoE; rate cuts expand it. This is why bank stocks behave like long-duration bonds.'},
+  ]
+}
+];
+
+/* ============================================================
    MODELS REGISTRY
 ============================================================ */
 const MODELS_META = [
@@ -2831,6 +3032,8 @@ const MODELS_META = [
   { name:'M&A',         title:'M&A Accretion / Dilution Model', sub:'TechCo acquires TargetCo · All-Stock · 2025E',       years:YEARS_MA,    hist:HIST_MA,    proj:PROJ_MA    },
   { name:'Comps',       title:'Comparable Companies Analysis',  sub:'Trading & Transaction Comps · TechCo vs Peers',      years:YEARS_COMPS, hist:HIST_COMPS, proj:PROJ_COMPS },
   { name:'Restruc.',    title:'Restructuring & Waterfall Analysis', sub:'RetailCo Inc. · Chapter 11 / Distressed Debt',    years:YEARS_RX,    hist:HIST_RX,    proj:PROJ_RX    },
+  { name:'SOTP',        title:'Sum-of-the-Parts Valuation',        sub:'CongloCo Holdings · Cloud SW / Industrials / Consumer · Segment-level EVs', years:YEARS_SOTP, hist:HIST_SOTP, proj:PROJ_SOTP },
+  { name:'DDM',         title:'Dividend Discount Model',            sub:'BankCo Financial Group · Gordon Growth · CoE 9.0% · Terminal g 3.0%',      years:YEARS_DDM,  hist:HIST_DDM,  proj:PROJ_DDM  },
 ];
 
 /* ============================================================
@@ -3109,6 +3312,8 @@ let MODELS_DATA = [
   JSON.parse(JSON.stringify(SHEETS_MA_ORIG)),
   JSON.parse(JSON.stringify(SHEETS_COMPS_ORIG)),
   JSON.parse(JSON.stringify(SHEETS_RX_ORIG)),
+  JSON.parse(JSON.stringify(SHEETS_SOTP_ORIG)),
+  JSON.parse(JSON.stringify(SHEETS_DDM_ORIG)),
 ];
 
 function activeModel() { return MODELS_META[activeModelIdx]; }
@@ -4131,6 +4336,8 @@ function resetTemplate() {
     JSON.parse(JSON.stringify(SHEETS_MA_ORIG)),
     JSON.parse(JSON.stringify(SHEETS_COMPS_ORIG)),
     JSON.parse(JSON.stringify(SHEETS_RX_ORIG)),
+    JSON.parse(JSON.stringify(SHEETS_SOTP_ORIG)),
+    JSON.parse(JSON.stringify(SHEETS_DDM_ORIG)),
   ];
   localStorage.removeItem('fm-models-v2');
   renderActive();
@@ -6983,6 +7190,53 @@ function resetPaperLBO() {
   renderPaperLBO();
 }
 
+/* ── PAPER LBO TIMER ──────────────────────────────── */
+let plboTimerSec = 1200, plboTimerRunning = false, plboTimerInterval = null;
+
+function togglePLBOTimer() {
+  if (plboTimerRunning) {
+    clearInterval(plboTimerInterval);
+    plboTimerRunning = false;
+    const btn = document.getElementById('plboTimerBtn');
+    if (btn) { btn.textContent = 'Resume'; btn.className = 'plbo-timer-btn go'; }
+  } else {
+    if (plboTimerSec <= 0) return;
+    plboTimerRunning = true;
+    const btn = document.getElementById('plboTimerBtn');
+    if (btn) { btn.textContent = 'Pause'; btn.className = 'plbo-timer-btn pause'; }
+    plboTimerInterval = setInterval(() => {
+      if (plboTimerSec > 0) {
+        plboTimerSec--;
+        updatePLBOTimerDisplay();
+      }
+      if (plboTimerSec <= 0) {
+        clearInterval(plboTimerInterval);
+        plboTimerRunning = false;
+        const b = document.getElementById('plboTimerBtn');
+        if (b) { b.textContent = 'Time\'s Up'; b.className = 'plbo-timer-btn'; b.disabled = true; }
+      }
+    }, 1000);
+  }
+}
+
+function updatePLBOTimerDisplay() {
+  const el = document.getElementById('plboTimerDisplay');
+  if (!el) return;
+  const m = Math.floor(plboTimerSec / 60), s = plboTimerSec % 60;
+  el.textContent = String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0');
+  el.className = 'plbo-timer-display' + (plboTimerSec <= 60 ? ' crit' : plboTimerSec <= 300 ? ' warn' : '');
+}
+
+function resetPLBOTimer() {
+  clearInterval(plboTimerInterval);
+  plboTimerRunning = false;
+  plboTimerSec = 1200;
+  const el = document.getElementById('plboTimerDisplay');
+  if (el) { el.textContent = '20:00'; el.className = 'plbo-timer-display'; }
+  const btn = document.getElementById('plboTimerBtn');
+  if (btn) { btn.textContent = 'Start'; btn.className = 'plbo-timer-btn go'; btn.disabled = false; }
+}
+
 /* ============================================================
    MODEL BUILDER — 5 MODELS
 ============================================================ */
@@ -9612,7 +9866,11 @@ function stopMockTimer() {
     <div class="drill-head">
       <div><div class="fit-head-title">Paper LBO — Mental Math</div><div class="fit-head-sub">Entry equity · debt schedule · exit proceeds · MoM and IRR · build intuition for back-of-envelope LBO</div></div>
       <div style="display:flex;gap:8px;align-items:center">
-        <button class="drill-reset-btn" onclick="resetPaperLBO()">Reset</button>
+        <div class="plbo-timer-wrap">
+          <div class="plbo-timer-display" id="plboTimerDisplay">20:00</div>
+          <button class="plbo-timer-btn go" id="plboTimerBtn" onclick="togglePLBOTimer()">Start</button>
+        </div>
+        <button class="drill-reset-btn" onclick="resetPaperLBO();resetPLBOTimer()">Reset</button>
         <button class="modal-close" onclick="togglePaperLBO()">✕</button>
       </div>
     </div>
