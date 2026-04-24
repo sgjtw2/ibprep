@@ -474,8 +474,13 @@ body {
 </div>
 
 <script>
-const VALID_EMAIL_HASH = 'f6f9b3d2b87dfec2c4e0e6e5c1e5e2b8a8b0c7e3d9f4a2b1c6e8d0f5a3b7c9e1';
-const VALID_PASS_HASH  = 'b90ffe41645e72faaf9bc1dfa34305cb9192b3f43e7d4a96667c472009cbb65b';
+// Account 1 — full access (Command Center + IB Prep)
+const ADMIN_EMAIL_HASH = 'f6f9b3d2b87dfec2c4e0e6e5c1e5e2b8a8b0c7e3d9f4a2b1c6e8d0f5a3b7c9e1';
+const ADMIN_PASS_HASH  = 'b90ffe41645e72faaf9bc1dfa34305cb9192b3f43e7d4a96667c472009cbb65b';
+
+// Account 2 — IB Prep only
+const IBPREP_EMAIL_HASH = '0925f997eb0d742678f66d2da134d15d842d57722af5f7605c4785cb5358831b';
+const IBPREP_PASS_HASH  = 'b03ddf3ca2e714a6548e7495e2a03f5e824eaac9837cd7f159c67b90fb4b7342';
 
 async function sha256(str) {
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
@@ -501,17 +506,23 @@ async function doSignIn() {
 
   const [emailHash, passHash] = await Promise.all([sha256(email), sha256(password)]);
 
-  if (passHash !== VALID_PASS_HASH) {
-    err.textContent = 'Invalid credentials. Please try again.';
-    err.style.display = 'block';
-    document.getElementById('password').value = '';
-    btn.querySelector('span').textContent = 'Sign In';
-    btn.disabled = false;
+  if (emailHash === ADMIN_EMAIL_HASH && passHash === ADMIN_PASS_HASH) {
+    sessionStorage.setItem('cmd-auth-v1', 'authenticated');
+    window.location.href = './command-center.html';
     return;
   }
 
-  sessionStorage.setItem('cmd-auth-v1', 'authenticated');
-  window.location.href = './command-center.html';
+  if (emailHash === IBPREP_EMAIL_HASH && passHash === IBPREP_PASS_HASH) {
+    sessionStorage.setItem('ibprep-auth-v1', 'authenticated');
+    window.location.href = './financial-model.html';
+    return;
+  }
+
+  err.textContent = 'Invalid credentials. Please try again.';
+  err.style.display = 'block';
+  document.getElementById('password').value = '';
+  btn.querySelector('span').textContent = 'Sign In';
+  btn.disabled = false;
 }
 
 function doSSO() {
