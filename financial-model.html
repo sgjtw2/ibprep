@@ -801,22 +801,25 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
 
   /* Topbar — single compact row on mobile */
   .topbar {
-    height:46px; flex-wrap:nowrap; padding:0 10px;
-    gap:6px; overflow:hidden;
+    height:46px; flex-wrap:nowrap; padding:0 8px;
+    gap:4px; overflow:visible;
   }
-  .back-btn { font-size:10px; padding:5px 8px; flex-shrink:0; }
+  .back-btn { font-size:10px; padding:5px 7px; flex-shrink:0; }
   .top-sep { display:none; }
-  .top-title { font-size:10px; flex-shrink:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .top-title { font-size:10px; flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .top-sub { display:none; }
   .topbar-actions {
-    margin-left:auto; flex-shrink:0;
-    display:flex; gap:5px; flex-wrap:nowrap;
+    flex-shrink:0;
+    display:flex; gap:4px; flex-wrap:nowrap; align-items:center;
   }
+  /* Hide Import/Export Excel — file ops not available on mobile */
+  .topbar-actions label.tbtn { display:none; }
+  .topbar-actions button.tbtn:not(#toolsBtn) { display:none; }
   .tbtn { font-size:10px; padding:6px 10px; white-space:nowrap; }
   .tbtn.primary { font-size:9px; padding:6px 8px; }
 
-  /* Scenario buttons */
-  .scen-btn { padding:0 10px; height:30px; font-size:10px; }
+  /* Scenario buttons — compact on mobile */
+  .scen-btn { padding:0 7px; height:26px; font-size:9px; letter-spacing:0; }
 
   /* Tools dropdown — full width on mobile */
   .tools-wrap { position:static; }
@@ -924,6 +927,20 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
   /* Football field — adjust label width */
   .ff-label { width:130px; font-size:9px; }
   .ff-val-lo, .ff-val-hi { display:none; }
+
+  /* Story Bank — stack sidebar above editor */
+  #storyBankBody { overflow:auto !important; min-height:0 !important; }
+  .sb-layout { flex-direction:column; overflow:visible; height:auto; }
+  .sb-sidebar { width:auto; border-right:none; border-bottom:1px solid var(--b1); overflow:visible; height:auto; }
+  .sb-list { max-height:110px; overflow-y:auto; }
+  .sb-editor { padding:10px 12px; overflow-y:auto; }
+  .sb-star-grid { grid-template-columns:1fr; }
+
+  /* Valuation Assumptions — stack 4-col grid into single column */
+  .va-legend { display:none; }
+  .va-row { grid-template-columns:1fr; gap:3px; padding:10px 12px; }
+  .va-col-range { font-size:10px; }
+  .va-col-derive, .va-col-pitfall { font-size:10px; }
 }
 
 /* ── IPAD (769px – 1100px) ───────────────────────────────── */
