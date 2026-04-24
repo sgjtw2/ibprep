@@ -7508,25 +7508,42 @@ function mbBackToSelect() {
 
 function renderMBComplete() {
   const ans = mbModel.ans;
-  let summaryHTML = '';
-  if (mbModel.id === 'dcf') {
-    summaryHTML = `
-      <div class="mb-complete-val"><div class="mb-complete-v">$${ans.ev.toFixed(0)}m</div><div class="mb-complete-l">Enterprise Value</div></div>
-      <div class="mb-complete-val"><div class="mb-complete-v">$${ans.price.toFixed(2)}</div><div class="mb-complete-l">Share Price</div></div>
-      <div class="mb-complete-val"><div class="mb-complete-v">${ans.pvtv.toFixed(0)}/${ans.ev.toFixed(0)}</div><div class="mb-complete-l">TV as % of EV</div></div>`;
-  } else {
-    summaryHTML = `
-      <div class="mb-complete-val"><div class="mb-complete-v">${ans.mom.toFixed(2)}×</div><div class="mb-complete-l">MoM Return</div></div>
-      <div class="mb-complete-val"><div class="mb-complete-v">${ans.irr.toFixed(1)}%</div><div class="mb-complete-l">IRR</div></div>
-      <div class="mb-complete-val"><div class="mb-complete-v">$${ans.exitEq.toFixed(0)}m</div><div class="mb-complete-l">Exit Equity</div></div>`;
-  }
+  const summaries = {
+    dcf: [
+      { v:`$${ans.ev.toFixed(0)}m`,        l:'Enterprise Value' },
+      { v:`$${ans.price.toFixed(2)}`,       l:'Implied Share Price' },
+      { v:`${Math.round(ans.pvtv/ans.ev*100)}%`, l:'TV as % of EV' },
+    ],
+    lbo: [
+      { v:`${ans.mom.toFixed(2)}×`,         l:'MoM Return' },
+      { v:`${ans.irr.toFixed(1)}%`,         l:'IRR' },
+      { v:`$${ans.exitEq.toFixed(0)}m`,     l:'Exit Equity' },
+    ],
+    '3s': [
+      { v:`$${ans.ni.toFixed(1)}m`,         l:'Net Income' },
+      { v:`$${ans.cfo.toFixed(1)}m`,        l:'Cash from Ops' },
+      { v:`$${ans.cashEnd.toFixed(1)}m`,    l:'Ending Cash' },
+    ],
+    ma: [
+      { v:`$${ans.pfEPS.toFixed(2)}`,       l:'Pro Forma EPS' },
+      { v:`+${ans.accretion.toFixed(1)}%`,  l:'Accretion' },
+      { v:`${ans.pfShares.toFixed(1)}m`,    l:'PF Share Count' },
+    ],
+    comps: [
+      { v:`$${ans.midEV.toFixed(0)}m`,      l:'Implied EV (mid)' },
+      { v:`$${ans.midEq.toFixed(0)}m`,      l:'Implied Equity' },
+      { v:`${ans.evEbitda[0].toFixed(1)}–${ans.evEbitda[2].toFixed(1)}×`, l:'EV/EBITDA Range' },
+    ],
+  };
+  const vals = summaries[mbModel.id] || [];
+  const names = { dcf:'DCF Valuation', lbo:'LBO Analysis', '3s':'3-Statement Model', ma:'M&A Accretion/Dilution', comps:'Trading Comps Analysis' };
   document.getElementById('modelBuilderSubtitle').textContent = `${mbModel.title} — Complete`;
   document.getElementById('modelBuilderBody').innerHTML = `
     <div class="mb-complete">
       <div class="mb-complete-icon">🎉</div>
       <div class="mb-complete-h">Model Complete</div>
-      <div class="mb-complete-sub">You built a full ${mbModel.id === 'dcf' ? 'DCF Valuation' : 'LBO Analysis'} for ${mbModel.company} from scratch. Review the key outputs below.</div>
-      <div class="mb-complete-vals">${summaryHTML}</div>
+      <div class="mb-complete-sub">You built a full ${names[mbModel.id]||mbModel.title} for ${mbModel.company} from scratch. Review the key outputs below.</div>
+      <div class="mb-complete-vals">${vals.map(s=>`<div class="mb-complete-val"><div class="mb-complete-v">${s.v}</div><div class="mb-complete-l">${s.l}</div></div>`).join('')}</div>
       <button class="mb-back-sel" onclick="mbBackToSelect()">⊞ Build Another Model</button>
     </div>`;
 }
