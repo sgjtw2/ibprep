@@ -1,4 +1,5 @@
 const ALLOWED = new Set([
+  'news.google.com',
   'finance.yahoo.com',
   'feeds.marketwatch.com',
   'www.cnbc.com',
