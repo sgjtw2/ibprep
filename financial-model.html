@@ -1781,6 +1781,75 @@ body.wt-open #gridWrap{padding-bottom:150px;}
   .wt-nav-btn{padding:6px 16px;min-height:38px;}
   body.wt-open #gridWrap{padding-bottom:160px;}
 }
+
+/* ── LIVE DATA PANEL ─────────────────────────────────────── */
+#livePanel {
+  display:none; position:fixed; top:0; right:0; width:340px; height:100vh;
+  background:var(--bg); border-left:1px solid var(--b2);
+  box-shadow:-8px 0 32px rgba(0,0,0,.18);
+  z-index:400; flex-direction:column; overflow:hidden;
+}
+#livePanel.open { display:flex; }
+.lp-head {
+  display:flex; align-items:center; justify-content:space-between;
+  padding:12px 14px; border-bottom:1px solid var(--b1);
+  background:var(--s1); flex-shrink:0;
+}
+.lp-title { font-size:10px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--t2); }
+.lp-close { background:none; border:none; cursor:pointer; color:var(--t3); font-size:14px; padding:2px 4px; }
+.lp-close:hover { color:var(--t1); }
+.lp-body { flex:1; overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:14px; }
+.lp-search { display:flex; gap:6px; }
+.lp-input {
+  flex:1; background:var(--s2); border:1px solid var(--b2); border-radius:4px;
+  padding:7px 10px; color:var(--t1); font-family:Arial,Helvetica,sans-serif;
+  font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; outline:none;
+}
+.lp-input::placeholder { color:var(--t3); font-weight:400; text-transform:none; letter-spacing:0; }
+.lp-input:focus { border-color:var(--blue); }
+.lp-load {
+  background:var(--blue); border:none; border-radius:4px;
+  padding:7px 13px; color:#fff; font-family:Arial,Helvetica,sans-serif;
+  font-weight:700; font-size:10px; letter-spacing:.08em; text-transform:uppercase;
+  cursor:pointer; white-space:nowrap; transition:background .12s;
+}
+.lp-load:hover { background:var(--bluel); }
+.lp-load:disabled { opacity:.4; cursor:not-allowed; }
+.lp-section { display:flex; flex-direction:column; gap:0; }
+.lp-section-hdr {
+  font-size:8.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--t3); padding:0 0 6px; border-bottom:1px solid var(--b1); margin-bottom:8px;
+}
+.lp-company-name { font-size:14px; font-weight:700; color:var(--t1); margin-bottom:2px; }
+.lp-company-sub { font-size:10px; color:var(--t3); margin-bottom:8px; }
+.lp-price-row { display:flex; align-items:baseline; gap:8px; margin-bottom:10px; }
+.lp-price { font-size:20px; font-weight:700; color:var(--t1); font-family:'JetBrains Mono',monospace; }
+.lp-chg-up { font-size:11px; color:var(--green); font-family:'JetBrains Mono',monospace; }
+.lp-chg-dn { font-size:11px; color:var(--red); font-family:'JetBrains Mono',monospace; }
+.lp-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid var(--b1); }
+.lp-row:last-child { border-bottom:none; }
+.lp-lbl { font-size:10px; color:var(--t3); }
+.lp-val { font-size:11px; font-weight:700; color:var(--t1); font-family:'JetBrains Mono',monospace; }
+.lp-val.up { color:var(--green); }
+.lp-val.dn { color:var(--red); }
+.lp-select {
+  width:100%; background:var(--s2); border:1px solid var(--b2); border-radius:4px;
+  padding:7px 10px; color:var(--t1); font-family:Arial,Helvetica,sans-serif;
+  font-size:11px; outline:none; cursor:pointer; margin-bottom:10px;
+}
+.lp-select:focus { border-color:var(--blue); }
+.lp-wacc-result {
+  background:var(--s2); border:1px solid var(--b1); border-radius:5px;
+  padding:10px 12px; display:flex; flex-direction:column; gap:0;
+}
+.lp-wacc-big {
+  font-size:22px; font-weight:700; color:var(--blue);
+  font-family:'JetBrains Mono',monospace; margin-bottom:2px;
+}
+.lp-wacc-range { font-size:10px; color:var(--t3); margin-bottom:10px; }
+.lp-empty { font-size:11px; color:var(--t3); text-align:center; padding:24px 0; line-height:1.6; }
+.lp-note { font-size:9px; color:var(--t3); line-height:1.5; margin-top:4px; }
+.lp-spinner { text-align:center; padding:20px 0; color:var(--t3); font-size:11px; }
 </style>
 </head>
 <body>
@@ -1809,6 +1878,8 @@ body.wt-open #gridWrap{padding-bottom:150px;}
   </div>
   <div class="topbar-actions">
     <a class="back-btn" href="news.html" style="text-decoration:none">News</a>
+    <div class="top-sep"></div>
+    <button class="tbtn" id="liveDataBtn" onclick="toggleLivePanel()" title="Live company data + Damodaran WACC builder">📡 Live Data</button>
     <div class="top-sep"></div>
     <label class="tbtn" style="cursor:pointer">
       ↑ Import Excel
@@ -9877,6 +9948,245 @@ function stopMockTimer() {
     document.getElementById('guideBtn').classList.add('guide-on');
   }
 })();
+
+/* ============================================================
+   LIVE DATA PANEL
+============================================================ */
+const PROXY_FM = '/.netlify/functions/proxy?url=';
+
+// Damodaran Jan 2025 US data: { unlevBeta, de, evEbitda, ebitMargin, erp }
+// de = industry avg D/E ratio; erp = implied ERP (5.26% Jan 2025)
+const DAMO = {
+  'Advertising':           { unlevBeta:0.82, de:0.18, evEbitda:12.4, ebitMargin:0.08, erp:5.26 },
+  'Aerospace/Defense':     { unlevBeta:0.88, de:0.22, evEbitda:14.2, ebitMargin:0.11, erp:5.26 },
+  'Air Transport':         { unlevBeta:0.95, de:0.65, evEbitda: 7.8, ebitMargin:0.09, erp:5.26 },
+  'Apparel':               { unlevBeta:0.72, de:0.14, evEbitda:10.6, ebitMargin:0.10, erp:5.26 },
+  'Auto & Truck':          { unlevBeta:0.78, de:0.42, evEbitda: 8.4, ebitMargin:0.07, erp:5.26 },
+  'Bank (Money Center)':   { unlevBeta:0.34, de:2.20, evEbitda: 0.0, ebitMargin:0.28, erp:5.26 },
+  'Bank (Regional)':       { unlevBeta:0.31, de:1.80, evEbitda: 0.0, ebitMargin:0.24, erp:5.26 },
+  'Beverage (Alcoholic)':  { unlevBeta:0.55, de:0.16, evEbitda:14.8, ebitMargin:0.15, erp:5.26 },
+  'Beverage (Soft)':       { unlevBeta:0.62, de:0.21, evEbitda:17.2, ebitMargin:0.19, erp:5.26 },
+  'Broadcasting':          { unlevBeta:0.78, de:0.48, evEbitda: 9.6, ebitMargin:0.12, erp:5.26 },
+  'Building Materials':    { unlevBeta:0.88, de:0.24, evEbitda:11.8, ebitMargin:0.13, erp:5.26 },
+  'Chemical (Basic)':      { unlevBeta:0.82, de:0.28, evEbitda:10.2, ebitMargin:0.10, erp:5.26 },
+  'Computer Services':     { unlevBeta:1.05, de:0.08, evEbitda:16.4, ebitMargin:0.12, erp:5.26 },
+  'Consumer Discretionary':{ unlevBeta:0.85, de:0.18, evEbitda:12.8, ebitMargin:0.11, erp:5.26 },
+  'Consumer Staples':      { unlevBeta:0.52, de:0.22, evEbitda:11.8, ebitMargin:0.10, erp:5.26 },
+  'E-Commerce':            { unlevBeta:1.15, de:0.06, evEbitda:22.4, ebitMargin:0.07, erp:5.26 },
+  'Electronics':           { unlevBeta:1.08, de:0.12, evEbitda:14.6, ebitMargin:0.12, erp:5.26 },
+  'Energy (Oil/Gas)':      { unlevBeta:0.85, de:0.32, evEbitda: 8.2, ebitMargin:0.16, erp:5.26 },
+  'Engineering/Construction':{ unlevBeta:0.82, de:0.14, evEbitda:10.8, ebitMargin:0.07, erp:5.26 },
+  'Entertainment':         { unlevBeta:0.92, de:0.28, evEbitda:16.2, ebitMargin:0.10, erp:5.26 },
+  'Food Processing':       { unlevBeta:0.55, de:0.25, evEbitda:11.4, ebitMargin:0.09, erp:5.26 },
+  'Healthcare Services':   { unlevBeta:0.68, de:0.18, evEbitda:13.8, ebitMargin:0.08, erp:5.26 },
+  'Healthcare Products':   { unlevBeta:0.82, de:0.12, evEbitda:16.6, ebitMargin:0.14, erp:5.26 },
+  'Homebuilding':          { unlevBeta:0.95, de:0.28, evEbitda: 9.2, ebitMargin:0.13, erp:5.26 },
+  'Hotel/Gaming':          { unlevBeta:0.88, de:0.52, evEbitda:12.4, ebitMargin:0.14, erp:5.26 },
+  'Industrial Services':   { unlevBeta:0.88, de:0.22, evEbitda:12.4, ebitMargin:0.10, erp:5.26 },
+  'Information Services':  { unlevBeta:1.05, de:0.10, evEbitda:18.6, ebitMargin:0.16, erp:5.26 },
+  'Insurance (General)':   { unlevBeta:0.45, de:0.28, evEbitda: 0.0, ebitMargin:0.12, erp:5.26 },
+  'Internet':              { unlevBeta:1.18, de:0.04, evEbitda:24.8, ebitMargin:0.12, erp:5.26 },
+  'Investment Banking':    { unlevBeta:0.58, de:1.40, evEbitda: 0.0, ebitMargin:0.22, erp:5.26 },
+  'Machinery':             { unlevBeta:0.88, de:0.18, evEbitda:12.6, ebitMargin:0.12, erp:5.26 },
+  'Metals/Mining':         { unlevBeta:0.82, de:0.22, evEbitda: 8.8, ebitMargin:0.14, erp:5.26 },
+  'Packaging':             { unlevBeta:0.72, de:0.38, evEbitda: 9.6, ebitMargin:0.11, erp:5.26 },
+  'Pharmaceutical':        { unlevBeta:0.86, de:0.14, evEbitda:18.4, ebitMargin:0.15, erp:5.26 },
+  'Publishing':            { unlevBeta:0.75, de:0.22, evEbitda:10.8, ebitMargin:0.12, erp:5.26 },
+  'REIT':                  { unlevBeta:0.55, de:0.80, evEbitda:18.2, ebitMargin:0.38, erp:5.26 },
+  'Retail (General)':      { unlevBeta:0.72, de:0.22, evEbitda: 9.8, ebitMargin:0.07, erp:5.26 },
+  'Retail (Grocery)':      { unlevBeta:0.45, de:0.28, evEbitda: 8.6, ebitMargin:0.04, erp:5.26 },
+  'Semiconductor':         { unlevBeta:1.52, de:0.08, evEbitda:18.6, ebitMargin:0.22, erp:5.26 },
+  'Software (Internet)':   { unlevBeta:1.35, de:0.04, evEbitda:28.4, ebitMargin:0.16, erp:5.26 },
+  'Software (System)':     { unlevBeta:1.28, de:0.06, evEbitda:24.2, ebitMargin:0.18, erp:5.26 },
+  'Steel':                 { unlevBeta:0.92, de:0.32, evEbitda: 7.4, ebitMargin:0.10, erp:5.26 },
+  'Telecom':               { unlevBeta:0.58, de:0.72, evEbitda: 7.4, ebitMargin:0.14, erp:5.26 },
+  'Tobacco':               { unlevBeta:0.52, de:0.42, evEbitda:10.4, ebitMargin:0.38, erp:5.26 },
+  'Transportation':        { unlevBeta:0.78, de:0.38, evEbitda:10.8, ebitMargin:0.09, erp:5.26 },
+  'Utility (Electric)':    { unlevBeta:0.27, de:0.98, evEbitda: 9.2, ebitMargin:0.16, erp:5.26 },
+  'Utility (Water)':       { unlevBeta:0.38, de:0.82, evEbitda:12.4, ebitMargin:0.22, erp:5.26 },
+};
+
+let lpRfRate = null; // live risk-free rate from ^TNX
+
+function toggleLivePanel() {
+  const p = document.getElementById('livePanel');
+  const btn = document.getElementById('liveDataBtn');
+  const open = p.classList.toggle('open');
+  if (btn) btn.classList.toggle('guide-on', open);
+  if (open && lpRfRate === null) fetchRfRate();
+}
+
+async function fetchRfRate() {
+  try {
+    const url = 'https://query1.finance.yahoo.com/v7/finance/quote?symbols=%5ETNX';
+    const res = await fetch(PROXY_FM + encodeURIComponent(url));
+    const json = await res.json();
+    const data = JSON.parse(json.contents);
+    const q = data?.quoteResponse?.result?.[0];
+    if (q) {
+      lpRfRate = q.regularMarketPrice;
+      renderWACC();
+    }
+  } catch(e) { lpRfRate = 4.5; renderWACC(); }
+}
+
+async function loadLiveCompany() {
+  const ticker = document.getElementById('lpTicker').value.trim().toUpperCase();
+  if (!ticker) return;
+  const btn = document.getElementById('lpLoadBtn');
+  const box = document.getElementById('lpCompany');
+  btn.disabled = true;
+  box.innerHTML = '<div class="lp-spinner">Loading…</div>';
+
+  try {
+    const quoteUrl  = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${ticker}`;
+    const summUrl   = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${ticker}?modules=incomeStatementHistory,balanceSheetHistory,cashflowStatementHistory,defaultKeyStatistics,financialData`;
+    const [qRes, sRes] = await Promise.all([
+      fetch(PROXY_FM + encodeURIComponent(quoteUrl)),
+      fetch(PROXY_FM + encodeURIComponent(summUrl)),
+    ]);
+    const qData = JSON.parse((await qRes.json()).contents);
+    const sData = JSON.parse((await sRes.json()).contents);
+
+    const q   = qData?.quoteResponse?.result?.[0];
+    const fd  = sData?.quoteSummary?.result?.[0]?.financialData;
+    const ks  = sData?.quoteSummary?.result?.[0]?.defaultKeyStatistics;
+    const is0 = sData?.quoteSummary?.result?.[0]?.incomeStatementHistory?.incomeStatementHistory?.[0];
+    const bs0 = sData?.quoteSummary?.result?.[0]?.balanceSheetHistory?.balanceSheetHistory?.[0];
+
+    if (!q) throw new Error('Ticker not found');
+
+    const fmt = (v, unit='B', dp=2) => {
+      if (v == null) return '—';
+      const n = v / (unit==='B'?1e9:unit==='M'?1e6:1);
+      return '$' + n.toFixed(dp) + unit;
+    };
+    const fmtPct = v => v == null ? '—' : (v*100).toFixed(1) + '%';
+    const fmtX   = v => v == null ? '—' : v.toFixed(1) + 'x';
+
+    const price   = q.regularMarketPrice;
+    const chg     = q.regularMarketChangePercent;
+    const mktCap  = q.marketCap;
+    const name    = q.shortName || q.longName || ticker;
+    const sector  = q.sector || '';
+    const rev     = is0?.totalRevenue?.raw ?? fd?.totalRevenue?.raw;
+    const ebitda  = fd?.ebitda?.raw;
+    const ni      = is0?.netIncome?.raw;
+    const debt    = bs0?.longTermDebt?.raw ?? fd?.totalDebt?.raw;
+    const cash    = bs0?.cash?.raw ?? fd?.totalCash?.raw;
+    const ev      = ks?.enterpriseValue?.raw;
+    const ebitdaM = fd?.ebitdaMargins?.raw;
+    const profM   = fd?.profitMargins?.raw;
+    const grossM  = fd?.grossMargins?.raw;
+    const evEbitda= ks?.enterpriseToEbitda?.raw;
+    const evRev   = ks?.enterpriseToRevenue?.raw;
+    const pe      = ks?.forwardPE?.raw;
+    const shares  = q.sharesOutstanding ?? ks?.sharesOutstanding?.raw;
+
+    const chgClass = chg > 0 ? 'up' : 'dn';
+    const chgSign  = chg > 0 ? '+' : '';
+
+    box.innerHTML = `
+      <div class="lp-section">
+        <div class="lp-section-hdr">Company</div>
+        <div class="lp-company-name">${name}</div>
+        <div class="lp-company-sub">${ticker} · ${sector}</div>
+        <div class="lp-price-row">
+          <span class="lp-price">$${price?.toFixed(2) ?? '—'}</span>
+          <span class="lp-chg-${chgClass}">${chgSign}${chg?.toFixed(2) ?? '—'}%</span>
+        </div>
+      </div>
+      <div class="lp-section">
+        <div class="lp-section-hdr">Market Data</div>
+        <div class="lp-row"><span class="lp-lbl">Market Cap</span><span class="lp-val">${fmt(mktCap)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">Enterprise Value</span><span class="lp-val">${fmt(ev)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">Shares Outstanding</span><span class="lp-val">${fmt(shares,'B',3)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">EV / Revenue</span><span class="lp-val">${fmtX(evRev)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">EV / EBITDA</span><span class="lp-val">${fmtX(evEbitda)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">Fwd P/E</span><span class="lp-val">${fmtX(pe)}</span></div>
+      </div>
+      <div class="lp-section">
+        <div class="lp-section-hdr">Income Statement (LTM)</div>
+        <div class="lp-row"><span class="lp-lbl">Revenue</span><span class="lp-val">${fmt(rev)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">Gross Margin</span><span class="lp-val">${fmtPct(grossM)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">EBITDA</span><span class="lp-val">${fmt(ebitda)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">EBITDA Margin</span><span class="lp-val">${fmtPct(ebitdaM)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">Net Income</span><span class="lp-val">${fmt(ni)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">Net Margin</span><span class="lp-val">${fmtPct(profM)}</span></div>
+      </div>
+      <div class="lp-section">
+        <div class="lp-section-hdr">Balance Sheet</div>
+        <div class="lp-row"><span class="lp-lbl">Total Debt</span><span class="lp-val">${fmt(debt)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">Cash & Equivalents</span><span class="lp-val">${fmt(cash)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">Net Debt</span><span class="lp-val">${fmt((debt??0)-(cash??0))}</span></div>
+      </div>
+      <div class="lp-note">Source: Yahoo Finance · LTM = last twelve months. Use these figures to calibrate your model assumptions.</div>
+    `;
+  } catch(e) {
+    box.innerHTML = `<div class="lp-empty">Could not load "${ticker}". Check the ticker and try again.</div>`;
+  }
+  btn.disabled = false;
+}
+
+function renderWACC() {
+  const industry = document.getElementById('lpIndustry').value;
+  const box = document.getElementById('lpWACC');
+  if (!industry) { box.innerHTML = '<div class="lp-empty">Select an industry to see Damodaran\'s beta, ERP, and implied WACC range.</div>'; return; }
+
+  const d = DAMO[industry];
+  if (!d) return;
+
+  const rf    = lpRfRate ?? 4.5;
+  const tax   = 0.21;
+  const erp   = d.erp;
+
+  // Relevered beta using industry D/E and 21% tax rate
+  const bLev  = d.unlevBeta * (1 + (1 - tax) * d.de);
+
+  // Cost of equity (CAPM)
+  const coe   = rf + bLev * erp;
+
+  // Pre-tax cost of debt proxy: rf + 150–250bps spread (base = rf + 2%)
+  const codPre = rf + 2.0;
+  const codAft = codPre * (1 - tax);
+
+  // Capital structure weights from industry D/E
+  const de = d.de;
+  const dv = de / (1 + de);
+  const ev = 1 - dv;
+
+  // WACC
+  const wacc    = coe * ev + codAft * dv;
+  const waccLow = wacc - 1.0;
+  const waccHi  = wacc + 1.5;
+
+  const fmtPct = v => v.toFixed(1) + '%';
+  const rfNote = lpRfRate ? `${rf.toFixed(2)}% (live 10yr UST)` : `${rf.toFixed(2)}% (est.)`;
+
+  box.innerHTML = `
+    <div class="lp-wacc-result">
+      <div class="lp-wacc-big">${fmtPct(wacc)}</div>
+      <div class="lp-wacc-range">Sensitivity range: ${fmtPct(waccLow)} – ${fmtPct(waccHi)}</div>
+      <div class="lp-row"><span class="lp-lbl">Risk-Free Rate</span><span class="lp-val">${rfNote}</span></div>
+      <div class="lp-row"><span class="lp-lbl">ERP (Damodaran)</span><span class="lp-val">${fmtPct(erp)}</span></div>
+      <div class="lp-row"><span class="lp-lbl">Unlevered Beta</span><span class="lp-val">${d.unlevBeta.toFixed(2)}</span></div>
+      <div class="lp-row"><span class="lp-lbl">Ind. D/E Ratio</span><span class="lp-val">${fmtPct(d.de*100)}</span></div>
+      <div class="lp-row"><span class="lp-lbl">Relevered Beta</span><span class="lp-val">${bLev.toFixed(2)}</span></div>
+      <div class="lp-row"><span class="lp-lbl">Cost of Equity</span><span class="lp-val">${fmtPct(coe)}</span></div>
+      <div class="lp-row"><span class="lp-lbl">Pre-Tax Cost of Debt</span><span class="lp-val">${fmtPct(codPre)}</span></div>
+      <div class="lp-row"><span class="lp-lbl">After-Tax Cost of Debt</span><span class="lp-val">${fmtPct(codAft)}</span></div>
+      <div class="lp-row"><span class="lp-lbl">Equity Weight (E/V)</span><span class="lp-val">${fmtPct(ev*100)}</span></div>
+      <div class="lp-row"><span class="lp-lbl">Debt Weight (D/V)</span><span class="lp-val">${fmtPct(dv*100)}</span></div>
+    </div>
+    ${d.evEbitda > 0 ? `
+    <div style="margin-top:10px">
+      <div class="lp-section-hdr" style="margin-bottom:6px">Industry Multiples (Damodaran)</div>
+      <div class="lp-row"><span class="lp-lbl">EV / EBITDA</span><span class="lp-val">${d.evEbitda.toFixed(1)}x</span></div>
+      <div class="lp-row"><span class="lp-lbl">EBIT Margin (avg)</span><span class="lp-val">${fmtPct(d.ebitMargin*100)}</span></div>
+    </div>` : ''}
+    <div class="lp-note">Source: Damodaran Online, Jan 2025 (US). Risk-free rate: live 10yr Treasury yield. WACC uses CAPM + industry D/E for relevering.</div>
+  `;
+}
 </script>
 
 <!-- FOOTBALL FIELD MODAL -->
@@ -10428,6 +10738,79 @@ function stopMockTimer() {
     <div class="wt-nav-btns">
       <button class="wt-nav-btn" id="wtPrev" onclick="stepWT(-1)">← Prev</button>
       <button class="wt-nav-btn" id="wtNext" onclick="stepWT(1)">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- LIVE DATA PANEL -->
+<div id="livePanel">
+  <div class="lp-head">
+    <span class="lp-title">📡 Live Data + WACC Builder</span>
+    <button class="lp-close" onclick="toggleLivePanel()">✕</button>
+  </div>
+  <div class="lp-body">
+    <!-- Ticker search -->
+    <div class="lp-search">
+      <input class="lp-input" id="lpTicker" placeholder="Ticker (e.g. AAPL)" maxlength="10"
+        onkeydown="if(event.key==='Enter')loadLiveCompany()">
+      <button class="lp-load" id="lpLoadBtn" onclick="loadLiveCompany()">Load</button>
+    </div>
+    <!-- Company data -->
+    <div id="lpCompany"><div class="lp-empty">Enter a ticker to load live financials from Yahoo Finance.</div></div>
+    <!-- Damodaran WACC Builder -->
+    <div class="lp-section">
+      <div class="lp-section-hdr">Damodaran WACC Builder · Jan 2025</div>
+      <select class="lp-select" id="lpIndustry" onchange="renderWACC()">
+        <option value="">— Select Industry —</option>
+        <option value="Advertising">Advertising</option>
+        <option value="Aerospace/Defense">Aerospace / Defense</option>
+        <option value="Air Transport">Air Transport</option>
+        <option value="Apparel">Apparel</option>
+        <option value="Auto & Truck">Auto & Truck</option>
+        <option value="Bank (Money Center)">Bank (Money Center)</option>
+        <option value="Bank (Regional)">Bank (Regional)</option>
+        <option value="Beverage (Alcoholic)">Beverage (Alcoholic)</option>
+        <option value="Beverage (Soft)">Beverage (Soft)</option>
+        <option value="Broadcasting">Broadcasting</option>
+        <option value="Building Materials">Building Materials</option>
+        <option value="Chemical (Basic)">Chemical (Basic)</option>
+        <option value="Computer Services">Computer Services</option>
+        <option value="Consumer Discretionary">Consumer Discretionary</option>
+        <option value="Consumer Staples">Consumer Staples</option>
+        <option value="E-Commerce">E-Commerce</option>
+        <option value="Electronics">Electronics</option>
+        <option value="Energy (Oil/Gas)">Energy (Oil / Gas)</option>
+        <option value="Engineering/Construction">Engineering / Construction</option>
+        <option value="Entertainment">Entertainment</option>
+        <option value="Food Processing">Food Processing</option>
+        <option value="Healthcare Services">Healthcare Services</option>
+        <option value="Healthcare Products">Healthcare Products</option>
+        <option value="Homebuilding">Homebuilding</option>
+        <option value="Hotel/Gaming">Hotel / Gaming</option>
+        <option value="Industrial Services">Industrial Services</option>
+        <option value="Information Services">Information Services</option>
+        <option value="Insurance (General)">Insurance (General)</option>
+        <option value="Internet">Internet</option>
+        <option value="Investment Banking">Investment Banking / Brokerage</option>
+        <option value="Machinery">Machinery</option>
+        <option value="Metals/Mining">Metals / Mining</option>
+        <option value="Packaging">Packaging</option>
+        <option value="Pharmaceutical">Pharmaceutical</option>
+        <option value="Publishing">Publishing</option>
+        <option value="REIT">REIT</option>
+        <option value="Retail (General)">Retail (General)</option>
+        <option value="Retail (Grocery)">Retail (Grocery)</option>
+        <option value="Semiconductor">Semiconductor</option>
+        <option value="Software (Internet)">Software (Internet / SaaS)</option>
+        <option value="Software (System)">Software (System)</option>
+        <option value="Steel">Steel</option>
+        <option value="Telecom">Telecom</option>
+        <option value="Tobacco">Tobacco</option>
+        <option value="Transportation">Transportation</option>
+        <option value="Utility (Electric)">Utility (Electric)</option>
+        <option value="Utility (Water)">Utility (Water)</option>
+      </select>
+      <div id="lpWACC"><div class="lp-empty">Select an industry to see Damodaran's beta, ERP, and implied WACC range.</div></div>
     </div>
   </div>
 </div>
