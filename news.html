@@ -9,7 +9,9 @@
   <title>News Terminal — IB Prep</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/neue-haas-grotesk-text" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/druk" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
     /* ── TOKENS — DARK (default) ─────────────────────────────── */
     :root {
@@ -27,7 +29,8 @@
       --accent-a:rgba(27,79,216,.15);
       --green:   #1E7A5A;
       --red:     #C93C2E;
-      --font:    'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font:    'Neue Haas Grotesk Text', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --font-hd: 'Druk', 'Bebas Neue', Impact, 'Arial Black', sans-serif;
       --mono:    'JetBrains Mono', 'Courier New', monospace;
     }
 
@@ -92,14 +95,16 @@
     }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.25} }
     .logo-name {
-      font-size: 11px; font-weight: 700;
-      letter-spacing: .1em; text-transform: uppercase;
+      font-family: var(--font-hd);
+      font-size: 14px; font-weight: 400;
+      letter-spacing: .08em; text-transform: uppercase;
       color: var(--accent);
     }
     .logo-sep { color: var(--border2); margin: 0 2px; font-size: 14px; }
     .logo-sub {
-      font-size: 9px; font-weight: 600;
-      letter-spacing: .1em; text-transform: uppercase;
+      font-family: var(--font-hd);
+      font-size: 11px; font-weight: 400;
+      letter-spacing: .08em; text-transform: uppercase;
       color: var(--muted);
     }
 
@@ -227,9 +232,10 @@
       display: inline-flex;
       align-items: center;
       padding: 10px 14px 9px;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: .05em;
+      font-family: var(--font-hd);
+      font-size: 14px;
+      font-weight: 400;
+      letter-spacing: .06em;
       text-transform: uppercase;
       color: var(--muted);
       border-bottom: 2px solid transparent;
@@ -285,8 +291,9 @@
     /* ── DATE GROUP HEADER ───────────────────────────────────── */
     .date-hdr {
       padding: 8px 20px 5px;
-      font-size: 9px; font-weight: 700;
-      letter-spacing: .12em; text-transform: uppercase;
+      font-family: var(--font-hd);
+      font-size: 13px; font-weight: 400;
+      letter-spacing: .1em; text-transform: uppercase;
       color: var(--muted);
       border-bottom: 1px solid var(--border);
       background: var(--bg);
