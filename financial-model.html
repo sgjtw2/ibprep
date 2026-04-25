@@ -1850,6 +1850,81 @@ body.wt-open #gridWrap{padding-bottom:150px;}
 .lp-empty { font-size:11px; color:var(--t3); text-align:center; padding:24px 0; line-height:1.6; }
 .lp-note { font-size:9px; color:var(--t3); line-height:1.5; margin-top:4px; }
 .lp-spinner { text-align:center; padding:20px 0; color:var(--t3); font-size:11px; }
+.lp-refresh { background:none; border:1px solid var(--b2); border-radius:3px; padding:4px 10px; font-size:9px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--t3); cursor:pointer; transition:all .12s; }
+.lp-refresh:hover { color:var(--t1); border-color:var(--b3); }
+.lp-macro-row { display:flex; justify-content:space-between; align-items:center; padding:5px 0; border-bottom:1px solid var(--b1); }
+.lp-macro-row:last-child { border-bottom:none; }
+.lp-macro-lbl { font-size:10px; color:var(--t3); }
+.lp-macro-vals { display:flex; gap:8px; align-items:center; }
+.lp-macro-val { font-size:11px; font-weight:700; color:var(--t1); font-family:'JetBrains Mono',monospace; }
+.lp-macro-chg { font-size:10px; font-family:'JetBrains Mono',monospace; }
+
+/* ── FORMULA QUIZ ─────────────────────────────────────────── */
+#quizModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.7); z-index:600; align-items:center; justify-content:center; }
+#quizModal.open { display:flex; }
+.quiz-box { background:var(--bg); border:1px solid var(--b2); border-radius:8px; width:min(680px,96vw); max-height:92vh; display:flex; flex-direction:column; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,.4); }
+.quiz-head { display:flex; align-items:center; justify-content:space-between; padding:14px 18px; border-bottom:1px solid var(--b1); background:var(--s1); flex-shrink:0; }
+.quiz-head-left { display:flex; flex-direction:column; gap:2px; }
+.quiz-title { font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--t1); }
+.quiz-progress { font-size:10px; color:var(--t3); font-family:'JetBrains Mono',monospace; }
+.quiz-cats { display:flex; gap:4px; padding:10px 18px; border-bottom:1px solid var(--b1); background:var(--s1); flex-wrap:wrap; flex-shrink:0; }
+.quiz-cat { font-size:9px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; padding:4px 10px; border-radius:12px; border:1px solid var(--b2); color:var(--t3); cursor:pointer; transition:all .12s; }
+.quiz-cat:hover { color:var(--t2); border-color:var(--b3); }
+.quiz-cat.on { color:var(--blue); border-color:var(--bbrd); background:var(--bbg); }
+.quiz-body { flex:1; overflow-y:auto; padding:28px 24px; display:flex; flex-direction:column; gap:16px; }
+.quiz-card { background:var(--s1); border:1px solid var(--b2); border-radius:8px; min-height:180px; cursor:pointer; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:24px; text-align:center; transition:border-color .15s; position:relative; }
+.quiz-card:hover { border-color:var(--blue); }
+.quiz-card-label { font-size:8.5px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--t3); margin-bottom:12px; }
+.quiz-card-q { font-size:15px; font-weight:700; color:var(--t1); line-height:1.45; }
+.quiz-card-a { font-size:13px; color:var(--t2); line-height:1.6; display:none; border-top:1px solid var(--b1); padding-top:16px; margin-top:16px; width:100%; text-align:left; }
+.quiz-card-a code { background:var(--s2); border:1px solid var(--b1); border-radius:3px; padding:2px 6px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--blue); }
+.quiz-card.flipped .quiz-card-a { display:block; }
+.quiz-card.flipped .quiz-card-label { color:var(--blue); }
+.quiz-hint { font-size:10px; color:var(--t3); margin-top:6px; }
+.quiz-foot { display:flex; align-items:center; justify-content:space-between; padding:12px 18px; border-top:1px solid var(--b1); background:var(--s1); flex-shrink:0; gap:8px; }
+.quiz-btn { font-size:10px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; padding:7px 16px; border-radius:4px; border:1px solid var(--b2); background:var(--s2); color:var(--t2); cursor:pointer; transition:all .12s; }
+.quiz-btn:hover { color:var(--t1); border-color:var(--b3); }
+.quiz-btn.know { border-color:var(--green); color:var(--green); background:rgba(22,163,74,.06); }
+.quiz-btn.review { border-color:var(--red); color:var(--red); background:rgba(201,60,46,.06); }
+.quiz-btn.primary { background:var(--blue); border-color:var(--blue); color:#fff; }
+.quiz-score { font-size:10px; color:var(--t3); font-family:'JetBrains Mono',monospace; }
+
+/* ── TIMED BUILD MODE ─────────────────────────────────────── */
+#buildModal { display:none; position:fixed; inset:0; background:rgba(0,0,0,.8); z-index:600; flex-direction:column; overflow:hidden; }
+#buildModal.open { display:flex; }
+.bm-head { display:flex; align-items:center; gap:16px; padding:10px 20px; background:var(--s1); border-bottom:1px solid var(--b1); flex-shrink:0; }
+.bm-title { font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--t1); }
+.bm-timer { font-size:22px; font-weight:700; font-family:'JetBrains Mono',monospace; color:var(--blue); min-width:72px; }
+.bm-timer.warn { color:var(--red); animation:pip .8s ease-in-out infinite; }
+.bm-score-bar { font-size:10px; color:var(--t3); font-family:'JetBrains Mono',monospace; }
+.bm-actions { margin-left:auto; display:flex; gap:6px; }
+.bm-btn { font-size:10px; font-weight:700; letter-spacing:.07em; text-transform:uppercase; padding:6px 14px; border-radius:4px; border:1px solid var(--b2); background:var(--s2); color:var(--t2); cursor:pointer; transition:all .12s; }
+.bm-btn:hover { color:var(--t1); }
+.bm-btn.primary { background:var(--blue); border-color:var(--blue); color:#fff; }
+.bm-btn.check { background:var(--green); border-color:var(--green); color:#fff; }
+.bm-body { flex:1; display:flex; overflow:hidden; gap:0; }
+.bm-assumptions { width:260px; flex-shrink:0; background:var(--s1); border-right:1px solid var(--b1); overflow-y:auto; padding:14px; display:flex; flex-direction:column; gap:12px; }
+.bm-assum-title { font-size:9px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--t3); border-bottom:1px solid var(--b1); padding-bottom:6px; }
+.bm-assum-row { display:flex; justify-content:space-between; align-items:center; padding:4px 0; }
+.bm-assum-lbl { font-size:10px; color:var(--t2); }
+.bm-assum-val { font-size:11px; font-weight:700; color:var(--blue); font-family:'JetBrains Mono',monospace; }
+.bm-table-wrap { flex:1; overflow:auto; padding:14px; }
+.bm-table { border-collapse:collapse; width:100%; font-size:11px; }
+.bm-table th { background:var(--s1); color:var(--t3); font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:7px 12px; border:1px solid var(--b1); text-align:right; white-space:nowrap; position:sticky; top:0; z-index:2; }
+.bm-table th:first-child { text-align:left; min-width:180px; z-index:3; left:0; }
+.bm-table td { padding:0; border:1px solid var(--b1); vertical-align:middle; }
+.bm-table td.label { padding:6px 12px; font-size:11px; color:var(--t2); background:var(--bg); position:sticky; left:0; white-space:nowrap; }
+.bm-table td.label.section { font-weight:700; color:var(--t1); background:var(--s2); font-size:10px; letter-spacing:.06em; text-transform:uppercase; }
+.bm-table td.given { padding:6px 12px; text-align:right; font-family:'JetBrains Mono',monospace; color:var(--t3); background:var(--s1); }
+.bm-input { width:100%; padding:6px 10px; background:transparent; border:none; outline:none; text-align:right; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--t1); min-width:90px; }
+.bm-input:focus { background:var(--bbg); }
+.bm-input.correct { background:rgba(22,163,74,.12); color:var(--green); }
+.bm-input.wrong { background:rgba(201,60,46,.1); color:var(--red); }
+.bm-result-overlay { display:none; position:absolute; inset:0; background:rgba(0,0,0,.85); z-index:10; align-items:center; justify-content:center; flex-direction:column; gap:16px; }
+.bm-result-overlay.show { display:flex; }
+.bm-result-score { font-size:56px; font-weight:700; color:var(--blue); font-family:'JetBrains Mono',monospace; }
+.bm-result-label { font-size:13px; color:var(--t2); }
+.bm-result-grade { font-size:22px; font-weight:700; color:var(--t1); }
 </style>
 </head>
 <body>
@@ -1955,6 +2030,13 @@ body.wt-open #gridWrap{padding-bottom:150px;}
           </button>
           <button class="tools-item" id="errSpotBtn" onclick="toggleErrSpot();closeToolsMenu()">
             <span class="tools-item-icon">🔍</span>Error Spotter<span class="tools-item-badge"></span>
+          </button>
+          <div class="tools-divider"></div>
+          <button class="tools-item" onclick="toggleBuildModal();closeToolsMenu()">
+            <span class="tools-item-icon">⏱️</span>Timed Build<span class="tools-item-badge">NEW</span>
+          </button>
+          <button class="tools-item" onclick="toggleQuizModal();closeToolsMenu()">
+            <span class="tools-item-icon">🃏</span>Formula Quiz<span class="tools-item-badge">NEW</span>
           </button>
         </div>
         <!-- INTERVIEW TAB -->
@@ -10742,6 +10824,66 @@ function renderWACC() {
   </div>
 </div>
 
+<!-- FORMULA QUIZ MODAL -->
+<div id="quizModal" onclick="if(event.target===this)toggleQuizModal()">
+  <div class="quiz-box">
+    <div class="quiz-head">
+      <div class="quiz-head-left">
+        <div class="quiz-title">IB Formula &amp; Concept Quiz</div>
+        <div class="quiz-progress" id="quizProgress">Card 1 of 60</div>
+      </div>
+      <button class="modal-close" onclick="toggleQuizModal()">✕</button>
+    </div>
+    <div class="quiz-cats" id="quizCats"></div>
+    <div class="quiz-body">
+      <div id="quizCard" class="quiz-card" onclick="flipCard()">
+        <div class="quiz-card-label" id="quizCardLabel">Click to reveal answer</div>
+        <div class="quiz-card-q" id="quizCardQ"></div>
+        <div class="quiz-card-a" id="quizCardA"></div>
+      </div>
+      <div class="quiz-hint" id="quizHint">Click the card to flip it</div>
+    </div>
+    <div class="quiz-foot">
+      <button class="quiz-btn" onclick="quizNav(-1)">← Prev</button>
+      <div style="display:flex;gap:6px">
+        <button class="quiz-btn know" id="quizKnow" onclick="markKnow()">✓ Know It</button>
+        <button class="quiz-btn review" id="quizReview" onclick="markReview()">✗ Review</button>
+      </div>
+      <div class="quiz-score" id="quizScore">Know: 0 · Review: 0</div>
+      <button class="quiz-btn primary" onclick="quizNav(1)">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- TIMED BUILD MODE MODAL -->
+<div id="buildModal">
+  <div class="bm-head">
+    <div class="bm-title">⏱️ Timed Build — 3-Year Income Statement</div>
+    <div class="bm-timer" id="bmTimer">10:00</div>
+    <div class="bm-score-bar" id="bmScoreBar">Fill the projected columns (E+1, E+2, E+3), then check your work</div>
+    <div class="bm-actions">
+      <button class="bm-btn" onclick="bmReset()">↺ Reset</button>
+      <button class="bm-btn check" onclick="bmCheck()">✓ Check</button>
+      <button class="bm-btn" onclick="toggleBuildModal()">✕ Close</button>
+    </div>
+  </div>
+  <div class="bm-body">
+    <div class="bm-assumptions" id="bmAssumptions"></div>
+    <div class="bm-table-wrap" style="position:relative">
+      <table class="bm-table" id="bmTable"></table>
+      <div class="bm-result-overlay" id="bmResultOverlay">
+        <div class="bm-result-score" id="bmResultScore"></div>
+        <div class="bm-result-grade" id="bmResultGrade"></div>
+        <div class="bm-result-label" id="bmResultLabel"></div>
+        <div style="display:flex;gap:10px;margin-top:8px">
+          <button class="bm-btn" onclick="bmReset()">↺ Try Again</button>
+          <button class="bm-btn" onclick="toggleBuildModal()">✕ Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- LIVE DATA PANEL -->
 <div id="livePanel">
   <div class="lp-head">
@@ -10812,8 +10954,487 @@ function renderWACC() {
       </select>
       <div id="lpWACC"><div class="lp-empty">Select an industry to see Damodaran's beta, ERP, and implied WACC range.</div></div>
     </div>
+    <!-- Macro Dashboard -->
+    <div class="lp-section">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <div class="lp-section-hdr" style="margin-bottom:0;border:none;padding:0">Macro Dashboard</div>
+        <button class="lp-refresh" id="macroRefreshBtn" onclick="fetchMacroData()">↻ Refresh</button>
+      </div>
+      <div id="lpMacro"><div class="lp-empty">Click Refresh to load live macro indicators.</div></div>
+    </div>
   </div>
 </div>
+
+<script>
+/* ══════════════════════════════════════════════════════════
+   MACRO DASHBOARD
+══════════════════════════════════════════════════════════ */
+async function fetchMacroData() {
+  const box = document.getElementById('lpMacro');
+  const btn = document.getElementById('macroRefreshBtn');
+  box.innerHTML = '<div class="lp-spinner">Loading…</div>';
+  if (btn) btn.disabled = true;
+
+  const symbols = ['^TNX','^IRX','^VIX','^GSPC','HYG','LQD'];
+  try {
+    const url = 'https://query1.finance.yahoo.com/v7/finance/quote?symbols=' + symbols.join(',');
+    const res = await fetch(PROXY_FM + encodeURIComponent(url));
+    const data = JSON.parse((await res.json()).contents);
+    const results = data?.quoteResponse?.result ?? [];
+    const by = {};
+    results.forEach(q => { by[q.symbol] = q; });
+
+    const fmt1 = v => v == null ? '—' : v.toFixed(2);
+    const fmtPct = v => v == null ? '—' : (v > 0 ? '+' : '') + v.toFixed(2) + '%';
+    const chgCls = v => v == null ? '' : (v > 0 ? 'up' : v < 0 ? 'dn' : '');
+
+    const tnx = by['^TNX']?.regularMarketPrice;
+    const irx = by['^IRX']?.regularMarketPrice;
+    const vix = by['^VIX']?.regularMarketPrice;
+    const spx = by['^GSPC']?.regularMarketPrice;
+    const spxChg = by['^GSPC']?.regularMarketChangePercent;
+    const hygP = by['HYG']?.regularMarketPrice;
+    const hygChg = by['HYG']?.regularMarketChangePercent;
+    const lqdP = by['LQD']?.regularMarketPrice;
+    const lqdChg = by['LQD']?.regularMarketChangePercent;
+
+    const curve = tnx != null && irx != null ? (tnx - irx).toFixed(2) + ' bps' : '—';
+    const curveColor = (tnx != null && irx != null && tnx < irx) ? 'color:var(--red)' : 'color:var(--t1)';
+
+    box.innerHTML = `
+      <div class="lp-macro-row"><span class="lp-macro-lbl">10yr UST Yield</span><div class="lp-macro-vals"><span class="lp-macro-val">${fmt1(tnx)}%</span></div></div>
+      <div class="lp-macro-row"><span class="lp-macro-lbl">3mo UST Yield</span><div class="lp-macro-vals"><span class="lp-macro-val">${fmt1(irx)}%</span></div></div>
+      <div class="lp-macro-row"><span class="lp-macro-lbl">Yield Curve (10y–3m)</span><div class="lp-macro-vals"><span class="lp-macro-val" style="${curveColor}">${curve}</span></div></div>
+      <div class="lp-macro-row"><span class="lp-macro-lbl">S&P 500</span><div class="lp-macro-vals"><span class="lp-macro-val">${spx ? spx.toLocaleString('en-US',{maximumFractionDigits:0}) : '—'}</span><span class="lp-macro-chg lp-val ${chgCls(spxChg)}">${fmtPct(spxChg)}</span></div></div>
+      <div class="lp-macro-row"><span class="lp-macro-lbl">VIX</span><div class="lp-macro-vals"><span class="lp-macro-val" style="${vix>25?'color:var(--red)':vix<15?'color:var(--green)':'color:var(--t1)'}">${fmt1(vix)}</span></div></div>
+      <div class="lp-macro-row"><span class="lp-macro-lbl">HYG (HY Credit)</span><div class="lp-macro-vals"><span class="lp-macro-val">${fmt1(hygP)}</span><span class="lp-macro-chg lp-val ${chgCls(hygChg)}">${fmtPct(hygChg)}</span></div></div>
+      <div class="lp-macro-row"><span class="lp-macro-lbl">LQD (IG Credit)</span><div class="lp-macro-vals"><span class="lp-macro-val">${fmt1(lqdP)}</span><span class="lp-macro-chg lp-val ${chgCls(lqdChg)}">${fmtPct(lqdChg)}</span></div></div>
+      <div class="lp-note" style="margin-top:6px">Real-time via Yahoo Finance. VIX &lt;15 = low vol, &gt;25 = stress. Inverted curve = 10y &lt; 3m.</div>
+    `;
+  } catch(e) {
+    box.innerHTML = '<div class="lp-empty">Could not load macro data. Try again.</div>';
+  }
+  if (btn) btn.disabled = false;
+}
+
+/* ══════════════════════════════════════════════════════════
+   FORMULA QUIZ
+══════════════════════════════════════════════════════════ */
+const QUIZ_CARDS = [
+  // ── ACCOUNTING ──────────────────────────────────────────
+  { cat:'accounting', q:'Walk me through the 3 financial statements and how they link.',
+    a:'IS: Revenue → Net Income. BS: Assets = Liabilities + Equity. CF: starts with NI, adds back non-cash (D&A), adjusts working capital (Operating), then Investing (CapEx), then Financing (debt/equity issuance). Net Income flows to retained earnings on BS; ending cash on CF = cash on BS.' },
+  { cat:'accounting', q:'What happens to the 3 statements when CapEx increases by $10M?',
+    a:'IS: No immediate change (CapEx is on the CF statement, not IS). D&A rises over asset life → reduces pre-tax income → lower taxes. BS: PP&E +$10M, Cash -$10M → assets unchanged net. CF: Operating CF unchanged (D&A added back), Investing CF -$10M (CapEx). Net cash decreases $10M.' },
+  { cat:'accounting', q:'How does a $10M increase in D&A flow through the 3 statements?',
+    a:'IS: EBITDA unchanged, EBIT -$10M, pre-tax income -$10M, taxes -$2.5M (at 25%), net income -$7.5M. BS: PP&E net -$10M (accumulated depreciation +$10M), retained earnings -$7.5M, deferred tax liability -$2.5M. CF: Net income -$7.5M, add back D&A +$10M → operating CF +$2.5M (equals tax savings).' },
+  { cat:'accounting', q:'If inventory increases by $10M, what happens to the 3 statements?',
+    a:'IS: No change (inventory sits on BS until sold). BS: Inventory +$10M, Cash -$10M (if purchased with cash) → total assets unchanged. CF: Operating CF -$10M (increase in working capital is a use of cash). Net cash -$10M.' },
+  { cat:'accounting', q:'What is working capital and how does it affect free cash flow?',
+    a:'Working capital = Current Assets - Current Liabilities (typically excl. cash and debt). An increase in working capital is a use of cash (you invest more in receivables/inventory or pay down payables). FCF = EBIT(1-t) + D&A - CapEx - ΔWorking Capital. Rising WC hurts FCF; falling WC boosts FCF.' },
+  { cat:'accounting', q:'What is deferred revenue and why is it a liability?',
+    a:'Deferred revenue = cash received for services/goods not yet delivered. It\'s a liability because the company owes performance, not money. As services are delivered, it\'s recognized as revenue on the IS. SaaS annual subscriptions paid upfront are a classic example.' },
+  { cat:'accounting', q:'How does a $100M stock buyback affect the 3 statements?',
+    a:'IS: No immediate impact (EPS rises because shares outstanding fall). BS: Cash -$100M, Treasury Stock +$100M (contra-equity), total equity -$100M. CF: Financing CF -$100M (repurchase of shares). Net balance sheet shrinks by $100M.' },
+  { cat:'accounting', q:'What is goodwill and when does it appear on the balance sheet?',
+    a:'Goodwill = Purchase Price - Fair Value of Net Identifiable Assets. It only appears after an acquisition (not organic). It\'s tested annually for impairment (not amortized under US GAAP). If impaired, it flows through IS as a non-cash charge that reduces net income and BS goodwill.' },
+  { cat:'accounting', q:'Difference between cash and accrual accounting?',
+    a:'Cash accounting: revenue/expense recognized when cash changes hands. Accrual: revenue recognized when earned, expenses when incurred, regardless of cash timing. Most corporates use accrual. Accrual gives a more accurate picture of economic performance; cash accounting is simpler but can be manipulated by timing cash flows.' },
+  { cat:'accounting', q:'What is the difference between EBIT and EBITDA?',
+    a:'EBITDA = Earnings Before Interest, Taxes, Depreciation & Amortization. EBIT = Earnings Before Interest & Taxes. EBITDA adds back D&A to EBIT. EBITDA is a proxy for operating cash flow (pre-WC, pre-CapEx) and is used for EV/EBITDA multiples. EBIT is used for EBIT multiples and is closer to operating income.' },
+  // ── VALUATION ───────────────────────────────────────────
+  { cat:'valuation', q:'What are the three main valuation methodologies, and when would you use each?',
+    a:'1) DCF (Discounted Cash Flow): intrinsic value, used for companies with stable FCF, heavily assumption-driven. 2) Comparable Companies (Comps): market-relative, uses EV/EBITDA, P/E of public peers — fast, objective. 3) Precedent Transactions: M&A comps, includes control premium. Use all three and triangulate in a football field.' },
+  { cat:'valuation', q:'What is the difference between equity value and enterprise value?',
+    a:'Enterprise Value = Equity Value + Net Debt (Debt - Cash) + Minority Interest + Preferred Stock. EV is the total cost to acquire the whole business (capital structure neutral). Equity Value = shares × share price. Use EV multiples (EV/EBITDA, EV/Rev) for operating comparisons; equity multiples (P/E) for equity-level comparisons.' },
+  { cat:'valuation', q:'How do you value a company with negative earnings?',
+    a:'Use revenue or gross profit multiples (EV/Revenue, EV/Gross Profit) instead of P/E or EV/EBITDA. For high-growth unprofitable companies (SaaS, biotech), also consider: DCF with far-out profitability, ARR multiples for SaaS, pipeline/drug value for biotech, or NAV for asset-heavy businesses.' },
+  { cat:'valuation', q:'What multiple would you typically use to value a bank?',
+    a:'Price-to-Book (P/B) or Price-to-Tangible Book (P/TBV) — because book value is meaningful for financial institutions. Also P/E is commonly used. EV/EBITDA is not appropriate because debt is part of a bank\'s core operating business, making enterprise value an unhelpful concept.' },
+  { cat:'valuation', q:'Walk me through how you build a comparable company analysis.',
+    a:'1) Select peers (size, sector, geography, business model). 2) Spread financial metrics: Revenue, EBITDA, EBIT, Net Income, EPS. 3) Calculate market data: Market Cap, EV = MCap + Net Debt. 4) Calculate trading multiples: EV/EBITDA, EV/Rev, P/E. 5) Find median/mean. 6) Apply to target company to get implied range.' },
+  { cat:'valuation', q:'What is a control premium and why do acquirers pay it?',
+    a:'Control premium = price paid above market value (typically 20–40% for public companies). Acquirers pay it because: (1) they gain strategic control and can implement changes, (2) they expect synergies that justify overpaying, (3) competitive bidding in M&A processes. It\'s why precedent transactions trade at a premium to public comps.' },
+  { cat:'valuation', q:'What is LTM and NTM in the context of valuation?',
+    a:'LTM = Last Twelve Months (trailing). NTM = Next Twelve Months (forward). Valuation multiples can use either. NTM multiples are typically lower (higher denominator due to expected growth) and more commonly used for growth companies. EV/NTM EBITDA is preferred when you can find reliable consensus forecasts.' },
+  { cat:'valuation', q:'Why might a DCF give a higher valuation than comps?',
+    a:'DCF captures the full intrinsic value of future cash flows while comps reflect current market sentiment. If the market is depressed/undervaluing the sector, DCF will be higher. DCF also captures synergies and unique strategic value. Conversely, comps may show a premium if markets are bullish on the sector.' },
+  { cat:'valuation', q:'What is SOTP (Sum of Parts) valuation and when do you use it?',
+    a:'SOTP values each business segment separately using the most appropriate multiple/methodology, then sums them to get total EV. Used for conglomerates where segments have different growth profiles (e.g., GE, Berkshire). Also used to identify "hidden value" in diversified companies where the market applies a conglomerate discount.' },
+  { cat:'valuation', q:'How does leverage affect equity value?',
+    a:'Higher leverage amplifies equity returns (and losses). For a given EV, more debt = less equity value (EV = Equity + Net Debt). In an LBO, debt magnifies equity IRR through financial leverage. But high leverage also increases bankruptcy risk. EV itself should be relatively unaffected by capital structure (Modigliani-Miller).' },
+  // ── DCF ─────────────────────────────────────────────────
+  { cat:'dcf', q:'What is WACC and how do you calculate it?',
+    a:'WACC = Cost of Equity × (E/V) + After-Tax Cost of Debt × (D/V). Cost of Equity via CAPM = Rf + β × ERP. After-tax cost of debt = pre-tax cost × (1 - tax rate). E/V and D/V are target capital structure weights at market value. WACC = the hurdle rate for the whole firm (blended return required by all capital providers).' },
+  { cat:'dcf', q:'Walk me through how to calculate unlevered free cash flow (UFCF).',
+    a:'UFCF = EBIT × (1 - tax rate) + D&A - CapEx - ΔWorking Capital. Start with EBIT (operating income), tax-affect it (unlevered net income). Add back D&A (non-cash). Subtract CapEx (cash investment). Subtract increase in net working capital (cash consumed). UFCF is capital-structure neutral — you use WACC to discount it.' },
+  { cat:'dcf', q:'What is the terminal value and what are the two methods to calculate it?',
+    a:'Terminal value = value of all cash flows beyond the explicit forecast period. 1) Gordon Growth Model (GGM): TV = UFCF × (1+g) / (WACC - g). g = perpetual growth rate (typically 2–3%, tied to long-run nominal GDP). 2) Exit Multiple Method: TV = EBITDA_T × Exit Multiple (e.g., EV/EBITDA). Both should be cross-checked against each other.' },
+  { cat:'dcf', q:'What is beta and how do you unlever / relever it?',
+    a:'Beta measures systematic risk (volatility relative to market). Observed (levered) beta includes financial risk. Unlever: βU = βL / (1 + (1-t) × D/E). Relever to target: βL = βU × (1 + (1-t) × D/E). You unlever peer betas to strip out capital structure, then relever to your company\'s target leverage. βU is the pure business risk.' },
+  { cat:'dcf', q:'How sensitive is a DCF to terminal growth rate?',
+    a:'Very sensitive. A 1% change in "g" can swing DCF value by 20–50%+ because TV typically represents 60–80% of total DCF value. A 0.5% error in g compounds in perpetuity: at WACC=10%, g=2% gives multiplier of 1/8=12.5x; g=3% gives 1/7=14.3x — a 15% swing. Always show a sensitivity table (g vs. WACC).' },
+  { cat:'dcf', q:'What does the Equity Risk Premium (ERP) represent?',
+    a:'ERP = excess return investors require for holding equities over the risk-free rate. It compensates for the higher risk of equities vs. government bonds. Historically ~5–6% (implied ERP per Damodaran ~5.5% for US, Jan 2025). You can use historical (arithmetic mean excess return) or implied (back-solved from current market prices + growth expectations).' },
+  { cat:'dcf', q:'Why do you discount the terminal value at the same WACC?',
+    a:'Because WACC represents the risk of the cash flows, and the terminal value is just a perpetuity of the same business risk. The Gordon Growth Model TV already assumes a stable, perpetual business with the same risk profile. Consistency: the TV is discounted back at WACC for the same number of years as the last forecast year.' },
+  { cat:'dcf', q:'What is the mid-year convention in DCF?',
+    a:'Instead of assuming cash flows arrive at year-end (discount factor = 1/(1+WACC)^n), the mid-year convention assumes they arrive mid-year (discount factor = 1/(1+WACC)^(n-0.5)). This gives a slightly higher value and is more realistic since companies generate cash throughout the year, not just on Dec 31.' },
+  { cat:'dcf', q:'What is the difference between equity DCF and firm DCF (FCFF vs FCFE)?',
+    a:'FCFF (Free Cash Flow to Firm) = UFCF discounted at WACC → gives Enterprise Value. FCFE (Free Cash Flow to Equity) = FCFF - After-tax interest - debt repayments + new borrowings, discounted at Cost of Equity → gives Equity Value directly. FCFF is more common in IB; FCFE is used for banks/financials.' },
+  { cat:'dcf', q:'What happens to WACC if a company increases its leverage?',
+    a:'Debt is cheaper than equity (tax shield), so more debt initially lowers WACC. But at some point, financial distress costs rise, and both cost of equity and cost of debt increase. Optimal capital structure minimizes WACC. The equity beta also increases with leverage (more financial risk), partially offsetting the benefit.' },
+  // ── LBO ─────────────────────────────────────────────────
+  { cat:'lbo', q:'What is a leveraged buyout (LBO)?',
+    a:'An LBO is an acquisition financed largely with debt (typically 50–70% of purchase price), with the acquired company\'s assets/cash flows used as collateral and for debt repayment. A PE firm puts in 30–50% equity. Value is created through: (1) debt paydown (leverage), (2) EBITDA growth, (3) multiple expansion, (4) dividend recaps.' },
+  { cat:'lbo', q:'What makes a good LBO candidate?',
+    a:'1) Stable, predictable cash flows (FCF generation to service debt). 2) Low CapEx requirements. 3) Strong market position with pricing power. 4) Undervalued or underperforming management. 5) Hard assets as collateral. 6) Clear exit opportunity in 3–7 years. Classic examples: mature consumer brands, industrial companies, software with recurring revenue.' },
+  { cat:'lbo', q:'Walk me through a simple LBO model.',
+    a:'1) Entry: assume EV = EBITDA × Entry Multiple. Debt = EV × leverage%. Equity = EV - Debt. 2) Debt schedule: model interest payments and repayments from FCF each year. 3) Projected EBITDA over 5 years. 4) Exit: Exit EV = EBITDA × Exit Multiple. Equity proceeds = Exit EV - remaining debt. 5) IRR = solve for r where equity invested × (1+r)^n = exit equity proceeds.' },
+  { cat:'lbo', q:'How do you calculate IRR in a simple LBO?',
+    a:'IRR solves: Initial Equity × (1+IRR)^n = Exit Equity Proceeds. In Excel: IRR([-equity_in, 0, 0, 0, equity_out]). Rule of thumb: 2x in 3 years ≈ 26% IRR; 2x in 5 years ≈ 15% IRR; 3x in 5 years ≈ 25% IRR. PE firms target 20%+ IRR.' },
+  { cat:'lbo', q:'What is the impact of paying 1x more EBITDA at entry on IRR?',
+    a:'It reduces equity IRR because: (1) higher purchase price with same debt = more equity invested, (2) same exit value / more equity in = lower MoM. Rule of thumb: 1x turn of EBITDA in entry multiple ≈ 3–5% IRR drag. This is why deal pricing is critical — "entry multiple is destiny."' },
+  { cat:'lbo', q:'What is a PIK (Payment-in-Kind) note?',
+    a:'PIK = interest is paid by issuing more debt (added to principal) rather than cash. Used in HY/mezzanine tranches when the company needs to preserve cash. PIK interest compounds — the debt balance grows. It\'s the most expensive form of debt and signals a levered/cash-constrained balance sheet. Common in sponsor transactions.' },
+  { cat:'lbo', q:'What is the difference between senior secured, senior unsecured, and subordinated debt?',
+    a:'Senior Secured: first lien on specific assets, lowest risk, lowest rate (e.g., Term Loan A/B). Senior Unsecured: no specific collateral pledge, higher rate (e.g., HY bonds). Subordinated: paid after senior in bankruptcy, highest risk/rate (e.g., mezz, second lien). Priority in a bankruptcy waterfall: Secured → Senior Unsecured → Sub → Equity.' },
+  { cat:'lbo', q:'What is management rollover equity in an LBO?',
+    a:'Management rollover = existing management team converts a portion of their ownership (pre-close equity) into equity in the new PE-owned entity, rather than taking cash. Aligns incentives: management\'s return depends on the same exit as the PE sponsor. Typically 5–20% of new equity. Often required by PE firms and seen as a quality signal.' },
+  { cat:'lbo', q:'What is a dividend recap?',
+    a:'Dividend recapitalization: the PE-owned company takes on additional debt to pay a special dividend to equity holders (the PE firm). Allows the sponsor to return capital before exit, boosting IRR by accelerating cash returns. Increases leverage/risk for the company. Common when company performance has improved post-acquisition.' },
+  { cat:'lbo', q:'What is multiple expansion in an LBO and what drives it?',
+    a:'Multiple expansion = exiting at a higher EV/EBITDA multiple than the entry multiple. Drives value creation without any operational improvement. Causes: market re-rating, improved profitability story, IPO premium vs. private buyout, sector multiple expansion. Can\'t be relied upon — most PE models are conservative on exit multiples (often same as entry).' },
+  // ── M&A ─────────────────────────────────────────────────
+  { cat:'ma', q:'Walk me through accretion/dilution analysis.',
+    a:'Accretion/Dilution = effect of deal on acquirer\'s EPS. 1) Calculate combined net income. 2) Add after-tax synergies. 3) Subtract after-tax financing costs (incremental interest, share dilution from new shares). 4) Divide by pro forma diluted shares. If pro forma EPS > standalone EPS → accretive. Dilutive otherwise.' },
+  { cat:'ma', q:'When is a stock deal dilutive to the acquirer?',
+    a:'A stock deal is dilutive when the acquirer\'s P/E < target\'s implied P/E (price paid / target EPS). You\'re issuing expensive shares at a low earnings yield to buy cheap earnings. Conversely, accretive when acquirer P/E > target\'s implied P/E. Deal is also dilutive if synergies don\'t cover the premium paid.' },
+  { cat:'ma', q:'What is purchase price allocation (PPA) and why does it matter?',
+    a:'PPA = allocating the purchase price to the fair value of identifiable assets and liabilities acquired. Any excess = goodwill. Identifiable intangibles (customer lists, patents, trade names) are written up and amortized → reduces post-close net income (amortization of acquired intangibles). Cash taxes not affected unless there\'s a step-up. Matters for modeling post-close EPS.' },
+  { cat:'ma', q:'What are synergies in M&A and how do you value them?',
+    a:'Revenue synergies: incremental sales from cross-selling, new markets, product bundling. Cost synergies: eliminating duplicate overhead, facilities, headcount. Value = PV of synergies discounted at a risk-adjusted rate (synergies riskier than existing cash flows). Bankers often share 30–50% of synergy value with target via the premium. Cost synergies are more reliable than revenue synergies.' },
+  { cat:'ma', q:'What is the difference between a strategic buyer and a financial buyer (PE)?',
+    a:'Strategic buyer: industry participant, can use operational synergies, higher valuation, typically all-cash/stock, long-term horizon, synergies justify premium. Financial buyer (PE): pure financial return, levered acquisition, 3–7 year exit horizon, no synergies, lower entry multiples needed to hit IRR threshold (20%+), focused on FCF generation and debt paydown.' },
+  { cat:'ma', q:'What is a fairness opinion and who provides it?',
+    a:'A fairness opinion is a letter from a financial advisor (investment bank) stating that the transaction price is fair from a financial point of view to shareholders. Required by the board to satisfy fiduciary duty. The bank runs valuation analyses (DCF, comps, premiums paid) and issues the opinion. It\'s paid for by the company and can be a potential conflict of interest.' },
+  { cat:'ma', q:'What happens to a target\'s options and restricted stock in an acquisition?',
+    a:'Options: typically "cashed out" at deal price minus strike price (in-the-money) or cancelled out-of-the-money. RSUs/restricted stock: usually accelerated vesting and cashed out at deal price. Golden parachutes (CIC provisions) can be very expensive. All these costs are included in the total deal consideration and affect the purchase price.' },
+  { cat:'ma', q:'Why might an acquirer use an all-cash vs. all-stock deal?',
+    a:'All-cash: acquirer takes full risk/reward; no dilution; target shareholders get certainty; creates more debt. Preferred when acquirer has dry powder or undervalued stock. All-stock: risk-sharing with target shareholders; acquirer stock must be seen as valuable; dilutive unless deal is accretive. Mixed deals balance both. Target usually prefers cash (certainty); acquirer prefers stock (preserve cash).' },
+  { cat:'ma', q:'What is a break-up fee and a reverse break-up fee?',
+    a:'Break-up fee (termination fee): paid by the target to the acquirer if target breaks the deal (e.g., board changes recommendation). Typically 2–4% of deal value. Reverse break-up fee: paid by the acquirer to the target if the deal doesn\'t close (e.g., financing failure, regulatory block). Protects target. Typically 3–6% of deal value.' },
+  { cat:'ma', q:'How does the acquisition of a company using debt affect the 3 statements?',
+    a:'IS: Interest expense rises (reduces EBT), D&A rises (amortization of intangibles). Net income initially falls. BS: Assets rise (goodwill, intangibles, PP&E step-up), cash decreases (or new debt proceeds added), debt increases, equity increases by purchase price (new shares) if stock deal. CF: No immediate operating CF impact; financing CF shows debt raised.' },
+  // ── CREDIT ──────────────────────────────────────────────
+  { cat:'credit', q:'What is net leverage and what are typical thresholds for investment grade vs. high yield?',
+    a:'Net Leverage = Net Debt / EBITDA. IG companies: typically &lt;2–3x. HY companies: 4–7x common, 8x+ is highly stressed. LBO entry: typically 5–6x. Lenders use leverage covenants (e.g., max 5.0x). Net debt = Total Debt - Cash. Higher leverage = higher interest burden, more risk of covenant breach, lower credit rating.' },
+  { cat:'credit', q:'What is interest coverage ratio and what does it measure?',
+    a:'Interest Coverage = EBITDA / Interest Expense (or EBIT / Interest). Measures ability to service debt from operating income. Covenants typically require >2x–3x. Below 1.5x = distress signal. Also used in credit ratings analysis. A company with $50M EBITDA and $10M interest expense has 5.0x coverage — healthy.' },
+  { cat:'credit', q:'What is the difference between a leveraged loan and a high yield bond?',
+    a:'Leveraged Loan: floating rate (SOFR + spread), bank-arranged, term A/B structure, amortizes principal, can be prepaid without penalty, secured/first lien. HY Bond: fixed rate, public market, bullet maturity (no amortization), callable after non-call period, less covenant-heavy (covenant-lite). Loans sit higher in capital structure than bonds.' },
+  { cat:'credit', q:'What is a debt covenant and what are the two main types?',
+    a:'Debt covenants are restrictions/requirements in loan agreements. 1) Maintenance covenants (incurrence vs. financial): tested every quarter regardless of action (e.g., max leverage 5.0x). 2) Incurrence covenants: only triggered when company takes an action (adds more debt, pays dividend). HY bonds are typically incurrence-only; leveraged loans have maintenance covenants.' },
+  { cat:'credit', q:'What happens in bankruptcy under Chapter 11?',
+    a:'Chapter 11 = reorganization (vs. Chapter 7 = liquidation). Company continues operating while restructuring its balance sheet. Absolute Priority Rule: senior creditors paid first (secured → unsecured → junior → equity). Company files a Plan of Reorganization: equity often wiped out, creditors convert debt to equity. Management can propose the plan first (exclusivity period).' },
+  { cat:'credit', q:'What is a revolver and how is it different from a term loan?',
+    a:'Revolver (revolving credit facility): a line of credit that can be drawn, repaid, and redrawn. Used for working capital / liquidity cushion. Typically undrawn at closing. Unused commitment fee on undrawn portion. Term Loan: one-time drawdown at close, amortizes over time (TLA) or bullet (TLB). Revolver = liquidity; term loan = permanent leverage.' },
+  { cat:'credit', q:'What is the debt waterfall / priority of claims in liquidation?',
+    a:'Order of priority: (1) Secured creditors (first lien → second lien → ABL). (2) Senior unsecured creditors (trade payables, HY bonds). (3) Subordinated/mezzanine debt. (4) Preferred equity. (5) Common equity. Each layer must be paid in full before the next layer receives anything (Absolute Priority Rule). In practice, negotiated in reorganization plans.' },
+  { cat:'credit', q:'What is DSCR (Debt Service Coverage Ratio)?',
+    a:'DSCR = (EBITDA - CapEx) / Debt Service (principal + interest). Used in project finance and real estate. DSCR > 1.0 = cash flows cover debt obligations. Lenders typically require DSCR > 1.2–1.5x for safety. Below 1.0 = company cannot cover debt service from operations without asset sales or refinancing.' },
+  { cat:'credit', q:'What is the difference between LIBOR and SOFR?',
+    a:'LIBOR (London Interbank Offered Rate): historically the benchmark floating rate, based on self-reported bank borrowing rates. Phased out end of 2021 due to manipulation scandal. SOFR (Secured Overnight Financing Rate): based on actual overnight US Treasury repo transactions — more robust, transparent. Leveraged loans now reference SOFR + spread (e.g., SOFR + 300 bps).' },
+  { cat:'credit', q:'What is the yield-to-worst (YTW) on a bond?',
+    a:'YTW = the lowest possible yield an investor can receive on a callable bond. It is the minimum of: yield to maturity, yield to all call dates. For callable HY bonds, the YTW is lower than YTM if the bond trades above par (issuer will call it early). Investors buy at YTW as it represents the worst-case scenario for their return.' },
+];
+
+let quizIdx = 0;
+let quizCat = 'all';
+let quizKnown = new Set();
+let quizReviewSet = new Set();
+let quizFiltered = [];
+
+function toggleQuizModal() {
+  const m = document.getElementById('quizModal');
+  const open = m.classList.toggle('open');
+  if (open) initQuiz();
+}
+
+function initQuiz() {
+  const cats = [
+    { id:'all', label:'All' },
+    { id:'accounting', label:'Accounting' },
+    { id:'valuation', label:'Valuation' },
+    { id:'dcf', label:'DCF' },
+    { id:'lbo', label:'LBO' },
+    { id:'ma', label:'M&A' },
+    { id:'credit', label:'Credit' },
+  ];
+  const catHtml = cats.map(c =>
+    `<button class="quiz-cat${quizCat===c.id?' on':''}" onclick="setQuizCat('${c.id}')">${c.label}</button>`
+  ).join('');
+  document.getElementById('quizCats').innerHTML = catHtml;
+  filterAndRender();
+}
+
+function setQuizCat(cat) {
+  quizCat = cat;
+  quizIdx = 0;
+  initQuiz();
+}
+
+function filterAndRender() {
+  quizFiltered = quizCat === 'all' ? QUIZ_CARDS : QUIZ_CARDS.filter(c => c.cat === quizCat);
+  renderQuizCard();
+}
+
+function renderQuizCard() {
+  const card = document.getElementById('quizCard');
+  if (!quizFiltered.length) { card.querySelector ? null : null; return; }
+  const q = quizFiltered[quizIdx % quizFiltered.length];
+  card.classList.remove('flipped');
+  document.getElementById('quizCardLabel').textContent = q.cat.toUpperCase() + ' — Click to reveal answer';
+  document.getElementById('quizCardQ').textContent = q.q;
+  document.getElementById('quizCardA').innerHTML = q.a;
+  document.getElementById('quizHint').textContent = 'Click the card to flip it';
+  document.getElementById('quizProgress').textContent =
+    `Card ${(quizIdx % quizFiltered.length) + 1} of ${quizFiltered.length}`;
+  document.getElementById('quizScore').textContent =
+    `Know: ${quizKnown.size} · Review: ${quizReviewSet.size}`;
+}
+
+function flipCard() {
+  const card = document.getElementById('quizCard');
+  card.classList.toggle('flipped');
+  const flipped = card.classList.contains('flipped');
+  document.getElementById('quizHint').textContent = flipped
+    ? 'Was this right? Mark below, then Next →' : 'Click the card to flip it';
+  document.getElementById('quizCardLabel').textContent =
+    flipped ? 'ANSWER' : (quizFiltered[quizIdx % quizFiltered.length]?.cat || '').toUpperCase() + ' — Click to reveal answer';
+}
+
+function quizNav(dir) {
+  quizIdx = ((quizIdx + dir) % quizFiltered.length + quizFiltered.length) % quizFiltered.length;
+  renderQuizCard();
+}
+
+function markKnow() {
+  const key = quizIdx % quizFiltered.length;
+  quizKnown.add(key);
+  quizReviewSet.delete(key);
+  quizNav(1);
+}
+
+function markReview() {
+  const key = quizIdx % quizFiltered.length;
+  quizReviewSet.add(key);
+  quizKnown.delete(key);
+  quizNav(1);
+}
+
+/* ══════════════════════════════════════════════════════════
+   TIMED BUILD MODE
+══════════════════════════════════════════════════════════ */
+const BM_ASSUMPTIONS = {
+  baseRevenue: 100,
+  revenueGrowth: 0.15,
+  cogsPercent: 0.45,
+  sgaPercent: 0.20,
+  daPercent: 0.05,
+  interestExpense: 3.0,
+  taxRate: 0.25,
+};
+
+let bmTimerInterval = null;
+let bmSecsLeft = 600;
+let bmStarted = false;
+
+const BM_ROWS = [
+  { key:'rev',   label:'Revenue',         type:'formula', indent:0 },
+  { key:'cogs',  label:'(-) COGS',        type:'formula', indent:1 },
+  { key:'gp',    label:'Gross Profit',    type:'total',   indent:0 },
+  { key:'sga',   label:'(-) SG&A',        type:'formula', indent:1 },
+  { key:'ebitda',label:'EBITDA',          type:'total',   indent:0 },
+  { key:'da',    label:'(-) D&A',         type:'formula', indent:1 },
+  { key:'ebit',  label:'EBIT',            type:'subtotal',indent:0 },
+  { key:'int',   label:'(-) Interest',    type:'given',   indent:1 },
+  { key:'ebt',   label:'EBT',             type:'subtotal',indent:0 },
+  { key:'tax',   label:'(-) Tax',         type:'formula', indent:1 },
+  { key:'ni',    label:'Net Income',      type:'total',   indent:0 },
+];
+
+function bmCalcAnswers(a) {
+  const yrs = [1, 2, 3];
+  const answers = {};
+  yrs.forEach(y => {
+    const rev  = a.baseRevenue * Math.pow(1 + a.revenueGrowth, y);
+    const cogs = rev * a.cogsPercent;
+    const gp   = rev - cogs;
+    const sga  = rev * a.sgaPercent;
+    const ebitda = gp - sga;
+    const da   = rev * a.daPercent;
+    const ebit = ebitda - da;
+    const int  = a.interestExpense;
+    const ebt  = ebit - int;
+    const tax  = ebt > 0 ? ebt * a.taxRate : 0;
+    const ni   = ebt - tax;
+    answers[y] = { rev, cogs, gp, sga, ebitda, da, ebit, int, ebt, tax, ni };
+  });
+  return answers;
+}
+
+function toggleBuildModal() {
+  const m = document.getElementById('buildModal');
+  const open = m.classList.toggle('open');
+  if (open) bmInit();
+  else bmStop();
+}
+
+function bmInit() {
+  const a = BM_ASSUMPTIONS;
+  const answers = bmCalcAnswers(a);
+
+  const assmHtml = `
+    <div class="bm-assum-title">Given Assumptions</div>
+    <div class="bm-assum-row"><span class="bm-assum-lbl">Base Revenue (E-1)</span><span class="bm-assum-val">$${a.baseRevenue.toFixed(0)}M</span></div>
+    <div class="bm-assum-row"><span class="bm-assum-lbl">Revenue Growth</span><span class="bm-assum-val">+${(a.revenueGrowth*100).toFixed(0)}% / yr</span></div>
+    <div class="bm-assum-row"><span class="bm-assum-lbl">COGS</span><span class="bm-assum-val">${(a.cogsPercent*100).toFixed(0)}% of Rev</span></div>
+    <div class="bm-assum-row"><span class="bm-assum-lbl">SG&A</span><span class="bm-assum-val">${(a.sgaPercent*100).toFixed(0)}% of Rev</span></div>
+    <div class="bm-assum-row"><span class="bm-assum-lbl">D&A</span><span class="bm-assum-val">${(a.daPercent*100).toFixed(0)}% of Rev</span></div>
+    <div class="bm-assum-row"><span class="bm-assum-lbl">Interest Expense</span><span class="bm-assum-val">$${a.interestExpense.toFixed(0)}M (fixed)</span></div>
+    <div class="bm-assum-row"><span class="bm-assum-lbl">Tax Rate</span><span class="bm-assum-val">${(a.taxRate*100).toFixed(0)}%</span></div>
+    <div style="margin-top:12px;border-top:1px solid var(--b1);padding-top:10px">
+      <div class="bm-assum-title" style="margin-bottom:6px">How to build:</div>
+      <div style="font-size:9.5px;color:var(--t3);line-height:1.65">
+        1. Revenue grows ${(a.revenueGrowth*100).toFixed(0)}% each year<br>
+        2. COGS, SG&A, D&A = % × Revenue<br>
+        3. Gross Profit = Rev − COGS<br>
+        4. EBITDA = GP − SG&A<br>
+        5. EBIT = EBITDA − D&A<br>
+        6. EBT = EBIT − Interest<br>
+        7. Tax = EBT × ${(a.taxRate*100).toFixed(0)}%<br>
+        8. Net Income = EBT − Tax
+      </div>
+    </div>
+  `;
+  document.getElementById('bmAssumptions').innerHTML = assmHtml;
+
+  const base = answers[1];
+  let thead = `<tr><th>Line Item</th><th>E-1 (Historical)</th><th>E+1 (Projected)</th><th>E+2 (Projected)</th><th>E+3 (Projected)</th></tr>`;
+  let tbody = '';
+  const histAnswers = bmCalcAnswers({ ...a, baseRevenue: a.baseRevenue, revenueGrowth: 0 });
+
+  BM_ROWS.forEach(row => {
+    const histVal = answers[1]; // E-1 uses base values
+    const baseY0 = (() => {
+      const r = a.baseRevenue;
+      const c = r * a.cogsPercent;
+      const g = r - c;
+      const s = r * a.sgaPercent;
+      const e = g - s;
+      const d = r * a.daPercent;
+      const ei = e - d;
+      const int = a.interestExpense;
+      const ebt = ei - int;
+      const tax = ebt > 0 ? ebt * a.taxRate : 0;
+      const ni = ebt - tax;
+      return { rev:r, cogs:c, gp:g, sga:s, ebitda:e, da:d, ebit:ei, int, ebt, tax, ni };
+    })();
+
+    const histStr = `$${baseY0[row.key].toFixed(1)}M`;
+    const typeClass = row.type === 'total' ? 'section' : '';
+    const indentStyle = row.indent ? 'padding-left:20px' : '';
+
+    let projCells = '';
+    [1,2,3].forEach(y => {
+      if (row.type === 'given') {
+        projCells += `<td class="given">${a.interestExpense.toFixed(1)}</td>`;
+      } else {
+        projCells += `<td><input class="bm-input" data-row="${row.key}" data-yr="${y}"
+          data-ans="${answers[y][row.key].toFixed(2)}"
+          placeholder="?" type="number" step="0.1"
+          oninput="bmAutoCalc(this)" /></td>`;
+      }
+    });
+
+    tbody += `<tr>
+      <td class="label ${typeClass}" style="${indentStyle}">${row.label}</td>
+      <td class="given">${histStr}</td>
+      ${projCells}
+    </tr>`;
+  });
+
+  document.getElementById('bmTable').innerHTML = `<thead>${thead}</thead><tbody>${tbody}</tbody>`;
+  bmReset();
+}
+
+function bmAutoCalc(inp) {
+  if (!bmStarted) bmStartTimer();
+}
+
+function bmStartTimer() {
+  bmStarted = true;
+  bmSecsLeft = 600;
+  clearInterval(bmTimerInterval);
+  bmTimerInterval = setInterval(() => {
+    bmSecsLeft--;
+    const m = Math.floor(bmSecsLeft / 60);
+    const s = bmSecsLeft % 60;
+    const timerEl = document.getElementById('bmTimer');
+    timerEl.textContent = `${m}:${s.toString().padStart(2,'0')}`;
+    timerEl.classList.toggle('warn', bmSecsLeft <= 60);
+    if (bmSecsLeft <= 0) { clearInterval(bmTimerInterval); bmCheck(); }
+  }, 1000);
+}
+
+function bmStop() {
+  clearInterval(bmTimerInterval);
+  bmStarted = false;
+}
+
+function bmReset() {
+  bmStop();
+  bmSecsLeft = 600;
+  document.getElementById('bmTimer').textContent = '10:00';
+  document.getElementById('bmTimer').classList.remove('warn');
+  document.getElementById('bmResultOverlay').classList.remove('show');
+  document.getElementById('bmScoreBar').textContent = 'Fill the projected columns (E+1, E+2, E+3), then check your work';
+  document.querySelectorAll('.bm-input').forEach(inp => {
+    inp.value = '';
+    inp.classList.remove('correct','wrong');
+    inp.disabled = false;
+  });
+  bmStarted = false;
+}
+
+function bmCheck() {
+  clearInterval(bmTimerInterval);
+  const inputs = document.querySelectorAll('.bm-input');
+  let correct = 0; let total = 0;
+  inputs.forEach(inp => {
+    total++;
+    const expected = parseFloat(inp.dataset.ans);
+    const entered  = parseFloat(inp.value);
+    const tol = Math.max(0.5, Math.abs(expected) * 0.01);
+    if (!isNaN(entered) && Math.abs(entered - expected) <= tol) {
+      inp.classList.add('correct'); inp.classList.remove('wrong'); correct++;
+    } else {
+      inp.classList.add('wrong'); inp.classList.remove('correct');
+      inp.placeholder = expected.toFixed(1);
+    }
+    inp.disabled = true;
+  });
+  const pct = total > 0 ? Math.round(correct / total * 100) : 0;
+  const grade = pct >= 90 ? 'Excellent' : pct >= 70 ? 'Good' : pct >= 50 ? 'Needs Work' : 'Keep Practicing';
+  const color = pct >= 90 ? 'var(--green)' : pct >= 70 ? 'var(--blue)' : pct >= 50 ? '#D97706' : 'var(--red)';
+  document.getElementById('bmResultScore').textContent = `${pct}%`;
+  document.getElementById('bmResultScore').style.color = color;
+  document.getElementById('bmResultGrade').textContent = grade;
+  document.getElementById('bmResultLabel').textContent = `${correct} of ${total} cells correct`;
+  document.getElementById('bmResultOverlay').classList.add('show');
+}
+</script>
 
 <script>if('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js');</script>
 </body>
