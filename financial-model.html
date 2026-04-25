@@ -1738,6 +1738,29 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
 .plbo-timer-btn { padding:4px 9px; border:1px solid var(--b1); border-radius:3px; background:none; font-family:'Plus Jakarta Sans',sans-serif; font-weight:700; font-size:8px; letter-spacing:.06em; text-transform:uppercase; color:var(--t3); cursor:pointer; transition:all .12s; }
 .plbo-timer-btn.go { border-color:var(--green); color:var(--green); }
 .plbo-timer-btn.pause { border-color:#D97706; color:#D97706; }
+/* ---- WALKTHROUGH PANEL ---- */
+.wt-panel{position:fixed;bottom:0;left:0;right:0;z-index:350;background:var(--bg);border-top:2px solid var(--blue);padding:10px 20px 12px;display:none;box-shadow:0 -6px 24px rgba(0,0,0,.28);}
+.wt-panel.open{display:flex;flex-direction:column;gap:5px;}
+.wt-row1{display:flex;align-items:center;gap:8px;}
+.wt-model-tag{font-size:9px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:var(--blue);background:rgba(59,130,246,.12);padding:2px 6px;border-radius:4px;white-space:nowrap;}
+.wt-dots{display:flex;gap:4px;flex:1;align-items:center;}
+.wt-dot{width:7px;height:7px;border-radius:50%;background:var(--b2);cursor:pointer;transition:background .15s;}
+.wt-dot.on{background:var(--blue);}
+.wt-step-count{font-size:10px;color:var(--muted);white-space:nowrap;}
+.wt-close-btn{font-size:10px;padding:3px 8px;border:1px solid var(--b2);border-radius:4px;background:none;color:var(--muted);cursor:pointer;white-space:nowrap;}
+.wt-close-btn:hover{border-color:var(--accent);color:var(--accent);}
+.wt-row2{display:flex;flex-direction:column;gap:2px;}
+.wt-title{font-size:12px;font-weight:700;color:var(--text);}
+.wt-body{font-size:11px;color:var(--muted);line-height:1.45;}
+.wt-formula{font-size:10px;font-family:monospace;color:var(--blue);background:rgba(59,130,246,.07);padding:2px 6px;border-radius:3px;width:fit-content;}
+.wt-row3{display:flex;align-items:center;gap:8px;}
+.wt-sheet-badge{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);background:var(--b1);border:1px solid var(--b2);padding:2px 6px;border-radius:3px;}
+.wt-nav-btns{display:flex;gap:6px;margin-left:auto;}
+.wt-nav-btn{font-size:11px;padding:4px 12px;background:var(--blue);color:#fff;border:none;border-radius:5px;cursor:pointer;font-weight:600;}
+.wt-nav-btn:disabled{background:var(--b2);color:var(--muted);cursor:default;}
+tr.wt-row-on>td{background:rgba(59,130,246,.08)!important;}
+tr.wt-row-on>td.lbl-td{border-left:3px solid var(--blue)!important;font-weight:600;}
+body.wt-open #gridWrap{padding-bottom:150px;}
 </style>
 </head>
 <body>
@@ -1809,6 +1832,9 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
           </button>
           <button class="tools-item" id="modelBuilderBtn" onclick="toggleModelBuilder();closeToolsMenu()">
             <span class="tools-item-icon">🏗️</span>Model Builder<span class="tools-item-badge">GUIDED</span>
+          </button>
+          <button class="tools-item" id="wtBtn" onclick="toggleWalkthrough();closeToolsMenu()">
+            <span class="tools-item-icon">▶</span>Model Walkthrough<span class="tools-item-badge">GUIDE</span>
           </button>
         </div>
         <!-- DRILLS TAB -->
@@ -3365,6 +3391,73 @@ const QA_DATA = {
   ],
 };
 
+const WALKTHROUGH_DATA = {
+  '3-Statement': [
+    { sheet:'Assumptions',      label:'Revenue Growth Rate',                  title:'Step 1 — Revenue Growth Rate: the anchor assumption',           body:'Every projection in the 3-Statement flows from revenue. The growth rate here (13–15% historically, declining to 8% by 2031E) drives revenue on the IS, then COGS, EBITDA, D&A, NWC, capex, and ultimately cash on the balance sheet.',                                                                          formula:'Revenue(t) = Revenue(t-1) × (1 + Growth Rate)' },
+    { sheet:'Income Statement', label:'Revenue',                              title:'Step 2 — Revenue: top line, driver of everything below',          body:'Revenue is the top-line. All cost items below are driven as a % of revenue from Assumptions. Projected years use the formula; historical years are hard-coded actuals from filings.',                                                                                                       formula:'Revenue = Prior Year × (1 + Growth Rate)' },
+    { sheet:'Income Statement', label:'EBITDA',                               title:'Step 3 — EBITDA: the primary comps and LBO multiple basis',       body:"EBITDA = Gross Profit − Operating Expenses. It is the primary EV/EBITDA multiple basis for comps and LBO analysis. TechCo's 25% margin is consistent across the forecast — driven by locked-in Assumptions.",                                                                                         formula:'EBITDA = Gross Profit − Total OpEx (R&D + S&M + G&A)' },
+    { sheet:'Income Statement', label:'NET INCOME',                           title:'Step 4 — Net Income: flows to equity and drives CFS',             body:'Net Income = EBT − Tax. It feeds Retained Earnings on the Balance Sheet and the top of the Cash Flow Statement. The 3S integration means any Revenue Growth change flows: EBITDA → EBIT → EBT → NI → RE → BS → CFS → back to Cash.',                                                                   formula:'Net Income = (EBIT − Interest) × (1 − Tax Rate)' },
+    { sheet:'Balance Sheet',    label:'Cash & Equivalents',                   title:'Step 5 — Cash: the plug that ties the 3 statements together',     body:'Cash is the BS plug — it equals prior-year cash plus Net Change in Cash from the CFS. If the model is correctly linked, BS Cash always equals CFS Ending Cash. Any mismatch (Balance Check ≠ 0) means a broken link.',                                                                          formula:'Cash(t) = Cash(t-1) + Net Change in Cash (from CFS)' },
+    { sheet:'Balance Sheet',    label:'TOTAL ASSETS',                         title:'Step 6 — Total Assets must equal Total Liabilities + Equity',     body:'The fundamental accounting identity: Assets = L&E. The Balance Check row (must = 0) confirms the model balances. A non-zero balance check means a link is broken — systematically find which statement contains the error.',                                                                           formula:'Total Assets = Total Liabilities + Shareholders\' Equity' },
+    { sheet:'Cash Flow',        label:'Net Income',                           title:'Step 7 — CFS starts with Net Income (indirect method)',           body:'The Cash Flow Statement begins with Net Income (a link from the IS, not a re-entry). Non-cash items (D&A) and working capital changes are then added back to convert accrual earnings into actual cash collected and paid out.',                                                                    formula:'Cash from Ops = Net Income + D&A ± ΔNWC' },
+    { sheet:'Cash Flow',        label:'Net Change in Cash',                   title:'Step 8 — Net Change in Cash: the final proof of integration',     body:'Net Change in Cash = CFO + CFI + CFF. This flows to the BS to update Cash. If the BS balances, the 3-Statement model is correctly integrated. This row is the ultimate proof that all three statements link properly.',                                                                      formula:'Net Change in Cash = Cash from Ops + Investing + Financing' },
+  ],
+  'DCF': [
+    { sheet:'WACC Build',        label:'Risk-Free Rate (10yr UST)',            title:'Step 1 — Risk-Free Rate: the foundation of WACC',               body:"The 10-year US Treasury yield is the risk-free benchmark for both CoE (via CAPM) and the reference for ERP. At 4.5%, it anchors TechCo's WACC. A 1% move in Rf changes the DCF implied price by ~$2–3.",                                                                                                      formula:'CoE = Rf + β × ERP  →  Rf is the 10yr UST yield' },
+    { sheet:'WACC Build',        label:'WACC',                                 title:'Step 2 — WACC: the blended cost of all capital',                 body:'WACC = CoE × E/(D+E) + CoD(1−t) × D/(D+E) ≈ 10.0%. It is the discount rate for all future free cash flows. WACC is the dominant DCF sensitivity — a 2% shift can move implied equity value by 30–40%.',                                                                                         formula:'WACC = 12.0%×75% + 3.75%×25% = 9.94% ≈ 10.0%' },
+    { sheet:'FCF Projections',   label:'NOPAT (Net Operating Profit After Tax)',title:'Step 3 — NOPAT: tax-adjusted operating profit, capital-structure neutral', body:'NOPAT = EBIT × (1 − Tax Rate). It strips out the effect of interest (capital structure) to give the operating profit available to all capital providers — the starting point for Unlevered FCF.',                                                                        formula:'NOPAT = EBIT × (1 − t) = $146M × 75% = $109M (2025E)' },
+    { sheet:'FCF Projections',   label:'Unlevered Free Cash Flow (UFCF)',       title:'Step 4 — UFCF: cash available to all capital providers',         body:'UFCF = NOPAT + D&A − Capex − ΔNWC. This is the cash the business generates independent of financing. It is discounted at WACC because WACC is the blended required return of all capital providers.',                                                                          formula:'UFCF = NOPAT + D&A − Capex − ΔNWC = $109+$36−$36−$5 = $104M' },
+    { sheet:'Valuation',         label:'Terminal Growth Rate (g)',              title:'Step 5 — Terminal growth rate: anchored to nominal GDP',         body:'Terminal g = 2.5% governs the Gordon Growth perpetuity. Must be < WACC or TV → ∞. Best practice anchors g to long-run nominal GDP growth (2–3%), not near-term revenue growth, which always overstates the perpetuity.',                                                                     formula:'g must be < WACC; anchored to long-run nominal GDP (~2–3%)' },
+    { sheet:'Valuation',         label:'Terminal Value (Gordon Growth)',         title:'Step 6 — Terminal Value: the dominant DCF component (73% of EV)', body:"TV = FCF₅ × (1+g) / (WACC − g) = $150M × 1.025 / 0.075 = $2,050M. TV drives 73% of TechCo's total DCF value. The spread (WACC − g) is the key sensitivity — a 1% narrowing increases TV by ~17%.",                                                                         formula:'TV = FCF_terminal × (1+g) / (WACC − g)' },
+    { sheet:'Valuation',         label:'Enterprise Value',                      title:'Step 7 — Enterprise Value: sum of all discounted cash flows',    body:'EV = PV(FCFs) + PV(TV) = $476M + $1,273M = $1,749M. Enterprise Value is capital-structure neutral — the value of the entire business. Bridge to equity: EV + Cash − Debt.',                                                                                              formula:'EV = Σ PV(UFCF₁₋₅) + PV(TV) = $476M + $1,273M = $1,749M' },
+    { sheet:'Valuation',         label:'Implied Price / Share (Gordon Growth)',  title:'Step 8 — Implied price per share: the DCF output',              body:'Equity Value = EV + Cash − Debt = $1,749+$125−$100 = $1,774M. Implied Price = $1,774M / 100M shares = $17.74. Market vs DCF: if market > DCF → overvalued; if market < DCF → undervalued.',                                                                         formula:'Implied Price = (EV + Cash − Debt) / Shares = $1,774M / 100M = $17.74' },
+  ],
+  'LBO': [
+    { sheet:'Sources & Uses', label:'Entry EV/EBITDA Multiple',    title:'Step 1 — Entry multiple: sets the purchase price',                body:"Entry = 10.0× LTM EBITDA → Entry EV = $150M × 10.0× = $1,500M. The entry multiple is the most critical LBO input. Overpaying at entry compresses returns from day one — the PE firm has to grow EBITDA faster to compensate.",                                           formula:'Entry EV = LTM EBITDA × Entry Multiple = $150M × 10.0×' },
+    { sheet:'Sources & Uses', label:'Sponsor Equity',              title:'Step 2 — Sponsor equity: the residual after debt financing',    body:'Equity = Total Transaction Value − Total Debt = $1,530M − $900M = $630M (41.2% of total). Higher equity contribution = lower risk but lower IRR. Typical PE structure: 35–45% equity, 55–65% debt.',                                                          formula:'Equity = Total Value − Total Debt = $1,530M − $900M = $630M' },
+    { sheet:'Sources & Uses', label:'Total Debt / EBITDA',         title:'Step 3 — Leverage: 6.0× at entry, targeting < 4.0× at exit',   body:'6.0× entry leverage is typical for a quality industrial LBO. The PE thesis is de-levering over the hold period via EBITDA growth + cash sweep. By 2029E leverage falls to 2.9× — unlocking equity value.',                                                         formula:'Leverage = Total Debt / LTM EBITDA = $900M / $150M = 6.0×' },
+    { sheet:'Operating Model', label:'EBITDA',                     title:'Step 4 — EBITDA growth: the operational engine of value creation', body:'EBITDA grows $150M → $242M (+61%) through 5% organic revenue CAGR and 800bps margin expansion (30% → 38%). EBITDA growth drives ~$1,099M of the $1,581M total value creation — the largest single driver.',                                                 formula:'EBITDA expansion: $150M → $242M (+8.0pp margin over 5 years)' },
+    { sheet:'Operating Model', label:'Cash Interest Expense',      title:'Step 5 — Cash interest: the cost of leverage',                  body:'Cash Interest = ~$74M in Year 1 (avg TLB × 7.5% + $300M × 10%). Interest must be covered by EBITDA (coverage > 2.0×). As debt is repaid via cash sweep, interest falls to $62M by 2029E — increasing free cash flow available for additional sweep.',  formula:'Interest = Avg TLB × 7.5% + $300M × 10.0%' },
+    { sheet:'Returns',         label:'Exit Enterprise Value',       title:'Step 6 — Exit EV: what the business is worth at the point of sale', body:'Exit EV = $242M × 12.0× = $2,904M. Exit multiple (12×) > Entry multiple (10×) → multiple expansion of $288M. A good LBO should not rely on multiple expansion; EBITDA growth should carry the returns.',                                                    formula:'Exit EV = 2029E EBITDA × Exit Multiple = $242M × 12.0×' },
+    { sheet:'Returns',         label:'MOIC (Money-on-Money)',       title:'Step 7 — MOIC: raw cash return on invested equity',             body:'MOIC = Exit Equity / Entry Equity = $2,211M / $630M = 3.5×. Target range: 2.5–3.5× for a standard 5-year hold. MOIC ignores time — a 3.5× in 3 years is far better than a 3.5× in 7 years.',                                                                    formula:'MOIC = Exit Equity / Entry Equity = $2,211M / $630M = 3.5×' },
+    { sheet:'Returns',         label:'IRR (Internal Rate of Return)', title:'Step 8 — IRR: the time-adjusted return, the primary PE metric', body:'IRR ≈ 28.5% annualised. Primary PE return metric — accounts for the holding period unlike MOIC. Target: 20–25% for most buyout funds. Rule of thumb: 3.5× in 5 years ≈ 29% IRR.',                                                                      formula:'IRR = MOIC^(1/n) − 1 = 3.5^(0.2) − 1 ≈ 28.5%' },
+  ],
+  'M&A': [
+    { sheet:'Transaction',          label:'Acquisition Premium',               title:'Step 1 — Acquisition premium: price paid above unaffected market', body:'Premium = ($800M − $750M) / $750M = 6.7%. Typical strategic premiums: 20–40%. This deal\'s 6.7% is below-average — justified only if synergies are highly certain and the seller has limited alternatives.',                                     formula:'Premium = (Offer Price − Unaffected Market Cap) / Unaffected Market Cap' },
+    { sheet:'Transaction',          label:'New Shares Issued by Acquirer (M)',  title:'Step 2 — New shares: dilution from all-stock consideration',       body:'New Shares = $800M / $17.74 = 45.1M. These shares dilute existing TechCo shareholders. Pro Forma diluted shares = 100M + 45.1M = 145.1M. Share dilution is precisely why EPS accretion/dilution must be verified.',                       formula:'New Shares = Offer Price / Acquirer Stock Price = $800M / $17.74 = 45.1M' },
+    { sheet:'Pro Forma IS',         label:'D&A (incl. PPA Step-Up)',            title:'Step 3 — PPA D&A: the accretion killer in many deals',             body:'PPA requires step-up of acquired intangibles to fair value and amortisation over 5–15 years. At $15M/yr (after-tax: $11.25M), PPA D&A reduces PF EPS by $0.077 — turning what looks like strong synergies into near-neutral accretion.',    formula:'PPA D&A after-tax = $15M × (1 − 25%) / 145.1M shares = −$0.077 EPS' },
+    { sheet:'Accretion / Dilution', label:'PRO FORMA EPS',                     title:'Step 4 — Pro Forma EPS: the combined company earnings per share',  body:'PF EPS = $166M / 145.1M = $1.144. The PF EPS bridges from standalone TechCo ($1.03) through target contribution, synergies, PPA D&A, and share dilution. Each component must be modelled separately to identify what drives accretion.',       formula:'PF EPS = PF Net Income / PF Diluted Shares = $166M / 145.1M = $1.144' },
+    { sheet:'Accretion / Dilution', label:'ACCRETION / (DILUTION) %',          title:'Step 5 — Accretion/Dilution %: the primary M&A output',            body:'+11.0% accretive: PF EPS ($1.144) > Standalone ($1.030). Synergies ($45M gross) exceed the cost of dilution and PPA D&A. Break-even synergy = $23.6M — any synergy above that is EPS accretive. The deal is achievable even with partial synergy realisation.', formula:'= (PF EPS − Standalone EPS) / Standalone = ($1.144 − $1.030) / $1.030 = +11.0%' },
+  ],
+  'Comps': [
+    { sheet:'Trading Comps',      label:'Enterprise Value ($M)',          title:'Step 1 — Enterprise Value: capital-structure-neutral business value', body:'EV = Market Cap + Net Debt. For TechCo: $1,774M + (−$25M net cash) = $1,749M. EV allows comparison across different capital structures — unlike market cap, it does not penalise levered companies.',                                                    formula:'EV = Market Cap + Total Debt − Cash (net cash = negative net debt)' },
+    { sheet:'Trading Comps',      label:'EV / EBITDA',                    title:'Step 2 — EV/EBITDA: the primary trading multiple',                  body:'TechCo at 9.6× vs peer mean 10.0× — slightly below peer mean despite similar margins, suggesting mild undervaluation. Always cross-check with other multiples (EV/Revenue, P/E) to confirm the signal.',                                                formula:'EV/EBITDA = Enterprise Value / LTM EBITDA' },
+    { sheet:'Transaction Comps',  label:'EV / LTM EBITDA',               title:'Step 3 — Transaction EV/EBITDA: premium for control',               body:'Median acquisition EV/EBITDA = 11.4× — a ~15% premium to the 10.0× trading multiple. This control premium reflects synergy expectations and the buyer\'s ability to pay. Transaction comps provide the M&A valuation ceiling.',                       formula:'Control Premium ≈ Transaction Multiple / Trading Multiple − 1 ≈ 14%' },
+    { sheet:'Transaction Comps',  label:'Premium to Unaffected Price',    title:'Step 4 — Unaffected premium: always use pre-leak stock price',       body:'28% median premium calculated against the stock price before any deal rumours — not the post-announcement price. Using the post-rumour price would overstate the "control premium" by embedding speculation that already reflects deal probability.', formula:'Unaffected Premium = (Deal Price / Pre-leak Price) − 1' },
+  ],
+  'Restruc.': [
+    { sheet:'Capital Structure',   label:'Interest Coverage (EBITDA / Interest)', title:'Step 1 — Coverage ratio: 1.41× — the company is in breach',  body:'EBITDA / Interest = $120M / $85M = 1.41× against a covenant minimum of ~2.0×. Sub-1.5× coverage triggers lender negotiations, covenant waivers, and restructuring engagement. This is the early-warning signal.',                              formula:'Coverage = EBITDA / Cash Interest = $120M / $85M = 1.41× (covenant: 2.0×)' },
+    { sheet:'Capital Structure',   label:'TOTAL DEBT',                          title:'Step 2 — Capital structure: $1,050M across 3 seniority layers', body:'RCF ($150M) + TLA ($300M) + TLB ($200M) = $650M Senior Secured, then Sr. Unsecured ($250M) and Sub PIK ($150M). Each tranche has different collateral, maturity, and recovery prospect. Seniority determines who gets paid first in a waterfall.', formula:'Total Leverage = $1,050M / $120M EBITDA = 8.75× (covenant: 6.0×)' },
+    { sheet:'Recovery Waterfall',  label:'Enterprise Value',                    title:'Step 3 — Enterprise Value: the only asset available for distribution', body:'Bear: $600M, Base: $750M, Bull: $1,000M, Liq: $500M. The entire waterfall distributes this EV to creditors in strict seniority order. The scenario spread ($400M range) drives radically different outcomes for each tranche.',              formula:'Waterfall distributes EV from top (senior secured) to bottom (equity)' },
+    { sheet:'Recovery Waterfall',  label:'Remaining EV After TLB',             title:'Step 4 — TLB is the fulcrum security in the bear case',         body:'After paying RCF + TLA ($450M), $0–$350M remains for the $200M TLB. In Bear: only $150M left → TLB recovers 75% (fulcrum). In Base/Bull: fully covered. The fulcrum holder receives new equity in reorganisation — most valuable tranche to acquire.',  formula:'Remaining EV = Prior balance − tranche claim paid (Bear: $0 after TLB)' },
+  ],
+  'SOTP': [
+    { sheet:'Segment Overview', label:'EBITDA ($M)',         title:'Step 1 — Segment EBITDA: the valuation basis for each part',   body:'Cloud SW: $60M (35% margin), Industrials: $62M (20%), Consumer: $32M (15%), Corp HQ: −$15M overhead. Each segment is valued on its own EBITDA × a segment-specific multiple. The blended group EBITDA margin is only 19.9%.',                                  formula:'Total EBITDA ex-HQ: $60+$62+$32 = $154M; Corp HQ penalty: −$15M' },
+    { sheet:'Segment Overview', label:'vs Blended multiple', title:'Step 2 — Why SOTP beats a blended multiple by $173M',          body:'A blended 8.8× on $154M EBITDA = $1,355M. SOTP gives $1,528M segment EV — a $173M difference. The cloud business earns 14× because of 18% growth and SaaS quality. Forcing a blended 8.8× destroys $240M of cloud value.',              formula:'SOTP advantage = $1,528M − $1,355M blended = $173M of unlocked value' },
+    { sheet:'SOTP Build',       label:'EV/EBITDA Multiple',  title:'Step 3 — Multiples: the most judgement-intensive input',       body:'Cloud SW 14× (SaaS, 18% growth), Industrials 8× (mid-cycle OEM), Consumer 6× (low-growth retail), Corp HQ 10× cost penalty. Each must be benchmarked against a mini comps screen of 4–6 pure-play peers.',                                  formula:'Segment EV = Segment EBITDA × Peer-benchmarked EV/EBITDA Multiple' },
+    { sheet:'SOTP Build',       label:'Segment EV ($M)',     title:'Step 4 — Segment EVs: the sum of the parts',                   body:'Cloud SW: $840M (61% of total EV), Industrials: $496M, Consumer: $192M, HQ: −$150M. Total Segment EV = $1,378M. Cloud SW at 61% of EV from only 25% of revenue — the classic hidden value in a conglomerate structure.',            formula:'$60×14=$840 | $62×8=$496 | $32×6=$192 | −$15×10=−$150 | Σ=$1,378M' },
+    { sheet:'SOTP Build',       label:'Equity Value ($M)',   title:'Step 5 — Equity bridge: EV → Equity Value via net debt',       body:'Equity = Total EV − Net Debt = $1,378M − $370M = $1,008M. Net Debt = $450M debt − $80M cash. Debt is deducted at holdco level (not allocated to segments). This bridge is identical to a DCF or comps bridge.',                     formula:'Equity = Total EV + Cash − Debt = $1,378M + $80M − $450M = $1,008M' },
+    { sheet:'SOTP Build',       label:'Implied Share Price ($)', title:'Step 6 — Implied price: the SOTP output and conglomerate discount', body:'$20.16 = $1,008M / 50M shares. Blended-multiple implied = ~$17.24. Conglomerate discount = 11.3% ($156M). Listed conglomerates trade 10–20% below SOTP — the financial case for spin-offs (GE, 3M, Honeywell).', formula:'Implied Price = Equity Value / Diluted Shares = $1,008M / 50M = $20.16' },
+  ],
+  'DDM': [
+    { sheet:'Assumptions', label:'Cost of Equity (CoE)',               title:'Step 1 — CoE: the only discount rate in a DDM',                  body:"CoE = Rf + β × ERP = 4.5% + 0.8×5.5% = 9.0%. There is no WACC in a bank DDM because EV is undefined for financial institutions. The bank's entire capital structure (deposits, wholesale funding) is its raw material — you cannot separate operating from financial leverage.",  formula:'CoE = Rf + β × ERP = 4.5% + 0.8 × 5.5% = 9.0%' },
+    { sheet:'Assumptions', label:'Dividend Payout Ratio',              title:'Step 2 — Payout ratio: constrained by Basel III CET1 buffers', body:'45% payout → DPS = EPS × 45%. Payout is not a free choice: banks must retain earnings to fund RWA growth under Basel III CET1 requirements. Sustainable max payout ≈ 1 − g/ROE = 1 − 7%/14% = 50%; 45% is conservatively below.',                formula:'Sustainable Payout = 1 − g/ROE = 1 − 7%/14% = 50%; use 45% conservatively' },
+    { sheet:'DDM Build',   label:'Dividends Per Share (DPS) ($)',       title:'Step 3 — DPS: the actual cash received by shareholders',        body:'DPS = EPS × 45% = $0.96 in 2025E, growing to $1.26 by 2029E. Dividends are what the DDM discounts — unlike the DCF which discounts UFCF. Each annual DPS is discounted separately at CoE back to today.',                                     formula:'DPS = EPS × Payout Ratio = $2.14 × 45% = $0.96 (2025E)' },
+    { sheet:'DDM Build',   label:'Terminal Value (at end 2029E) ($)',   title:'Step 4 — Terminal Value: Gordon Growth drives 77% of the price', body:"TV = DPS₂₀₃₀E / (CoE − g) = $1.298 / 6.0% = $21.63. PV of TV = $14.06 = 77% of total implied price. The spread (CoE − g) is the single most important input — a 1% narrowing increases TV by ~17%. This is why bank stocks act like long-duration bonds.", formula:'TV = DPS_terminal / (CoE − g) = $1.298 / (9.0% − 3.0%) = $21.63' },
+    { sheet:'DDM Build',   label:'DDM Implied Share Price ($)',         title:'Step 5 — DDM implied price: compare to market',                 body:'$18.32 = $4.26 PV(dividends) + $14.06 PV(TV). Market $18.50 = 1% premium to DDM → roughly fairly valued. Bear (CoE 10.5%, g 2.5%) → $13.88. Bull (CoE 7.5%, g 3.0%) → $24.53. The CoE vs g sensitivity matrix is the primary DDM deliverable.',        formula:'DDM Price = Σ PV(DPS₁₋₅) + PV(TV) = $4.26 + $14.06 = $18.32' },
+  ],
+};
+
 
 let activeSheetIdx = 0;
 let selectedCell   = null;
@@ -3375,6 +3468,9 @@ let showQA         = false;
 let showGloss      = false;
 let isDark         = false;
 let activeScenario = 'base';
+let showWalkthrough  = false;
+let wtStepIdx        = 0;
+let wtHighlightLabel = null;
 
 // Working copies
 let MODELS_DATA = [
@@ -3945,6 +4041,13 @@ function fmtVal(v, format, negative) {
    MODEL SWITCH
 ============================================================ */
 function setModel(idx) {
+  if (showWalkthrough) {
+    showWalkthrough  = false;
+    wtHighlightLabel = null;
+    document.body.classList.remove('wt-open');
+    document.getElementById('wtPanel').classList.remove('open');
+    updateToolsItemState('wtBtn', false);
+  }
   activeModelIdx = idx;
   activeSheetIdx = 0;
   selectedCell   = null;
@@ -4026,7 +4129,8 @@ function renderSheet() {
     const scenOverrides = activeScenario !== 'base' ? (SCENARIO_OVERRIDES[activeScenario] || {}) : {};
     const scenVals = scenOverrides[rowKey];
     const isScenRow = !!scenVals;
-    const trCls = `${row.type}${isScenRow ? ' scen-' + activeScenario : ''}`;
+    const isWTRow   = showWalkthrough && wtHighlightLabel && row.label === wtHighlightLabel;
+    const trCls = `${row.type}${isScenRow ? ' scen-' + activeScenario : ''}${isWTRow ? ' wt-row-on' : ''}`;
 
     html += `<tr class="${trCls}" data-ri="${ri}">`;
     html += `<td class="rn">${rowNum}</td>`;
@@ -4287,6 +4391,86 @@ function toggleRemarks() {
   showRemarks = !showRemarks;
   updateToolsItemState('remarksBtn', showRemarks);
   renderActive();
+}
+
+/* ============================================================
+   MODEL WALKTHROUGH
+============================================================ */
+function toggleWalkthrough() {
+  if (showWalkthrough) { closeWalkthrough(); return; }
+  showWalkthrough = true;
+  wtStepIdx = 0;
+  document.body.classList.add('wt-open');
+  document.getElementById('wtPanel').classList.add('open');
+  updateToolsItemState('wtBtn', true);
+  applyWTStep();
+}
+
+function closeWalkthrough() {
+  showWalkthrough  = false;
+  wtHighlightLabel = null;
+  document.body.classList.remove('wt-open');
+  document.getElementById('wtPanel').classList.remove('open');
+  updateToolsItemState('wtBtn', false);
+  renderActive();
+}
+
+function getWTSteps() { return WALKTHROUGH_DATA[activeModel().name] || []; }
+
+function applyWTStep() {
+  const steps = getWTSteps();
+  if (!steps.length) return;
+  const step = steps[wtStepIdx];
+  wtHighlightLabel = step.label;
+
+  const sheets = activeSheets();
+  const si = sheets.findIndex(s => s.name === step.sheet);
+  if (si >= 0 && si !== activeSheetIdx) {
+    activeSheetIdx = si;
+    const tabs = document.getElementById('sheetTabs');
+    if (tabs) tabs.querySelectorAll('.stab').forEach((b, i) => b.classList.toggle('on', i === si));
+  }
+  renderActive();
+  renderWTPanel();
+  scrollToHighlight();
+}
+
+function renderWTPanel() {
+  const steps = getWTSteps();
+  const step  = steps[wtStepIdx];
+  const total = steps.length;
+  document.getElementById('wtModelTag').textContent   = activeModel().name + ' Guide';
+  document.getElementById('wtStepCount').textContent  = (wtStepIdx + 1) + '/' + total;
+  document.getElementById('wtTitle').textContent      = step.title;
+  document.getElementById('wtBody').textContent       = step.body;
+  const fEl = document.getElementById('wtFormula');
+  fEl.textContent    = step.formula || '';
+  fEl.style.display  = step.formula ? '' : 'none';
+  document.getElementById('wtSheetBadge').textContent = step.sheet;
+  document.getElementById('wtPrev').disabled          = wtStepIdx === 0;
+  document.getElementById('wtNext').textContent       = wtStepIdx === total - 1 ? 'Finish ✓' : 'Next →';
+  const dotsEl = document.getElementById('wtDots');
+  dotsEl.innerHTML = steps.map((_, i) =>
+    `<span class="wt-dot${i === wtStepIdx ? ' on' : ''}" onclick="goWTStep(${i})"></span>`
+  ).join('');
+}
+
+function stepWT(dir) {
+  const steps  = getWTSteps();
+  const newIdx = wtStepIdx + dir;
+  if (newIdx < 0) return;
+  if (newIdx >= steps.length) { closeWalkthrough(); return; }
+  wtStepIdx = newIdx;
+  applyWTStep();
+}
+
+function goWTStep(idx) { wtStepIdx = idx; applyWTStep(); }
+
+function scrollToHighlight() {
+  setTimeout(() => {
+    const el = document.querySelector('tr.wt-row-on');
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 60);
 }
 
 /* ============================================================
@@ -10202,6 +10386,27 @@ function stopMockTimer() {
     </div>
     <div class="va-tabs" id="vaTabNav"></div>
     <div class="va-body" id="vaBody"></div>
+  </div>
+</div>
+
+<div class="wt-panel" id="wtPanel">
+  <div class="wt-row1">
+    <span class="wt-model-tag" id="wtModelTag">Guide</span>
+    <div class="wt-dots" id="wtDots"></div>
+    <span class="wt-step-count" id="wtStepCount">1/8</span>
+    <button class="wt-close-btn" onclick="closeWalkthrough()">Exit Guide</button>
+  </div>
+  <div class="wt-row2">
+    <span class="wt-title" id="wtTitle"></span>
+    <span class="wt-body" id="wtBody"></span>
+    <span class="wt-formula" id="wtFormula" style="display:none"></span>
+  </div>
+  <div class="wt-row3">
+    <span class="wt-sheet-badge" id="wtSheetBadge"></span>
+    <div class="wt-nav-btns">
+      <button class="wt-nav-btn" id="wtPrev" onclick="stepWT(-1)">← Prev</button>
+      <button class="wt-nav-btn" id="wtNext" onclick="stepWT(1)">Next →</button>
+    </div>
   </div>
 </div>
 
