@@ -444,8 +444,6 @@
       oninput="onSearch()" autocomplete="off" spellcheck="false">
   </div>
 
-  <span id="countdown"></span>
-
   <button class="btn btn-refresh" id="refreshBtn" onclick="manualRefresh()">
     <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
       <polyline points="23 4 23 10 17 10"></polyline>
@@ -601,8 +599,6 @@ let activeSrc   = 'all';
 let query       = '';
 let failed      = [];
 let tabCache    = {};
-let cntId       = null;
-let cntSec      = 0;
 
 function activeTab() { return TABS.find(t => t.id === activeTabId); }
 
@@ -834,11 +830,9 @@ function onSearch() {
 function manualRefresh() {
   const btn = document.getElementById('refreshBtn');
   btn.classList.add('spin');
-  clearInterval(cntId);
   delete tabCache[activeTabId];
   Promise.all([loadTab(activeTabId, true), loadTicker()]).then(() => {
     btn.classList.remove('spin');
-    startCountdown();
   });
 }
 
@@ -865,25 +859,6 @@ function setStatus(n) {
     'Updated ' + new Date().toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit' });
 }
 
-/* ── COUNTDOWN ───────────────────────────────────────────── */
-function startCountdown() {
-  clearInterval(cntId);
-  cntSec = REFRESH_MS / 1000;
-  cntId  = setInterval(() => {
-    cntSec--;
-    if (cntSec <= 0) {
-      clearInterval(cntId);
-      delete tabCache[activeTabId];
-      loadTab(activeTabId, true);
-      loadTicker();
-      startCountdown();
-      return;
-    }
-    const m = Math.floor(cntSec / 60).toString().padStart(2, '0');
-    const s = (cntSec % 60).toString().padStart(2, '0');
-    document.getElementById('countdown').textContent = m + ':' + s;
-  }, 1000);
-}
 
 /* ── UTILS ───────────────────────────────────────────────── */
 function ago(d) {
@@ -923,7 +898,6 @@ function safeAttr(s) {
 /* ── INIT ────────────────────────────────────────────────── */
 loadTab('market');
 loadTicker();
-startCountdown();
 </script>
 </body>
 </html>
