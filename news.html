@@ -481,11 +481,14 @@
 /* ── CONFIG ──────────────────────────────────────────────── */
 const PROXY = 'https://api.allorigins.win/get?url=';
 
+const FVZ = { id:'finviz', name:'FinViz', tag:'FVZ', clr:'#EF4444', type:'finviz' };
+
 const TABS = [
   {
     id: 'market',
     name: 'Market News',
     feeds: [
+      FVZ,
       { id:'yahoo',      name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex' },
       { id:'investing',  name:'Investing.com', tag:'INV',  clr:'#C0392B', url:'https://www.investing.com/rss/news.rss' },
       { id:'marketwatch',name:'MarketWatch',   tag:'MW',   clr:'#0A6E31', url:'https://feeds.marketwatch.com/marketwatch/topstories/' },
@@ -498,6 +501,7 @@ const TABS = [
     id: 'pulse',
     name: 'Market Pulse',
     feeds: [
+      FVZ,
       { id:'yahoo_p',    name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex' },
       { id:'cnbc_p',     name:'CNBC',          tag:'CNBC', clr:'#0084CC', url:'https://www.cnbc.com/id/100727362/device/rss/rss.html' },
       { id:'investing_p',name:'Investing.com', tag:'INV',  clr:'#C0392B', url:'https://www.investing.com/rss/news.rss' },
@@ -509,6 +513,7 @@ const TABS = [
     id: 'stocks',
     name: 'Stocks News',
     feeds: [
+      FVZ,
       { id:'yahoo_s',    name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex' },
       { id:'cnbc_s',     name:'CNBC',          tag:'CNBC', clr:'#0084CC', url:'https://www.cnbc.com/id/15839069/device/rss/rss.html' },
       { id:'marketwatch_s',name:'MarketWatch', tag:'MW',   clr:'#0A6E31', url:'https://feeds.marketwatch.com/marketwatch/topstories/' },
@@ -519,6 +524,7 @@ const TABS = [
     id: 'etf',
     name: 'ETF News',
     feeds: [
+      FVZ,
       { id:'etftrends',  name:'ETF Trends',    tag:'ETFT', clr:'#059669', url:'https://www.etftrends.com/feed/' },
       { id:'etfdb',      name:'ETF Database',  tag:'ETFD', clr:'#10B981', url:'https://etfdb.com/feed/' },
       { id:'yahoo_e',    name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex' },
@@ -529,6 +535,7 @@ const TABS = [
     id: 'crypto',
     name: 'Crypto News',
     feeds: [
+      FVZ,
       { id:'cointele',   name:'CoinTelegraph', tag:'CT',   clr:'#17A589', url:'https://cointelegraph.com/rss' },
       { id:'btcmag',     name:'Bitcoin Mag.',  tag:'BTC',  clr:'#F97316', url:'https://bitcoinmagazine.com/feed' },
       { id:'cryptoslate',name:'CryptoSlate',   tag:'CS',   clr:'#6366F1', url:'https://cryptoslate.com/feed/' },
@@ -565,8 +572,54 @@ let cntSec      = 0;
 
 function activeTab() { return TABS.find(t => t.id === activeTabId); }
 
+/* ── FETCH: FinViz (via Netlify function) ────────────────── */
+async function fetchFinVizFeed(feed) {
+  try {
+    const res  = await fetch('/.netlify/functions/finviz?tab=' + activeTabId, { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    if (!json.contents) throw new Error('empty');
+
+    const doc  = new DOMParser().parseFromString(json.contents, 'text/html');
+    const rows = [...doc.querySelectorAll('.news-table tr')];
+    if (!rows.length) throw new Error('no rows');
+
+    const MONTH = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+    let curDate = new Date();
+
+    return rows.map(row => {
+      const cells = row.querySelectorAll('td');
+      if (cells.length < 2) return null;
+      const dateText = cells[0].textContent.trim();
+      const anchor   = cells[cells.length - 1].querySelector('a');
+      if (!anchor) return null;
+      const title = anchor.textContent.trim();
+      const href  = anchor.getAttribute('href') || '';
+
+      if (dateText) {
+        const tM = dateText.match(/^(\d{1,2}):(\d{2})(AM|PM)$/i);
+        const dM = dateText.match(/^([A-Za-z]{3})-(\d{1,2})-(\d{2})$/);
+        if (tM) {
+          let h = parseInt(tM[1]);
+          const p = tM[3].toUpperCase();
+          if (p === 'PM' && h !== 12) h += 12;
+          if (p === 'AM' && h === 12) h = 0;
+          const d = new Date(curDate); d.setHours(h, parseInt(tM[2]), 0, 0); curDate = d;
+        } else if (dM && MONTH[dM[1]] !== undefined) {
+          curDate = new Date(2000 + parseInt(dM[3]), MONTH[dM[1]], parseInt(dM[2]));
+        }
+      }
+      return title.length > 6 ? { title, link: href, date: new Date(curDate), feed, key: href || title } : null;
+    }).filter(Boolean);
+  } catch (e) {
+    console.warn('[finviz]', e.message);
+    failed.push(feed.name);
+    return [];
+  }
+}
+
 /* ── FETCH: RSS ──────────────────────────────────────────── */
-async function fetchFeed(feed) {
+async function fetchRSSFeed(feed) {
   try {
     const res  = await fetch(PROXY + encodeURIComponent(feed.url), { cache: 'no-store' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -591,6 +644,10 @@ async function fetchFeed(feed) {
     failed.push(feed.name);
     return [];
   }
+}
+
+function fetchFeed(feed) {
+  return feed.type === 'finviz' ? fetchFinVizFeed(feed) : fetchRSSFeed(feed);
 }
 
 /* ── LOAD TAB ────────────────────────────────────────────── */
