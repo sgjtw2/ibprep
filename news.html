@@ -5,29 +5,48 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="mobile-web-app-capable" content="yes">
-  <meta name="theme-color" content="#09090f">
+  <meta name="theme-color" content="#000000">
   <title>News Terminal — IB Prep</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <style>
-    /* ── TOKENS ──────────────────────────────────────────────── */
+    /* ── TOKENS — DARK (default) ─────────────────────────────── */
     :root {
-      --bg:      #09090f;
-      --bg2:     #0e1117;
-      --bg3:     #141920;
-      --bg4:     #1a2030;
-      --border:  #1e2635;
-      --border2: #252f3e;
-      --text:    #dde3ed;
-      --text2:   #99a8ba;
-      --muted:   #4e5d70;
-      --accent:  #f97316;
-      --green:   #22c55e;
-      --red:     #ef4444;
-      --blue:    #3b82f6;
-      --font:    'Inter', system-ui, -apple-system, sans-serif;
+      --bg:      #000000;
+      --bg2:     #080C14;
+      --bg3:     #0C1220;
+      --bg4:     #0E1828;
+      --border:  #162038;
+      --border2: #1E2E4A;
+      --text:    #EEF2FF;
+      --text2:   #8898B8;
+      --muted:   #4A5A78;
+      --accent:  #1B4FD8;
+      --accent-l:#2D63F0;
+      --accent-a:rgba(27,79,216,.15);
+      --green:   #1E7A5A;
+      --red:     #C93C2E;
+      --font:    'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
       --mono:    'JetBrains Mono', 'Courier New', monospace;
+    }
+
+    /* ── TOKENS — LIGHT ──────────────────────────────────────── */
+    [data-theme="light"] {
+      --bg:      #FFFFFF;
+      --bg2:     #F8FAFC;
+      --bg3:     #F1F5F9;
+      --bg4:     #E2E8F0;
+      --border:  #E2E8F0;
+      --border2: #CBD5E1;
+      --text:    #0F172A;
+      --text2:   #475569;
+      --muted:   #94A3B8;
+      --accent:  #1B4FD8;
+      --accent-l:#2D63F0;
+      --accent-a:rgba(27,79,216,.08);
+      --green:   #16A34A;
+      --red:     #DC2626;
     }
 
     /* ── RESET ───────────────────────────────────────────────── */
@@ -43,7 +62,7 @@
       overflow-x: hidden;
     }
     a { color: inherit; text-decoration: none; }
-    button { cursor: pointer; border: none; background: none; font-family: inherit; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; color: inherit; }
 
     /* ── TOPBAR ──────────────────────────────────────────────── */
     #topbar {
@@ -54,10 +73,9 @@
       align-items: center;
       gap: 10px;
       padding: 0 20px;
-      height: 50px;
+      height: 52px;
       background: var(--bg2);
       border-bottom: 1px solid var(--border);
-      backdrop-filter: blur(8px);
     }
 
     .logo {
@@ -108,7 +126,7 @@
       -webkit-appearance: none;
     }
     #searchBox::placeholder { color: var(--muted); }
-    #searchBox:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(249,115,22,.15); }
+    #searchBox:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-a); }
 
     #countdown {
       font-family: var(--mono);
@@ -129,9 +147,9 @@
     }
     .btn-refresh {
       color: var(--accent);
-      border: 1px solid rgba(249,115,22,.35);
+      border: 1px solid rgba(27,79,216,.35);
     }
-    .btn-refresh:hover { background: rgba(249,115,22,.1); border-color: var(--accent); }
+    .btn-refresh:hover { background: var(--accent-a); border-color: var(--accent); }
     .btn-refresh.spin svg { animation: spin .7s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .btn-back {
@@ -139,6 +157,18 @@
       border: 1px solid var(--border);
     }
     .btn-back:hover { color: var(--text); border-color: var(--border2); }
+
+    .theme-toggle {
+      width: 30px; height: 30px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      transition: background .15s;
+    }
+    .theme-toggle:hover { background: var(--border); }
 
     /* ── TICKER TAPE ─────────────────────────────────────────── */
     #tickerWrap {
@@ -196,7 +226,6 @@
     .tab {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
       padding: 10px 14px 9px;
       font-size: 11px;
       font-weight: 600;
@@ -208,19 +237,9 @@
       white-space: nowrap;
       flex-shrink: 0;
       transition: color .15s, border-color .15s;
-      position: relative;
     }
     .tab:hover { color: var(--text2); }
     .tab.on { color: var(--accent); border-bottom-color: var(--accent); }
-    .tab-badge {
-      font-size: 8px; font-weight: 700;
-      padding: 1px 4px; border-radius: 2px;
-      background: rgba(249,115,22,.15);
-      color: var(--accent);
-      letter-spacing: 0;
-      display: none;
-    }
-    .tab.on .tab-badge { display: inline; }
 
     /* ── FILTER BAR ──────────────────────────────────────────── */
     #filterBar {
@@ -246,7 +265,7 @@
       flex-shrink: 0; transition: all .12s; cursor: pointer;
     }
     .chip:hover { border-color: var(--border2); color: var(--text2); }
-    .chip.on { color: #fff; }
+    .chip.on { color: var(--text); }
     .chip-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
     .chip-n { font-weight: 400; opacity: .5; margin-left: 1px; }
 
@@ -258,9 +277,9 @@
       display: none;
       padding: 6px 20px;
       font-size: 10px;
-      color: #fbbf24;
-      background: rgba(251,191,36,.06);
-      border-bottom: 1px solid rgba(251,191,36,.15);
+      color: #f59e0b;
+      background: rgba(245,158,11,.06);
+      border-bottom: 1px solid rgba(245,158,11,.15);
     }
 
     /* ── DATE GROUP HEADER ───────────────────────────────────── */
@@ -309,7 +328,7 @@
       font-size: 13px; font-weight: 400;
       color: var(--text); line-height: 1.45;
     }
-    .article:hover .art-title { color: #fff; }
+    .article:hover .art-title { color: var(--text); font-weight: 500; }
 
     /* ── SKELETON ────────────────────────────────────────────── */
     @keyframes shimmer {
@@ -358,7 +377,7 @@
 
     /* ── RESPONSIVE — MOBILE ≤768 ────────────────────────────── */
     @media (max-width: 768px) {
-      #topbar { padding: 0 14px; gap: 8px; height: 52px; }
+      #topbar { padding: 0 14px; gap: 8px; }
       .logo-sub, .logo-sep { display: none; }
       .logo-name { font-size: 10px; }
       .logo-dot { width: 7px; height: 7px; }
@@ -366,12 +385,11 @@
       .btn-back { display: none; }
       .btn { padding: 6px 10px; min-height: 34px; }
       #tabBar { padding: 0 14px; }
-      .tab { padding: 9px 11px 8px; font-size: 10px; }
+      .tab { padding: 9px 10px 8px; font-size: 10px; }
       #filterBar { padding: 7px 14px; gap: 5px; }
       .chip { padding: 6px 9px; min-height: 30px; }
       #main { max-width: 100%; }
       .article { padding: 11px 14px; gap: 9px; }
-      .art-title { font-size: 13px; }
       .date-hdr { padding: 7px 14px 4px; }
       #statusBar { padding: 5px 14px; font-size: 9px; }
       #warnBar { padding: 6px 14px; }
@@ -398,10 +416,11 @@
       .tab { padding: 11px 14px 10px; min-height: 44px; }
       .tk { height: 36px; }
       #tickerWrap { height: 36px; }
+      .theme-toggle { width: 36px; height: 36px; }
     }
     @media (pointer: coarse) and (max-width: 768px) {
       .article { padding: 13px 14px; }
-      .tab { padding: 11px 11px 10px; }
+      .tab { padding: 11px 10px 10px; }
     }
   </style>
 </head>
@@ -434,6 +453,7 @@
     Refresh
   </button>
 
+  <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" title="Toggle theme">☀</button>
   <a href="./financial-model.html" class="btn btn-back">← App</a>
 </div>
 
@@ -455,7 +475,7 @@
 
 <!-- ── FILTER BAR ──────────────────────────────────────── -->
 <div id="filterBar">
-  <button class="chip on" data-id="all" onclick="setFilter('all')">All</button>
+  <button class="chip on" onclick="setFilter('all')">All</button>
 </div>
 
 <!-- ── CONTENT ─────────────────────────────────────────── -->
@@ -478,8 +498,23 @@
 <script>
 'use strict';
 
+/* ── THEME ───────────────────────────────────────────────── */
+function initTheme() {
+  const t = localStorage.getItem('cc-theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('themeToggle').textContent = t === 'dark' ? '☀' : '☾';
+}
+function toggleTheme() {
+  const cur  = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  localStorage.setItem('cc-theme', next);
+  document.getElementById('themeToggle').textContent = next === 'dark' ? '☀' : '☾';
+}
+initTheme();
+
 /* ── CONFIG ──────────────────────────────────────────────── */
-const PROXY = 'https://api.allorigins.win/get?url=';
+const PROXY = '/.netlify/functions/proxy?url=';
 
 const FVZ = { id:'finviz', name:'FinViz', tag:'FVZ', clr:'#EF4444', type:'finviz' };
 
@@ -489,12 +524,12 @@ const TABS = [
     name: 'Market News',
     feeds: [
       FVZ,
-      { id:'yahoo',      name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex' },
-      { id:'investing',  name:'Investing.com', tag:'INV',  clr:'#C0392B', url:'https://www.investing.com/rss/news.rss' },
-      { id:'marketwatch',name:'MarketWatch',   tag:'MW',   clr:'#0A6E31', url:'https://feeds.marketwatch.com/marketwatch/topstories/' },
-      { id:'cnbc',       name:'CNBC',          tag:'CNBC', clr:'#0084CC', url:'https://www.cnbc.com/id/100003114/device/rss/rss.html' },
-      { id:'guardian',   name:'The Guardian',  tag:'GDN',  clr:'#005689', url:'https://www.theguardian.com/business/rss' },
-      { id:'bbc',        name:'BBC Business',  tag:'BBC',  clr:'#BB1919', url:'https://feeds.bbci.co.uk/news/business/rss.xml' },
+      { id:'yahoo',        name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex' },
+      { id:'investing',    name:'Investing.com', tag:'INV',  clr:'#C0392B', url:'https://www.investing.com/rss/news.rss' },
+      { id:'marketwatch',  name:'MarketWatch',   tag:'MW',   clr:'#0A6E31', url:'https://feeds.marketwatch.com/marketwatch/topstories/' },
+      { id:'cnbc',         name:'CNBC',          tag:'CNBC', clr:'#0060A8', url:'https://www.cnbc.com/id/100003114/device/rss/rss.html' },
+      { id:'guardian',     name:'The Guardian',  tag:'GDN',  clr:'#005689', url:'https://www.theguardian.com/business/rss' },
+      { id:'bbc',          name:'BBC Business',  tag:'BBC',  clr:'#BB1919', url:'https://feeds.bbci.co.uk/news/business/rss.xml' },
     ]
   },
   {
@@ -502,11 +537,11 @@ const TABS = [
     name: 'Market Pulse',
     feeds: [
       FVZ,
-      { id:'yahoo_p',    name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex' },
-      { id:'cnbc_p',     name:'CNBC',          tag:'CNBC', clr:'#0084CC', url:'https://www.cnbc.com/id/100727362/device/rss/rss.html' },
-      { id:'investing_p',name:'Investing.com', tag:'INV',  clr:'#C0392B', url:'https://www.investing.com/rss/news.rss' },
-      { id:'bbc_p',      name:'BBC Business',  tag:'BBC',  clr:'#BB1919', url:'https://feeds.bbci.co.uk/news/business/rss.xml' },
-      { id:'guardian_p', name:'The Guardian',  tag:'GDN',  clr:'#005689', url:'https://www.theguardian.com/business/rss' },
+      { id:'yahoo_p',      name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex' },
+      { id:'cnbc_p',       name:'CNBC',          tag:'CNBC', clr:'#0060A8', url:'https://www.cnbc.com/id/100727362/device/rss/rss.html' },
+      { id:'investing_p',  name:'Investing.com', tag:'INV',  clr:'#C0392B', url:'https://www.investing.com/rss/news.rss' },
+      { id:'bbc_p',        name:'BBC Business',  tag:'BBC',  clr:'#BB1919', url:'https://feeds.bbci.co.uk/news/business/rss.xml' },
+      { id:'guardian_p',   name:'The Guardian',  tag:'GDN',  clr:'#005689', url:'https://www.theguardian.com/business/rss' },
     ]
   },
   {
@@ -514,10 +549,10 @@ const TABS = [
     name: 'Stocks News',
     feeds: [
       FVZ,
-      { id:'yahoo_s',    name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex' },
-      { id:'cnbc_s',     name:'CNBC',          tag:'CNBC', clr:'#0084CC', url:'https://www.cnbc.com/id/15839069/device/rss/rss.html' },
-      { id:'marketwatch_s',name:'MarketWatch', tag:'MW',   clr:'#0A6E31', url:'https://feeds.marketwatch.com/marketwatch/topstories/' },
-      { id:'investing_s',name:'Investing.com', tag:'INV',  clr:'#C0392B', url:'https://www.investing.com/rss/news.rss' },
+      { id:'yahoo_s',      name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex' },
+      { id:'cnbc_s',       name:'CNBC',          tag:'CNBC', clr:'#0060A8', url:'https://www.cnbc.com/id/15839069/device/rss/rss.html' },
+      { id:'marketwatch_s',name:'MarketWatch',   tag:'MW',   clr:'#0A6E31', url:'https://feeds.marketwatch.com/marketwatch/topstories/' },
+      { id:'investing_s',  name:'Investing.com', tag:'INV',  clr:'#C0392B', url:'https://www.investing.com/rss/news.rss' },
     ]
   },
   {
@@ -525,10 +560,10 @@ const TABS = [
     name: 'ETF News',
     feeds: [
       FVZ,
-      { id:'etftrends',  name:'ETF Trends',    tag:'ETFT', clr:'#059669', url:'https://www.etftrends.com/feed/' },
-      { id:'etfdb',      name:'ETF Database',  tag:'ETFD', clr:'#10B981', url:'https://etfdb.com/feed/' },
-      { id:'yahoo_e',    name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex' },
-      { id:'marketwatch_e',name:'MarketWatch', tag:'MW',   clr:'#0A6E31', url:'https://feeds.marketwatch.com/marketwatch/topstories/' },
+      { id:'etftrends',    name:'ETF Trends',    tag:'ETFT', clr:'#059669', url:'https://www.etftrends.com/feed/' },
+      { id:'etfdb',        name:'ETF Database',  tag:'ETFD', clr:'#10B981', url:'https://etfdb.com/feed/' },
+      { id:'yahoo_e',      name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex' },
+      { id:'marketwatch_e',name:'MarketWatch',   tag:'MW',   clr:'#0A6E31', url:'https://feeds.marketwatch.com/marketwatch/topstories/' },
     ]
   },
   {
@@ -536,11 +571,11 @@ const TABS = [
     name: 'Crypto News',
     feeds: [
       FVZ,
-      { id:'cointele',   name:'CoinTelegraph', tag:'CT',   clr:'#17A589', url:'https://cointelegraph.com/rss' },
-      { id:'btcmag',     name:'Bitcoin Mag.',  tag:'BTC',  clr:'#F97316', url:'https://bitcoinmagazine.com/feed' },
-      { id:'cryptoslate',name:'CryptoSlate',   tag:'CS',   clr:'#6366F1', url:'https://cryptoslate.com/feed/' },
-      { id:'decrypt',    name:'Decrypt',       tag:'DCR',  clr:'#9333EA', url:'https://decrypt.co/feed' },
-      { id:'coindesk',   name:'CoinDesk',      tag:'CD',   clr:'#F7931A', url:'https://www.coindesk.com/arc/outboundfeeds/rss/' },
+      { id:'cointele',     name:'CoinTelegraph', tag:'CT',   clr:'#17A589', url:'https://cointelegraph.com/rss' },
+      { id:'btcmag',       name:'Bitcoin Mag.',  tag:'BTC',  clr:'#F97316', url:'https://bitcoinmagazine.com/feed' },
+      { id:'cryptoslate',  name:'CryptoSlate',   tag:'CS',   clr:'#6366F1', url:'https://cryptoslate.com/feed/' },
+      { id:'decrypt',      name:'Decrypt',       tag:'DCR',  clr:'#9333EA', url:'https://decrypt.co/feed' },
+      { id:'coindesk',     name:'CoinDesk',      tag:'CD',   clr:'#F7931A', url:'https://www.coindesk.com/arc/outboundfeeds/rss/' },
     ]
   },
 ];
@@ -572,7 +607,7 @@ let cntSec      = 0;
 
 function activeTab() { return TABS.find(t => t.id === activeTabId); }
 
-/* ── FETCH: FinViz (via Netlify function) ────────────────── */
+/* ── FETCH: FinViz (Netlify function) ────────────────────── */
 async function fetchFinVizFeed(feed) {
   try {
     const res  = await fetch('/.netlify/functions/finviz?tab=' + activeTabId, { cache: 'no-store' });
@@ -618,7 +653,7 @@ async function fetchFinVizFeed(feed) {
   }
 }
 
-/* ── FETCH: RSS ──────────────────────────────────────────── */
+/* ── FETCH: RSS (Netlify proxy) ──────────────────────────── */
 async function fetchRSSFeed(feed) {
   try {
     const res  = await fetch(PROXY + encodeURIComponent(feed.url), { cache: 'no-store' });
@@ -630,10 +665,10 @@ async function fetchRSSFeed(feed) {
     if (xml.querySelector('parsererror')) throw new Error('XML parse error');
 
     return [...xml.querySelectorAll('item')].slice(0, 30).map(el => {
-      const raw   = el.querySelector('title')?.textContent || '';
-      const title = raw.replace(/<!\[CDATA\[|\]\]>/g, '').trim();
-      const link  = (el.querySelector('link')?.textContent?.trim()
-                  || el.querySelector('guid')?.textContent?.trim() || '').trim();
+      const raw     = el.querySelector('title')?.textContent || '';
+      const title   = raw.replace(/<!\[CDATA\[|\]\]>/g, '').trim();
+      const link    = (el.querySelector('link')?.textContent?.trim()
+                    || el.querySelector('guid')?.textContent?.trim() || '').trim();
       const rawDate = el.querySelector('pubDate')?.textContent?.trim()
                     || el.querySelector('dc\\:date,date')?.textContent?.trim() || '';
       const date = rawDate ? new Date(rawDate) : new Date();
@@ -650,12 +685,55 @@ function fetchFeed(feed) {
   return feed.type === 'finviz' ? fetchFinVizFeed(feed) : fetchRSSFeed(feed);
 }
 
+/* ── FETCH: TICKER ───────────────────────────────────────── */
+async function loadTicker() {
+  try {
+    const syms = TICKER_SYMS.map(([s]) => s).join(',');
+    const api  = 'https://query1.finance.yahoo.com/v7/finance/quote?symbols=' + encodeURIComponent(syms);
+    const res  = await fetch(PROXY + encodeURIComponent(api));
+    const json = await res.json();
+    const data = JSON.parse(json.contents);
+    buildTicker(data?.quoteResponse?.result || []);
+  } catch (e) {
+    console.warn('[ticker]', e.message);
+    document.getElementById('tickerTrack').innerHTML =
+      '<span class="tk-loading">Market data unavailable</span>';
+  }
+}
+
+function buildTicker(quotes) {
+  const map  = Object.fromEntries(TICKER_SYMS);
+  const html = quotes.map(q => {
+    const lbl    = map[q.symbol] || q.symbol;
+    const price  = q.regularMarketPrice;
+    const pct    = q.regularMarketChangePercent;
+    const disp   = price == null ? '—'
+      : price < 10   ? price.toFixed(4)
+      : price < 1000 ? price.toFixed(2)
+      : price.toLocaleString('en-US', { maximumFractionDigits: 0 });
+    const arrow  = pct >  0.01 ? '▲' : pct < -0.01 ? '▼' : '─';
+    const cls    = pct >  0.01 ? 'up' : pct < -0.01 ? 'dn' : 'fl';
+    const pctStr = pct != null ? (pct > 0 ? '+' : '') + pct.toFixed(2) + '%' : '';
+    return `<span class="tk">
+      <span class="tk-lbl">${lbl}</span>
+      <span class="tk-val">${disp}</span>
+      <span class="tk-chg ${cls}">${arrow} ${pctStr}</span>
+    </span>`;
+  }).join('');
+
+  const track = document.getElementById('tickerTrack');
+  track.innerHTML = html + html;
+  requestAnimationFrame(() => {
+    const dur = Math.max(20, track.scrollWidth / 2 / 85);
+    track.style.animationDuration = dur + 's';
+  });
+}
+
 /* ── LOAD TAB ────────────────────────────────────────────── */
 async function loadTab(tabId, force) {
-  const tab    = TABS.find(t => t.id === tabId);
+  const tab = TABS.find(t => t.id === tabId);
   if (!tab) return;
 
-  // Use cache if fresh and not forced
   const cached = tabCache[tabId];
   if (!force && cached && Date.now() - cached.at < REFRESH_MS) {
     allItems = cached.items;
@@ -696,57 +774,10 @@ function switchTab(tabId) {
   activeSrc   = 'all';
   query       = '';
   document.getElementById('searchBox').value = '';
-
   document.querySelectorAll('.tab').forEach(t =>
     t.classList.toggle('on', t.dataset.id === tabId)
   );
-
   loadTab(tabId);
-}
-
-/* ── FETCH: TICKER ───────────────────────────────────────── */
-async function loadTicker() {
-  try {
-    const syms = TICKER_SYMS.map(([s]) => s).join(',');
-    const api  = 'https://query1.finance.yahoo.com/v7/finance/quote?symbols='
-               + encodeURIComponent(syms);
-    const res  = await fetch(PROXY + encodeURIComponent(api));
-    const json = await res.json();
-    const data = JSON.parse(json.contents);
-    buildTicker(data?.quoteResponse?.result || []);
-  } catch (e) {
-    console.warn('[ticker]', e.message);
-    document.getElementById('tickerTrack').innerHTML =
-      '<span class="tk-loading">Market data unavailable</span>';
-  }
-}
-
-function buildTicker(quotes) {
-  const map  = Object.fromEntries(TICKER_SYMS);
-  const html = quotes.map(q => {
-    const lbl   = map[q.symbol] || q.symbol;
-    const price = q.regularMarketPrice;
-    const pct   = q.regularMarketChangePercent;
-    const disp  = price == null ? '—'
-      : price < 10   ? price.toFixed(4)
-      : price < 1000 ? price.toFixed(2)
-      : price.toLocaleString('en-US', { maximumFractionDigits: 0 });
-    const arrow  = pct >  0.01 ? '▲' : pct < -0.01 ? '▼' : '─';
-    const cls    = pct >  0.01 ? 'up' : pct < -0.01 ? 'dn' : 'fl';
-    const pctStr = pct != null ? (pct > 0 ? '+' : '') + pct.toFixed(2) + '%' : '';
-    return `<span class="tk">
-      <span class="tk-lbl">${lbl}</span>
-      <span class="tk-val">${disp}</span>
-      <span class="tk-chg ${cls}">${arrow} ${pctStr}</span>
-    </span>`;
-  }).join('');
-
-  const track = document.getElementById('tickerTrack');
-  track.innerHTML = html + html;
-  requestAnimationFrame(() => {
-    const dur = Math.max(20, track.scrollWidth / 2 / 85);
-    track.style.animationDuration = dur + 's';
-  });
 }
 
 /* ── RENDER: FEED ────────────────────────────────────────── */
@@ -792,14 +823,14 @@ function renderFeed() {
 
 /* ── RENDER: FILTER BAR ──────────────────────────────────── */
 function buildFilterBar() {
-  const bar  = document.getElementById('filterBar');
-  const tab  = activeTab();
-  const cnt  = {};
+  const bar = document.getElementById('filterBar');
+  const tab = activeTab();
+  const cnt = {};
   allItems.forEach(i => { cnt[i.feed.id] = (cnt[i.feed.id] || 0) + 1; });
 
   const allOn = activeSrc === 'all';
   let html = `<button class="chip ${allOn ? 'on' : ''}" onclick="setFilter('all')"
-    style="${allOn ? 'background:#1c2d45;border-color:#2563eb;color:#e2e8f0' : ''}">
+    style="${allOn ? 'background:rgba(27,79,216,.15);border-color:#1B4FD8;' : ''}">
     All <span class="chip-n">${allItems.length}</span>
   </button>`;
 
@@ -808,7 +839,7 @@ function buildFilterBar() {
     if (!n) return;
     const on = activeSrc === f.id;
     html += `<button class="chip ${on ? 'on' : ''}" onclick="setFilter('${f.id}')"
-      style="${on ? `background:${hexAlpha(f.clr,0.15)};border-color:${f.clr};color:#fff` : ''}">
+      style="${on ? `background:${hexAlpha(f.clr,0.15)};border-color:${f.clr};` : ''}">
       <span class="chip-dot" style="background:${f.clr}"></span>
       ${f.name} <span class="chip-n">${n}</span>
     </button>`;
@@ -822,8 +853,7 @@ function renderWarn() {
   const el = document.getElementById('warnBar');
   if (!failed.length) { el.style.display = 'none'; return; }
   el.style.display = 'block';
-  el.textContent   = '⚠  Could not reach: ' + failed.join(', ')
-                   + '. Remaining sources loaded successfully.';
+  el.textContent   = '⚠  Could not reach: ' + failed.join(', ') + '. Remaining sources loaded successfully.';
 }
 
 /* ── CONTROLS ────────────────────────────────────────────── */
@@ -862,9 +892,7 @@ function showSkeleton() {
   document.getElementById('feed').innerHTML = '';
   document.getElementById('emptyState').style.display = 'none';
 }
-function hideSkeleton() {
-  document.getElementById('skeletons').innerHTML = '';
-}
+function hideSkeleton() { document.getElementById('skeletons').innerHTML = ''; }
 
 /* ── STATUS ──────────────────────────────────────────────── */
 function setStatus(n) {
@@ -923,9 +951,7 @@ function hexAlpha(hex, a) {
 }
 
 function safeHtml(s) {
-  return String(s)
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 function safeAttr(s) {
   return String(s).replace(/"/g,'&quot;').replace(/'/g,'&#39;');
