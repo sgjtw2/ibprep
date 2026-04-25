@@ -60,7 +60,6 @@
       backdrop-filter: blur(8px);
     }
 
-    /* Logo */
     .logo {
       display: flex;
       align-items: center;
@@ -88,7 +87,6 @@
 
     .tb-gap { flex: 1; }
 
-    /* Search */
     .search-wrap { position: relative; }
     .search-icon {
       position: absolute; left: 9px; top: 50%;
@@ -112,7 +110,6 @@
     #searchBox::placeholder { color: var(--muted); }
     #searchBox:focus { border-color: var(--accent); box-shadow: 0 0 0 2px rgba(249,115,22,.15); }
 
-    /* Countdown */
     #countdown {
       font-family: var(--mono);
       font-size: 10px;
@@ -122,7 +119,6 @@
       text-align: right;
     }
 
-    /* Buttons */
     .btn {
       display: inline-flex; align-items: center; gap: 5px;
       font-size: 10px; font-weight: 700;
@@ -183,13 +179,56 @@
     .fl  { color: var(--muted); }
     .tk-loading { padding: 0 20px; font-size: 10px; color: var(--muted); font-family: var(--mono); }
 
+    /* ── TAB BAR ─────────────────────────────────────────────── */
+    #tabBar {
+      display: flex;
+      align-items: flex-end;
+      padding: 0 20px;
+      background: var(--bg2);
+      border-bottom: 2px solid var(--border);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      flex-shrink: 0;
+    }
+    #tabBar::-webkit-scrollbar { display: none; }
+
+    .tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 14px 9px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      white-space: nowrap;
+      flex-shrink: 0;
+      transition: color .15s, border-color .15s;
+      position: relative;
+    }
+    .tab:hover { color: var(--text2); }
+    .tab.on { color: var(--accent); border-bottom-color: var(--accent); }
+    .tab-badge {
+      font-size: 8px; font-weight: 700;
+      padding: 1px 4px; border-radius: 2px;
+      background: rgba(249,115,22,.15);
+      color: var(--accent);
+      letter-spacing: 0;
+      display: none;
+    }
+    .tab.on .tab-badge { display: inline; }
+
     /* ── FILTER BAR ──────────────────────────────────────────── */
     #filterBar {
       display: flex;
       align-items: center;
       gap: 5px;
       padding: 8px 20px;
-      background: var(--bg2);
+      background: var(--bg);
       border-bottom: 1px solid var(--border);
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
@@ -211,11 +250,8 @@
     .chip-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
     .chip-n { font-weight: 400; opacity: .5; margin-left: 1px; }
 
-    /* ── MAIN LAYOUT ─────────────────────────────────────────── */
-    #main {
-      max-width: 1040px;
-      margin: 0 auto;
-    }
+    /* ── MAIN ────────────────────────────────────────────────── */
+    #main { max-width: 1040px; margin: 0 auto; }
 
     /* ── WARN BAR ────────────────────────────────────────────── */
     #warnBar {
@@ -261,7 +297,6 @@
       min-width: 36px;
       padding-top: 2px;
     }
-
     .art-tag {
       font-size: 7.5px; font-weight: 800;
       letter-spacing: .06em; text-transform: uppercase;
@@ -269,7 +304,6 @@
       white-space: nowrap; flex-shrink: 0;
       color: #fff; margin-top: 2px;
     }
-
     .art-title {
       flex: 1;
       font-size: 13px; font-weight: 400;
@@ -328,9 +362,11 @@
       .logo-sub, .logo-sep { display: none; }
       .logo-name { font-size: 10px; }
       .logo-dot { width: 7px; height: 7px; }
-      #searchBox { width: 130px; font-size: 16px; /* prevent iOS zoom */ }
+      #searchBox { width: 120px; font-size: 16px; }
       .btn-back { display: none; }
       .btn { padding: 6px 10px; min-height: 34px; }
+      #tabBar { padding: 0 14px; }
+      .tab { padding: 9px 11px 8px; font-size: 10px; }
       #filterBar { padding: 7px 14px; gap: 5px; }
       .chip { padding: 6px 9px; min-height: 30px; }
       #main { max-width: 100%; }
@@ -346,6 +382,7 @@
     @media (min-width: 769px) and (max-width: 1100px) {
       #topbar { padding: 0 16px; }
       #searchBox { width: 160px; }
+      #tabBar { padding: 0 16px; }
       #filterBar { padding: 7px 16px; }
       #main { max-width: 100%; }
       .article { padding: 11px 16px; }
@@ -353,17 +390,18 @@
       #statusBar { padding: 5px 16px; }
     }
 
-    /* ── COARSE POINTER (TOUCH DEVICES) ─────────────────────── */
+    /* ── COARSE POINTER ──────────────────────────────────────── */
     @media (pointer: coarse) {
       .article { padding: 13px 20px; }
       .chip { min-height: 34px; }
       .btn { min-height: 36px; }
+      .tab { padding: 11px 14px 10px; min-height: 44px; }
       .tk { height: 36px; }
       #tickerWrap { height: 36px; }
     }
-
     @media (pointer: coarse) and (max-width: 768px) {
       .article { padding: 13px 14px; }
+      .tab { padding: 11px 11px 10px; }
     }
   </style>
 </head>
@@ -406,6 +444,15 @@
   </div>
 </div>
 
+<!-- ── TAB BAR ─────────────────────────────────────────── -->
+<div id="tabBar">
+  <button class="tab on" data-id="market"  onclick="switchTab('market')">Market News</button>
+  <button class="tab"    data-id="pulse"   onclick="switchTab('pulse')">Market Pulse</button>
+  <button class="tab"    data-id="stocks"  onclick="switchTab('stocks')">Stocks News</button>
+  <button class="tab"    data-id="etf"     onclick="switchTab('etf')">ETF News</button>
+  <button class="tab"    data-id="crypto"  onclick="switchTab('crypto')">Crypto News</button>
+</div>
+
 <!-- ── FILTER BAR ──────────────────────────────────────── -->
 <div id="filterBar">
   <button class="chip on" data-id="all" onclick="setFilter('all')">All</button>
@@ -434,14 +481,61 @@
 /* ── CONFIG ──────────────────────────────────────────────── */
 const PROXY = 'https://api.allorigins.win/get?url=';
 
-const FEEDS = [
-  { id:'bloomberg', name:'Bloomberg',     tag:'BBG',  clr:'#FF8C00', url:'https://feeds.bloomberg.com/markets/news.rss' },
-  { id:'reuters',   name:'Reuters',       tag:'RTRS', clr:'#FF5500', url:'https://feeds.reuters.com/reuters/businessNews' },
-  { id:'wsj',       name:'WSJ',           tag:'WSJ',  clr:'#0060A8', url:'https://feeds.a.dj.com/rss/RSSMarketsMain.xml' },
-  { id:'ft',        name:'Fin. Times',    tag:'FT',   clr:'#C5A028', url:'https://www.ft.com/rss/home' },
-  { id:'cnbc',      name:'CNBC',          tag:'CNBC', clr:'#0084CC', url:'https://www.cnbc.com/id/10000664/device/rss/rss.html' },
-  { id:'yahoo',     name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex' },
-  { id:'investing', name:'Investing.com', tag:'INV',  clr:'#C0392B', url:'https://www.investing.com/rss/news.rss' },
+const TABS = [
+  {
+    id: 'market',
+    name: 'Market News',
+    feeds: [
+      { id:'finviz',    name:'FinViz',        tag:'FVZ',  clr:'#EF4444', url:'https://finviz.com/news.ashx',                          type:'html' },
+      { id:'bloomberg', name:'Bloomberg',      tag:'BBG',  clr:'#FF8C00', url:'https://feeds.bloomberg.com/markets/news.rss',           type:'rss'  },
+      { id:'reuters',   name:'Reuters',        tag:'RTRS', clr:'#FF5500', url:'https://feeds.reuters.com/reuters/businessNews',         type:'rss'  },
+      { id:'wsj',       name:'WSJ',            tag:'WSJ',  clr:'#0060A8', url:'https://feeds.a.dj.com/rss/RSSMarketsMain.xml',          type:'rss'  },
+      { id:'ft',        name:'Fin. Times',     tag:'FT',   clr:'#C5A028', url:'https://www.ft.com/rss/home',                           type:'rss'  },
+      { id:'cnbc',      name:'CNBC',           tag:'CNBC', clr:'#0084CC', url:'https://www.cnbc.com/id/10000664/device/rss/rss.html',   type:'rss'  },
+    ]
+  },
+  {
+    id: 'pulse',
+    name: 'Market Pulse',
+    feeds: [
+      { id:'finviz_p',  name:'FinViz Pulse',  tag:'FVZ',  clr:'#EF4444', url:'https://finviz.com/news.ashx?v=2',                      type:'html' },
+      { id:'reuters_t', name:'Reuters',       tag:'RTRS', clr:'#FF5500', url:'https://feeds.reuters.com/reuters/topNews',              type:'rss'  },
+      { id:'ap',        name:'AP Business',   tag:'AP',   clr:'#2563EB', url:'https://feeds.apnews.com/apf-business',                  type:'rss'  },
+      { id:'investing', name:'Investing.com', tag:'INV',  clr:'#C0392B', url:'https://www.investing.com/rss/news.rss',                 type:'rss'  },
+      { id:'cnbc_top',  name:'CNBC',          tag:'CNBC', clr:'#0084CC', url:'https://www.cnbc.com/id/100727362/device/rss/rss.html',  type:'rss'  },
+    ]
+  },
+  {
+    id: 'stocks',
+    name: 'Stocks News',
+    feeds: [
+      { id:'finviz_s',  name:'FinViz Stocks', tag:'FVZ',  clr:'#EF4444', url:'https://finviz.com/news.ashx?v=3',                      type:'html' },
+      { id:'yahoo_s',   name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex',               type:'rss'  },
+      { id:'wsj_s',     name:'WSJ',           tag:'WSJ',  clr:'#0060A8', url:'https://feeds.a.dj.com/rss/RSSMarketsMain.xml',          type:'rss'  },
+      { id:'cnbc_s',    name:'CNBC',          tag:'CNBC', clr:'#0084CC', url:'https://www.cnbc.com/id/15839069/device/rss/rss.html',   type:'rss'  },
+      { id:'reuters_s', name:'Reuters',       tag:'RTRS', clr:'#FF5500', url:'https://feeds.reuters.com/reuters/businessNews',         type:'rss'  },
+    ]
+  },
+  {
+    id: 'etf',
+    name: 'ETF News',
+    feeds: [
+      { id:'finviz_e',  name:'FinViz ETF',    tag:'FVZ',  clr:'#EF4444', url:'https://finviz.com/news.ashx?v=4',                      type:'html' },
+      { id:'etfdb',     name:'ETF Database',  tag:'ETFD', clr:'#10B981', url:'https://etfdb.com/feed/',                               type:'rss'  },
+      { id:'etftrends', name:'ETF Trends',    tag:'ETFT', clr:'#059669', url:'https://www.etftrends.com/feed/',                       type:'rss'  },
+      { id:'yahoo_e',   name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex',               type:'rss'  },
+    ]
+  },
+  {
+    id: 'crypto',
+    name: 'Crypto News',
+    feeds: [
+      { id:'finviz_c',  name:'FinViz Crypto', tag:'FVZ',  clr:'#EF4444', url:'https://finviz.com/news.ashx?v=5',                      type:'html' },
+      { id:'coindesk',  name:'CoinDesk',      tag:'CD',   clr:'#F7931A', url:'https://www.coindesk.com/arc/outboundfeeds/rss/',       type:'rss'  },
+      { id:'cointele',  name:'CoinTelegraph', tag:'CT',   clr:'#17A589', url:'https://cointelegraph.com/rss',                         type:'rss'  },
+      { id:'decrypt',   name:'Decrypt',       tag:'DCR',  clr:'#9333EA', url:'https://decrypt.co/feed',                              type:'rss'  },
+    ]
+  },
 ];
 
 const TICKER_SYMS = [
@@ -460,15 +554,19 @@ const TICKER_SYMS = [
 const REFRESH_MS = 5 * 60 * 1000;
 
 /* ── STATE ───────────────────────────────────────────────── */
-let allItems   = [];
-let activeSrc  = 'all';
-let query      = '';
-let failed     = [];
-let cntId      = null;
-let cntSec     = 0;
+let activeTabId = 'market';
+let allItems    = [];
+let activeSrc   = 'all';
+let query       = '';
+let failed      = [];
+let tabCache    = {};
+let cntId       = null;
+let cntSec      = 0;
 
-/* ── FETCH: FEEDS ────────────────────────────────────────── */
-async function fetchFeed(feed) {
+function activeTab() { return TABS.find(t => t.id === activeTabId); }
+
+/* ── FETCH: RSS ──────────────────────────────────────────── */
+async function fetchRSSFeed(feed) {
   try {
     const res  = await fetch(PROXY + encodeURIComponent(feed.url), { cache: 'no-store' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -479,31 +577,109 @@ async function fetchFeed(feed) {
     if (xml.querySelector('parsererror')) throw new Error('XML parse error');
 
     return [...xml.querySelectorAll('item')].slice(0, 30).map(el => {
-      const raw  = el.querySelector('title')?.textContent || '';
+      const raw   = el.querySelector('title')?.textContent || '';
       const title = raw.replace(/<!\[CDATA\[|\]\]>/g, '').trim();
       const link  = (el.querySelector('link')?.textContent?.trim()
-                  || el.querySelector('guid')?.textContent?.trim()
-                  || '').trim();
+                  || el.querySelector('guid')?.textContent?.trim() || '').trim();
       const rawDate = el.querySelector('pubDate')?.textContent?.trim()
-                    || el.querySelector('dc\\:date,date')?.textContent?.trim()
-                    || '';
+                    || el.querySelector('dc\\:date,date')?.textContent?.trim() || '';
       const date = rawDate ? new Date(rawDate) : new Date();
       return { title, link, date, feed, key: link || title };
     }).filter(i => i.title.length > 6 && !i.title.startsWith('<?'));
   } catch (e) {
-    console.warn('[feed]', feed.name, '—', e.message);
+    console.warn('[rss]', feed.name, '—', e.message);
     failed.push(feed.name);
     return [];
   }
 }
 
-async function loadFeeds() {
+/* ── FETCH: FinViz HTML ──────────────────────────────────── */
+async function fetchHTMLFeed(feed) {
+  try {
+    const res  = await fetch(PROXY + encodeURIComponent(feed.url), { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    if (!json.contents) throw new Error('empty');
+
+    const doc  = new DOMParser().parseFromString(json.contents, 'text/html');
+    const rows = [...doc.querySelectorAll('.news-table tr')];
+    if (!rows.length) throw new Error('no news-table rows');
+
+    const MONTH = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+    let curDate = new Date();
+
+    return rows.map(row => {
+      const cells = row.querySelectorAll('td');
+      if (cells.length < 2) return null;
+
+      const dateText = cells[0].textContent.trim();
+      const newsCell = cells[cells.length - 1];
+      const anchor   = newsCell.querySelector('a');
+      if (!anchor) return null;
+
+      const title = anchor.textContent.trim();
+      const href  = anchor.getAttribute('href') || '';
+
+      // Parse FinViz date: "Apr-25-26" or "08:30AM"
+      if (dateText) {
+        const timeM = dateText.match(/^(\d{1,2}):(\d{2})(AM|PM)$/i);
+        const dateM = dateText.match(/^([A-Za-z]{3})-(\d{1,2})-(\d{2})$/);
+        if (timeM) {
+          let h = parseInt(timeM[1]);
+          const m = parseInt(timeM[2]);
+          const p = timeM[3].toUpperCase();
+          if (p === 'PM' && h !== 12) h += 12;
+          if (p === 'AM' && h === 12) h = 0;
+          const d = new Date(curDate);
+          d.setHours(h, m, 0, 0);
+          curDate = d;
+        } else if (dateM) {
+          const mo = MONTH[dateM[1]];
+          if (mo !== undefined) {
+            curDate = new Date(2000 + parseInt(dateM[3]), mo, parseInt(dateM[2]));
+          }
+        }
+      }
+
+      return title.length > 6
+        ? { title, link: href, date: new Date(curDate), feed, key: href || title }
+        : null;
+    }).filter(Boolean);
+  } catch (e) {
+    console.warn('[html]', feed.name, '—', e.message);
+    failed.push(feed.name);
+    return [];
+  }
+}
+
+/* ── FETCH: dispatch ─────────────────────────────────────── */
+function fetchFeed(feed) {
+  return feed.type === 'html' ? fetchHTMLFeed(feed) : fetchRSSFeed(feed);
+}
+
+/* ── LOAD TAB ────────────────────────────────────────────── */
+async function loadTab(tabId, force) {
+  const tab    = TABS.find(t => t.id === tabId);
+  if (!tab) return;
+
+  // Use cache if fresh and not forced
+  const cached = tabCache[tabId];
+  if (!force && cached && Date.now() - cached.at < REFRESH_MS) {
+    allItems = cached.items;
+    failed   = cached.failed;
+    buildFilterBar();
+    renderFeed();
+    renderWarn();
+    setStatus(getFiltered().length);
+    return;
+  }
+
   failed = [];
   showSkeleton();
-  const results = await Promise.allSettled(FEEDS.map(fetchFeed));
+
+  const results = await Promise.allSettled(tab.feeds.map(fetchFeed));
   const raw     = results.flatMap(r => r.status === 'fulfilled' ? r.value : []);
 
-  // Deduplicate by key (URL or title)
   const seen = new Set();
   allItems = raw.filter(i => {
     if (seen.has(i.key)) return false;
@@ -511,11 +687,28 @@ async function loadFeeds() {
     return true;
   }).sort((a, b) => b.date - a.date);
 
+  tabCache[tabId] = { items: allItems, failed: [...failed], at: Date.now() };
+
   hideSkeleton();
   buildFilterBar();
   renderFeed();
   renderWarn();
   setStatus(getFiltered().length);
+}
+
+/* ── SWITCH TAB ──────────────────────────────────────────── */
+function switchTab(tabId) {
+  if (activeTabId === tabId) return;
+  activeTabId = tabId;
+  activeSrc   = 'all';
+  query       = '';
+  document.getElementById('searchBox').value = '';
+
+  document.querySelectorAll('.tab').forEach(t =>
+    t.classList.toggle('on', t.dataset.id === tabId)
+  );
+
+  loadTab(tabId);
 }
 
 /* ── FETCH: TICKER ───────────────────────────────────────── */
@@ -531,12 +724,12 @@ async function loadTicker() {
   } catch (e) {
     console.warn('[ticker]', e.message);
     document.getElementById('tickerTrack').innerHTML =
-      '<span class="tk-loading">Market data unavailable — check connection</span>';
+      '<span class="tk-loading">Market data unavailable</span>';
   }
 }
 
 function buildTicker(quotes) {
-  const map = Object.fromEntries(TICKER_SYMS);
+  const map  = Object.fromEntries(TICKER_SYMS);
   const html = quotes.map(q => {
     const lbl   = map[q.symbol] || q.symbol;
     const price = q.regularMarketPrice;
@@ -545,8 +738,8 @@ function buildTicker(quotes) {
       : price < 10   ? price.toFixed(4)
       : price < 1000 ? price.toFixed(2)
       : price.toLocaleString('en-US', { maximumFractionDigits: 0 });
-    const arrow = pct >  0.01 ? '▲' : pct < -0.01 ? '▼' : '─';
-    const cls   = pct >  0.01 ? 'up' : pct < -0.01 ? 'dn' : 'fl';
+    const arrow  = pct >  0.01 ? '▲' : pct < -0.01 ? '▼' : '─';
+    const cls    = pct >  0.01 ? 'up' : pct < -0.01 ? 'dn' : 'fl';
     const pctStr = pct != null ? (pct > 0 ? '+' : '') + pct.toFixed(2) + '%' : '';
     return `<span class="tk">
       <span class="tk-lbl">${lbl}</span>
@@ -556,10 +749,9 @@ function buildTicker(quotes) {
   }).join('');
 
   const track = document.getElementById('tickerTrack');
-  track.innerHTML = html + html; // duplicate for seamless loop
+  track.innerHTML = html + html;
   requestAnimationFrame(() => {
-    const halfW = track.scrollWidth / 2;
-    const dur   = Math.max(20, halfW / 85); // ~85 px/s
+    const dur = Math.max(20, track.scrollWidth / 2 / 85);
     track.style.animationDuration = dur + 's';
   });
 }
@@ -587,9 +779,7 @@ function renderFeed() {
   }
   empty.style.display = 'none';
 
-  let html     = '';
-  let lastKey  = '';
-
+  let html = '', lastKey = '';
   items.forEach(item => {
     const key = dateKey(item.date);
     if (key !== lastKey) {
@@ -610,6 +800,7 @@ function renderFeed() {
 /* ── RENDER: FILTER BAR ──────────────────────────────────── */
 function buildFilterBar() {
   const bar  = document.getElementById('filterBar');
+  const tab  = activeTab();
   const cnt  = {};
   allItems.forEach(i => { cnt[i.feed.id] = (cnt[i.feed.id] || 0) + 1; });
 
@@ -619,9 +810,9 @@ function buildFilterBar() {
     All <span class="chip-n">${allItems.length}</span>
   </button>`;
 
-  FEEDS.forEach(f => {
+  (tab?.feeds || []).forEach(f => {
     const n  = cnt[f.id] || 0;
-    if (!n) return; // hide feeds that returned nothing
+    if (!n) return;
     const on = activeSrc === f.id;
     html += `<button class="chip ${on ? 'on' : ''}" onclick="setFilter('${f.id}')"
       style="${on ? `background:${hexAlpha(f.clr,0.15)};border-color:${f.clr};color:#fff` : ''}">
@@ -658,7 +849,8 @@ function manualRefresh() {
   const btn = document.getElementById('refreshBtn');
   btn.classList.add('spin');
   clearInterval(cntId);
-  Promise.all([loadFeeds(), loadTicker()]).then(() => {
+  delete tabCache[activeTabId];
+  Promise.all([loadTab(activeTabId, true), loadTicker()]).then(() => {
     btn.classList.remove('spin');
     startCountdown();
   });
@@ -674,6 +866,8 @@ function showSkeleton() {
       <div class="skel" style="width:${pw}px;max-width:100%;height:13px"></div>
     </div>`
   ).join('');
+  document.getElementById('feed').innerHTML = '';
+  document.getElementById('emptyState').style.display = 'none';
 }
 function hideSkeleton() {
   document.getElementById('skeletons').innerHTML = '';
@@ -695,7 +889,8 @@ function startCountdown() {
     cntSec--;
     if (cntSec <= 0) {
       clearInterval(cntId);
-      loadFeeds();
+      delete tabCache[activeTabId];
+      loadTab(activeTabId, true);
       loadTicker();
       startCountdown();
       return;
@@ -744,7 +939,7 @@ function safeAttr(s) {
 }
 
 /* ── INIT ────────────────────────────────────────────────── */
-loadFeeds();
+loadTab('market');
 loadTicker();
 startCountdown();
 </script>
