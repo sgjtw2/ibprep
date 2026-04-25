@@ -486,54 +486,54 @@ const TABS = [
     id: 'market',
     name: 'Market News',
     feeds: [
-      { id:'finviz',    name:'FinViz',        tag:'FVZ',  clr:'#EF4444', url:'https://finviz.com/news.ashx',                          type:'html' },
-      { id:'bloomberg', name:'Bloomberg',      tag:'BBG',  clr:'#FF8C00', url:'https://feeds.bloomberg.com/markets/news.rss',           type:'rss'  },
-      { id:'reuters',   name:'Reuters',        tag:'RTRS', clr:'#FF5500', url:'https://feeds.reuters.com/reuters/businessNews',         type:'rss'  },
-      { id:'wsj',       name:'WSJ',            tag:'WSJ',  clr:'#0060A8', url:'https://feeds.a.dj.com/rss/RSSMarketsMain.xml',          type:'rss'  },
-      { id:'ft',        name:'Fin. Times',     tag:'FT',   clr:'#C5A028', url:'https://www.ft.com/rss/home',                           type:'rss'  },
-      { id:'cnbc',      name:'CNBC',           tag:'CNBC', clr:'#0084CC', url:'https://www.cnbc.com/id/10000664/device/rss/rss.html',   type:'rss'  },
+      { id:'yahoo',      name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex' },
+      { id:'investing',  name:'Investing.com', tag:'INV',  clr:'#C0392B', url:'https://www.investing.com/rss/news.rss' },
+      { id:'marketwatch',name:'MarketWatch',   tag:'MW',   clr:'#0A6E31', url:'https://feeds.marketwatch.com/marketwatch/topstories/' },
+      { id:'cnbc',       name:'CNBC',          tag:'CNBC', clr:'#0084CC', url:'https://www.cnbc.com/id/100003114/device/rss/rss.html' },
+      { id:'guardian',   name:'The Guardian',  tag:'GDN',  clr:'#005689', url:'https://www.theguardian.com/business/rss' },
+      { id:'bbc',        name:'BBC Business',  tag:'BBC',  clr:'#BB1919', url:'https://feeds.bbci.co.uk/news/business/rss.xml' },
     ]
   },
   {
     id: 'pulse',
     name: 'Market Pulse',
     feeds: [
-      { id:'finviz_p',  name:'FinViz Pulse',  tag:'FVZ',  clr:'#EF4444', url:'https://finviz.com/news.ashx?v=2',                      type:'html' },
-      { id:'reuters_t', name:'Reuters',       tag:'RTRS', clr:'#FF5500', url:'https://feeds.reuters.com/reuters/topNews',              type:'rss'  },
-      { id:'ap',        name:'AP Business',   tag:'AP',   clr:'#2563EB', url:'https://feeds.apnews.com/apf-business',                  type:'rss'  },
-      { id:'investing', name:'Investing.com', tag:'INV',  clr:'#C0392B', url:'https://www.investing.com/rss/news.rss',                 type:'rss'  },
-      { id:'cnbc_top',  name:'CNBC',          tag:'CNBC', clr:'#0084CC', url:'https://www.cnbc.com/id/100727362/device/rss/rss.html',  type:'rss'  },
+      { id:'yahoo_p',    name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex' },
+      { id:'cnbc_p',     name:'CNBC',          tag:'CNBC', clr:'#0084CC', url:'https://www.cnbc.com/id/100727362/device/rss/rss.html' },
+      { id:'investing_p',name:'Investing.com', tag:'INV',  clr:'#C0392B', url:'https://www.investing.com/rss/news.rss' },
+      { id:'bbc_p',      name:'BBC Business',  tag:'BBC',  clr:'#BB1919', url:'https://feeds.bbci.co.uk/news/business/rss.xml' },
+      { id:'guardian_p', name:'The Guardian',  tag:'GDN',  clr:'#005689', url:'https://www.theguardian.com/business/rss' },
     ]
   },
   {
     id: 'stocks',
     name: 'Stocks News',
     feeds: [
-      { id:'finviz_s',  name:'FinViz Stocks', tag:'FVZ',  clr:'#EF4444', url:'https://finviz.com/news.ashx?v=3',                      type:'html' },
-      { id:'yahoo_s',   name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex',               type:'rss'  },
-      { id:'wsj_s',     name:'WSJ',           tag:'WSJ',  clr:'#0060A8', url:'https://feeds.a.dj.com/rss/RSSMarketsMain.xml',          type:'rss'  },
-      { id:'cnbc_s',    name:'CNBC',          tag:'CNBC', clr:'#0084CC', url:'https://www.cnbc.com/id/15839069/device/rss/rss.html',   type:'rss'  },
-      { id:'reuters_s', name:'Reuters',       tag:'RTRS', clr:'#FF5500', url:'https://feeds.reuters.com/reuters/businessNews',         type:'rss'  },
+      { id:'yahoo_s',    name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex' },
+      { id:'cnbc_s',     name:'CNBC',          tag:'CNBC', clr:'#0084CC', url:'https://www.cnbc.com/id/15839069/device/rss/rss.html' },
+      { id:'marketwatch_s',name:'MarketWatch', tag:'MW',   clr:'#0A6E31', url:'https://feeds.marketwatch.com/marketwatch/topstories/' },
+      { id:'investing_s',name:'Investing.com', tag:'INV',  clr:'#C0392B', url:'https://www.investing.com/rss/news.rss' },
     ]
   },
   {
     id: 'etf',
     name: 'ETF News',
     feeds: [
-      { id:'finviz_e',  name:'FinViz ETF',    tag:'FVZ',  clr:'#EF4444', url:'https://finviz.com/news.ashx?v=4',                      type:'html' },
-      { id:'etfdb',     name:'ETF Database',  tag:'ETFD', clr:'#10B981', url:'https://etfdb.com/feed/',                               type:'rss'  },
-      { id:'etftrends', name:'ETF Trends',    tag:'ETFT', clr:'#059669', url:'https://www.etftrends.com/feed/',                       type:'rss'  },
-      { id:'yahoo_e',   name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex',               type:'rss'  },
+      { id:'etftrends',  name:'ETF Trends',    tag:'ETFT', clr:'#059669', url:'https://www.etftrends.com/feed/' },
+      { id:'etfdb',      name:'ETF Database',  tag:'ETFD', clr:'#10B981', url:'https://etfdb.com/feed/' },
+      { id:'yahoo_e',    name:'Yahoo Finance', tag:'YFN',  clr:'#8B5CF6', url:'https://finance.yahoo.com/news/rssindex' },
+      { id:'marketwatch_e',name:'MarketWatch', tag:'MW',   clr:'#0A6E31', url:'https://feeds.marketwatch.com/marketwatch/topstories/' },
     ]
   },
   {
     id: 'crypto',
     name: 'Crypto News',
     feeds: [
-      { id:'finviz_c',  name:'FinViz Crypto', tag:'FVZ',  clr:'#EF4444', url:'https://finviz.com/news.ashx?v=5',                      type:'html' },
-      { id:'coindesk',  name:'CoinDesk',      tag:'CD',   clr:'#F7931A', url:'https://www.coindesk.com/arc/outboundfeeds/rss/',       type:'rss'  },
-      { id:'cointele',  name:'CoinTelegraph', tag:'CT',   clr:'#17A589', url:'https://cointelegraph.com/rss',                         type:'rss'  },
-      { id:'decrypt',   name:'Decrypt',       tag:'DCR',  clr:'#9333EA', url:'https://decrypt.co/feed',                              type:'rss'  },
+      { id:'cointele',   name:'CoinTelegraph', tag:'CT',   clr:'#17A589', url:'https://cointelegraph.com/rss' },
+      { id:'btcmag',     name:'Bitcoin Mag.',  tag:'BTC',  clr:'#F97316', url:'https://bitcoinmagazine.com/feed' },
+      { id:'cryptoslate',name:'CryptoSlate',   tag:'CS',   clr:'#6366F1', url:'https://cryptoslate.com/feed/' },
+      { id:'decrypt',    name:'Decrypt',       tag:'DCR',  clr:'#9333EA', url:'https://decrypt.co/feed' },
+      { id:'coindesk',   name:'CoinDesk',      tag:'CD',   clr:'#F7931A', url:'https://www.coindesk.com/arc/outboundfeeds/rss/' },
     ]
   },
 ];
@@ -566,7 +566,7 @@ let cntSec      = 0;
 function activeTab() { return TABS.find(t => t.id === activeTabId); }
 
 /* ── FETCH: RSS ──────────────────────────────────────────── */
-async function fetchRSSFeed(feed) {
+async function fetchFeed(feed) {
   try {
     const res  = await fetch(PROXY + encodeURIComponent(feed.url), { cache: 'no-store' });
     if (!res.ok) throw new Error('HTTP ' + res.status);
@@ -591,70 +591,6 @@ async function fetchRSSFeed(feed) {
     failed.push(feed.name);
     return [];
   }
-}
-
-/* ── FETCH: FinViz HTML ──────────────────────────────────── */
-async function fetchHTMLFeed(feed) {
-  try {
-    const res  = await fetch(PROXY + encodeURIComponent(feed.url), { cache: 'no-store' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const json = await res.json();
-    if (!json.contents) throw new Error('empty');
-
-    const doc  = new DOMParser().parseFromString(json.contents, 'text/html');
-    const rows = [...doc.querySelectorAll('.news-table tr')];
-    if (!rows.length) throw new Error('no news-table rows');
-
-    const MONTH = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
-    let curDate = new Date();
-
-    return rows.map(row => {
-      const cells = row.querySelectorAll('td');
-      if (cells.length < 2) return null;
-
-      const dateText = cells[0].textContent.trim();
-      const newsCell = cells[cells.length - 1];
-      const anchor   = newsCell.querySelector('a');
-      if (!anchor) return null;
-
-      const title = anchor.textContent.trim();
-      const href  = anchor.getAttribute('href') || '';
-
-      // Parse FinViz date: "Apr-25-26" or "08:30AM"
-      if (dateText) {
-        const timeM = dateText.match(/^(\d{1,2}):(\d{2})(AM|PM)$/i);
-        const dateM = dateText.match(/^([A-Za-z]{3})-(\d{1,2})-(\d{2})$/);
-        if (timeM) {
-          let h = parseInt(timeM[1]);
-          const m = parseInt(timeM[2]);
-          const p = timeM[3].toUpperCase();
-          if (p === 'PM' && h !== 12) h += 12;
-          if (p === 'AM' && h === 12) h = 0;
-          const d = new Date(curDate);
-          d.setHours(h, m, 0, 0);
-          curDate = d;
-        } else if (dateM) {
-          const mo = MONTH[dateM[1]];
-          if (mo !== undefined) {
-            curDate = new Date(2000 + parseInt(dateM[3]), mo, parseInt(dateM[2]));
-          }
-        }
-      }
-
-      return title.length > 6
-        ? { title, link: href, date: new Date(curDate), feed, key: href || title }
-        : null;
-    }).filter(Boolean);
-  } catch (e) {
-    console.warn('[html]', feed.name, '—', e.message);
-    failed.push(feed.name);
-    return [];
-  }
-}
-
-/* ── FETCH: dispatch ─────────────────────────────────────── */
-function fetchFeed(feed) {
-  return feed.type === 'html' ? fetchHTMLFeed(feed) : fetchRSSFeed(feed);
 }
 
 /* ── LOAD TAB ────────────────────────────────────────────── */
