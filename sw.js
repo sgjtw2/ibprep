@@ -1,5 +1,5 @@
-const CACHE = 'ibprep-v8';
-const ASSETS = ['/login.html', '/command-center.html', '/financial-model.html', '/manifest.json'];
+const CACHE = 'ibprep-v9';
+const ASSETS = ['/login.html', '/command-center.html', '/financial-model.html', '/news.html', '/manifest.json'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
