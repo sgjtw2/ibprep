@@ -2031,6 +2031,9 @@ body.wt-open #gridWrap{padding-bottom:150px;}
           <button class="tools-item" id="errSpotBtn" onclick="toggleErrSpot();closeToolsMenu()">
             <span class="tools-item-icon">🔍</span>Error Spotter<span class="tools-item-badge"></span>
           </button>
+          <button class="tools-item" id="paperDCFBtn" onclick="togglePaperDCF();closeToolsMenu()">
+            <span class="tools-item-icon">📉</span>Paper DCF<span class="tools-item-badge"></span>
+          </button>
           <div class="tools-divider"></div>
           <button class="tools-item" onclick="toggleBuildModal();closeToolsMenu()">
             <span class="tools-item-icon">⏱️</span>Timed Build<span class="tools-item-badge">NEW</span>
@@ -10824,6 +10827,35 @@ function renderWACC() {
   </div>
 </div>
 
+<!-- PAPER DCF MODAL -->
+<div class="xdrill-modal" id="paperDCFModal" onclick="if(event.target===this)togglePaperDCF()">
+  <div class="xdrill-box" style="max-width:860px;width:96%">
+    <div class="drill-head">
+      <div>
+        <div class="fit-head-title">Paper DCF — Mental Math</div>
+        <div class="fit-head-sub">WACC → Discount Factors → PV of UFCFs → Terminal Value → Enterprise Value → Equity Value</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <div class="plbo-timer-wrap">
+          <div class="plbo-timer-display" id="pdcfTimerDisplay">20:00</div>
+          <button class="plbo-timer-btn go" id="pdcfTimerBtn" onclick="togglePDCFTimer()">Start</button>
+        </div>
+        <button class="drill-reset-btn" onclick="resetPaperDCF()">Reset</button>
+        <button class="modal-close" onclick="togglePaperDCF()">✕</button>
+      </div>
+    </div>
+    <div class="plbo-scenario-tabs" id="paperDCFTabs"></div>
+    <div class="xdrill-body" id="paperDCFBody"></div>
+    <div class="xdrill-footer">
+      <div class="drill-progress-wrap">
+        <div class="drill-progress-bar"><div class="drill-progress-fill" id="paperDCFProg" style="width:0%"></div></div>
+        <div class="drill-progress-txt" id="paperDCFProgTxt">0 / 0 correct</div>
+      </div>
+      <button class="xdrill-next" id="paperDCFNext" disabled>Next Scenario →</button>
+    </div>
+  </div>
+</div>
+
 <!-- FORMULA QUIZ MODAL -->
 <div id="quizModal" onclick="if(event.target===this)toggleQuizModal()">
   <div class="quiz-box">
@@ -10966,6 +10998,263 @@ function renderWACC() {
 </div>
 
 <script>
+/* ══════════════════════════════════════════════════════════
+   PAPER DCF
+══════════════════════════════════════════════════════════ */
+const PAPER_DCF_SCENARIOS = [
+  {
+    title:'TechCo — Introductory',
+    difficulty:'Introductory',
+    context:'TechCo is a software business with stable growing FCF. Given 5 years of projected UFCFs and WACC components, build a full DCF to arrive at an implied share price.',
+    params:{ rf:4.0, beta:1.20, erp:5.0, codPre:6.0, taxRate:25, eV:80, dV:20, ufcf:[45,52,60,68,78], g:2.5, netDebt:200, shares:50 },
+    assumptions:[
+      {label:'Risk-Free Rate (Rf)',val:'4.0%'},
+      {label:'Equity Beta (β)',val:'1.20'},
+      {label:'Equity Risk Premium',val:'5.0%'},
+      {label:'Pre-Tax Cost of Debt',val:'6.0%'},
+      {label:'Tax Rate',val:'25%'},
+      {label:'Capital Structure (E/V)',val:'80%'},
+      {label:'Capital Structure (D/V)',val:'20%'},
+      {label:'UFCF Year 1–5 ($M)',val:'45 / 52 / 60 / 68 / 78'},
+      {label:'Terminal Growth Rate',val:'2.5%'},
+      {label:'Net Debt',val:'$200M'},
+      {label:'Diluted Shares',val:'50M'},
+    ],
+  },
+  {
+    title:'RetailCo — Intermediate',
+    difficulty:'Intermediate',
+    context:'RetailCo is a consumer staples business with a lower beta and conservative leverage. Higher D/V ratio. Use a lower WACC to value steadier cash flows.',
+    params:{ rf:3.5, beta:1.00, erp:5.0, codPre:5.0, taxRate:25, eV:70, dV:30, ufcf:[30,34,38,42,46], g:2.0, netDebt:100, shares:40 },
+    assumptions:[
+      {label:'Risk-Free Rate (Rf)',val:'3.5%'},
+      {label:'Equity Beta (β)',val:'1.00'},
+      {label:'Equity Risk Premium',val:'5.0%'},
+      {label:'Pre-Tax Cost of Debt',val:'5.0%'},
+      {label:'Tax Rate',val:'25%'},
+      {label:'Capital Structure (E/V)',val:'70%'},
+      {label:'Capital Structure (D/V)',val:'30%'},
+      {label:'UFCF Year 1–5 ($M)',val:'30 / 34 / 38 / 42 / 46'},
+      {label:'Terminal Growth Rate',val:'2.0%'},
+      {label:'Net Debt',val:'$100M'},
+      {label:'Diluted Shares',val:'40M'},
+    ],
+  },
+  {
+    title:'IndustryCo — Advanced',
+    difficulty:'Advanced',
+    context:'IndustryCo operates in a capital-intensive sector with higher leverage and a higher beta. Higher growth rate terminal assumption. Net debt is significant relative to EV.',
+    params:{ rf:5.0, beta:1.50, erp:4.0, codPre:7.0, taxRate:25, eV:65, dV:35, ufcf:[55,62,70,78,88], g:3.0, netDebt:350, shares:80 },
+    assumptions:[
+      {label:'Risk-Free Rate (Rf)',val:'5.0%'},
+      {label:'Equity Beta (β)',val:'1.50'},
+      {label:'Equity Risk Premium',val:'4.0%'},
+      {label:'Pre-Tax Cost of Debt',val:'7.0%'},
+      {label:'Tax Rate',val:'25%'},
+      {label:'Capital Structure (E/V)',val:'65%'},
+      {label:'Capital Structure (D/V)',val:'35%'},
+      {label:'UFCF Year 1–5 ($M)',val:'55 / 62 / 70 / 78 / 88'},
+      {label:'Terminal Growth Rate',val:'3.0%'},
+      {label:'Net Debt',val:'$350M'},
+      {label:'Diluted Shares',val:'80M'},
+    ],
+  },
+];
+
+function computePDCFAnswers(p) {
+  const coe      = p.rf + p.beta * p.erp;
+  const codAt    = p.codPre * (1 - p.taxRate / 100);
+  const wacc_pct = coe * p.eV / 100 + codAt * p.dV / 100;
+  const wd       = wacc_pct / 100;
+  const gd       = p.g / 100;
+  const df       = p.ufcf.map((_, i) => 1 / Math.pow(1 + wd, i + 1));
+  const pvufcf   = p.ufcf.map((v, i) => v * df[i]);
+  const sumPv    = pvufcf.reduce((a, b) => a + b, 0);
+  const tv       = p.ufcf[4] * (1 + gd) / (wd - gd);
+  const pvtv     = tv * df[4];
+  const ev       = sumPv + pvtv;
+  const eq       = ev - p.netDebt;
+  const price    = eq / p.shares;
+  return { coe, codAt, wacc_pct, df, pvufcf, sumPv, tv, pvtv, ev, eq, price };
+}
+
+function getPDCFSteps(p) {
+  const a = computePDCFAnswers(p);
+  const f = (v, d=1) => v.toFixed(d);
+  return [
+    { id:'coe',   section:'WACC Build',          label:'Cost of Equity (CoE)',           formula:`Rf + β × ERP`,                             ans:a.coe,         tol:0.15, unit:'%',  hint:`${p.rf} + ${p.beta} × ${p.erp} = ${f(a.coe,1)}%` },
+    { id:'codat', section:'',                    label:'After-Tax Cost of Debt',          formula:`Pre-Tax CoD × (1 − t)`,                    ans:a.codAt,       tol:0.15, unit:'%',  hint:`${p.codPre}% × (1 − ${p.taxRate}%) = ${f(a.codAt,2)}%` },
+    { id:'wacc',  section:'',                    label:'WACC',                            formula:`CoE × E/V + CoD_AT × D/V`,                 ans:a.wacc_pct,    tol:0.20, unit:'%',  hint:`${f(a.coe,1)}×${p.eV}% + ${f(a.codAt,2)}×${p.dV}% = ${f(a.wacc_pct,2)}%` },
+    { id:'df1',   section:'Discount Factors',    label:'Discount Factor — Year 1',        formula:'1 ÷ (1 + WACC)¹',                          ans:a.df[0],       tol:0.004, unit:'', hint:`1 ÷ ${f(1+a.wacc_pct/100,4)} = ${f(a.df[0],4)}` },
+    { id:'df2',   section:'',                    label:'Discount Factor — Year 2',        formula:'1 ÷ (1 + WACC)²',                          ans:a.df[1],       tol:0.004, unit:'', hint:`1 ÷ ${f(1+a.wacc_pct/100,4)}² = ${f(a.df[1],4)}` },
+    { id:'df3',   section:'',                    label:'Discount Factor — Year 3',        formula:'1 ÷ (1 + WACC)³',                          ans:a.df[2],       tol:0.004, unit:'', hint:`${f(a.df[2],4)}` },
+    { id:'df4',   section:'',                    label:'Discount Factor — Year 4',        formula:'1 ÷ (1 + WACC)⁴',                          ans:a.df[3],       tol:0.004, unit:'', hint:`${f(a.df[3],4)}` },
+    { id:'df5',   section:'',                    label:'Discount Factor — Year 5',        formula:'1 ÷ (1 + WACC)⁵',                          ans:a.df[4],       tol:0.004, unit:'', hint:`${f(a.df[4],4)}` },
+    { id:'pv1',   section:'PV of UFCFs ($M)',    label:`PV Year 1  ·  UFCF = $${p.ufcf[0]}M`, formula:'UFCF₁ × DF₁',                        ans:a.pvufcf[0],   tol:1.5,  unit:'$M', hint:`${p.ufcf[0]} × ${f(a.df[0],4)} = ${f(a.pvufcf[0],1)}` },
+    { id:'pv2',   section:'',                    label:`PV Year 2  ·  UFCF = $${p.ufcf[1]}M`, formula:'UFCF₂ × DF₂',                        ans:a.pvufcf[1],   tol:1.5,  unit:'$M', hint:`${p.ufcf[1]} × ${f(a.df[1],4)} = ${f(a.pvufcf[1],1)}` },
+    { id:'pv3',   section:'',                    label:`PV Year 3  ·  UFCF = $${p.ufcf[2]}M`, formula:'UFCF₃ × DF₃',                        ans:a.pvufcf[2],   tol:1.5,  unit:'$M', hint:`${p.ufcf[2]} × ${f(a.df[2],4)} = ${f(a.pvufcf[2],1)}` },
+    { id:'pv4',   section:'',                    label:`PV Year 4  ·  UFCF = $${p.ufcf[3]}M`, formula:'UFCF₄ × DF₄',                        ans:a.pvufcf[3],   tol:1.5,  unit:'$M', hint:`${p.ufcf[3]} × ${f(a.df[3],4)} = ${f(a.pvufcf[3],1)}` },
+    { id:'pv5',   section:'',                    label:`PV Year 5  ·  UFCF = $${p.ufcf[4]}M`, formula:'UFCF₅ × DF₅',                        ans:a.pvufcf[4],   tol:1.5,  unit:'$M', hint:`${p.ufcf[4]} × ${f(a.df[4],4)} = ${f(a.pvufcf[4],1)}` },
+    { id:'sumpv', section:'',                    label:'Sum of PV UFCFs',                 formula:'PV₁ + PV₂ + PV₃ + PV₄ + PV₅',            ans:a.sumPv,       tol:5.0,  unit:'$M', hint:`= ${f(a.sumPv,1)}` },
+    { id:'tv',    section:'Terminal Value',      label:'Terminal Value  (Gordon Growth)', formula:'UFCF₅ × (1 + g) ÷ (WACC − g)',            ans:a.tv,          tol:30.0, unit:'$M', hint:`${p.ufcf[4]} × ${1+p.g/100} ÷ (${f(a.wacc_pct,2)}% − ${p.g}%) = ${f(a.tv,0)}` },
+    { id:'pvtv',  section:'',                    label:'PV of Terminal Value',            formula:'TV × DF₅',                                 ans:a.pvtv,        tol:20.0, unit:'$M', hint:`${f(a.tv,0)} × ${f(a.df[4],4)} = ${f(a.pvtv,0)}` },
+    { id:'ev',    section:'Valuation Bridge',   label:'Enterprise Value',                formula:'Sum PV UFCFs + PV of TV',                  ans:a.ev,          tol:25.0, unit:'$M', hint:`${f(a.sumPv,0)} + ${f(a.pvtv,0)} = ${f(a.ev,0)}` },
+    { id:'eq',    section:'',                    label:'Equity Value',                    formula:'EV − Net Debt',                            ans:a.eq,          tol:20.0, unit:'$M', hint:`${f(a.ev,0)} − ${p.netDebt} = ${f(a.eq,0)}` },
+    { id:'price', section:'',                    label:'Implied Share Price',             formula:'Equity Value ÷ Shares Outstanding',        ans:a.price,       tol:0.50, unit:'$',  hint:`${f(a.eq,0)} ÷ ${p.shares}M = $${f(a.price,2)}` },
+  ];
+}
+
+let showPaperDCF = false, paperDCFIdx = 0, paperDCFState = {};
+
+function togglePaperDCF() {
+  showPaperDCF = !showPaperDCF;
+  document.getElementById('paperDCFModal').classList.toggle('open', showPaperDCF);
+  updateToolsItemState('paperDCFBtn', showPaperDCF);
+  if (showPaperDCF && Object.keys(paperDCFState).length === 0) initPaperDCFState();
+  if (showPaperDCF) renderPaperDCF();
+}
+
+function initPaperDCFState() {
+  paperDCFState = {};
+  PAPER_DCF_SCENARIOS.forEach(sc => {
+    const steps = getPDCFSteps(sc.params);
+    steps.forEach(s => { paperDCFState[s.id] = { status:null, attempts:0, hintOpen:false, userVal:'' }; });
+  });
+}
+
+function renderPaperDCF() {
+  const sc    = PAPER_DCF_SCENARIOS[paperDCFIdx];
+  const steps = getPDCFSteps(sc.params);
+  const correct = steps.filter(s => paperDCFState[s.id]?.status === 'correct').length;
+
+  const tabs = document.getElementById('paperDCFTabs');
+  tabs.innerHTML = PAPER_DCF_SCENARIOS.map((s, i) => {
+    const done = getPDCFSteps(s.params).every(st => paperDCFState[st.id]?.status === 'correct');
+    return `<div class="plbo-stab${i===paperDCFIdx?' on':''}${done?' done':''}" onclick="paperDCFIdx=${i};renderPaperDCF()">${i+1}. ${s.title}</div>`;
+  }).join('');
+
+  let lastSection = null;
+  const stepsHtml = steps.map(step => {
+    const st = paperDCFState[step.id];
+    const isCorrect = st?.status === 'correct';
+    const isWrong   = st?.status === 'wrong';
+    const showAns   = st?.attempts >= 2;
+    let sectionHdr  = '';
+    if (step.section && step.section !== lastSection) {
+      sectionHdr = `<div class="plbo-section-hdr">${step.section}</div>`;
+      lastSection = step.section;
+    }
+    const ansLabel = step.unit === '$M' ? `$${step.ans.toFixed(1)}M` :
+                     step.unit === '$'  ? `$${step.ans.toFixed(2)}` :
+                     step.unit === '%'  ? `${step.ans.toFixed(2)}%` :
+                                          step.ans.toFixed(4);
+    return `${sectionHdr}
+      ${st?.hintOpen ? `<div class="xdrill-hint-box show">💡 ${step.hint}</div>` : ''}
+      <div class="xdrill-row">
+        <div style="flex:1;min-width:0">
+          <div class="xdrill-lbl">${step.label}${showAns && !isCorrect ? `<span style="color:var(--green);font-size:9px;margin-left:6px">→ ${ansLabel}</span>` : ''}</div>
+          <div style="font-size:9px;color:var(--t3);margin-top:1px;font-family:'JetBrains Mono',monospace">${step.formula}</div>
+        </div>
+        <input class="xdrill-input${isCorrect?' correct':isWrong?' wrong':''}" id="pdcf-${step.id}"
+          type="number" step="0.001" value="${isCorrect ? step.ans.toFixed(4) : (st?.userVal ?? '')}"
+          ${isCorrect ? 'disabled' : ''} placeholder="${step.unit}"
+          style="width:88px" onkeydown="if(event.key==='Enter')checkPaperDCF('${step.id}')">
+        <button class="xdrill-check" onclick="checkPaperDCF('${step.id}')" ${isCorrect?'disabled':''}>→</button>
+        <button class="xdrill-hint-btn" onclick="togglePaperDCFHint('${step.id}')">?</button>
+        <div class="xdrill-status" style="${isCorrect?'color:var(--green)':isWrong?'color:var(--red)':''}">${isCorrect?'✓':isWrong?'✗':''}</div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('paperDCFBody').innerHTML = `
+    <div style="padding:8px 12px;background:var(--s1);border:1px solid var(--b1);border-radius:5px;font-size:9.5px;color:var(--t3);line-height:1.6">
+      <span style="color:var(--t2);font-weight:600">${sc.title}</span> · <span style="color:#D97706">${sc.difficulty}</span><br>${sc.context}
+    </div>
+    <div class="plbo-layout">
+      <div class="plbo-assumptions">
+        <div class="plbo-asm-title">Given Assumptions</div>
+        ${sc.assumptions.map(a => `<div class="plbo-asm-row"><span class="plbo-asm-lbl">${a.label}</span><span class="plbo-asm-val">${a.val}</span></div>`).join('')}
+      </div>
+      <div class="plbo-steps">${stepsHtml}</div>
+    </div>`;
+
+  const pct = steps.length ? Math.round(correct / steps.length * 100) : 0;
+  document.getElementById('paperDCFProg').style.width = pct + '%';
+  document.getElementById('paperDCFProgTxt').textContent = `${correct}/${steps.length} correct`;
+  const nextBtn = document.getElementById('paperDCFNext');
+  const allDone = steps.every(s => paperDCFState[s.id]?.status === 'correct');
+  const hasNext = paperDCFIdx < PAPER_DCF_SCENARIOS.length - 1;
+  nextBtn.textContent = hasNext ? 'Next Scenario →' : allDone ? 'All Done ✓' : 'Finish';
+  nextBtn.disabled = !allDone;
+  nextBtn.onclick = () => { if (hasNext) { paperDCFIdx++; renderPaperDCF(); } };
+}
+
+function checkPaperDCF(id) {
+  const sc    = PAPER_DCF_SCENARIOS[paperDCFIdx];
+  const steps = getPDCFSteps(sc.params);
+  const step  = steps.find(s => s.id === id);
+  const input = document.getElementById('pdcf-' + id);
+  if (!step || !input) return;
+  const val = parseFloat(input.value);
+  const st  = paperDCFState[id];
+  st.userVal   = input.value;
+  st.attempts++;
+  st.status    = !isNaN(val) && Math.abs(val - step.ans) <= step.tol ? 'correct' : 'wrong';
+  if (st.status === 'wrong' && st.attempts >= 2) st.hintOpen = true;
+  renderPaperDCF();
+}
+
+function togglePaperDCFHint(id) {
+  paperDCFState[id].hintOpen = !paperDCFState[id].hintOpen;
+  renderPaperDCF();
+}
+
+function resetPaperDCF() {
+  paperDCFState = {};
+  initPaperDCFState();
+  renderPaperDCF();
+  resetPDCFTimer();
+}
+
+/* ── Paper DCF Timer ── */
+let pdcfTimerSec = 1200, pdcfTimerRunning = false, pdcfTimerInterval = null;
+
+function togglePDCFTimer() {
+  if (pdcfTimerRunning) {
+    clearInterval(pdcfTimerInterval);
+    pdcfTimerRunning = false;
+    const btn = document.getElementById('pdcfTimerBtn');
+    if (btn) { btn.textContent = 'Resume'; btn.className = 'plbo-timer-btn go'; }
+  } else {
+    if (pdcfTimerSec <= 0) return;
+    pdcfTimerRunning = true;
+    const btn = document.getElementById('pdcfTimerBtn');
+    if (btn) { btn.textContent = 'Pause'; btn.className = 'plbo-timer-btn pause'; }
+    pdcfTimerInterval = setInterval(() => {
+      if (pdcfTimerSec > 0) { pdcfTimerSec--; updatePDCFTimerDisplay(); }
+      if (pdcfTimerSec <= 0) { clearInterval(pdcfTimerInterval); pdcfTimerRunning = false; }
+    }, 1000);
+  }
+}
+
+function updatePDCFTimerDisplay() {
+  const m = Math.floor(pdcfTimerSec / 60);
+  const s = pdcfTimerSec % 60;
+  const el = document.getElementById('pdcfTimerDisplay');
+  if (!el) return;
+  el.textContent = `${m}:${s.toString().padStart(2,'0')}`;
+  el.className = 'plbo-timer-display' + (pdcfTimerSec <= 60 ? ' crit' : pdcfTimerSec <= 180 ? ' warn' : '');
+}
+
+function resetPDCFTimer() {
+  clearInterval(pdcfTimerInterval);
+  pdcfTimerRunning = false;
+  pdcfTimerSec = 1200;
+  const el = document.getElementById('pdcfTimerDisplay');
+  if (el) { el.textContent = '20:00'; el.className = 'plbo-timer-display'; }
+  const btn = document.getElementById('pdcfTimerBtn');
+  if (btn) { btn.textContent = 'Start'; btn.className = 'plbo-timer-btn go'; }
+}
+
 /* ══════════════════════════════════════════════════════════
    MACRO DASHBOARD
 ══════════════════════════════════════════════════════════ */
