@@ -1925,6 +1925,93 @@ body.wt-open #gridWrap{padding-bottom:150px;}
 .bm-result-score { font-size:56px; font-weight:700; color:var(--blue); font-family:'JetBrains Mono',monospace; }
 .bm-result-label { font-size:13px; color:var(--t2); }
 .bm-result-grade { font-size:22px; font-weight:700; color:var(--t1); }
+/* ── MODELING CHEAT SHEET ─────────────────────── */
+.cs-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(270px,1fr)); gap:12px; padding:16px; }
+.cs-block { background:var(--bbg); border:1px solid var(--b1); border-radius:8px; padding:12px; }
+.cs-hdr { font-size:11px; font-weight:700; color:var(--blue); text-transform:uppercase; letter-spacing:.5px; margin-bottom:8px; padding-bottom:6px; border-bottom:1px solid var(--b1); }
+.cs-row { display:flex; justify-content:space-between; align-items:flex-start; padding:4px 0; border-bottom:1px solid rgba(255,255,255,.04); gap:8px; }
+.cs-row:last-child { border-bottom:none; }
+.cs-lbl { font-size:10px; color:var(--t3); flex:0 0 auto; max-width:48%; }
+.cs-val { font-size:10px; color:var(--t1); font-family:'JetBrains Mono',monospace; text-align:right; }
+/* ── 3-STATEMENT TRANSACTIONS GUIDE ──────────── */
+.txn-list { padding:12px 16px; display:flex; flex-direction:column; gap:8px; }
+.txn-card { background:var(--bbg); border:1px solid var(--b1); border-radius:8px; overflow:hidden; }
+.txn-card-head { display:flex; justify-content:space-between; align-items:center; padding:10px 14px; cursor:pointer; }
+.txn-card-title { font-size:12px; font-weight:600; color:var(--t1); }
+.txn-card-cat { font-size:10px; color:var(--t3); background:var(--b2); padding:2px 7px; border-radius:3px; flex-shrink:0; margin-left:8px; }
+.txn-body { display:none; padding:10px 14px 12px; border-top:1px solid var(--b1); }
+.txn-body.open { display:block; }
+.txn-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; }
+.txn-col-hdr { font-size:10px; font-weight:700; color:var(--blue); text-transform:uppercase; letter-spacing:.4px; margin-bottom:6px; }
+.txn-item { font-size:10px; color:var(--t2); padding:2px 0; line-height:1.5; }
+/* ── VALUATION DECISION TREE ──────────────────── */
+.vdt-wrap { padding:16px; display:flex; flex-direction:column; gap:12px; }
+.vdt-card { background:var(--bbg); border:1px solid var(--b1); border-radius:8px; padding:14px; }
+.vdt-card-title { font-size:13px; font-weight:700; color:var(--blue); margin-bottom:4px; }
+.vdt-when { font-size:10px; color:var(--t3); margin-bottom:8px; font-style:italic; line-height:1.5; }
+.vdt-pros-cons { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:8px; }
+.vdt-sub-hdr { font-size:10px; font-weight:700; margin-bottom:4px; }
+.vdt-pros .vdt-sub-hdr { color:var(--green); }
+.vdt-cons .vdt-sub-hdr { color:var(--red); }
+.vdt-item { font-size:10px; color:var(--t2); padding:2px 0; line-height:1.5; }
+/* ── M&A STRUCTURING GUIDE ───────────────────── */
+.mas-wrap { padding:16px; display:flex; flex-direction:column; gap:12px; }
+.mas-section { background:var(--bbg); border:1px solid var(--b1); border-radius:8px; padding:14px; }
+.mas-title { font-size:12px; font-weight:700; color:var(--blue); margin-bottom:10px; padding-bottom:6px; border-bottom:1px solid var(--b1); }
+.mas-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:8px; }
+.mas-col { background:var(--b2); border-radius:6px; padding:10px; }
+.mas-col-title { font-size:10px; font-weight:700; color:var(--t1); margin-bottom:6px; text-transform:uppercase; letter-spacing:.4px; }
+.mas-item { font-size:10px; color:var(--t2); padding:2px 0; line-height:1.5; }
+/* ── INTERVIEW ANSWER FRAMEWORKS ─────────────── */
+.iaf-wrap { padding:12px 16px; display:flex; flex-direction:column; gap:10px; }
+.iaf-card { background:var(--bbg); border:1px solid var(--b1); border-radius:8px; overflow:hidden; }
+.iaf-card-head { display:flex; justify-content:space-between; align-items:center; padding:12px 14px; cursor:pointer; gap:8px; }
+.iaf-card-q { font-size:12px; font-weight:600; color:var(--t1); }
+.iaf-card-tag { font-size:10px; color:var(--t3); background:var(--b2); padding:2px 8px; border-radius:3px; flex-shrink:0; }
+.iaf-body { display:none; padding:12px 14px 14px; border-top:1px solid var(--b1); }
+.iaf-body.open { display:block; }
+.iaf-step { display:flex; gap:10px; padding:7px 0; border-bottom:1px solid rgba(255,255,255,.04); align-items:flex-start; }
+.iaf-step:last-child { border-bottom:none; }
+.iaf-step-num { flex:0 0 20px; height:20px; background:var(--blue); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; margin-top:1px; }
+.iaf-step-text { font-size:11px; color:var(--t2); line-height:1.55; }
+.iaf-note { font-size:10px; color:var(--t3); background:var(--b2); border-radius:5px; padding:8px 10px; margin-top:8px; line-height:1.5; }
+/* ── JOURNAL ENTRY TRAINER ────────────────────── */
+.je-outer { padding:14px 16px; }
+.je-progress { font-size:11px; color:var(--t3); margin-bottom:12px; }
+.je-card { background:var(--bbg); border:1px solid var(--b1); border-radius:8px; padding:14px; }
+.je-scenario { font-size:12px; font-weight:600; color:var(--t1); margin-bottom:12px; line-height:1.5; }
+.je-table { width:100%; border-collapse:collapse; }
+.je-th { font-size:10px; font-weight:700; color:var(--t3); text-transform:uppercase; padding:4px 8px; border-bottom:1px solid var(--b1); text-align:left; }
+.je-th:nth-child(2),.je-th:nth-child(3) { text-align:right; }
+.je-td { padding:6px 8px; font-size:11px; color:var(--t2); border-bottom:1px solid rgba(255,255,255,.04); }
+.je-td:first-child { color:var(--t1); }
+.je-td:nth-child(2),.je-td:nth-child(3) { text-align:right; }
+.je-num-input { width:90px; background:var(--b2); border:1px solid var(--b1); border-radius:4px; padding:3px 6px; font-size:11px; color:var(--t1); text-align:right; font-family:'JetBrains Mono',monospace; }
+.je-num-input:focus { outline:none; border-color:var(--blue); }
+.je-num-input.correct { background:rgba(22,163,74,.12); border-color:var(--green); color:var(--green); }
+.je-num-input.wrong { background:rgba(201,60,46,.1); border-color:var(--red); color:var(--red); }
+.je-check-btn { padding:7px 18px; background:var(--blue); color:#fff; border:none; border-radius:6px; font-size:11px; font-weight:600; cursor:pointer; }
+.je-check-btn:hover { background:var(--blue-h); }
+.je-check-btn:disabled { opacity:.4; cursor:not-allowed; }
+.je-result { font-size:11px; padding:6px 10px; border-radius:5px; display:none; }
+.je-result.show { display:block; }
+.je-result.pass { background:rgba(22,163,74,.12); color:var(--green); }
+.je-result.fail { background:rgba(201,60,46,.1); color:var(--red); }
+.je-nav { display:flex; gap:8px; align-items:center; }
+.je-nav-btn { padding:6px 14px; background:var(--b2); border:1px solid var(--b1); border-radius:6px; font-size:11px; color:var(--t1); cursor:pointer; }
+.je-nav-btn:hover { background:var(--b1); }
+.je-nav-btn:disabled { opacity:.35; cursor:not-allowed; }
+/* ── NETWORKING SCRIPTS ───────────────────────── */
+.ns-wrap { padding:14px 16px; display:flex; flex-direction:column; gap:10px; }
+.ns-card { background:var(--bbg); border:1px solid var(--b1); border-radius:8px; overflow:hidden; }
+.ns-card-head { display:flex; justify-content:space-between; align-items:center; padding:12px 14px; cursor:pointer; gap:8px; }
+.ns-card-title { font-size:12px; font-weight:600; color:var(--t1); }
+.ns-card-tag { font-size:10px; color:var(--t3); background:var(--b2); padding:2px 8px; border-radius:3px; flex-shrink:0; }
+.ns-body { display:none; padding:12px 14px 14px; border-top:1px solid var(--b1); }
+.ns-body.open { display:block; }
+.ns-subject { font-size:10px; font-weight:700; color:var(--blue); margin-bottom:6px; text-transform:uppercase; letter-spacing:.4px; }
+.ns-text { font-size:11px; color:var(--t2); line-height:1.75; white-space:pre-line; }
+.ns-tip { font-size:10px; color:var(--t3); background:var(--b2); border-radius:5px; padding:8px 10px; margin-top:10px; line-height:1.5; }
 </style>
 </head>
 <body>
@@ -2041,6 +2128,9 @@ body.wt-open #gridWrap{padding-bottom:150px;}
           <button class="tools-item" onclick="toggleQuizModal();closeToolsMenu()">
             <span class="tools-item-icon">🃏</span>Formula Quiz<span class="tools-item-badge">NEW</span>
           </button>
+          <button class="tools-item" id="jeTrainerBtn" onclick="toggleJETrainer();closeToolsMenu()">
+            <span class="tools-item-icon">📒</span>Journal Entry Trainer<span class="tools-item-badge">NEW</span>
+          </button>
         </div>
         <!-- INTERVIEW TAB -->
         <div class="tools-tab-content hidden" id="ttab-interview">
@@ -2058,6 +2148,10 @@ body.wt-open #gridWrap{padding-bottom:150px;}
           </button>
           <button class="tools-item" id="mathBtn" onclick="toggleMath();closeToolsMenu()">
             <span class="tools-item-icon">🧮</span>Math Trainer<span class="tools-item-badge"></span>
+          </button>
+          <div class="tools-divider"></div>
+          <button class="tools-item" id="iafBtn" onclick="toggleIAF();closeToolsMenu()">
+            <span class="tools-item-icon">🎯</span>Answer Frameworks<span class="tools-item-badge">NEW</span>
           </button>
         </div>
         <!-- REFERENCE TAB -->
@@ -2086,6 +2180,19 @@ body.wt-open #gridWrap{padding-bottom:150px;}
           <button class="tools-item" id="valAssumpBtn" onclick="toggleValAssump();closeToolsMenu()">
             <span class="tools-item-icon">🎯</span>Valuation Assumptions<span class="tools-item-badge">NEW</span>
           </button>
+          <div class="tools-divider"></div>
+          <button class="tools-item" id="cheatSheetBtn" onclick="toggleCheatSheet();closeToolsMenu()">
+            <span class="tools-item-icon">📋</span>Modeling Cheat Sheet<span class="tools-item-badge">NEW</span>
+          </button>
+          <button class="tools-item" id="txnGuideBtn" onclick="toggleTxnGuide();closeToolsMenu()">
+            <span class="tools-item-icon">📊</span>3-Statement Txns<span class="tools-item-badge">NEW</span>
+          </button>
+          <button class="tools-item" id="valTreeBtn" onclick="toggleValTree();closeToolsMenu()">
+            <span class="tools-item-icon">🌳</span>Valuation Decision Tree<span class="tools-item-badge">NEW</span>
+          </button>
+          <button class="tools-item" id="masGuideBtn" onclick="toggleMASGuide();closeToolsMenu()">
+            <span class="tools-item-icon">🏗️</span>M&amp;A Structuring<span class="tools-item-badge">NEW</span>
+          </button>
         </div>
         <!-- CAREER TAB -->
         <div class="tools-tab-content hidden" id="ttab-career">
@@ -2100,6 +2207,10 @@ body.wt-open #gridWrap{padding-bottom:150px;}
           </button>
           <button class="tools-item" id="trackerBtn" onclick="toggleTracker();closeToolsMenu()">
             <span class="tools-item-icon">📋</span>App Tracker<span class="tools-item-badge"></span>
+          </button>
+          <div class="tools-divider"></div>
+          <button class="tools-item" id="netScriptsBtn" onclick="toggleNetScripts();closeToolsMenu()">
+            <span class="tools-item-icon">✉️</span>Networking Scripts<span class="tools-item-badge">NEW</span>
           </button>
         </div>
       </div>
@@ -10856,6 +10967,94 @@ function renderWACC() {
   </div>
 </div>
 
+<!-- MODELING CHEAT SHEET MODAL -->
+<div class="full-modal" id="cheatSheetModal" onclick="if(event.target===this)toggleCheatSheet()">
+  <div class="full-box" style="max-width:920px">
+    <div class="full-head">
+      <div><div class="roadmap-title">Modeling Cheat Sheet</div><div class="roadmap-sub">EV Bridge · WACC · DCF · LBO · M&amp;A · Credit Ratios · Key Multiples — all formulas in one place</div></div>
+      <button class="modal-close" onclick="toggleCheatSheet()">✕</button>
+    </div>
+    <div class="full-body" style="padding:0" id="cheatSheetBody"></div>
+  </div>
+</div>
+
+<!-- 3-STATEMENT TRANSACTIONS GUIDE MODAL -->
+<div class="full-modal" id="txnGuideModal" onclick="if(event.target===this)toggleTxnGuide()">
+  <div class="full-box" style="max-width:880px">
+    <div class="full-head">
+      <div><div class="roadmap-title">3-Statement Transactions Guide</div><div class="roadmap-sub">20 common transactions — Income Statement · Balance Sheet · Cash Flow impact. Click any card to expand.</div></div>
+      <button class="modal-close" onclick="toggleTxnGuide()">✕</button>
+    </div>
+    <div class="full-body" style="padding:0" id="txnGuideBody"></div>
+  </div>
+</div>
+
+<!-- VALUATION DECISION TREE MODAL -->
+<div class="full-modal" id="valTreeModal" onclick="if(event.target===this)toggleValTree()">
+  <div class="full-box" style="max-width:880px">
+    <div class="full-head">
+      <div><div class="roadmap-title">Valuation Methodology Decision Tree</div><div class="roadmap-sub">When to use DCF · Trading Comps · Precedent Transactions · SOTP · LBO Floor · DDM — strengths and limitations</div></div>
+      <button class="modal-close" onclick="toggleValTree()">✕</button>
+    </div>
+    <div class="full-body" style="padding:0" id="valTreeBody"></div>
+  </div>
+</div>
+
+<!-- M&A STRUCTURING GUIDE MODAL -->
+<div class="full-modal" id="masGuideModal" onclick="if(event.target===this)toggleMASGuide()">
+  <div class="full-box" style="max-width:940px">
+    <div class="full-head">
+      <div><div class="roadmap-title">M&amp;A Structuring Guide</div><div class="roadmap-sub">Consideration · Tax Structures · Deal Protections · Regulatory (HSR / CFIUS) · Key Terms</div></div>
+      <button class="modal-close" onclick="toggleMASGuide()">✕</button>
+    </div>
+    <div class="full-body" style="padding:0" id="masGuideBody"></div>
+  </div>
+</div>
+
+<!-- INTERVIEW ANSWER FRAMEWORKS MODAL -->
+<div class="full-modal" id="iafModal" onclick="if(event.target===this)toggleIAF()">
+  <div class="full-box" style="max-width:860px">
+    <div class="full-head">
+      <div><div class="roadmap-title">Interview Answer Frameworks</div><div class="roadmap-sub">Walk-through frameworks for DCF · LBO · M&amp;A · Why IB · Tell Me About Yourself · Valuation · LBO Candidates · Weakness</div></div>
+      <button class="modal-close" onclick="toggleIAF()">✕</button>
+    </div>
+    <div class="full-body" style="padding:0" id="iafBody"></div>
+  </div>
+</div>
+
+<!-- JOURNAL ENTRY TRAINER MODAL -->
+<div class="xdrill-modal" id="jeTrainerModal" onclick="if(event.target===this)toggleJETrainer()">
+  <div class="xdrill-box" style="max-width:680px;width:96%">
+    <div class="drill-head">
+      <div>
+        <div class="fit-head-title">Journal Entry Trainer</div>
+        <div class="fit-head-sub">Enter the debit / credit amounts for each transaction — amounts in whole dollars</div>
+      </div>
+      <button class="modal-close" onclick="toggleJETrainer()">✕</button>
+    </div>
+    <div class="xdrill-body" id="jeTrainerBody"></div>
+    <div class="xdrill-footer" style="justify-content:space-between">
+      <div class="je-nav">
+        <button class="je-nav-btn" id="jePrevBtn" onclick="moveJE(-1)" disabled>← Prev</button>
+        <span id="jeCounter" style="font-size:11px;color:var(--t3)">1 / 10</span>
+        <button class="je-nav-btn" id="jeNextBtn" onclick="moveJE(1)">Next →</button>
+      </div>
+      <div style="font-size:10px;color:var(--t3)">Debits = Credits in every valid journal entry</div>
+    </div>
+  </div>
+</div>
+
+<!-- NETWORKING SCRIPTS MODAL -->
+<div class="full-modal" id="netScriptsModal" onclick="if(event.target===this)toggleNetScripts()">
+  <div class="full-box" style="max-width:820px">
+    <div class="full-head">
+      <div><div class="roadmap-title">Networking Script Builder</div><div class="roadmap-sub">Cold email · LinkedIn · Info call opener · Follow-up · Thank you · Reconnect — copy and customize</div></div>
+      <button class="modal-close" onclick="toggleNetScripts()">✕</button>
+    </div>
+    <div class="full-body" style="padding:0" id="netScriptsBody"></div>
+  </div>
+</div>
+
 <!-- FORMULA QUIZ MODAL -->
 <div id="quizModal" onclick="if(event.target===this)toggleQuizModal()">
   <div class="quiz-box">
@@ -11695,6 +11894,609 @@ function bmReset() {
     inp.disabled = false;
   });
   bmStarted = false;
+}
+
+/* ══════════════════════════════════════════════════════════
+   MODELING CHEAT SHEET
+══════════════════════════════════════════════════════════ */
+function toggleCheatSheet() {
+  const m = document.getElementById('cheatSheetModal');
+  m.classList.toggle('open');
+  if (m.classList.contains('open') && !document.getElementById('cheatSheetBody').innerHTML)
+    renderCheatSheet();
+}
+const CHEAT_SHEET_DATA = [
+  { title:'Enterprise Value Bridge', rows:[
+    ['EV Formula','Equity Value + Total Debt − Cash'],
+    ['Equity Value','Share Price × Diluted Shares'],
+    ['EV → Equity Value','EV − Net Debt'],
+    ['Diluted Shares','Basic + Options + RSUs + Converts (TSM)'],
+    ['Net Debt','Total Debt + Preferred − Cash & Equiv.'],
+    ['EV Multiples','EV/EBITDA, EV/EBIT, EV/Revenue'],
+    ['Equity Multiples','P/E, P/Book, P/FCF (use Eq. Value)'],
+  ]},
+  { title:'WACC', rows:[
+    ['WACC','Ke×(E/V) + Kd×(1−t)×(D/V)'],
+    ['Cost of Equity (CAPM)','Rf + β × ERP'],
+    ['Risk-Free Rate','10-yr UST yield (~4.0–4.5%)'],
+    ['Equity Risk Premium','4.5–5.5% (Damodaran)'],
+    ['Beta (levered)','βU × [1 + (1−t) × (D/E)]'],
+    ['Beta (unlevered)','βL / [1 + (1−t) × (D/E)]'],
+    ['Kd (after-tax)','Pre-tax Kd × (1 − Tax Rate)'],
+    ['Tax Shield','Interest × Tax Rate (per year)'],
+  ]},
+  { title:'DCF', rows:[
+    ['UFCF','EBIT(1−t) + D&A − CapEx − ΔNWC'],
+    ['ΔWorking Capital','↑NWC = use of cash (subtract)'],
+    ['PV of UFCF','UFCF_n / (1+WACC)^n'],
+    ['Terminal Value (Gordon)','UFCF_N+1 / (WACC − g)'],
+    ['Terminal Value (Exit)','EBITDA_N × Exit Multiple'],
+    ['PV of TV','TV / (1+WACC)^N'],
+    ['Enterprise Value','Σ PV(UFCF) + PV(TV)'],
+    ['Share Price','(EV − Net Debt) / Diluted Shares'],
+  ]},
+  { title:'LBO Returns', rows:[
+    ['Entry EV','Entry EBITDA × Entry Multiple'],
+    ['Sponsor Equity','Entry EV − Debt Raised'],
+    ['Exit EV','Exit EBITDA × Exit Multiple'],
+    ['Exit Equity','Exit EV − Remaining Debt'],
+    ['MOIC','Exit Equity / Entry Equity'],
+    ['IRR (approx.)','2.0×≈15%, 2.5×≈20%, 3.0×≈25% (5yr)'],
+    ['Cash-on-Cash','Distributions / Invested Capital'],
+    ['FCCR','(EBITDA − CapEx) / Interest'],
+  ]},
+  { title:'M&A / Accretion-Dilution', rows:[
+    ['Pro Forma EPS','(Comb. NI + Synergies) / PF Shares'],
+    ['Accretive','PF EPS > Acquirer Standalone EPS'],
+    ['Dilutive','PF EPS < Acquirer Standalone EPS'],
+    ['Break-Even Synergy','Premium / Acquirer NTM P/E'],
+    ['Goodwill','Purchase Price − FV Net Ident. Assets'],
+    ['D&A Step-Up','Asset Write-Up / Useful Life (yr)'],
+    ['Cash Deal Dilution','Dilutive when Tgt EY < After-tax Kd'],
+    ['Stock Deal','Accretive when Acqr P/E > Tgt P/E'],
+  ]},
+  { title:'Credit Metrics', rows:[
+    ['Gross Leverage','Total Debt / EBITDA'],
+    ['Net Leverage','Net Debt / EBITDA'],
+    ['Interest Coverage','EBITDA / Interest Expense'],
+    ['DSCR','(EBITDA − CapEx) / Debt Service'],
+    ['Fixed Charge Coverage','(EBITDA − CapEx) / (Int + Amort)'],
+    ['LTV','Total Debt / Enterprise Value'],
+    ['Sr. Secured Limit','Typically ≤ 3.0–4.0× EBITDA'],
+    ['Total Leverage Limit','Typically ≤ 5.0–6.5× EBITDA'],
+  ]},
+  { title:'Key Operating Ratios', rows:[
+    ['Gross Margin','Gross Profit / Revenue'],
+    ['EBITDA Margin','EBITDA / Revenue'],
+    ['FCF Conversion','FCF / Net Income'],
+    ['ROIC','NOPAT / (Debt + Equity − Cash)'],
+    ['ROE','Net Income / Avg Shareholders Equity'],
+    ['Current Ratio','Current Assets / Current Liabilities'],
+    ['Quick Ratio','(Cash + AR) / Current Liabilities'],
+    ['Days Sales Outstanding','AR / (Revenue / 365)'],
+  ]},
+];
+function renderCheatSheet() {
+  document.getElementById('cheatSheetBody').innerHTML = '<div class="cs-grid">' +
+    CHEAT_SHEET_DATA.map(s=>`
+      <div class="cs-block">
+        <div class="cs-hdr">${s.title}</div>
+        ${s.rows.map(([l,v])=>`<div class="cs-row"><span class="cs-lbl">${l}</span><span class="cs-val">${v}</span></div>`).join('')}
+      </div>`).join('') + '</div>';
+}
+
+/* ══════════════════════════════════════════════════════════
+   3-STATEMENT TRANSACTIONS GUIDE
+══════════════════════════════════════════════════════════ */
+function toggleTxnGuide() {
+  const m = document.getElementById('txnGuideModal');
+  m.classList.toggle('open');
+  if (m.classList.contains('open') && !document.getElementById('txnGuideBody').innerHTML)
+    renderTxnGuide();
+}
+const TXN_DATA = [
+  { title:'$10M increase in Depreciation & Amortization', cat:'Non-Cash',
+    is:['D&A expense +$10M (non-cash)','Net Income −$7.5M (at 25% tax rate)','EBITDA unchanged; EBIT −$10M'],
+    bs:['PP&E net −$10M (acc. depreciation)','Retained Earnings −$7.5M','Deferred Tax Liability −$2.5M'],
+    cf:['NI −$7.5M; add-back D&A +$10M','Operating CF +$2.5M (tax shield)','No Investing or Financing CF'] },
+  { title:'$10M Stock-Based Compensation (SBC)', cat:'Non-Cash',
+    is:['Operating expense +$10M','Net Income −$7.5M (at 25% tax)','Non-cash charge (no cash out)'],
+    bs:['APIC +$10M (equity)','Retained Earnings −$7.5M','Deferred Tax Asset +$2.5M'],
+    cf:['NI −$7.5M; add-back SBC +$10M','Operating CF +$2.5M net','No actual cash outflow'] },
+  { title:'$30M Goodwill Impairment', cat:'Non-Cash',
+    is:['Impairment charge +$30M (expense)','NI −$30M (typically non-deductible)','No tax benefit; EBITDA unchanged'],
+    bs:['Goodwill −$30M','Retained Earnings −$30M','No cash impact'],
+    cf:['NI −$30M; add-back impairment +$30M','Zero net cash effect','Non-cash — no CF line impact'] },
+  { title:'$5M accrued warranty expense', cat:'Non-Cash',
+    is:['Warranty expense +$5M','NI −$3.75M (at 25% tax)','Cash outflow deferred until claims filed'],
+    bs:['Warranty Liability +$5M','Retained Earnings −$3.75M','DTA +$1.25M'],
+    cf:['NI −$3.75M; liability +$5M','Operating CF +$1.25M net','No Investing or Financing CF'] },
+  { title:'$50M CapEx purchase (all cash)', cat:'CapEx / PP&E',
+    is:['No immediate IS impact','Future D&A reduces NI over asset life','EBITDA unchanged'],
+    bs:['PP&E gross +$50M','Cash −$50M','Net assets unchanged'],
+    cf:['No Operating CF impact','Investing CF −$50M (CapEx)','Net cash −$50M'] },
+  { title:'$20M asset sale at book value (no gain/loss)', cat:'CapEx / PP&E',
+    is:['No IS impact (zero gain)','Revenue and NI unchanged','EBITDA unchanged'],
+    bs:['PP&E −$20M','Cash +$20M','Net assets unchanged'],
+    cf:['No Operating CF','Investing CF +$20M (proceeds)','Net cash +$20M'] },
+  { title:'$20M asset sale with $5M book gain (book value = $15M)', cat:'CapEx / PP&E',
+    is:['Gain on sale +$5M (below EBIT line)','NI +$3.75M (at 25% tax)','One-time, non-operating item'],
+    bs:['PP&E −$15M (book value)','Cash +$20M','Retained Earnings +$3.75M'],
+    cf:['NI +$3.75M; subtract gain −$5M','Investing CF +$20M (proceeds)','Operating CF −$1.25M (taxes paid)'] },
+  { title:'$10M increase in Accounts Receivable (credit sale)', cat:'Working Capital',
+    is:['Revenue +$10M recognized','NI +$7.5M (at 25% tax)','Revenue earned, cash not yet collected'],
+    bs:['AR +$10M','Retained Earnings +$7.5M','Tax Payable +$2.5M'],
+    cf:['NI +$7.5M; AR increase −$10M','Operating CF −$2.5M net','Cash not yet received'] },
+  { title:'$10M inventory purchase (cash)', cat:'Working Capital',
+    is:['No IS impact (inventory sits on BS)','COGS recognized only when sold','Revenue and NI unchanged'],
+    bs:['Inventory +$10M','Cash −$10M','Net assets unchanged'],
+    cf:['Operating CF −$10M','(↑NWC = use of cash)','No Investing or Financing CF'] },
+  { title:'$10M increase in Accounts Payable', cat:'Working Capital',
+    is:['No IS impact (AP is a BS item)','Expense recognized when incurred','Timing difference only'],
+    bs:['AP +$10M (current liability)','Inventory or Expense +$10M','Net assets unchanged'],
+    cf:['Operating CF +$10M','(↑AP = source of cash)','Working capital benefit'] },
+  { title:'$24M deferred revenue received (2-yr subscription upfront)', cat:'Working Capital',
+    is:['No revenue recognized at receipt','Revenue recognized as service delivered','IS impact fully deferred'],
+    bs:['Cash +$24M','Deferred Revenue +$24M (liability)','Net assets +$24M'],
+    cf:['Operating CF +$24M (cash received)','Appears as ↑ liabilities in OCF','No IS impact yet'] },
+  { title:'Recognize $1M of deferred revenue (monthly)', cat:'Working Capital',
+    is:['Revenue +$1M recognized','NI +$0.75M (at 25% tax)','Revenue earned this period'],
+    bs:['Deferred Revenue −$1M','Retained Earnings +$0.75M','Tax Payable +$0.25M'],
+    cf:['NI +$0.75M; def. rev. −$1M','Operating CF −$0.25M net','Cash already received earlier'] },
+  { title:'$100M senior debt issuance (cash proceeds)', cat:'Financing',
+    is:['No IS impact at issuance','Future interest expense per period','Principal is not an IS item'],
+    bs:['Cash +$100M','Long-Term Debt +$100M','Net assets +$100M'],
+    cf:['No Operating CF','No Investing CF','Financing CF +$100M'] },
+  { title:'$20M scheduled debt repayment', cat:'Financing',
+    is:['No IS impact (principal payment)','Interest expense accrued separately','NI unchanged'],
+    bs:['Cash −$20M','Long-Term Debt −$20M','Net assets −$20M'],
+    cf:['No Operating CF','No Investing CF','Financing CF −$20M'] },
+  { title:'$100M stock buyback (open market)', cat:'Financing',
+    is:['No immediate IS impact','EPS increases (fewer shares)','NI unchanged'],
+    bs:['Cash −$100M','Treasury Stock +$100M (contra-equity)','Equity −$100M'],
+    cf:['No Operating CF','No Investing CF','Financing CF −$100M'] },
+  { title:'$50M secondary equity issuance', cat:'Financing',
+    is:['No IS impact','EPS diluted (more shares)','NI unchanged'],
+    bs:['Cash +$50M','Common Stock / APIC +$50M','Equity +$50M'],
+    cf:['No Operating CF','No Investing CF','Financing CF +$50M'] },
+  { title:'$50M cash dividend declared and paid', cat:'Financing',
+    is:['No IS impact (dividends ≠ expense)','Reduces retained earnings directly','NI unchanged'],
+    bs:['Cash −$50M','Retained Earnings −$50M','Equity −$50M'],
+    cf:['No Operating CF','No Investing CF','Financing CF −$50M'] },
+  { title:'$200M all-cash acquisition', cat:'Acquisitions',
+    is:['No day-1 IS impact','Future: D&A step-up on acquired assets','Future: goodwill impairment risk'],
+    bs:['Cash −$200M','Acquired Assets (FV) + Goodwill +$200M','Assumed liabilities also on BS'],
+    cf:['No Operating CF','Investing CF −$200M','No Financing CF (cash funded)'] },
+  { title:'$200M all-stock acquisition', cat:'Acquisitions',
+    is:['No day-1 IS impact','Future: D&A step-up on acquired assets','EPS diluted from new shares issued'],
+    bs:['Acquired Assets + Goodwill +$200M','Common Stock / APIC +$200M (shares)','No cash change'],
+    cf:['No Operating CF','No Investing CF','Non-cash; supplemental schedule only'] },
+  { title:'$50M convertible bond converted to equity', cat:'Financing',
+    is:['No IS impact at conversion','Interest expense ceases post-conversion','Share count increases (dilution)'],
+    bs:['Long-Term Debt −$50M','Common Stock / APIC +$50M','No cash change; debt → equity'],
+    cf:['Non-cash financing transaction','No Operating or Investing CF','Disclosed in non-cash CF footnote'] },
+];
+function renderTxnGuide() {
+  document.getElementById('txnGuideBody').innerHTML = '<div class="txn-list">' +
+    TXN_DATA.map((t,i)=>`
+      <div class="txn-card">
+        <div class="txn-card-head" onclick="toggleTxnCard(${i})">
+          <span class="txn-card-title">${t.title}</span>
+          <span class="txn-card-cat">${t.cat}</span>
+        </div>
+        <div class="txn-body" id="txnBody${i}">
+          <div class="txn-grid">
+            <div><div class="txn-col-hdr">Income Statement</div>${t.is.map(s=>`<div class="txn-item">${s}</div>`).join('')}</div>
+            <div><div class="txn-col-hdr">Balance Sheet</div>${t.bs.map(s=>`<div class="txn-item">${s}</div>`).join('')}</div>
+            <div><div class="txn-col-hdr">Cash Flow</div>${t.cf.map(s=>`<div class="txn-item">${s}</div>`).join('')}</div>
+          </div>
+        </div>
+      </div>`).join('') + '</div>';
+}
+function toggleTxnCard(i) {
+  document.getElementById('txnBody'+i).classList.toggle('open');
+}
+
+/* ══════════════════════════════════════════════════════════
+   VALUATION DECISION TREE
+══════════════════════════════════════════════════════════ */
+function toggleValTree() {
+  const m = document.getElementById('valTreeModal');
+  m.classList.toggle('open');
+  if (m.classList.contains('open') && !document.getElementById('valTreeBody').innerHTML)
+    renderValTree();
+}
+const VAL_TREE_DATA = [
+  { method:'Discounted Cash Flow (DCF)',
+    when:'Use when: stable, predictable free cash flows; strong visibility on growth and margins; long-term business plan available; mature company.',
+    pros:['Intrinsic value — independent of market sentiment','Forces deep analysis of fundamentals','Captures long-term value creation','Best for mature companies with stable FCF'],
+    cons:['Highly sensitive to WACC and terminal growth rate','Terminal value drives 70–80% of total value','Garbage-in, garbage-out (projection quality)','Not useful for early-stage / no-FCF companies'],
+    note:'In interviews: "DCF captures intrinsic value but is limited by the quality of projections. Terminal value dominates, so small WACC or growth changes have large impacts."' },
+  { method:'Trading Comparables (Public Comps)',
+    when:'Use when: there are comparable public companies; current market pricing is reliable; need a market-based reality check on valuation.',
+    pros:['Market-based — reflects current investor sentiment','Objective: uses observable, real-time data','Easy to build and defend in a presentation','Good sanity check for DCF results'],
+    cons:['No two companies are truly identical','Diluted by market-wide mispricings (bubbles, panics)','Reflects minority discount — no control premium','Can embed sector-wide over/undervaluation'],
+    note:'In interviews: "Comps tell you how the market is pricing similar businesses today — but they reflect sentiment, not necessarily intrinsic value. Use alongside a DCF for context."' },
+  { method:'Precedent Transactions (M&A Comps)',
+    when:'Use when: there are comparable M&A transactions; want to understand acquisition premiums; assessing what acquirers have actually paid.',
+    pros:['Includes control premium (typically 20–40%)','Reflects what strategic buyers actually paid','Most relevant context for sell-side M&A','Grounded in real, completed transactions'],
+    cons:['Deals may be dated (different macro/market)','Limited data for private deal terms','Strategic rationale varies deal to deal','Often yields highest, sometimes inflated, values'],
+    note:'In interviews: "Precedents include control premiums so they typically show the highest valuations. Useful on the sell-side to set seller expectations and support the asking price."' },
+  { method:'Sum-of-the-Parts (SOTP)',
+    when:'Use when: conglomerate or multi-division company; each segment operates in a different industry with different risk/growth profiles; single multiple would distort value.',
+    pros:['Captures distinct value of each business unit','Can reveal hidden value or conglomerate discount','Ideal for diversified industrials, media, energy','Can identify asset monetization opportunities'],
+    cons:['Complex to build: requires segment financials','Assumes divisions could trade independently','Corporate overhead allocation is subjective','Not applicable to single-segment businesses'],
+    note:'In interviews: "SOTP is correct when a blended multiple would average out very different businesses. You value each segment on its own terms, then subtract corporate overhead and debt."' },
+  { method:'LBO Analysis (Floor Valuation)',
+    when:'Use when: evaluating a PE target; want a valuation floor; need to understand leverage capacity; company has stable, predictable FCF.',
+    pros:['Sets valuation floor (minimum a financial buyer pays)','Highlights cash generation quality','Shows maximum leverage capacity','Directly models investor return sensitivity'],
+    cons:['Assumes financial buyer only (no synergies)','Highly sensitive to exit assumptions','Not applicable to asset-heavy / cyclical companies','Requires debt capacity — not all cos. qualify'],
+    note:'In interviews: "LBO gives the floor — what a PE buyer targeting 20%+ IRR would pay. A strategic acquirer can justify a higher price by including synergies."' },
+  { method:'Dividend Discount Model (DDM)',
+    when:'Use when: valuing banks, insurance companies, or utilities; FCF is less meaningful (regulated capital); company pays stable, predictable dividends.',
+    pros:['Well-suited for financial institutions','Directly models capital returned to shareholders','Simple for mature, slow-growth businesses','Cost of equity is the right discount rate'],
+    cons:['Only captures dividends, not all value creation','Sensitive to assumed dividend growth rate','Useless for non-dividend-paying companies','Overly simplistic for complex businesses'],
+    note:'In interviews: "DDM is the go-to for banks and insurers where FCF is hard to define due to regulatory capital requirements. You discount dividends instead of free cash flows."' },
+];
+function renderValTree() {
+  document.getElementById('valTreeBody').innerHTML = '<div class="vdt-wrap">' +
+    VAL_TREE_DATA.map(m=>`
+      <div class="vdt-card">
+        <div class="vdt-card-title">${m.method}</div>
+        <div class="vdt-when">${m.when}</div>
+        <div class="vdt-pros-cons">
+          <div class="vdt-pros"><div class="vdt-sub-hdr">Strengths</div>${m.pros.map(p=>`<div class="vdt-item">+ ${p}</div>`).join('')}</div>
+          <div class="vdt-cons"><div class="vdt-sub-hdr">Limitations</div>${m.cons.map(c=>`<div class="vdt-item">− ${c}</div>`).join('')}</div>
+        </div>
+        <div class="iaf-note" style="margin-top:10px">${m.note}</div>
+      </div>`).join('') + '</div>';
+}
+
+/* ══════════════════════════════════════════════════════════
+   M&A STRUCTURING GUIDE
+══════════════════════════════════════════════════════════ */
+function toggleMASGuide() {
+  const m = document.getElementById('masGuideModal');
+  m.classList.toggle('open');
+  if (m.classList.contains('open') && !document.getElementById('masGuideBody').innerHTML)
+    renderMASGuide();
+}
+const MAS_DATA = [
+  { title:'Consideration: Cash vs. Stock vs. Mixed', cols:[
+    { name:'Cash Deal', items:['Seller receives certainty of value','Fully taxable to seller (capital gains)','Acquirer uses cash on hand or acquisition debt','Dilutive if interest cost > target earnings yield','Best when acquirer stock is undervalued','Faster to close — no stock registration required'] },
+    { name:'Stock-for-Stock', items:['Seller receives acquirer shares — typically tax-free','Qualifies as Type A reorg (continuity of interest)','Seller participates in combined company upside','Acquirer EPS diluted from new shares issued','Best when acquirer stock is overvalued','Requires shareholder vote and proxy statement'] },
+    { name:'Mixed Consideration', items:['Part cash, part stock (most common in large deals)','Partial tax deferral on stock portion received','Balances seller certainty with upside participation','Seller can often elect cash/stock preference','Collar provisions protect both parties from price swings','Lock-up restrictions often apply to stock received'] },
+  ]},
+  { title:'Deal Protections & Negotiation Mechanics', cols:[
+    { name:'Break-Up Fees', items:['Seller break-up fee: 3–4% of deal value','Paid if target board accepts a superior proposal','Reverse break-up fee (buyer): 2–5% of deal value','Paid if buyer walks (e.g., regulatory failure)','Higher reverse fee = stronger buyer commitment','Caps seller\'s downside if deal fails; enables fiduciary duty'] },
+    { name:'Go-Shop / No-Shop', items:['No-shop: seller cannot solicit competing bids post-signing','Go-shop: seller may solicit bids for 20–40 days after signing','Fiduciary out: board can accept a "superior proposal"','Match right: incumbent bidder can match any superior offer','Force-the-vote: board must hold shareholder vote regardless','SNDA: preserves key contracts through ownership change'] },
+    { name:'Representations & Warranties', items:['Seller makes reps about business accuracy/condition','Buyer makes reps about financing/authority','R&W Insurance (RWI): insures breach of reps','Eliminates escrow; increasingly standard in PE deals','MAE clause: buyer may walk if "material adverse effect"','MAE carve-outs: macro events, pandemics, sector-wide changes'] },
+  ]},
+  { title:'Tax Structures', cols:[
+    { name:'Asset Deal', items:['Buyer acquires specific assets and liabilities','Step-up in tax basis to FMV (buyer benefit)','Future D&A/amortization on stepped-up basis','Seller pays ordinary income + capital gains tax','No unknown contingent liabilities assumed','More complex — requires consent of counterparties'] },
+    { name:'Stock Deal', items:['Buyer acquires entire legal entity (all assets/liabilities)','No step-up in tax basis (buyer disadvantage)','Seller pays capital gains tax (lower rate = preferred)','Simpler execution — contracts transfer automatically','Buyer inherits unknown/contingent liabilities','Sec. 338(h)(10) can elect asset treatment in stock deal'] },
+    { name:'Tax-Free Reorganizations', items:['Type A: stock-for-stock merger (≥40% equity)','Type B: stock-for-stock exchange (≥80% voting stock)','Type C: stock for substantially all assets','Boot (cash in reorg): causes partial gain recognition','Continuity of interest + continuity of business required','Sellers defer gains; recognize when acquirer stock sold'] },
+  ]},
+  { title:'Regulatory & Key Transaction Terms', cols:[
+    { name:'HSR / Antitrust (U.S.)', items:['HSR Act: pre-merger notification for deals ≥~$119M','30-day initial waiting period (15 days for cash deals)','Second request = extensive document production + 30+ days','DOJ or FTC reviews horizontal overlap and market power','Remedies: divestitures, consent decrees, behavioral conditions','ECMR: EU merger regulation for cross-border deals'] },
+    { name:'CFIUS', items:['Committee on Foreign Investment in the United States','Reviews national security implications of foreign acquisitions','Mandatory filing for critical infrastructure / technology','Foreign government-owned acquirers face highest scrutiny','Mitigation agreements or outright block possible','Voluntary filing strongly recommended when uncertainty exists'] },
+    { name:'Key Terms to Know', items:['Earnout: contingent payment tied to post-close performance','Escrow: portion of purchase price held back post-close','Collar: protects stock consideration from price movements','Ticking fee: compensation to seller for deal delays','EBITDA ratchet: price adjusts based on actual EBITDA','Tag-along / drag-along: minority shareholder rights'] },
+  ]},
+];
+function renderMASGuide() {
+  document.getElementById('masGuideBody').innerHTML = '<div class="mas-wrap">' +
+    MAS_DATA.map(s=>`
+      <div class="mas-section">
+        <div class="mas-title">${s.title}</div>
+        <div class="mas-grid">
+          ${s.cols.map(c=>`
+            <div class="mas-col">
+              <div class="mas-col-title">${c.name}</div>
+              ${c.items.map(i=>`<div class="mas-item">• ${i}</div>`).join('')}
+            </div>`).join('')}
+        </div>
+      </div>`).join('') + '</div>';
+}
+
+/* ══════════════════════════════════════════════════════════
+   INTERVIEW ANSWER FRAMEWORKS
+══════════════════════════════════════════════════════════ */
+function toggleIAF() {
+  const m = document.getElementById('iafModal');
+  m.classList.toggle('open');
+  if (m.classList.contains('open') && !document.getElementById('iafBody').innerHTML)
+    renderIAF();
+}
+const IAF_DATA = [
+  { q:'Walk me through a DCF.', tag:'Technical', steps:[
+    { n:1, t:'Project unlevered free cash flows (UFCF) over a 5–10 year period. UFCF = EBIT×(1−t) + D&A − CapEx − ΔNet Working Capital. Make explicit assumptions about revenue growth, margins, and capex intensity.' },
+    { n:2, t:'Calculate the discount rate (WACC): Ke via CAPM (Rf + β×ERP) and after-tax Kd, weighted by target capital structure. Use unlevered beta re-levered to the company\'s structure.' },
+    { n:3, t:'Discount each year\'s UFCF to the present: PV = UFCF_n / (1+WACC)^n. Sum all discounted cash flows.' },
+    { n:4, t:'Calculate Terminal Value — either Gordon Growth Model [UFCF_N × (1+g) / (WACC−g)] or Exit Multiple [EBITDA_N × Exit Multiple]. Discount TV back to present using (1+WACC)^N.' },
+    { n:5, t:'Enterprise Value = Σ PV(UFCFs) + PV(Terminal Value). TV typically represents 70–80% of total EV.' },
+    { n:6, t:'Bridge EV to Equity Value: subtract Net Debt (Total Debt + Preferred + Minority Interest − Cash). Divide by diluted shares to get implied share price.' },
+    { n:7, t:'Run sensitivity tables: WACC vs. terminal growth rate (Gordon) or WACC vs. exit multiple. This shows the valuation range and communicates uncertainty honestly.' },
+  ], note:'Key follow-ups: "What\'s the biggest weakness of a DCF?" (Terminal value dominates; WACC is estimated, not exact). "When wouldn\'t you use a DCF?" (Early-stage, no FCF, cyclical co. mid-cycle).' },
+  { q:'Walk me through an LBO model.', tag:'Technical', steps:[
+    { n:1, t:'Set entry assumptions: purchase price = Entry EBITDA × Entry Multiple. Model sources (senior debt, mezz/bonds, sponsor equity) and uses (equity purchase price + fees). Equity check = Uses − Debt.' },
+    { n:2, t:'Build a 5-year operating model. Project revenue growth, EBITDA margins, CapEx, and changes in working capital. Calculate free cash flow available for debt repayment each year.' },
+    { n:3, t:'Model the debt schedule: starting balance, interest expense (rate × beginning balance), mandatory amortization, and optional cash sweep (remaining FCF repays debt). Ending balance rolls forward.' },
+    { n:4, t:'Project exit in Year 5: Exit EV = Exit EBITDA × Exit Multiple. Exit Equity = Exit EV − Remaining Debt (after sweeps). Returns = Exit Equity / Entry Equity.' },
+    { n:5, t:'Calculate MOIC and IRR. MOIC = Exit Equity / Sponsor Equity. IRR = annualized return. Quick checks: 2.0×/5yr ≈ 15%, 2.5×/5yr ≈ 20%, 3.0×/5yr ≈ 25%.' },
+    { n:6, t:'Build sensitivities: MOIC/IRR vs. Entry Multiple × Exit Multiple, vs. EBITDA growth, vs. leverage. Identify the key value drivers.' },
+    { n:7, t:'Stress test with a downside case (10–15% EBITDA haircut). Does the company still cover interest? Does it breach covenants? This tests the downside protection.' },
+  ], note:'Key follow-ups: "What makes a good LBO candidate?" (Stable FCF, defensible margins, low CapEx, debt capacity, operational improvement potential). "What drives IRR?" (Entry/exit multiple arbitrage, leverage, EBITDA growth).' },
+  { q:'Walk me through an accretion/dilution analysis.', tag:'Technical', steps:[
+    { n:1, t:'Determine the purchase price and mix of consideration: cash (uses debt or balance sheet cash), stock (issues new acquirer shares), or a mix. Model financing: issuance costs, interest rate on debt.' },
+    { n:2, t:'Calculate the cost of the deal: (a) interest expense on acquisition debt or lost interest income on cash used; (b) new shares issued for stock consideration; (c) synergies (cost savings, revenue upside, net of costs to achieve).' },
+    { n:3, t:'Perform purchase price allocation (PPA): allocate purchase price to FV of identifiable assets. Write up intangibles (customer lists, IP, trade names). Calculate incremental D&A from step-ups. Residual = goodwill.' },
+    { n:4, t:'Build pro forma income statement: Acquirer Revenue + Target Revenue + Synergies − Incremental D&A (from PPA) − Incremental Interest (or lost interest) − Synergy costs. Apply blended tax rate.' },
+    { n:5, t:'Compare PF EPS to acquirer standalone EPS. Accretive = PF EPS > Standalone. Dilutive = PF EPS < Standalone. % accretion/(dilution) = (PF EPS − Standalone) / Standalone.' },
+    { n:6, t:'Calculate break-even synergy = Premium Paid / Acquirer NTM P/E. This tells you how much synergy the deal needs to break even on EPS. Key reality check for whether deal makes sense.' },
+  ], note:'Key insight: a cash deal is dilutive when target earnings yield (1/P/E) < after-tax cost of debt. Stock deal is accretive when acquirer P/E > target P/E (acquirer is paying with more valuable currency).' },
+  { q:'Why investment banking?', tag:'Behavioral', steps:[
+    { n:1, t:'Hook — genuine, specific interest: "I\'ve been drawn to capital markets since [specific catalyst — a deal, a class, a mentor, a book]. Watching [Company X\'s acquisition of Y / the IPO of Z] made me want to be the advisor structuring those transactions." Be specific; vague "passion" gets filtered.' },
+    { n:2, t:'Skill development: "IB provides the steepest learning curve early in a career — financial modeling, deal execution, client management, and cross-sector exposure — all in 2–3 years. I want to build that foundation deliberately."' },
+    { n:3, t:'Long-term vision: "I see this as the best foundation for [private equity / corporate development / CFO path / entrepreneurship]. The analytical skills and network from IB will open doors for the next 20 years."' },
+    { n:4, t:'This bank specifically: "I\'m drawn to [Bank] because of [specific group strength, recent deal, culture point, person you spoke with]. I spoke with [name, title] who told me [specific thing]. That resonated because [your reasoning]." Generic = rejection.' },
+  ], note:'What to avoid: "I want to make a lot of money," "I want to work hard," "I\'ve always loved finance." None of these differentiate you. The question is really "why are you serious about this, and why us specifically?"' },
+  { q:'Tell me about yourself.', tag:'Behavioral', steps:[
+    { n:1, t:'Origin (2 sentences max): Start at college, not high school. "I\'m a [year] at [University] studying [major]. I became interested in [finance/deals/markets] through [specific experience or class]."' },
+    { n:2, t:'Experience (3–4 sentences): Walk through your top 2–3 experiences in reverse chronological order. Lead with your most impressive. Quantify impact where possible. Each experience should show progression toward IB.' },
+    { n:3, t:'Why IB at this bank (2 sentences): "I\'m recruiting for investment banking because [specific reason]. I\'m especially interested in [Bank] because [specific group, deal, culture, person]." Show you\'ve done research.' },
+    { n:4, t:'Bridge: End with something that invites follow-up. "I\'d love to tell you more about [specific experience]." Aim for 60–90 seconds total. Practice until you can say it naturally without memorized-sounding delivery.' },
+  ], note:'Mistakes: starting at birth ("I was born in..."), going longer than 90 seconds, being generic ("I\'ve always loved business"), not mentioning specific relevant experiences. Tailor to each interviewer.' },
+  { q:'What are the three main valuation methodologies?', tag:'Technical', steps:[
+    { n:1, t:'DCF (Intrinsic Value): project UFCFs, discount at WACC, add terminal value. Gives intrinsic value independent of market. Most theoretically sound but highly assumption-dependent.' },
+    { n:2, t:'Trading Comps (Relative Value): compare to similar public companies using EV/EBITDA, P/E, EV/Revenue. Market-based, real-time, easy to defend. Shows minority value (no control premium).' },
+    { n:3, t:'Precedent Transactions: compare to past M&A deals. Includes control premium (typically 20–40% above trading value). Most relevant for sell-side advisory and setting seller expectations.' },
+    { n:4, t:'Relationship between them: in a normal market, Trading Comps &lt; DCF &lt; Precedent Transactions. The football field chart overlays all three ranges — convergence = confidence, divergence = story to tell. LBO = floor; SOTP = conglomerates; DDM = financials.' },
+  ], note:'Always present a range, never a single number. In an M&A context, you\'d present all three and explain why your client\'s situation warrants the upper/lower end of the range.' },
+  { q:'What makes a good LBO candidate?', tag:'Technical', steps:[
+    { n:1, t:'Stable, predictable free cash flows: low cyclicality, high recurring revenue (subscription, contract-based), strong FCF conversion. The business must reliably service debt year after year.' },
+    { n:2, t:'Strong market position / defensible moats: pricing power, customer switching costs, or regulatory barriers reduce the risk of margin compression under leverage.' },
+    { n:3, t:'Asset-light model / low maintenance CapEx: high CapEx needs reduce FCF available for debt repayment. Software, services, consumer brands, and healthcare services are classic examples.' },
+    { n:4, t:'Operational improvement potential: cost takeout (G&A rationalization, procurement), geographic expansion, or add-on acquisition strategy creates EBITDA growth during the hold period.' },
+    { n:5, t:'Attractive entry multiple: ideally below 8–10× EBITDA. Higher entry multiples compress exit multiple arbitrage and require more EBITDA growth to hit return targets.' },
+    { n:6, t:'Clean balance sheet and limited contingent liabilities: avoids post-close surprises that reduce equity value. Manageable existing debt preferred (room to lever up).' },
+  ], note:'Red flags: commodity businesses with no pricing power, high cyclicality, heavy maintenance CapEx, concentrated customers/suppliers, regulatory uncertainty, or recent one-time EBITDA adjustments.' },
+  { q:'What is your greatest weakness?', tag:'Behavioral', steps:[
+    { n:1, t:'Pick a real but professionally safe weakness — not a core IB skill. Avoid clichés like "I work too hard" (dishonest, everyone sees through it) or "attention to detail" (disqualifying for banking). Good options: public speaking to large groups, delegating instead of doing, being too in the weeds.' },
+    { n:2, t:'Contextualize authentically: "Earlier in college / in my first internship, I noticed that I [specific pattern — jumped to conclusions / was uncomfortable pushing back on senior people / sometimes prioritized speed over thoroughness in written communication]."' },
+    { n:3, t:'Show concrete action: "I\'ve been working on this specifically by [course, activity, mentor feedback, deliberate practice]. For example, [specific instance where you applied the fix]."' },
+    { n:4, t:'Close with current state + self-awareness: "I still have room to grow, but [evidence of improvement]. I know in IB [the skill] matters and I\'m committed to continuing to develop it." The arc: real → acknowledged → actionable → improving.' },
+  ], note:'The question is actually testing self-awareness and intellectual honesty. A weak answer ("I\'m a perfectionist") signals low self-awareness. A strong answer signals maturity and coachability — exactly what first-year analysts need.' },
+];
+function renderIAF() {
+  document.getElementById('iafBody').innerHTML = '<div class="iaf-wrap">' +
+    IAF_DATA.map((f,i)=>`
+      <div class="iaf-card">
+        <div class="iaf-card-head" onclick="toggleIAFCard(${i})">
+          <span class="iaf-card-q">${f.q}</span>
+          <span class="iaf-card-tag">${f.tag}</span>
+        </div>
+        <div class="iaf-body" id="iafCard${i}">
+          ${f.steps.map(s=>`<div class="iaf-step"><div class="iaf-step-num">${s.n}</div><div class="iaf-step-text">${s.t}</div></div>`).join('')}
+          <div class="iaf-note">${f.note}</div>
+        </div>
+      </div>`).join('') + '</div>';
+}
+function toggleIAFCard(i) {
+  document.getElementById('iafCard'+i).classList.toggle('open');
+}
+
+/* ══════════════════════════════════════════════════════════
+   JOURNAL ENTRY TRAINER
+══════════════════════════════════════════════════════════ */
+let jeIdx = 0;
+let jeChecked = false;
+function toggleJETrainer() {
+  const m = document.getElementById('jeTrainerModal');
+  m.classList.toggle('open');
+  if (m.classList.contains('open')) renderJE(jeIdx);
+}
+const JE_SCENARIOS = [
+  { scenario:'A company issues 1,000 shares of common stock at $50/share. Par value is $1/share.', entries:[
+    { account:'Cash', side:'Dr', amt:50000 },
+    { account:'Common Stock (Par)', side:'Cr', amt:1000 },
+    { account:'Additional Paid-in Capital', side:'Cr', amt:49000 },
+  ]},
+  { scenario:'A company purchases equipment for $40,000 cash.', entries:[
+    { account:'Property, Plant &amp; Equipment', side:'Dr', amt:40000 },
+    { account:'Cash', side:'Cr', amt:40000 },
+  ]},
+  { scenario:'Record annual depreciation of $8,000 on equipment.', entries:[
+    { account:'Depreciation Expense', side:'Dr', amt:8000 },
+    { account:'Accumulated Depreciation', side:'Cr', amt:8000 },
+  ]},
+  { scenario:'A company bills a client $25,000 for consulting services rendered on credit.', entries:[
+    { account:'Accounts Receivable', side:'Dr', amt:25000 },
+    { account:'Revenue', side:'Cr', amt:25000 },
+  ]},
+  { scenario:'The company collects $20,000 cash from a client on their outstanding receivable.', entries:[
+    { account:'Cash', side:'Dr', amt:20000 },
+    { account:'Accounts Receivable', side:'Cr', amt:20000 },
+  ]},
+  { scenario:'A company purchases $15,000 of inventory on credit (accounts payable).', entries:[
+    { account:'Inventory', side:'Dr', amt:15000 },
+    { account:'Accounts Payable', side:'Cr', amt:15000 },
+  ]},
+  { scenario:'The company sells inventory costing $10,000 for $18,000 cash. Record both the sale and the cost.', entries:[
+    { account:'Cash', side:'Dr', amt:18000 },
+    { account:'Revenue', side:'Cr', amt:18000 },
+    { account:'Cost of Goods Sold', side:'Dr', amt:10000 },
+    { account:'Inventory', side:'Cr', amt:10000 },
+  ]},
+  { scenario:'Accrue $6,000 of salaries earned by employees but not yet paid in cash.', entries:[
+    { account:'Salaries Expense', side:'Dr', amt:6000 },
+    { account:'Salaries Payable', side:'Cr', amt:6000 },
+  ]},
+  { scenario:'A company receives $24,000 cash upfront for a 2-year software subscription.', entries:[
+    { account:'Cash', side:'Dr', amt:24000 },
+    { account:'Deferred Revenue', side:'Cr', amt:24000 },
+  ]},
+  { scenario:'Recognize 1 month of the $24,000 subscription above as earned revenue ($24,000 ÷ 24 months).', entries:[
+    { account:'Deferred Revenue', side:'Dr', amt:1000 },
+    { account:'Revenue', side:'Cr', amt:1000 },
+  ]},
+];
+function renderJE(idx) {
+  jeChecked = false;
+  const sc = JE_SCENARIOS[idx];
+  document.getElementById('jeCounter').textContent = `${idx+1} / ${JE_SCENARIOS.length}`;
+  document.getElementById('jePrevBtn').disabled = idx === 0;
+  document.getElementById('jeNextBtn').disabled = idx === JE_SCENARIOS.length - 1;
+  const rows = sc.entries.map((e,i)=>`
+    <tr>
+      <td class="je-td" style="padding-left:${e.side==='Cr'?'24px':'8px'}">${e.account}</td>
+      <td class="je-td">${e.side==='Dr'?`<input class="je-num-input" id="jeIn${i}" type="number" min="0" placeholder="0">`:''}</td>
+      <td class="je-td">${e.side==='Cr'?`<input class="je-num-input" id="jeIn${i}" type="number" min="0" placeholder="0">`:''}</td>
+    </tr>`).join('');
+  document.getElementById('jeTrainerBody').innerHTML = `
+    <div class="je-outer">
+      <div class="je-progress">Question ${idx+1} of ${JE_SCENARIOS.length}</div>
+      <div class="je-card">
+        <div class="je-scenario">${sc.scenario}</div>
+        <table class="je-table">
+          <thead><tr><th class="je-th">Account</th><th class="je-th">Debit ($)</th><th class="je-th">Credit ($)</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:14px;flex-wrap:wrap;gap:8px">
+          <button class="je-check-btn" id="jeCheckBtn" onclick="checkJE()">Check Answers</button>
+          <div id="jeResult" class="je-result"></div>
+        </div>
+      </div>
+    </div>`;
+}
+function checkJE() {
+  if (jeChecked) return;
+  jeChecked = true;
+  document.getElementById('jeCheckBtn').disabled = true;
+  const sc = JE_SCENARIOS[jeIdx];
+  let correct = 0;
+  sc.entries.forEach((e,i)=>{
+    const inp = document.getElementById('jeIn'+i);
+    if (!inp) return;
+    const val = parseFloat(inp.value);
+    if (!isNaN(val) && Math.abs(val - e.amt) <= Math.max(1, e.amt * 0.005)) {
+      inp.classList.add('correct'); correct++;
+    } else {
+      inp.classList.add('wrong');
+      inp.placeholder = e.amt.toLocaleString();
+    }
+    inp.disabled = true;
+  });
+  const total = sc.entries.length;
+  const result = document.getElementById('jeResult');
+  result.textContent = correct === total ? `✓ Perfect! All ${total} entries correct.` : `${correct}/${total} correct — incorrect fields show expected values.`;
+  result.className = 'je-result show ' + (correct === total ? 'pass' : 'fail');
+}
+function moveJE(dir) {
+  const n = jeIdx + dir;
+  if (n < 0 || n >= JE_SCENARIOS.length) return;
+  jeIdx = n;
+  renderJE(jeIdx);
+}
+
+/* ══════════════════════════════════════════════════════════
+   NETWORKING SCRIPTS
+══════════════════════════════════════════════════════════ */
+function toggleNetScripts() {
+  const m = document.getElementById('netScriptsModal');
+  m.classList.toggle('open');
+  if (m.classList.contains('open') && !document.getElementById('netScriptsBody').innerHTML)
+    renderNetScripts();
+}
+const NET_SCRIPTS_DATA = [
+  { title:'Cold Email to Analyst / Associate', tag:'Email',
+    subject:'Subject: [University] Student — Quick Chat on Your Path to [Bank]',
+    text:`Dear [First Name],
+
+My name is [Your Name], a [Year] at [University] studying [Major]. I came across your profile on LinkedIn and saw that you work in [Group] at [Bank] — I've been following [Bank]'s work in [specific sector/recent deal], and it's exactly the type of advisory I'm most excited about.
+
+I'm exploring careers in investment banking and would be incredibly grateful for 15–20 minutes of your time to hear about your experience and any advice you might have for someone at my stage.
+
+I know your schedule is demanding — even a quick email exchange would be meaningful. I'm happy to work around your availability entirely.
+
+Thank you for considering it. I've attached my resume for context.
+
+Best,
+[Your Name]
+[University] | Class of [Year] | [Phone/Email]`,
+    tip:'Personalize the opening with something specific — a deal they worked on, a group they\'re in, or a connection you share. Generic emails get deleted immediately. Keep the body under 150 words. Follow up once after 5–7 business days if no response.' },
+  { title:'LinkedIn Connection Request', tag:'LinkedIn',
+    subject:'Note (300-character limit — every word counts)',
+    text:`Hi [First Name] — I'm a [Year] at [University] interested in IB and have been following [Bank]'s work in [sector/deal]. Would love to connect and, if you're open to it, hear briefly about your path. No pressure at all — thanks for considering!`,
+    tip:'Never use the default "I\'d like to add you to my professional network." Always personalize. Don\'t ask for a call in the connection request — that comes after they accept. Keep it casual, not a formal cover letter in miniature.' },
+  { title:'Info Call Opening Script', tag:'Phone',
+    subject:'First 60–90 seconds of the conversation',
+    text:`"Hi [First Name], thank you so much for making the time — I really appreciate it and I'll keep this tight.
+
+I'm [Name], a [Year] at [University]. I'm speaking with people across different banks to understand what the day-to-day looks like and what differentiates teams and cultures from the inside.
+
+I wanted to speak with you specifically because [specific reason — your group, your background, a deal you worked on that I researched].
+
+I have a handful of questions prepared, but first — is there anything you'd like to know about me before we dive in?"`,
+    tip:'That last question is powerful: it turns the call into a two-way conversation and gives them a natural way to screen you early. Come with 4–5 thoughtful, non-obvious questions. Never ask about comp, hours, or work-life balance on a first call.' },
+  { title:'Follow-Up After Info Call', tag:'Email',
+    subject:'Subject: Thank You — [Date] Call',
+    text:`Hi [First Name],
+
+Thank you for the time today — I left the call with a much clearer sense of [specific insight: what your group\'s deal flow looks like / how you approach coverage / what the first year experience actually involves].
+
+I especially appreciated your point about [something specific they said]. I've been thinking about it in the context of [how it connects to your own goals or thinking].
+
+If there's anyone else on your team — or at a related firm — you'd recommend I speak with, I'd be really grateful for any introductions. And please reach out if there's ever anything I can help with on my end.
+
+Thanks again,
+[Your Name]`,
+    tip:'Send within 24 hours. The "anyone else you\'d recommend" line is your best tool for expanding your network through warm intros — use it every time. Reference something specific from the call to prove you were engaged.' },
+  { title:'Thank You Note After Interview', tag:'Email',
+    subject:'Subject: Thank You — [Role] Interview, [Date]',
+    text:`Dear [Interviewer Name],
+
+Thank you for the time today to discuss the [Analyst/Associate] opportunity at [Bank]. I genuinely enjoyed our conversation, particularly [specific topic or question discussed — the deal you mentioned, the group\'s focus area, a case question].
+
+I wanted to follow up on one point you raised: [brief, substantive follow-up thought that shows continued engagement with a topic from the interview]. I think [your perspective in 1–2 sentences].
+
+I'm very excited about the opportunity to join [Bank]'s [Group] team and contribute to [what the group does]. Please don't hesitate to reach out if you need any additional information from me.
+
+Thank you again,
+[Your Name]`,
+    tip:'Send within 2 hours of the interview if it\'s a full-day process. The "follow-up on one point" paragraph is optional but powerful — it shows intellectual engagement. Under 150 words in total. Never ask about timeline in a thank you note.' },
+  { title:'Reconnecting After 6+ Months', tag:'Email',
+    subject:'Subject: Checking In — [Your Name], [University]',
+    text:`Hi [First Name],
+
+I hope you're well! It's been a few months since [we spoke / you gave me advice during recruiting / you attended our campus event] — I wanted to reach out with a quick update.
+
+[Brief, concrete update: "I've accepted a summer analyst offer at X," or "I'm now recruiting full-time for IB roles after completing an internship at Y," or "I've been following your group's work — congratulations on the [deal]."]
+
+I saw that [Bank] recently [completed X deal / announced Y / promoted from within the group] — impressive, and it reinforces my interest in [Bank/group] as I think about [next step].
+
+If you're open to it, I'd love to reconnect briefly. And of course, please let me know if there's anything I can do for you.
+
+Best,
+[Your Name]`,
+    tip:'Reconnecting is expected behavior in banking — it\'s not an imposition. Always give a concrete update so they can see the conversation had value. Reference something current about their bank to show you\'re still tracking.' },
+];
+function renderNetScripts() {
+  document.getElementById('netScriptsBody').innerHTML = '<div class="ns-wrap">' +
+    NET_SCRIPTS_DATA.map((s,i)=>`
+      <div class="ns-card">
+        <div class="ns-card-head" onclick="toggleNSCard(${i})">
+          <span class="ns-card-title">${s.title}</span>
+          <span class="ns-card-tag">${s.tag}</span>
+        </div>
+        <div class="ns-body" id="nsBody${i}">
+          <div class="ns-subject">${s.subject}</div>
+          <div class="ns-text">${s.text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>
+          <div class="ns-tip"><strong>Tip:</strong> ${s.tip}</div>
+        </div>
+      </div>`).join('') + '</div>';
+}
+function toggleNSCard(i) {
+  document.getElementById('nsBody'+i).classList.toggle('open');
 }
 
 function bmCheck() {
