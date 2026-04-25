@@ -3345,6 +3345,24 @@ const QA_DATA = {
     { tag:'trap', q:'How does leverage ratio affect restructuring outcomes?', a:'Leverage (Debt/EBITDA) determines where in the capital structure the value break occurs. At 5x EV on $100M EBITDA = $500M EV: a company with $600M TLB is underwater — TLB is the fulcrum. At 8x EV = $800M, TLB is fully covered and Senior Unsecured becomes the fulcrum. Recovery scenarios differ dramatically across small EV changes — this is why distressed analysis is inherently scenario-based and why Bear/Base/Bull scenarios are essential.' },
     { tag:'tech', q:'What is a prepackaged bankruptcy?', a:'A "prepac" is a Chapter 11 where the restructuring plan is agreed with key creditor classes BEFORE filing. The company files with a pre-negotiated plan, dramatically reducing in-court time to 45–90 days vs 12–24 months for a contested case. Lower professional fees. Requires soliciting votes from impaired classes pre-filing. Most effective when capital structure is simple (few tranches, high institutional ownership) and management has built consensus ahead of the filing.' },
   ],
+  'SOTP': [
+    { tag:'walk', q:'Walk me through a Sum-of-the-Parts (SOTP) analysis.', a:'SOTP disaggregates a conglomerate into its distinct business segments and values each one independently using segment-specific multiples, then sums the parts to get total Enterprise Value. (1) Define segments — each must have a different applicable EV/EBITDA multiple (different industry, different growth/margin profile). (2) Pull segment Revenue and EBITDA from filing footnotes. (3) Build a mini comps screen for each segment — 4–6 pure-play listed peers per segment. (4) Assign an EV/EBITDA multiple based on where the segment sits vs peer range on growth and margin. (5) Segment EV = EBITDA × Multiple. (6) Corp HQ overhead is a negative EV: −Overhead × penalty multiple (8–12×). (7) Sum all segment EVs → Total Segment EV. (8) Bridge to equity: EV + Cash − Debt = Equity Value / Diluted Shares = Implied Price per Share. Compare to blended EV to quantify the conglomerate discount.' },
+    { tag:'tech', q:'When would you use SOTP instead of a single EV/EBITDA multiple?', a:'SOTP is warranted when a company has segments with materially different EV/EBITDA multiples — typically when segment multiples diverge by 2× or more. In this model, Cloud SW trades at 14× and Consumer at 6× — applying an 8.8× blended multiple would destroy $156m of implied value. SOTP is standard for: (1) true conglomerates with businesses in different industries, (2) companies with one high-growth segment subsidised by mature segments, (3) spin-off/break-up analysis where each segment would be independently listed, (4) sum-of-assets valuation for holding companies and investment trusts.' },
+    { tag:'tech', q:'How do you determine the right multiple for each segment?', a:'Build a mini trading comps screen for each segment using pure-play listed peers in that sub-sector. Calculate LTM and NTM EV/EBITDA for each peer. Then determine where this segment ranks vs peers on: (1) revenue growth rate — a segment growing 18% vs peer median of 10% warrants a 1–2× premium; (2) EBITDA margin — higher-margin businesses command premium multiples; (3) revenue quality — SaaS recurring revenue is premium to one-time project revenue. Apply the position within the peer range: top-quartile growth + margin = top-quartile multiple. The rationale must be specific and defensible — "14× because SaaS comps with >15% growth median at 15×, and Cloud SW warrants a 1× discount for customer concentration" is the standard.' },
+    { tag:'trap', q:'What is the conglomerate discount and why does it exist?', a:'The conglomerate discount is the difference between a company\'s SOTP intrinsic value and its observed market trading value as a single entity — typically 10–20% for listed diversified conglomerates. It exists because: (1) investors can buy pure-play equivalents directly, each with its own dedicated investor base; (2) management complexity and G&A overhead consume value; (3) capital is often cross-allocated — profitable segments subsidise weak ones; (4) the conglomerate lacks a natural sector classification in any equity index. The discount is the financial basis for spin-offs (GE, 3M, J&J, Honeywell): separating segments eliminates the discount and lets each business attract the right investors at the right multiple.' },
+    { tag:'tech', q:'How do you handle corporate overhead in an SOTP?', a:'Corporate HQ overhead (unallocated central costs) is never a segment — it is a cost penalty. It is capitalised using a penalty multiple (typically 8–12×) and subtracted from Total Segment EV. Example: −$15m overhead × 10× = −$150m EV drag. Some analysts instead capitalise overhead as a perpetuity at WACC, but the multiple convention is more common in practice. The key principle: never omit overhead or treat it as zero — doing so inflates the SOTP and overstates the case for a break-up. The overhead must always appear as an explicit negative adjustment.' },
+    { tag:'trap', q:'What does a very high Cloud SW segment EV % of total tell you?', a:'It tells you that most of the group\'s value is concentrated in one segment — in this case, 61% of total EV from 24% of revenue. This creates two analytical conclusions: (1) the blended multiple dramatically undervalues the group because the most valuable segment is being dragged down by lower-quality segments; (2) any scenario analysis must focus primarily on the Cloud SW multiple — a ±1× change in Cloud SW multiple moves the total implied share price by ~$0.70, dwarfing the sensitivity to Industrials or Consumer multiples. High concentration also implies an activist thesis: extracting the cloud segment would allow it to trade at its standalone 14× multiple without the conglomerate discount.' },
+    { tag:'tech', q:'How do you bridge from Total Segment EV to equity value per share?', a:'Equity Value = Total Segment EV + Cash − Total Financial Debt − Minority Interests − Preferred Stock. This bridge is structurally identical to a DCF or trading comps bridge — the only difference is that EV comes from the SOTP disaggregation. Key points: (1) debt is deducted at holdco level, not allocated to segments (unless ring-fenced); (2) if any subsidiary is not 100% owned, deduct the minority interest; (3) restricted cash (regulatory reserves, pledged cash) should be excluded from "available" cash. Divide equity value by diluted shares (including in-the-money options and warrants) for implied price per share.' },
+  ],
+  'DDM': [
+    { tag:'walk', q:'Walk me through a Dividend Discount Model (DDM).', a:'A DDM values a company by discounting the dividends shareholders will receive to their present value. Used primarily for financial institutions (banks, insurance) where unlevered FCF is undefined. (1) Build Cost of Equity via CAPM: CoE = Rf + β × ERP — this is the only discount rate (no WACC). (2) Forecast Net Income for 5 years using NIM trajectory, loan growth, and provisioning assumptions. (3) Apply the payout ratio to derive DPS = EPS × Payout Ratio — must be consistent with Basel III capital retention constraints. (4) Discount each year\'s DPS at CoE: PV(DPS_t) = DPS_t / (1+CoE)^t. (5) Calculate Terminal Value via Gordon Growth: TV = DPS₅ × (1+g) / (CoE−g). (6) Discount TV to today: PV(TV) = TV / (1+CoE)^5. (7) DDM Implied Price = Σ PV(DPS₁₋₅) + PV(TV). Compare to market price for over/undervaluation assessment.' },
+    { tag:'tech', q:'Why do you use DDM for banks instead of a DCF?', a:'Banks cannot be valued with a DCF because the concept of "unlevered free cash flow" is undefined for a financial institution. In a bank, debt (deposits, wholesale borrowings) is the raw material of the business — it generates income by being intermediated into loans. You cannot separate "financial debt" from "operating debt" the way you can for a manufacturer. Enterprise Value is meaningless when the entire right-hand side of the balance sheet is the product. EBITDA is irrelevant (no D&A, no capex in the traditional sense). What shareholders actually receive is dividends — the portion of earnings paid out after regulatory capital requirements are met. The DDM discounts those actual cash flows at the cost of equity.' },
+    { tag:'tech', q:'What is the Gordon Growth Model and how is it applied in DDM?', a:'Gordon Growth Model: P = DPS / (CoE − g). In the DDM context, it calculates the terminal value at the end of the explicit forecast period: TV = DPS_terminal / (CoE − g), where DPS_terminal = DPS_final_year × (1+g). This perpetuity captures all dividends from Year 6 to infinity, assuming steady-state growth at rate g. The spread (CoE − g) is the capitalisation rate — the most sensitive input in the model. At CoE 9%, g 3%: spread = 6%, TV per $1 DPS = $16.7. At CoE 9%, g 4%: spread = 5%, TV = $20.0 — a 1pp change in g increases TV by 20%. This is why the CoE vs g sensitivity matrix is the primary DDM deliverable.' },
+    { tag:'trap', q:'What happens to the DDM value if g approaches CoE?', a:'The formula breaks down — TV = DPS / (CoE − g) → infinity as g → CoE. This is the mathematical reason g must always be strictly less than CoE: the Gordon Growth formula requires a positive discount rate in the denominator. In practice, g should be anchored to long-run nominal GDP growth (2–2.5% for the US) — no company can grow faster than the economy forever. Setting g = 4.5% when CoE = 9% gives a spread of only 4.5% and a TV multiple of 22× DPS — extreme sensitivity to small assumption changes. Interviewers ask this to test whether you understand the mathematics behind the formula.' },
+    { tag:'tech', q:'What is the relationship between P/BV ratio and the DDM for banks?', a:'They are mathematically equivalent. Gordon Growth gives: P = DPS / (CoE − g). DPS = EPS × payout. EPS = ROE × Book Value per Share. Substituting: P = (ROE × BV × payout) / (CoE − g). Dividing both sides by BV: P/BV = ROE × payout / (CoE − g) = (ROE − g) / (CoE − g) [assuming sustainable payout = 1 − g/ROE]. Implication: P/BV = 1.0× when ROE = CoE. P/BV > 1.0× when ROE > CoE (bank creates value). P/BV < 1.0× when ROE < CoE (bank destroys value). JPMorgan at ~17% ROE vs ~10% CoE trades at ~2.0× P/BV. This equivalence is tested heavily in FIG interviews.' },
+    { tag:'trap', q:'What are the key weaknesses of the DDM?', a:'(1) Terminal value dominates — typically 75–85% of total implied price, making the model almost entirely a bet on the terminal spread (CoE − g). (2) Dividend policy sensitivity — two banks with identical earnings but different payout ratios (40% vs 60%) will have very different DDM values, even though the underlying business is the same. (3) Regulatory constraint on dividends: the model assumes dividends can grow at the projected rate, but the Fed/ECB can restrict dividends at any time. (4) Banks with no dividends (or recent dividend cuts) cannot be valued this way — DDM breaks down. (5) CoE estimation is inherently imprecise — a 1% error in CoE changes TV by 14–20%. Use DDM as one method among several: P/BV, P/E, and regression of P/BV vs ROE are complementary approaches.' },
+    { tag:'tech', q:'How is the dividend payout ratio for a bank constrained by Basel III?', a:'Under Basel III, banks must maintain a minimum CET1 (Common Equity Tier 1) ratio — the core regulatory capital buffer. As a bank grows its loan book, risk-weighted assets (RWA) grow proportionally, requiring more CET1 capital. The fraction of earnings that must be retained (not paid as dividends) is approximately: Retention Rate = g / ROE, where g is the pace of RWA/earnings growth. Sustainable Max Payout = 1 − g/ROE. At g = 7% and ROE = 15%, max sustainable payout = 53%. US banks must also pass the Fed\'s DFAST stress test before the Fed will approve dividend increases or buybacks. European banks face the SREP process. This makes bank dividends more predictable but also more constrained than industrial company dividends.' },
+  ],
 };
 
 
@@ -3435,6 +3453,26 @@ const SCENARIO_OVERRIDES = {
       [null,null,-.032,null],
     'M&A|Accretion / Dilution|Synergies Required for EPS Neutral ($M pre-tax)':
       [null,null,23.6,null],
+    // ── SOTP ───────────────────────────────────────────────────
+    'SOTP|SOTP Build|EV/EBITDA Multiple':
+      [12.0,7.0,5.0,10.0,null],
+    'SOTP|SOTP Build|Segment EV ($M)':
+      [720,434,160,-150,1164],
+    'SOTP|SOTP Build|TOTAL SEGMENT EV':
+      [null,null,null,null,1164],
+    'SOTP|SOTP Build|Equity Value ($M)':
+      [null,null,null,null,794],
+    'SOTP|SOTP Build|Implied Share Price ($)':
+      [null,null,null,null,15.88],
+    // ── DDM ────────────────────────────────────────────────────
+    'DDM|Assumptions|Cost of Equity (CoE)':
+      [.105,null,null,null,null,null],
+    'DDM|Assumptions|Terminal Dividend Growth (g)':
+      [.025,null,null,null,null,null],
+    'DDM|DDM Build|DDM Implied Share Price ($)':
+      [null,13.88,null,null,null,null],
+    'DDM|DDM Build|  Premium / (Discount) to DDM':
+      [null,.333,null,null,null,null],
   },
   bull: {
     // ── 3-STATEMENT ────────────────────────────────────────────
@@ -3491,6 +3529,26 @@ const SCENARIO_OVERRIDES = {
       [null,null,.198,null],
     'M&A|Accretion / Dilution|Synergies Required for EPS Neutral ($M pre-tax)':
       [null,null,23.6,null],
+    // ── SOTP ───────────────────────────────────────────────────
+    'SOTP|SOTP Build|EV/EBITDA Multiple':
+      [16.0,9.0,7.0,10.0,null],
+    'SOTP|SOTP Build|Segment EV ($M)':
+      [960,558,224,-150,1592],
+    'SOTP|SOTP Build|TOTAL SEGMENT EV':
+      [null,null,null,null,1592],
+    'SOTP|SOTP Build|Equity Value ($M)':
+      [null,null,null,null,1222],
+    'SOTP|SOTP Build|Implied Share Price ($)':
+      [null,null,null,null,24.44],
+    // ── DDM ────────────────────────────────────────────────────
+    'DDM|Assumptions|Cost of Equity (CoE)':
+      [.075,null,null,null,null,null],
+    'DDM|Assumptions|Terminal Dividend Growth (g)':
+      [.030,null,null,null,null,null],
+    'DDM|DDM Build|DDM Implied Share Price ($)':
+      [null,24.53,null,null,null,null],
+    'DDM|DDM Build|  Premium / (Discount) to DDM':
+      [null,-.246,null,null,null,null],
   },
 };
 
@@ -3518,6 +3576,14 @@ const SCENARIO_DESCRIPTIONS = {
   'Restruc.': {
     bear: 'Already modelled — Bear column ($600M EV) shows fulcrum at TLB; Sr. Unsecured and below receive zero recovery',
     bull: 'Already modelled — Bull column ($1,000M EV) shows full recovery through Sr. Unsecured; Sub Notes partially recover; old equity worthless',
+  },
+  'SOTP': {
+    bear: 'Bear multiples — Cloud SW 12×, Industrials 7×, Consumer 5×; Total Segment EV falls to $1,164m; equity value $794m; implied price $15.88 (conglomerate discount widens to 15%)',
+    bull: 'Bull multiples — Cloud SW 16×, Industrials 9×, Consumer 7×; Total Segment EV rises to $1,592m; equity value $1,222m; implied price $24.44 (conglomerate discount narrows to 8%)',
+  },
+  'DDM': {
+    bear: 'CoE rises to 10.5% (rate hikes + risk re-pricing), terminal g falls to 2.5%; capitalisation spread widens to 8.0%; TV compresses; implied price drops to $13.88 — stock trades at 33% premium to DDM',
+    bull: 'CoE falls to 7.5% (rate cuts + beta compression), terminal g holds at 3.0%; capitalisation spread narrows to 4.5%; TV expands sharply; implied price reaches $24.53 — stock trades at 25% discount to DDM',
   },
 };
 
@@ -3576,6 +3642,16 @@ const KPI_DATA = {
     base: [{ l:'Leverage (D/EBITDA)', v:'8.75x', c:'dn' },{ l:'Coverage', v:'1.41x', c:'dn' },{ l:'Covenant Floor', v:'2.00x', c:'hl' },{ l:'Fulcrum (Base)', v:'Sr. Unsec.', c:'hl' },{ l:'Base Recovery', v:'40¢', c:'dn' }],
     bull: [{ l:'Leverage (D/EBITDA)', v:'8.75x', c:'dn' },{ l:'Coverage', v:'1.41x', c:'dn' },{ l:'Covenant Floor', v:'2.00x', c:'hl' },{ l:'Fulcrum (Bull)', v:'Sub Notes', c:'hl' },{ l:'Bull Recovery', v:'par', c:'up' }],
     bear: [{ l:'Leverage (D/EBITDA)', v:'8.75x', c:'dn' },{ l:'Coverage', v:'1.41x', c:'dn' },{ l:'Covenant Floor', v:'2.00x', c:'hl' },{ l:'Fulcrum (Bear)', v:'TLB', c:'hl' },{ l:'Bear Recovery', v:'0¢', c:'dn' }],
+  },
+  'SOTP': {
+    base: [{ l:'SOTP EV', v:'$1,378m', c:'hl' },{ l:'Implied Price', v:'$20.16', c:'up' },{ l:'Cong. Discount', v:'11.3%', c:'dn' },{ l:'Net Debt', v:'$370m', c:'' },{ l:'Cloud SW EV %', v:'61%', c:'hl' }],
+    bull: [{ l:'SOTP EV', v:'$1,592m', c:'up' },{ l:'Implied Price', v:'$24.44', c:'up' },{ l:'Cong. Discount', v:'~8%', c:'up' },{ l:'Cloud SW (16×)', v:'$960m', c:'up' },{ l:'Total Eq. Value', v:'$1,222m', c:'up' }],
+    bear: [{ l:'SOTP EV', v:'$1,164m', c:'dn' },{ l:'Implied Price', v:'$15.88', c:'dn' },{ l:'Cong. Discount', v:'~15%', c:'dn' },{ l:'Cloud SW (12×)', v:'$720m', c:'dn' },{ l:'Total Eq. Value', v:'$794m', c:'dn' }],
+  },
+  'DDM': {
+    base: [{ l:'Cost of Equity', v:'9.0%', c:'hl' },{ l:'Terminal Growth', v:'3.0%', c:'' },{ l:'TV % of Total', v:'77%', c:'' },{ l:'DDM Implied', v:'$18.32', c:'' },{ l:'Mkt Premium', v:'+1.0%', c:'' }],
+    bull: [{ l:'Cost of Equity', v:'7.5%', c:'up' },{ l:'Terminal Growth', v:'3.0%', c:'up' },{ l:'CoE−g Spread', v:'4.5%', c:'up' },{ l:'DDM Implied', v:'$24.53', c:'up' },{ l:'Mkt (Discount)', v:'−24.6%', c:'up' }],
+    bear: [{ l:'Cost of Equity', v:'10.5%', c:'dn' },{ l:'Terminal Growth', v:'2.5%', c:'dn' },{ l:'CoE−g Spread', v:'8.0%', c:'dn' },{ l:'DDM Implied', v:'$13.88', c:'dn' },{ l:'Mkt Premium', v:'+33.3%', c:'dn' }],
   },
 };
 
@@ -3759,6 +3835,22 @@ const GLOSSARY = [
     { t:'Equity Risk Premium (ERP)', d:'The additional return equity investors require above the risk-free rate. ~5–6% for the US (Damodaran implied estimate). Higher ERP = higher WACC = lower DCF. Reflects the extra compensation for holding equities vs risk-free bonds.' },
     { t:'Football Field', d:'A horizontal bar chart showing the implied valuation range from each methodology (DCF GG, DCF Exit Multiple, Trading Comps, Transaction Comps, LBO Floor). The standard IB valuation summary slide. Current price is shown as a vertical marker.' },
     { t:'Sensitivity Table', d:'A two-variable data table showing how valuation changes across ranges of two key assumptions — typically WACC vs terminal growth rate, or WACC vs exit multiple. The primary output of any DCF. Always presented as a range, never a point estimate.' },
+  ]},
+  { cat:'SOTP / Conglomerates', terms:[
+    { t:'Sum-of-the-Parts (SOTP)', d:'A valuation methodology that values each business segment of a diversified company independently using segment-specific multiples, then sums them to derive total Enterprise Value. Used when a conglomerate has segments with materially different applicable multiples (diverging by 2× or more). The alternative to applying a single blended EV/EBITDA to consolidated financials.' },
+    { t:'Conglomerate Discount', d:'The observed gap (typically 10–20%) between a diversified company\'s SOTP intrinsic value and its market trading value. Exists because investors can buy pure-plays directly; management complexity adds overhead; and capital is often misallocated to weaker segments. The financial basis for activist spin-off campaigns — eliminating the discount unlocks the trapped value.' },
+    { t:'Segment EBITDA', d:'Each business division\'s EBITDA calculated independently, used as the valuation basis in SOTP. The sum of segment EBITDAs minus unallocated corporate overhead equals consolidated adjusted EBITDA. Disclosed in annual report footnotes (ASC 280 / IFRS 8 segment reporting). The foundation of the SOTP model.' },
+    { t:'Corporate HQ Penalty', d:'In SOTP, the unallocated central overhead is capitalised as a negative segment EV: −Overhead × penalty multiple (8–12×). It reflects the cost drag of running a holding company structure. Cannot be ignored or set to zero — doing so overstates SOTP EV and the case for separation.' },
+    { t:'Spin-off / Carve-out', d:'Corporate actions that separate a subsidiary or segment into a standalone public entity. A spin-off distributes new shares to existing shareholders (tax-free, no cash). A carve-out is a partial IPO of a subsidiary (cash raised). Both close the conglomerate discount by giving each segment its own investor base and an appropriate market multiple.' },
+    { t:'Pure-play Premium', d:'The valuation premium awarded to a focused single-segment business vs a diversified conglomerate in the same industry. Investors prefer pure-plays because they offer cleaner earnings visibility, a natural equity index fit, and management focused entirely on one strategy. The pure-play premium is the mirror image of the conglomerate discount.' },
+  ]},
+  { cat:'Financial Institutions (FIG)', terms:[
+    { t:'DDM (Dividend Discount Model)', d:'The standard equity valuation model for banks and insurance companies. Discounts the actual dividends paid to shareholders at the Cost of Equity. Used instead of DCF because EV is undefined for financial institutions — their "debt" is raw material (deposits), not financing. DDM Implied Price = Σ PV(DPS) + PV(Terminal Value via Gordon Growth).' },
+    { t:'Gordon Growth Model', d:'A perpetuity formula: P = DPS / (CoE − g), where DPS is the next dividend, CoE is the cost of equity, and g is the perpetual growth rate. Applied in DDM as the terminal value formula. The spread (CoE − g) is the capitalisation rate — a 1% change in this spread typically moves TV by 14–20%. g must always be strictly less than CoE.' },
+    { t:'Net Interest Margin (NIM)', d:'A bank\'s primary earnings driver = (Interest Income − Interest Expense) / Average Earning Assets. Expressed as a percentage (e.g. 3.2%). NIM expands when a bank reprices loans faster than deposits in a rising rate environment ("asset sensitivity"). A 10bps NIM change on $20bn of earning assets = $20m annual pre-tax income impact.' },
+    { t:'Payout Ratio (Sustainable)', d:'The proportion of Net Income paid as dividends. For banks, constrained by Basel III: Sustainable Max Payout = 1 − (g / ROE). At 7% growth and 15% ROE, max sustainable payout = 53% — the rest must be retained to fund the growing capital base. Regulators (Fed DFAST, ECB SREP) must approve material dividend increases.' },
+    { t:'CET1 Ratio', d:'Common Equity Tier 1 capital as a percentage of risk-weighted assets (RWA). The primary Basel III capital adequacy measure. Minimum regulatory requirement: ~4.5% + buffers (~2.5% conservation buffer + GSIB surcharge). As a bank grows its loan book (RWA grows), it must retain earnings to maintain CET1 — directly constraining the dividend payout ratio.' },
+    { t:'P/BV (Price-to-Book Value)', d:'The bank valuation multiple = Market Cap / Book Value of Equity. Mathematically equivalent to the DDM: P/BV = (ROE − g) / (CoE − g). Banks with ROE > CoE trade above 1.0× P/BV (they create value). Banks with ROE < CoE trade below 1.0× P/BV (they destroy value). JPMorgan at ~17% ROE / ~10% CoE trades at ~2.0× P/BV.' },
   ]},
   { cat:'Credit / Restructuring', terms:[
     { t:'Absolute Priority Rule (APR)', d:'In Chapter 11 bankruptcy, each creditor class must be paid in full before junior classes receive anything. Order: secured → senior unsecured → subordinated → equity. Violations can be challenged unless all impaired classes consent.' },
