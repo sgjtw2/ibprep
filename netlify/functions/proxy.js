@@ -9,6 +9,8 @@ const ALLOWED = new Set([
   'rss.nytimes.com',
   'feeds.bloomberg.com',
   'feeds.a.wsj.com',
+  'query1.finance.yahoo.com',
+  'query2.finance.yahoo.com',
   'cointelegraph.com',
   'bitcoinmagazine.com',
   'cryptoslate.com',
@@ -59,7 +61,7 @@ exports.handler = async (event) => {
       headers: {
         'Content-Type':              'application/json',
         'Access-Control-Allow-Origin': '*',
-        'Cache-Control':             'public, max-age=30',
+        'Cache-Control':             'public, max-age=300',
       },
       body: JSON.stringify({ contents }),
     };
