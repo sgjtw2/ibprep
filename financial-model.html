@@ -1761,6 +1761,26 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
 tr.wt-row-on>td{background:rgba(59,130,246,.08)!important;}
 tr.wt-row-on>td.lbl-td{border-left:3px solid var(--blue)!important;font-weight:600;}
 body.wt-open #gridWrap{padding-bottom:150px;}
+@media (max-width:768px){
+  .wt-panel{padding:12px 16px 20px;}
+  .wt-title{font-size:13px;}
+  .wt-body{font-size:12px;line-height:1.5;}
+  .wt-formula{font-size:11px;}
+  .wt-dot{width:9px;height:9px;}
+  .wt-nav-btn{font-size:12px;padding:8px 18px;min-height:40px;}
+  .wt-close-btn{font-size:11px;padding:6px 10px;min-height:36px;}
+  .wt-model-tag{font-size:9px;}
+  .wt-step-count{font-size:11px;}
+  .wt-sheet-badge{font-size:9px;}
+  body.wt-open #gridWrap{padding-bottom:200px;}
+}
+@media (min-width:769px) and (max-width:1100px){
+  .wt-panel{padding:10px 18px 14px;}
+  .wt-title{font-size:13px;}
+  .wt-body{font-size:12px;}
+  .wt-nav-btn{padding:6px 16px;min-height:38px;}
+  body.wt-open #gridWrap{padding-bottom:160px;}
+}
 </style>
 </head>
 <body>
@@ -1834,7 +1854,7 @@ body.wt-open #gridWrap{padding-bottom:150px;}
             <span class="tools-item-icon">🏗️</span>Model Builder<span class="tools-item-badge">GUIDED</span>
           </button>
           <button class="tools-item" id="wtBtn" onclick="toggleWalkthrough();closeToolsMenu()">
-            <span class="tools-item-icon">▶</span>Model Walkthrough<span class="tools-item-badge">GUIDE</span>
+            <span class="tools-item-icon">▶</span>Model Walkthrough
           </button>
         </div>
         <!-- DRILLS TAB -->
