@@ -10239,50 +10239,51 @@ async function loadLiveCompany() {
   box.innerHTML = '<div class="lp-spinner">Loading…</div>';
 
   try {
-    const quoteUrl  = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d`;
-    const summUrl   = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${ticker}?modules=incomeStatementHistory,balanceSheetHistory,cashflowStatementHistory,defaultKeyStatistics,financialData`;
-    const [qRes, sRes] = await Promise.all([
-      fetch(PROXY_FM + encodeURIComponent(quoteUrl)),
-      fetch(PROXY_FM + encodeURIComponent(summUrl)),
+    const quoteUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d`;
+    const summUrl  = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${ticker}?modules=financialData,defaultKeyStatistics,price`;
+
+    const [qRes, sRes] = await Promise.allSettled([
+      fetch(PROXY_FM + encodeURIComponent(quoteUrl)).then(r => r.json()),
+      fetch(PROXY_FM + encodeURIComponent(summUrl)).then(r => r.json()),
     ]);
-    const qData = JSON.parse((await qRes.json()).contents);
-    const sData = JSON.parse((await sRes.json()).contents);
 
-    const q   = qData?.chart?.result?.[0]?.meta;
-    const fd  = sData?.quoteSummary?.result?.[0]?.financialData;
-    const ks  = sData?.quoteSummary?.result?.[0]?.defaultKeyStatistics;
-    const is0 = sData?.quoteSummary?.result?.[0]?.incomeStatementHistory?.incomeStatementHistory?.[0];
-    const bs0 = sData?.quoteSummary?.result?.[0]?.balanceSheetHistory?.balanceSheetHistory?.[0];
-
+    if (qRes.status !== 'fulfilled') throw new Error('Quote unavailable');
+    const qData = JSON.parse(qRes.value.contents);
+    const q = qData?.chart?.result?.[0]?.meta;
     if (!q?.regularMarketPrice) throw new Error('Ticker not found');
 
-    const fmt = (v, unit='B', dp=2) => {
-      if (v == null) return '—';
-      const n = v / (unit==='B'?1e9:unit==='M'?1e6:1);
-      return '$' + n.toFixed(dp) + unit;
-    };
+    let fd = null, ks = null, pd = null;
+    if (sRes.status === 'fulfilled' && sRes.value?.contents) {
+      try {
+        const r0 = JSON.parse(sRes.value.contents)?.quoteSummary?.result?.[0];
+        fd = r0?.financialData;
+        ks = r0?.defaultKeyStatistics;
+        pd = r0?.price;
+      } catch(e) {}
+    }
+
+    const fmt    = (v, unit='B', dp=2) => v == null ? '—' : '$' + (v/(unit==='B'?1e9:unit==='M'?1e6:1)).toFixed(dp) + unit;
     const fmtPct = v => v == null ? '—' : (v*100).toFixed(1) + '%';
     const fmtX   = v => v == null ? '—' : v.toFixed(1) + 'x';
 
-    const price   = q.regularMarketPrice;
-    const rawChg  = q.regularMarketChangePercent;
-    const chg     = rawChg != null ? (Math.abs(rawChg) > 1 ? rawChg : rawChg * 100) : ((q.regularMarketPrice - q.chartPreviousClose) / q.chartPreviousClose * 100);
-    const mktCap  = fd?.marketCap?.raw ?? ks?.marketCap?.raw;
-    const name    = q.shortName || q.longName || ticker;
-    const sector  = '';
-    const rev     = is0?.totalRevenue?.raw ?? fd?.totalRevenue?.raw;
-    const ebitda  = fd?.ebitda?.raw;
-    const ni      = is0?.netIncome?.raw;
-    const debt    = bs0?.longTermDebt?.raw ?? fd?.totalDebt?.raw;
-    const cash    = bs0?.cash?.raw ?? fd?.totalCash?.raw;
-    const ev      = ks?.enterpriseValue?.raw;
-    const ebitdaM = fd?.ebitdaMargins?.raw;
-    const profM   = fd?.profitMargins?.raw;
-    const grossM  = fd?.grossMargins?.raw;
-    const evEbitda= ks?.enterpriseToEbitda?.raw;
-    const evRev   = ks?.enterpriseToRevenue?.raw;
-    const pe      = ks?.forwardPE?.raw;
-    const shares  = ks?.sharesOutstanding?.raw;
+    const price    = q.regularMarketPrice;
+    const rawChg   = pd?.regularMarketChangePercent?.raw ?? q.regularMarketChangePercent;
+    const chg      = rawChg != null ? (Math.abs(rawChg) > 1 ? rawChg : rawChg * 100) : ((price - q.chartPreviousClose) / q.chartPreviousClose * 100);
+    const name     = pd?.shortName || pd?.longName || ticker;
+    const mktCap   = pd?.marketCap?.raw   ?? ks?.marketCap?.raw;
+    const ev       = ks?.enterpriseValue?.raw;
+    const shares   = ks?.sharesOutstanding?.raw;
+    const evRev    = ks?.enterpriseToRevenue?.raw;
+    const evEbitda = ks?.enterpriseToEbitda?.raw;
+    const pe       = ks?.forwardPE?.raw;
+    const rev      = fd?.totalRevenue?.raw;
+    const ebitda   = fd?.ebitda?.raw;
+    const ni       = fd?.netIncomeToCommon?.raw;
+    const debt     = fd?.totalDebt?.raw;
+    const cash     = fd?.totalCash?.raw;
+    const ebitdaM  = fd?.ebitdaMargins?.raw;
+    const profM    = fd?.profitMargins?.raw;
+    const grossM   = fd?.grossMargins?.raw;
 
     const chgClass = chg > 0 ? 'up' : 'dn';
     const chgSign  = chg > 0 ? '+' : '';
@@ -10291,7 +10292,7 @@ async function loadLiveCompany() {
       <div class="lp-section">
         <div class="lp-section-hdr">Company</div>
         <div class="lp-company-name">${name}</div>
-        <div class="lp-company-sub">${ticker} · ${sector}</div>
+        <div class="lp-company-sub">${ticker}</div>
         <div class="lp-price-row">
           <span class="lp-price">$${price?.toFixed(2) ?? '—'}</span>
           <span class="lp-chg-${chgClass}">${chgSign}${chg?.toFixed(2) ?? '—'}%</span>
@@ -10307,7 +10308,7 @@ async function loadLiveCompany() {
         <div class="lp-row"><span class="lp-lbl">Fwd P/E</span><span class="lp-val">${fmtX(pe)}</span></div>
       </div>
       <div class="lp-section">
-        <div class="lp-section-hdr">Income Statement (LTM)</div>
+        <div class="lp-section-hdr">Financials (LTM)</div>
         <div class="lp-row"><span class="lp-lbl">Revenue</span><span class="lp-val">${fmt(rev)}</span></div>
         <div class="lp-row"><span class="lp-lbl">Gross Margin</span><span class="lp-val">${fmtPct(grossM)}</span></div>
         <div class="lp-row"><span class="lp-lbl">EBITDA</span><span class="lp-val">${fmt(ebitda)}</span></div>
@@ -10321,7 +10322,7 @@ async function loadLiveCompany() {
         <div class="lp-row"><span class="lp-lbl">Cash & Equivalents</span><span class="lp-val">${fmt(cash)}</span></div>
         <div class="lp-row"><span class="lp-lbl">Net Debt</span><span class="lp-val">${fmt((debt??0)-(cash??0))}</span></div>
       </div>
-      <div class="lp-note">Source: Yahoo Finance · LTM = last twelve months. Use these figures to calibrate your model assumptions.</div>
+      <div class="lp-note">Source: Yahoo Finance · LTM = last twelve months.</div>
     `;
   } catch(e) {
     const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
@@ -11474,19 +11475,21 @@ async function fetchMacroData() {
 
   const symbols = ['^TNX','^IRX','^VIX','^GSPC','HYG','LQD'];
   try {
-    const fetches = await Promise.all(
-      symbols.map(s => fetch(PROXY_FM + encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(s)}?interval=1d&range=1d`)))
+    const results = await Promise.allSettled(
+      symbols.map(s => fetch(PROXY_FM + encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(s)}?interval=1d&range=1d`)).then(r => r.json()))
     );
-    const jsons = await Promise.all(fetches.map(r => r.json()));
     const by = {};
-    symbols.forEach((s,i) => {
-      const meta = JSON.parse(jsons[i].contents)?.chart?.result?.[0]?.meta;
-      if (meta) {
+    symbols.forEach((s, i) => {
+      if (results[i].status !== 'fulfilled') return;
+      try {
+        const meta = JSON.parse(results[i].value.contents)?.chart?.result?.[0]?.meta;
+        if (!meta) return;
         const rawPct = meta.regularMarketChangePercent;
         meta.regularMarketChangePercent = rawPct != null ? (Math.abs(rawPct) > 1 ? rawPct : rawPct * 100) : ((meta.regularMarketPrice - meta.chartPreviousClose) / meta.chartPreviousClose * 100);
         by[s] = meta;
-      }
+      } catch(e) {}
     });
+    if (!Object.keys(by).length) throw new Error('All symbols failed');
 
     const fmt1 = v => v == null ? '—' : v.toFixed(2);
     const fmtPct = v => v == null ? '—' : (v > 0 ? '+' : '') + v.toFixed(2) + '%';
