@@ -10239,97 +10239,55 @@ async function loadLiveCompany() {
   box.innerHTML = '<div class="lp-spinner">Loading…</div>';
 
   try {
-    const quoteUrl = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d`;
-    const summUrl  = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${ticker}?modules=financialData,defaultKeyStatistics,price`;
-
-    const [qRes, sRes] = await Promise.allSettled([
-      fetch(PROXY_FM + encodeURIComponent(quoteUrl)).then(r => r.json()),
-      fetch(PROXY_FM + encodeURIComponent(summUrl)).then(r => r.json()),
-    ]);
-
-    if (qRes.status !== 'fulfilled') throw new Error('Quote unavailable');
-    const qData = JSON.parse(qRes.value.contents);
-    const q = qData?.chart?.result?.[0]?.meta;
-    if (!q?.regularMarketPrice) throw new Error('Ticker not found');
-
-    let fd = null, ks = null, pd = null;
-    if (sRes.status === 'fulfilled' && sRes.value?.contents) {
-      try {
-        const r0 = JSON.parse(sRes.value.contents)?.quoteSummary?.result?.[0];
-        fd = r0?.financialData;
-        ks = r0?.defaultKeyStatistics;
-        pd = r0?.price;
-      } catch(e) {}
-    }
+    const res  = await fetch(`/.netlify/functions/fmp?ticker=${encodeURIComponent(ticker)}`);
+    const d    = await res.json();
+    if (!res.ok || d.error) throw new Error(d.error || 'Load failed');
 
     const fmt    = (v, unit='B', dp=2) => v == null ? '—' : '$' + (v/(unit==='B'?1e9:unit==='M'?1e6:1)).toFixed(dp) + unit;
     const fmtPct = v => v == null ? '—' : (v*100).toFixed(1) + '%';
     const fmtX   = v => v == null ? '—' : v.toFixed(1) + 'x';
 
-    const price    = q.regularMarketPrice;
-    const rawChg   = pd?.regularMarketChangePercent?.raw ?? q.regularMarketChangePercent;
-    const chg      = rawChg != null ? (Math.abs(rawChg) > 1 ? rawChg : rawChg * 100) : ((price - q.chartPreviousClose) / q.chartPreviousClose * 100);
-    const name     = pd?.shortName || pd?.longName || ticker;
-    const mktCap   = pd?.marketCap?.raw   ?? ks?.marketCap?.raw;
-    const ev       = ks?.enterpriseValue?.raw;
-    const shares   = ks?.sharesOutstanding?.raw;
-    const evRev    = ks?.enterpriseToRevenue?.raw;
-    const evEbitda = ks?.enterpriseToEbitda?.raw;
-    const pe       = ks?.forwardPE?.raw;
-    const rev      = fd?.totalRevenue?.raw;
-    const ebitda   = fd?.ebitda?.raw;
-    const ni       = fd?.netIncomeToCommon?.raw;
-    const debt     = fd?.totalDebt?.raw;
-    const cash     = fd?.totalCash?.raw;
-    const ebitdaM  = fd?.ebitdaMargins?.raw;
-    const profM    = fd?.profitMargins?.raw;
-    const grossM   = fd?.grossMargins?.raw;
-
-    const chgClass = chg > 0 ? 'up' : 'dn';
-    const chgSign  = chg > 0 ? '+' : '';
+    const chgClass = (d.change ?? 0) > 0 ? 'up' : 'dn';
+    const chgSign  = (d.change ?? 0) > 0 ? '+' : '';
 
     box.innerHTML = `
       <div class="lp-section">
         <div class="lp-section-hdr">Company</div>
-        <div class="lp-company-name">${name}</div>
+        <div class="lp-company-name">${d.name || ticker}</div>
         <div class="lp-company-sub">${ticker}</div>
         <div class="lp-price-row">
-          <span class="lp-price">$${price?.toFixed(2) ?? '—'}</span>
-          <span class="lp-chg-${chgClass}">${chgSign}${chg?.toFixed(2) ?? '—'}%</span>
+          <span class="lp-price">$${d.price?.toFixed(2) ?? '—'}</span>
+          <span class="lp-chg-${chgClass}">${chgSign}${d.change?.toFixed(2) ?? '—'}%</span>
         </div>
       </div>
       <div class="lp-section">
         <div class="lp-section-hdr">Market Data</div>
-        <div class="lp-row"><span class="lp-lbl">Market Cap</span><span class="lp-val">${fmt(mktCap)}</span></div>
-        <div class="lp-row"><span class="lp-lbl">Enterprise Value</span><span class="lp-val">${fmt(ev)}</span></div>
-        <div class="lp-row"><span class="lp-lbl">Shares Outstanding</span><span class="lp-val">${fmt(shares,'B',3)}</span></div>
-        <div class="lp-row"><span class="lp-lbl">EV / Revenue</span><span class="lp-val">${fmtX(evRev)}</span></div>
-        <div class="lp-row"><span class="lp-lbl">EV / EBITDA</span><span class="lp-val">${fmtX(evEbitda)}</span></div>
-        <div class="lp-row"><span class="lp-lbl">Fwd P/E</span><span class="lp-val">${fmtX(pe)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">Market Cap</span><span class="lp-val">${fmt(d.marketCap)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">Enterprise Value</span><span class="lp-val">${fmt(d.ev)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">Shares Outstanding</span><span class="lp-val">${fmt(d.shares,'B',3)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">EV / Revenue</span><span class="lp-val">${fmtX(d.evRev)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">EV / EBITDA</span><span class="lp-val">${fmtX(d.evEbitda)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">P/E</span><span class="lp-val">${fmtX(d.pe)}</span></div>
       </div>
       <div class="lp-section">
-        <div class="lp-section-hdr">Financials (LTM)</div>
-        <div class="lp-row"><span class="lp-lbl">Revenue</span><span class="lp-val">${fmt(rev)}</span></div>
-        <div class="lp-row"><span class="lp-lbl">Gross Margin</span><span class="lp-val">${fmtPct(grossM)}</span></div>
-        <div class="lp-row"><span class="lp-lbl">EBITDA</span><span class="lp-val">${fmt(ebitda)}</span></div>
-        <div class="lp-row"><span class="lp-lbl">EBITDA Margin</span><span class="lp-val">${fmtPct(ebitdaM)}</span></div>
-        <div class="lp-row"><span class="lp-lbl">Net Income</span><span class="lp-val">${fmt(ni)}</span></div>
-        <div class="lp-row"><span class="lp-lbl">Net Margin</span><span class="lp-val">${fmtPct(profM)}</span></div>
+        <div class="lp-section-hdr">Financials (last fiscal year)</div>
+        <div class="lp-row"><span class="lp-lbl">Revenue</span><span class="lp-val">${fmt(d.revenue)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">Gross Margin</span><span class="lp-val">${fmtPct(d.grossMargin)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">EBITDA</span><span class="lp-val">${fmt(d.ebitda)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">EBITDA Margin</span><span class="lp-val">${fmtPct(d.ebitdaMargin)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">Net Income</span><span class="lp-val">${fmt(d.netIncome)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">Net Margin</span><span class="lp-val">${fmtPct(d.netMargin)}</span></div>
       </div>
       <div class="lp-section">
         <div class="lp-section-hdr">Balance Sheet</div>
-        <div class="lp-row"><span class="lp-lbl">Total Debt</span><span class="lp-val">${fmt(debt)}</span></div>
-        <div class="lp-row"><span class="lp-lbl">Cash & Equivalents</span><span class="lp-val">${fmt(cash)}</span></div>
-        <div class="lp-row"><span class="lp-lbl">Net Debt</span><span class="lp-val">${fmt((debt??0)-(cash??0))}</span></div>
+        <div class="lp-row"><span class="lp-lbl">Total Debt</span><span class="lp-val">${fmt(d.totalDebt)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">Cash & Equivalents</span><span class="lp-val">${fmt(d.cash)}</span></div>
+        <div class="lp-row"><span class="lp-lbl">Net Debt</span><span class="lp-val">${fmt(d.netDebt)}</span></div>
       </div>
-      <div class="lp-note">Source: Yahoo Finance · LTM = last twelve months.</div>
+      <div class="lp-note">Source: Financial Modeling Prep · last fiscal year financials.</div>
     `;
   } catch(e) {
-    const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-    const hint = isLocal
-      ? 'Run <strong>netlify dev</strong> instead of <code>npx serve</code> to enable the API proxy.'
-      : 'Yahoo Finance may be temporarily unavailable — try again in a moment.';
-    box.innerHTML = `<div class="lp-empty">Could not load <strong>${ticker}</strong>. ${hint}</div>`;
+    box.innerHTML = `<div class="lp-empty">Could not load <strong>${ticker}</strong>. ${e.message || 'Try again in a moment.'}</div>`;
   }
   btn.disabled = false;
 }
