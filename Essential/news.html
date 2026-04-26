@@ -435,27 +435,54 @@
     #fvFrame {
       display: none;
       width: 100%;
+      flex-direction: column;
     }
+    #fvBar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 16px;
+      height: 36px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    #fvBarTitle {
+      flex: 1;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text2);
+    }
+    #fvBarHint {
+      font-size: 10px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+    #fvOpenBtn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: 4px;
+      color: var(--accent);
+      border: 1px solid rgba(27,79,216,.35);
+      transition: all .15s;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    #fvOpenBtn:hover { background: var(--accent-a); border-color: var(--accent); }
     #fvFrame iframe {
       display: block;
       width: 100%;
-      height: calc(100vh - 126px);
+      height: calc(100vh - 162px);
       border: none;
       background: var(--bg2);
-    }
-    #fvBlock {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      height: calc(100vh - 126px);
-      color: var(--muted);
-      font-size: 13px;
-    }
-    #fvBlock a {
-      color: var(--accent);
-      text-decoration: underline;
     }
     body.fv-active #filterBar,
     body.fv-active #main,
@@ -463,9 +490,11 @@
     body.fv-active .search-wrap,
     body.fv-active #refreshBtn,
     body.fv-active #countdown { display: none !important; }
-    body.fv-active #fvFrame   { display: block; }
+    body.fv-active #fvFrame   { display: flex; }
     @media (max-width: 768px) {
-      #fvFrame iframe, #fvBlock { height: calc(100vh - 130px); }
+      #fvFrame iframe { height: calc(100vh - 166px); }
+      #fvBar { padding: 0 12px; }
+      #fvBarHint { display: none; }
     }
   </style>
 </head>
@@ -537,6 +566,11 @@
 
 <!-- ── FINVIZ EMBED ────────────────────────────────────── -->
 <div id="fvFrame">
+  <div id="fvBar">
+    <span id="fvBarTitle">FinViz</span>
+    <span id="fvBarHint">If blocked below →</span>
+    <a id="fvOpenBtn" href="#" target="_blank" rel="noopener noreferrer">Open in FinViz ↗</a>
+  </div>
   <iframe id="fvEmbed" src="" allow="fullscreen" title="FinViz"></iframe>
 </div>
 
@@ -822,9 +856,13 @@ function switchTab(tabId) {
   );
   if (tabId in FV_TABS) {
     document.body.classList.add('fv-active');
+    const url   = FV_TABS[tabId];
+    const label = document.querySelector(`.tab[data-id="${tabId}"]`)?.textContent?.trim() || 'FinViz';
+    document.getElementById('fvBarTitle').textContent = 'FinViz · ' + label;
+    document.getElementById('fvOpenBtn').href = url;
     const iframe = document.getElementById('fvEmbed');
     if (iframe.dataset.loaded !== tabId) {
-      iframe.src = FV_TABS[tabId];
+      iframe.src = url;
       iframe.dataset.loaded = tabId;
     }
   } else {
