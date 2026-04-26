@@ -90,7 +90,7 @@ body { background: var(--bg); color: var(--t1); font-family: Arial, Helvetica, s
 }
 .mbar-spacer { flex: 1; }
 .theme-btn {
-  align-self: center; width: 30px; height: 30px;
+  align-self: center; width: 28px; height: 28px;
   background: var(--s2); border: 1px solid var(--b1); border-radius: 4px;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; font-size: 14px; transition: background .12s;
@@ -105,7 +105,9 @@ body { background: var(--bg); color: var(--t1); font-family: Arial, Helvetica, s
 }
 .back-btn {
   background: var(--s1); border: 1px solid var(--b1); border-radius: 3px;
-  padding: 5px 10px; font-size: 10px; color: var(--t2);
+  height: 28px; box-sizing: border-box; padding: 0 10px;
+  display: inline-flex; align-items: center;
+  font-size: 10px; color: var(--t2);
   cursor: pointer; text-decoration: none; letter-spacing: .06em; transition: color .12s;
 }
 .back-btn:hover { color: var(--t1); }
@@ -115,7 +117,9 @@ body { background: var(--bg); color: var(--t1); font-family: Arial, Helvetica, s
 .topbar-actions { margin-left: auto; display: flex; gap: 6px; align-items: center; }
 .tbtn {
   background: var(--s1); border: 1px solid var(--b1); border-radius: 3px;
-  padding: 6px 12px; font-family: 'JetBrains Mono', monospace;
+  height: 28px; box-sizing: border-box; padding: 0 12px;
+  display: inline-flex; align-items: center;
+  font-family: 'JetBrains Mono', monospace;
   font-size: 10px; letter-spacing: .06em; color: var(--t2);
   cursor: pointer; transition: all .12s; white-space: nowrap;
 }
@@ -131,7 +135,7 @@ body { background: var(--bg); color: var(--t1); font-family: Arial, Helvetica, s
   display: none; position: absolute; top: calc(100% + 6px); right: 0;
   background: var(--bg); border: 1px solid var(--b1); border-radius: 8px;
   box-shadow: 0 12px 36px rgba(0,0,0,.22); z-index: 300;
-  width: 260px; overflow: hidden;
+  width: 280px; overflow: hidden;
 }
 .tools-menu.open { display: block; }
 .tools-menu-tabs {
@@ -148,7 +152,9 @@ body { background: var(--bg); color: var(--t1); font-family: Arial, Helvetica, s
 }
 .tools-menu-tab:hover { color: var(--t2); background: var(--s2); }
 .tools-menu-tab.on { color: var(--blue); border-bottom-color: var(--blue); background: var(--bg); font-weight: 800; }
-.tools-tab-content { padding: 6px; }
+.tools-tab-content { padding: 6px; max-height: 400px; overflow-y: auto; }
+.tools-tab-content::-webkit-scrollbar { width: 3px; }
+.tools-tab-content::-webkit-scrollbar-thumb { background: var(--b2); }
 .tools-tab-content.hidden { display: none; }
 .tools-item {
   display: flex; align-items: center; gap: 9px; width: 100%;
@@ -164,6 +170,7 @@ body { background: var(--bg); color: var(--t1); font-family: Arial, Helvetica, s
   background: var(--blue); opacity: 0; transition: opacity .12s; }
 .tools-item.active .tools-item-badge { opacity: 1; }
 .tools-divider { height: 1px; background: var(--b1); margin: 4px 0; }
+.tools-item-section { font-size:8px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; color:var(--t3); padding:8px 10px 2px; display:block; }
 
 /* ── SCENARIO MANAGER ─────────────────────────────────────── */
 .scen-group { display:flex; border:1px solid var(--b1); border-radius:4px; overflow:hidden; flex-shrink:0; }
@@ -985,7 +992,7 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
   .gloss-panel.open { width:380px; }
 
   /* Tools menu */
-  .tools-menu { width:260px; }
+  .tools-menu { width:280px; }
   .tools-item { padding:10px 12px; font-size:11.5px; }
   .tools-menu-tab { font-size:9.5px; padding:10px 10px; }
 
@@ -2059,158 +2066,158 @@ body.wt-open #gridWrap{padding-bottom:150px;}
       <button class="tbtn" id="toolsBtn" onclick="toggleToolsMenu()">Tools ▾</button>
       <div class="tools-menu" id="toolsMenu">
         <div class="tools-menu-tabs">
-          <button class="tools-menu-tab on" id="ttabModel" onclick="setToolsTab('model')">Model</button>
+          <button class="tools-menu-tab on" id="ttabBuild" onclick="setToolsTab('build')">Build</button>
           <button class="tools-menu-tab" id="ttabDrills" onclick="setToolsTab('drills')">Drills</button>
           <button class="tools-menu-tab" id="ttabInterview" onclick="setToolsTab('interview')">Interview</button>
-          <button class="tools-menu-tab" id="ttabRef" onclick="setToolsTab('ref')">Reference</button>
           <button class="tools-menu-tab" id="ttabCareer" onclick="setToolsTab('career')">Career</button>
         </div>
-        <!-- MODEL TAB -->
-        <div class="tools-tab-content" id="ttab-model">
+        <!-- BUILD TAB -->
+        <div class="tools-tab-content" id="ttab-build">
           <button class="tools-item" id="stepsBtn" onclick="toggleSteps();closeToolsMenu()">
-            <span class="tools-item-icon">📋</span>Build Steps<span class="tools-item-badge"></span>
+            Build Steps<span class="tools-item-badge"></span>
           </button>
           <button class="tools-item" id="remarksBtn" onclick="toggleRemarks();closeToolsMenu()">
-            <span class="tools-item-icon">💬</span>Remarks<span class="tools-item-badge"></span>
-          </button>
-          <button class="tools-item" id="qaBtn" onclick="toggleQA();closeToolsMenu()">
-            <span class="tools-item-icon">🎯</span>Interview Q&amp;A<span class="tools-item-badge"></span>
+            Remarks<span class="tools-item-badge"></span>
           </button>
           <button class="tools-item" id="glossBtn" onclick="toggleGloss();closeToolsMenu()">
-            <span class="tools-item-icon">📖</span>Glossary<span class="tools-item-badge"></span>
+            Glossary<span class="tools-item-badge"></span>
           </button>
-          <button class="tools-item" id="ffBtn" onclick="toggleFF();closeToolsMenu()">
-            <span class="tools-item-icon">📊</span>Football Field<span class="tools-item-badge"></span>
-          </button>
-          <button class="tools-item" id="maProcessBtn" onclick="toggleMAProcess();closeToolsMenu()">
-            <span class="tools-item-icon">🔄</span>M&amp;A Deal Process<span class="tools-item-badge"></span>
-          </button>
+          <div class="tools-divider"></div>
           <button class="tools-item" id="modelBuilderBtn" onclick="toggleModelBuilder();closeToolsMenu()">
-            <span class="tools-item-icon">🏗️</span>Model Builder<span class="tools-item-badge">GUIDED</span>
+            Model Builder<span class="tools-item-badge">GUIDED</span>
           </button>
           <button class="tools-item" id="wtBtn" onclick="toggleWalkthrough();closeToolsMenu()">
-            <span class="tools-item-icon">▶</span>Model Walkthrough
+            Model Walkthrough
+          </button>
+          <button class="tools-item" id="ffBtn" onclick="toggleFF();closeToolsMenu()">
+            Football Field<span class="tools-item-badge"></span>
+          </button>
+          <button class="tools-item" id="maProcessBtn" onclick="toggleMAProcess();closeToolsMenu()">
+            M&amp;A Deal Process<span class="tools-item-badge"></span>
           </button>
         </div>
         <!-- DRILLS TAB -->
         <div class="tools-tab-content hidden" id="ttab-drills">
           <button class="tools-item" id="drillBtn" onclick="toggleDrill();closeToolsMenu()">
-            <span class="tools-item-icon">🏗️</span>Model Build<span class="tools-item-badge"></span>
-          </button>
-          <button class="tools-item" id="intDrillBtn" onclick="toggleIntDrill();closeToolsMenu()">
-            <span class="tools-item-icon">⚡</span>Integration Drills<span class="tools-item-badge"></span>
+            Model Build<span class="tools-item-badge"></span>
           </button>
           <button class="tools-item" id="dcfDrillBtn" onclick="toggleDCFDrill();closeToolsMenu()">
-            <span class="tools-item-icon">📈</span>DCF Builder<span class="tools-item-badge"></span>
+            DCF Builder<span class="tools-item-badge"></span>
           </button>
           <button class="tools-item" id="lboDrillBtn" onclick="toggleLBODrill();closeToolsMenu()">
-            <span class="tools-item-icon">🔩</span>LBO Drill<span class="tools-item-badge"></span>
+            LBO Drill<span class="tools-item-badge"></span>
           </button>
           <button class="tools-item" id="maDrillBtn" onclick="toggleMaDrill();closeToolsMenu()">
-            <span class="tools-item-icon">🤝</span>M&amp;A Accretion/Dilution<span class="tools-item-badge"></span>
-          </button>
-          <button class="tools-item" id="paperLBOBtn" onclick="togglePaperLBO();closeToolsMenu()">
-            <span class="tools-item-icon">🧮</span>Paper LBO<span class="tools-item-badge"></span>
+            M&amp;A Accretion/Dilution<span class="tools-item-badge"></span>
           </button>
           <button class="tools-item" id="acctBtn" onclick="toggleAcct();closeToolsMenu()">
-            <span class="tools-item-icon">🧾</span>Accounting Drills<span class="tools-item-badge"></span>
+            Accounting Drills<span class="tools-item-badge"></span>
           </button>
-          <button class="tools-item" id="errSpotBtn" onclick="toggleErrSpot();closeToolsMenu()">
-            <span class="tools-item-icon">🔍</span>Error Spotter<span class="tools-item-badge"></span>
+          <button class="tools-item" id="paperLBOBtn" onclick="togglePaperLBO();closeToolsMenu()">
+            Paper LBO<span class="tools-item-badge"></span>
           </button>
           <button class="tools-item" id="paperDCFBtn" onclick="togglePaperDCF();closeToolsMenu()">
-            <span class="tools-item-icon">📉</span>Paper DCF<span class="tools-item-badge"></span>
+            Paper DCF<span class="tools-item-badge"></span>
+          </button>
+          <button class="tools-item" id="errSpotBtn" onclick="toggleErrSpot();closeToolsMenu()">
+            Error Spotter<span class="tools-item-badge"></span>
           </button>
           <div class="tools-divider"></div>
+          <button class="tools-item" id="intDrillBtn" onclick="toggleIntDrill();closeToolsMenu()">
+            Integration Drills<span class="tools-item-badge"></span>
+          </button>
+          <button class="tools-item" id="mathBtn" onclick="toggleMath();closeToolsMenu()">
+            Math Trainer<span class="tools-item-badge"></span>
+          </button>
           <button class="tools-item" onclick="toggleBuildModal();closeToolsMenu()">
-            <span class="tools-item-icon">⏱️</span>Timed Build<span class="tools-item-badge">NEW</span>
+            Timed Build<span class="tools-item-badge">NEW</span>
           </button>
           <button class="tools-item" onclick="toggleQuizModal();closeToolsMenu()">
-            <span class="tools-item-icon">🃏</span>Formula Quiz<span class="tools-item-badge">NEW</span>
+            Formula Quiz<span class="tools-item-badge">NEW</span>
           </button>
           <button class="tools-item" id="jeTrainerBtn" onclick="toggleJETrainer();closeToolsMenu()">
-            <span class="tools-item-icon">📒</span>Journal Entry Trainer<span class="tools-item-badge">NEW</span>
+            Journal Entry Trainer<span class="tools-item-badge">NEW</span>
           </button>
         </div>
         <!-- INTERVIEW TAB -->
         <div class="tools-tab-content hidden" id="ttab-interview">
+          <span class="tools-item-section">Prep</span>
+          <button class="tools-item" id="qaBtn" onclick="toggleQA();closeToolsMenu()">
+            Interview Q&amp;A<span class="tools-item-badge"></span>
+          </button>
           <button class="tools-item" id="mockBtn" onclick="toggleMock();closeToolsMenu()">
-            <span class="tools-item-icon">🎙️</span>Mock Interview<span class="tools-item-badge"></span>
+            Mock Interview<span class="tools-item-badge"></span>
           </button>
           <button class="tools-item" id="maQABtn" onclick="toggleMaQA();closeToolsMenu()">
-            <span class="tools-item-icon">🏦</span>M&amp;A Technicals<span class="tools-item-badge"></span>
+            M&amp;A Technicals<span class="tools-item-badge"></span>
           </button>
           <button class="tools-item" id="behavBtn" onclick="toggleBehav();closeToolsMenu()">
-            <span class="tools-item-icon">🗣️</span>Fit &amp; Behavioral<span class="tools-item-badge"></span>
+            Fit &amp; Behavioral<span class="tools-item-badge"></span>
           </button>
           <button class="tools-item" id="fitBtn" onclick="toggleFit();closeToolsMenu()">
-            <span class="tools-item-icon">🤝</span>Fit Q&amp;A<span class="tools-item-badge"></span>
+            Fit Q&amp;A<span class="tools-item-badge"></span>
           </button>
-          <button class="tools-item" id="mathBtn" onclick="toggleMath();closeToolsMenu()">
-            <span class="tools-item-icon">🧮</span>Math Trainer<span class="tools-item-badge"></span>
+          <button class="tools-item" id="iafBtn" onclick="toggleIAF();closeToolsMenu()">
+            Answer Frameworks<span class="tools-item-badge">NEW</span>
           </button>
           <div class="tools-divider"></div>
-          <button class="tools-item" id="iafBtn" onclick="toggleIAF();closeToolsMenu()">
-            <span class="tools-item-icon">🎯</span>Answer Frameworks<span class="tools-item-badge">NEW</span>
-          </button>
-        </div>
-        <!-- REFERENCE TAB -->
-        <div class="tools-tab-content hidden" id="ttab-ref">
+          <span class="tools-item-section">Market Data</span>
           <button class="tools-item" id="pulseBtn" onclick="togglePulse();closeToolsMenu()">
-            <span class="tools-item-icon">📡</span>Markets Pulse<span class="tools-item-badge"></span>
+            Markets Pulse<span class="tools-item-badge"></span>
           </button>
           <button class="tools-item" id="dealTrackerBtn" onclick="toggleDealTracker();closeToolsMenu()">
-            <span class="tools-item-icon">📋</span>Deal Tracker<span class="tools-item-badge"></span>
-          </button>
-          <button class="tools-item" id="dealLibBtn" onclick="toggleDealLib();closeToolsMenu()">
-            <span class="tools-item-icon">📁</span>Deal Library<span class="tools-item-badge"></span>
-          </button>
-          <button class="tools-item" id="techQABtn" onclick="toggleTechQA();closeToolsMenu()">
-            <span class="tools-item-icon">⚙️</span>Technical Q&amp;A<span class="tools-item-badge"></span>
+            Deal Tracker<span class="tools-item-badge"></span>
           </button>
           <button class="tools-item" id="multRefBtn" onclick="toggleMultRef();closeToolsMenu()">
-            <span class="tools-item-icon">📐</span>Sector Multiples<span class="tools-item-badge"></span>
+            Sector Multiples<span class="tools-item-badge"></span>
           </button>
           <button class="tools-item" id="compRefBtn" onclick="toggleCompRef();closeToolsMenu()">
-            <span class="tools-item-icon">💰</span>Comp &amp; Levels<span class="tools-item-badge"></span>
-          </button>
-          <button class="tools-item" id="resourceBtn" onclick="toggleResources();closeToolsMenu()">
-            <span class="tools-item-icon">📚</span>Resource Hub<span class="tools-item-badge"></span>
+            Comp &amp; Levels<span class="tools-item-badge"></span>
           </button>
           <button class="tools-item" id="valAssumpBtn" onclick="toggleValAssump();closeToolsMenu()">
-            <span class="tools-item-icon">🎯</span>Valuation Assumptions<span class="tools-item-badge">NEW</span>
+            Valuation Assumptions<span class="tools-item-badge">NEW</span>
           </button>
           <div class="tools-divider"></div>
+          <span class="tools-item-section">Reference</span>
+          <button class="tools-item" id="techQABtn" onclick="toggleTechQA();closeToolsMenu()">
+            Technical Q&amp;A<span class="tools-item-badge"></span>
+          </button>
           <button class="tools-item" id="cheatSheetBtn" onclick="toggleCheatSheet();closeToolsMenu()">
-            <span class="tools-item-icon">📋</span>Modeling Cheat Sheet<span class="tools-item-badge">NEW</span>
+            Modeling Cheat Sheet<span class="tools-item-badge">NEW</span>
           </button>
           <button class="tools-item" id="txnGuideBtn" onclick="toggleTxnGuide();closeToolsMenu()">
-            <span class="tools-item-icon">📊</span>3-Statement Txns<span class="tools-item-badge">NEW</span>
+            3-Statement Txns<span class="tools-item-badge">NEW</span>
           </button>
           <button class="tools-item" id="valTreeBtn" onclick="toggleValTree();closeToolsMenu()">
-            <span class="tools-item-icon">🌳</span>Valuation Decision Tree<span class="tools-item-badge">NEW</span>
+            Valuation Decision Tree<span class="tools-item-badge">NEW</span>
           </button>
           <button class="tools-item" id="masGuideBtn" onclick="toggleMASGuide();closeToolsMenu()">
-            <span class="tools-item-icon">🏗️</span>M&amp;A Structuring<span class="tools-item-badge">NEW</span>
+            M&amp;A Structuring<span class="tools-item-badge">NEW</span>
+          </button>
+          <button class="tools-item" id="dealLibBtn" onclick="toggleDealLib();closeToolsMenu()">
+            Deal Library<span class="tools-item-badge"></span>
+          </button>
+          <button class="tools-item" id="resourceBtn" onclick="toggleResources();closeToolsMenu()">
+            Resource Hub<span class="tools-item-badge"></span>
           </button>
         </div>
         <!-- CAREER TAB -->
         <div class="tools-tab-content hidden" id="ttab-career">
           <button class="tools-item" id="storyBankBtn" onclick="toggleStoryBank();closeToolsMenu()">
-            <span class="tools-item-icon">📖</span>Story Bank<span class="tools-item-badge">NEW</span>
+            Story Bank<span class="tools-item-badge">NEW</span>
           </button>
           <button class="tools-item" id="roadmapBtn" onclick="toggleRoadmap();closeToolsMenu()">
-            <span class="tools-item-icon">🗺️</span>IB Roadmap<span class="tools-item-badge"></span>
+            IB Roadmap<span class="tools-item-badge"></span>
           </button>
           <button class="tools-item" id="crmBtn" onclick="toggleCRM();closeToolsMenu()">
-            <span class="tools-item-icon">👥</span>Networking CRM<span class="tools-item-badge"></span>
+            Networking CRM<span class="tools-item-badge"></span>
           </button>
           <button class="tools-item" id="trackerBtn" onclick="toggleTracker();closeToolsMenu()">
-            <span class="tools-item-icon">📋</span>App Tracker<span class="tools-item-badge"></span>
+            App Tracker<span class="tools-item-badge"></span>
           </button>
           <div class="tools-divider"></div>
           <button class="tools-item" id="netScriptsBtn" onclick="toggleNetScripts();closeToolsMenu()">
-            <span class="tools-item-icon">✉️</span>Networking Scripts<span class="tools-item-badge">NEW</span>
+            Networking Scripts<span class="tools-item-badge">NEW</span>
           </button>
         </div>
       </div>
@@ -4141,9 +4148,9 @@ function closeToolsMenu() {
   document.getElementById('toolsBtn').classList.remove('tools-open');
 }
 
-let activeToolsTab = 'model';
-const TOOL_TABS = ['model','drills','interview','ref','career'];
-const TOOL_TAB_BTN_IDS = {model:'ttabModel',drills:'ttabDrills',interview:'ttabInterview',ref:'ttabRef',career:'ttabCareer'};
+let activeToolsTab = 'build';
+const TOOL_TABS = ['build','drills','interview','career'];
+const TOOL_TAB_BTN_IDS = {build:'ttabBuild',drills:'ttabDrills',interview:'ttabInterview',career:'ttabCareer'};
 function setToolsTab(tab) {
   activeToolsTab = tab;
   TOOL_TABS.forEach(t => {
@@ -10218,11 +10225,9 @@ async function fetchRfRate() {
     const res = await fetch(PROXY_FM + encodeURIComponent(url));
     const data = JSON.parse((await res.json()).contents);
     const q = data?.chart?.result?.[0]?.meta;
-    if (q?.regularMarketPrice) {
-      lpRfRate = q.regularMarketPrice;
-      renderWACC();
-    }
-  } catch(e) { lpRfRate = 4.5; renderWACC(); }
+    lpRfRate = q?.regularMarketPrice ?? 4.5;
+  } catch(e) { lpRfRate = 4.5; }
+  renderWACC();
 }
 
 async function loadLiveCompany() {
@@ -10319,7 +10324,11 @@ async function loadLiveCompany() {
       <div class="lp-note">Source: Yahoo Finance · LTM = last twelve months. Use these figures to calibrate your model assumptions.</div>
     `;
   } catch(e) {
-    box.innerHTML = `<div class="lp-empty">Could not load "${ticker}". Check the ticker and try again.</div>`;
+    const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    const hint = isLocal
+      ? 'Run <strong>netlify dev</strong> instead of <code>npx serve</code> to enable the API proxy.'
+      : 'Yahoo Finance may be temporarily unavailable — try again in a moment.';
+    box.innerHTML = `<div class="lp-empty">Could not load <strong>${ticker}</strong>. ${hint}</div>`;
   }
   btn.disabled = false;
 }

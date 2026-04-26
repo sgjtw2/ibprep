@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>if(!sessionStorage.getItem('cmd-auth-v1'))window.location.replace('./login.html');</script>
+<title>LBO PRACTICE — IB PREP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#000000;--s1:#080C14;--s2:#0C1220;--card:#080C14;--card-h:#0C1220;
+  --b0:#0E1828;--b1:#162038;--b2:#1E2E4A;--b3:#2A3E5C;
+  --t1:#EEF2FF;--t2:#8898B8;--t3:#4A5A78;--t4:#2A3850;
+  --accent:#1B4FD8;--accent-l:#2D63F0;--accent-bg:rgba(27,79,216,.10);--accent-brd:rgba(27,79,216,.22);
+  --red:#C93C2E;--red-bg:rgba(201,60,46,.10);--red-brd:rgba(201,60,46,.22);
+  --green:#1E7A5A;--green-bg:rgba(30,122,90,.10);--green-brd:rgba(30,122,90,.22);
+  --yellow:#B8860B;--yellow-bg:rgba(184,134,11,.12);--yellow-brd:rgba(184,134,11,.25);
+}
+[data-theme="light"] {
+  --bg:#FFFFFF;--s1:#F8FAFC;--s2:#F1F5F9;--card:#F8FAFC;--card-h:#F1F5F9;
+  --b0:#E2E8F0;--b1:#E2E8F0;--b2:#CBD5E1;--b3:#94A3B8;
+  --t1:#0F172A;--t2:#475569;--t3:#94A3B8;--t4:#CBD5E1;
+  --accent:#1B4FD8;--accent-l:#2D63F0;--accent-bg:rgba(27,79,216,.06);--accent-brd:rgba(27,79,216,.20);
+  --red:#DC2626;--red-bg:rgba(220,38,38,.07);--red-brd:rgba(220,38,38,.20);
+  --green:#16A34A;--green-bg:rgba(22,163,74,.07);--green-brd:rgba(22,163,74,.20);
+  --yellow:#92400E;--yellow-bg:rgba(146,64,14,.07);--yellow-brd:rgba(146,64,14,.20);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:Arial,Helvetica,sans-serif;font-size:12px;}
+.hdr{height:52px;background:var(--s1);border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:16px;padding:0 20px;position:sticky;top:0;z-index:100;}
+.logo{font-weight:700;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--t1);display:flex;align-items:center;gap:7px;flex-shrink:0;text-decoration:none;}
+.logo-pip{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pip 2s ease-in-out infinite;}
+@keyframes pip{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.75);}}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.btn-back{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--s2);border:1px solid var(--b2);border-radius:3px;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--t2);text-decoration:none;transition:all .12s;}
+.btn-back:hover{color:var(--t1);border-color:var(--b3);}
+.theme-toggle{width:30px;height:30px;background:var(--s2);border:1px solid var(--b1);border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+.theme-toggle:hover{background:var(--b1);}
+.page{max-width:960px;margin:0 auto;padding:24px 20px 60px;}
+.page-title{font-size:18px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.page-sub{font-size:11px;color:var(--t3);margin-bottom:28px;}
+/* tabs */
+.tabs{display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap;}
+.tab{padding:7px 14px;background:var(--s2);border:1px solid var(--b1);border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);cursor:pointer;transition:all .12s;}
+.tab:hover{color:var(--t2);border-color:var(--b2);}
+.tab.active{color:var(--accent);border-color:var(--accent-brd);background:var(--accent-bg);}
+.section{display:none;}
+.section.active{display:block;}
+/* cards */
+.card{background:var(--card);border:1px solid var(--b1);border-radius:6px;padding:18px;margin-bottom:16px;}
+.card-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.card-title::after{content:'';flex:1;height:1px;background:var(--b1);}
+/* timer */
+.timer-wrap{display:flex;flex-direction:column;align-items:center;padding:32px 20px;background:var(--card);border:1px solid var(--b1);border-radius:6px;margin-bottom:20px;}
+.timer-display{font-family:'JetBrains Mono',monospace;font-size:56px;font-weight:600;color:var(--t1);letter-spacing:.04em;line-height:1;}
+.timer-display.warning{color:var(--yellow);}
+.timer-display.danger{color:var(--red);animation:pulse 1s ease-in-out infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.5;}}
+.timer-label{font-size:10px;color:var(--t3);letter-spacing:.1em;text-transform:uppercase;margin-top:8px;margin-bottom:24px;}
+.timer-btns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.btn{padding:8px 20px;border:none;border-radius:3px;font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .12s;}
+.btn-start{background:var(--accent);color:#fff;}
+.btn-start:hover{background:var(--accent-l);}
+.btn-reset{background:var(--s2);border:1px solid var(--b2);color:var(--t2);}
+.btn-reset:hover{color:var(--t1);}
+.btn-reveal{background:var(--green-bg);border:1px solid var(--green-brd);color:var(--green);padding:8px 20px;border-radius:3px;font-weight:700;font-size:10px;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:all .12s;}
+.btn-reveal:hover{background:var(--green);;color:#fff;}
+/* case selector */
+.case-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px;}
+@media(max-width:600px){.case-grid{grid-template-columns:1fr;}}
+.case-card{background:var(--card);border:1px solid var(--b1);border-radius:6px;padding:14px;cursor:pointer;transition:all .15s;}
+.case-card:hover{border-color:var(--b2);background:var(--card-h);}
+.case-card.selected{border-color:var(--accent-brd);background:var(--accent-bg);}
+.case-card-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:6px;}
+.case-card-name{font-size:12px;font-weight:700;color:var(--t1);margin-bottom:4px;}
+.case-card-meta{font-size:10px;color:var(--t2);}
+.diff-badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:2px;margin-top:6px;}
+.diff-easy{background:var(--green-bg);color:var(--green);border:1px solid var(--green-brd);}
+.diff-med{background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-brd);}
+.diff-hard{background:var(--red-bg);color:var(--red);border:1px solid var(--red-brd);}
+/* case content */
+.case-block{background:var(--card);border:1px solid var(--b1);border-radius:6px;padding:18px;margin-bottom:14px;}
+.block-title{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:10px;}
+.fact{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid var(--b0);gap:12px;}
+.fact:last-child{border-bottom:none;}
+.fact-label{color:var(--t2);font-size:11px;}
+.fact-val{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--t1);font-weight:600;}
+/* solution */
+.solution{display:none;}
+.solution.visible{display:block;}
+.step-block{background:var(--s2);border-left:3px solid var(--accent);border-radius:0 4px 4px 0;padding:14px 16px;margin-bottom:12px;}
+.step-num{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+.step-title{font-size:11px;font-weight:700;color:var(--t1);margin-bottom:8px;}
+.calc{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--t2);line-height:1.8;white-space:pre-wrap;}
+.result{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--accent);margin-top:6px;}
+.key-metric{display:inline-flex;align-items:center;gap:8px;background:var(--accent-bg);border:1px solid var(--accent-brd);border-radius:4px;padding:8px 14px;margin:6px 6px 0 0;}
+.key-metric-label{font-size:9px;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;}
+.key-metric-val{font-size:14px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--accent);}
+.irr-good{color:#4ADE80;}
+.irr-ok{color:var(--yellow);}
+.irr-bad{color:var(--red);}
+/* framework */
+.fw-step{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--b0);}
+.fw-step:last-child{border-bottom:none;}
+.fw-num{width:28px;height:28px;border-radius:50%;background:var(--accent-bg);border:1px solid var(--accent-brd);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--accent);flex-shrink:0;}
+.fw-content{flex:1;}
+.fw-title{font-size:11px;font-weight:700;color:var(--t1);margin-bottom:4px;}
+.fw-desc{font-size:10px;color:var(--t2);line-height:1.6;}
+.fw-formula{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);background:var(--s2);border:1px solid var(--b1);border-radius:3px;padding:6px 10px;margin-top:6px;}
+/* grid */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:600px){.grid-2{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <a class="logo" href="./command-center.html">
+    <span class="logo-pip"></span>IB PREP
+  </a>
+  <span style="font-size:11px;color:var(--t3);">/ LBO PRACTICE</span>
+  <div class="hdr-right">
+    <a class="btn-back" href="./command-center.html">← Command Center</a>
+    <button class="theme-toggle" onclick="toggleTheme()">☀</button>
+  </div>
+</header>
+
+<div class="page">
+  <div class="page-title">LBO Practice</div>
+  <div class="page-sub">Paper LBO drills with timer · framework · worked solutions</div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('framework')">Framework</div>
+    <div class="tab" onclick="switchTab('practice')">Practice Cases</div>
+    <div class="tab" onclick="switchTab('keyterms')">Key Terms</div>
+  </div>
+
+  <!-- FRAMEWORK -->
+  <div class="section active" id="framework">
+    <div class="card">
+      <div class="card-title">Paper LBO — 5-Step Framework</div>
+      <div class="fw-step">
+        <div class="fw-num">1</div>
+        <div class="fw-content">
+          <div class="fw-title">Calculate Entry Price &amp; Sources/Uses</div>
+          <div class="fw-desc">Determine total purchase price using the entry multiple. Split into debt and equity. Uses = purchase price + fees. Sources = debt tranches + sponsor equity.</div>
+          <div class="fw-formula">Purchase Price = Entry EBITDA × Entry Multiple
+Debt = Purchase Price × Leverage (e.g. 5× EBITDA or 60%)
+Equity = Purchase Price – Debt</div>
+        </div>
+      </div>
+      <div class="fw-step">
+        <div class="fw-num">2</div>
+        <div class="fw-content">
+          <div class="fw-title">Build Simplified Income Statement → EBITDA at Exit</div>
+          <div class="fw-desc">Project revenue and EBITDA over the hold period using the given growth rate. No need for a full 3-statement model in a paper LBO.</div>
+          <div class="fw-formula">EBITDA Year N = Entry EBITDA × (1 + growth)^N</div>
+        </div>
+      </div>
+      <div class="fw-step">
+        <div class="fw-num">3</div>
+        <div class="fw-content">
+          <div class="fw-title">Calculate Debt Paydown</div>
+          <div class="fw-desc">Estimate FCF each year. Use it to pay down debt. Assume all FCF goes to debt repayment unless told otherwise.</div>
+          <div class="fw-formula">FCF = EBITDA × (1 – Cash Tax Rate) – CapEx – Δ NWC
+(Simplification: FCF ≈ EBITDA × FCF conversion rate)
+Debt at Exit = Entry Debt – Cumulative FCF</div>
+        </div>
+      </div>
+      <div class="fw-step">
+        <div class="fw-num">4</div>
+        <div class="fw-content">
+          <div class="fw-title">Calculate Exit Equity Value</div>
+          <div class="fw-desc">Apply exit multiple to exit EBITDA. Subtract remaining debt to get equity proceeds.</div>
+          <div class="fw-formula">Exit Enterprise Value = Exit EBITDA × Exit Multiple
+Exit Equity = Exit EV – Remaining Debt</div>
+        </div>
+      </div>
+      <div class="fw-step">
+        <div class="fw-num">5</div>
+        <div class="fw-content">
+          <div class="fw-title">Calculate Returns — MoM and IRR</div>
+          <div class="fw-desc">MoM is equity at exit over equity invested. IRR is the annualised return. Use the quick IRR approximation table.</div>
+          <div class="fw-formula">MoM = Exit Equity / Entry Equity
+IRR (5yr): 2× ≈ 15%, 2.5× ≈ 20%, 3× ≈ 25%
+IRR (3yr): 2× ≈ 26%, 2.5× ≈ 36%, 3× ≈ 44%</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">IRR Quick Reference</div>
+        <div class="fact"><span class="fact-label">3yr hold, 2.0× MoM</span><span class="fact-val irr-ok">~26% IRR</span></div>
+        <div class="fact"><span class="fact-label">3yr hold, 2.5× MoM</span><span class="fact-val irr-good">~36% IRR</span></div>
+        <div class="fact"><span class="fact-label">3yr hold, 3.0× MoM</span><span class="fact-val irr-good">~44% IRR</span></div>
+        <div class="fact"><span class="fact-label">5yr hold, 2.0× MoM</span><span class="fact-val irr-ok">~15% IRR</span></div>
+        <div class="fact"><span class="fact-label">5yr hold, 2.5× MoM</span><span class="fact-val irr-ok">~20% IRR</span></div>
+        <div class="fact"><span class="fact-label">5yr hold, 3.0× MoM</span><span class="fact-val irr-good">~25% IRR</span></div>
+        <div class="fact"><span class="fact-label">5yr hold, 3.5× MoM</span><span class="fact-val irr-good">~29% IRR</span></div>
+        <div style="margin-top:10px;font-size:10px;color:var(--t3);">PE target: 20%+ IRR, 2.5–3× MoM</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Return Drivers</div>
+        <div class="fact"><span class="fact-label">EBITDA Growth</span><span class="fact-val" style="color:#4ADE80;">Operational</span></div>
+        <div class="fact"><span class="fact-label">Multiple Expansion</span><span class="fact-val" style="color:#4ADE80;">Market</span></div>
+        <div class="fact"><span class="fact-label">Debt Paydown</span><span class="fact-val" style="color:#4ADE80;">Financial</span></div>
+        <div style="margin-top:12px;font-size:10px;color:var(--t3);line-height:1.6;">
+          Leverage amplifies returns in good scenarios and amplifies losses in bad ones.
+          Most PE value creation today is EBITDA growth (buy-and-build, margin improvement),
+          not multiple expansion or leverage alone.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRACTICE CASES -->
+  <div class="section" id="practice">
+    <div class="case-grid">
+      <div class="case-card selected" onclick="selectCase(0,this)">
+        <div class="case-card-label">Case 1</div>
+        <div class="case-card-name">SteadyCo</div>
+        <div class="case-card-meta">Stable industrial · 5yr hold</div>
+        <div class="diff-badge diff-easy">Easy</div>
+      </div>
+      <div class="case-card" onclick="selectCase(1,this)">
+        <div class="case-card-label">Case 2</div>
+        <div class="case-card-name">GrowthTech</div>
+        <div class="case-card-meta">High-growth SaaS · 5yr hold</div>
+        <div class="diff-badge diff-med">Medium</div>
+      </div>
+      <div class="case-card" onclick="selectCase(2,this)">
+        <div class="case-card-label">Case 3</div>
+        <div class="case-card-name">TurnCo</div>
+        <div class="case-card-meta">Margin expansion story · 5yr</div>
+        <div class="diff-badge diff-hard">Hard</div>
+      </div>
+    </div>
+
+    <!-- Timer -->
+    <div class="timer-wrap">
+      <div class="timer-display" id="timerDisplay">10:00</div>
+      <div class="timer-label">Target: complete paper LBO in 10 minutes</div>
+      <div class="timer-btns">
+        <button class="btn btn-start" id="timerBtn" onclick="toggleTimer()">START</button>
+        <button class="btn btn-reset" onclick="resetTimer()">RESET</button>
+      </div>
+    </div>
+
+    <!-- Case 0: SteadyCo -->
+    <div id="case-0" class="case-content">
+      <div class="case-block">
+        <div class="block-title">Case Prompt — SteadyCo</div>
+        <p style="font-size:11px;color:var(--t2);line-height:1.7;margin-bottom:12px;">
+          A PE firm is acquiring SteadyCo, a manufacturer of industrial fasteners. You have 10 minutes to complete a paper LBO and determine whether the deal meets the fund's return hurdles.
+        </p>
+        <div class="fact"><span class="fact-label">LTM Revenue</span><span class="fact-val">$200M</span></div>
+        <div class="fact"><span class="fact-label">LTM EBITDA Margin</span><span class="fact-val">25%</span></div>
+        <div class="fact"><span class="fact-label">Entry EV/EBITDA Multiple</span><span class="fact-val">8.0×</span></div>
+        <div class="fact"><span class="fact-label">Leverage</span><span class="fact-val">4.0× EBITDA</span></div>
+        <div class="fact"><span class="fact-label">Revenue Growth (annual)</span><span class="fact-val">5%</span></div>
+        <div class="fact"><span class="fact-label">EBITDA Margin (constant)</span><span class="fact-val">25%</span></div>
+        <div class="fact"><span class="fact-label">FCF Conversion (% of EBITDA)</span><span class="fact-val">50%</span></div>
+        <div class="fact"><span class="fact-label">Exit Multiple</span><span class="fact-val">8.0×</span></div>
+        <div class="fact"><span class="fact-label">Hold Period</span><span class="fact-val">5 years</span></div>
+      </div>
+      <button class="btn-reveal" onclick="toggleSolution('sol-0')">Reveal Solution ▼</button>
+      <div class="solution" id="sol-0" style="margin-top:14px;">
+        <div class="step-block">
+          <div class="step-num">Step 1 — Entry</div>
+          <div class="step-title">Sources &amp; Uses</div>
+          <div class="calc">LTM EBITDA     = $200M × 25%        = $50M
+Purchase Price = $50M × 8.0×          = $400M
+Entry Debt     = $50M × 4.0×          = $200M
+Entry Equity   = $400M – $200M        = $200M</div>
+        </div>
+        <div class="step-block">
+          <div class="step-num">Step 2 — EBITDA Growth</div>
+          <div class="step-title">Project EBITDA to Year 5</div>
+          <div class="calc">Year 0  EBITDA = $50M
+Year 1  EBITDA = $50M × 1.05          = $52.5M
+Year 2  EBITDA = $52.5M × 1.05        = $55.1M
+Year 3  EBITDA = $55.1M × 1.05        = $57.9M
+Year 4  EBITDA = $57.9M × 1.05        = $60.8M
+Year 5  EBITDA = $60.8M × 1.05        ≈ $63.8M</div>
+          <div style="font-size:10px;color:var(--t3);margin-top:6px;">Shortcut: $50M × (1.05)^5 = $50M × 1.276 ≈ $63.8M</div>
+        </div>
+        <div class="step-block">
+          <div class="step-num">Step 3 — Debt Paydown</div>
+          <div class="step-title">Cumulative FCF over 5 Years</div>
+          <div class="calc">Annual FCF ≈ EBITDA × 50% (use avg EBITDA ≈ $57M for simplicity)
+Avg FCF/yr  ≈ $57M × 50%               = ~$28.5M
+Cumulative FCF (5yr) ≈ $28.5M × 5      = $142.5M
+
+Debt at Exit = $200M – $142.5M         = $57.5M</div>
+        </div>
+        <div class="step-block">
+          <div class="step-num">Step 4 — Exit</div>
+          <div class="step-title">Exit Equity Value</div>
+          <div class="calc">Exit EV    = $63.8M × 8.0×            = $510.4M
+Exit Equity = $510.4M – $57.5M        ≈ $452.9M</div>
+        </div>
+        <div class="step-block">
+          <div class="step-num">Step 5 — Returns</div>
+          <div class="step-title">MoM &amp; IRR</div>
+          <div class="calc">MoM = $452.9M / $200M               ≈ 2.26×</div>
+          <div class="result">IRR ≈ 18% (between 15% at 2× and 20% at 2.5× for 5yr)</div>
+          <div style="margin-top:10px;display:flex;flex-wrap:wrap;">
+            <div class="key-metric"><div><div class="key-metric-label">MoM</div><div class="key-metric-val irr-ok">2.26×</div></div></div>
+            <div class="key-metric"><div><div class="key-metric-label">IRR</div><div class="key-metric-val irr-ok">~18%</div></div></div>
+            <div class="key-metric"><div><div class="key-metric-label">Verdict</div><div class="key-metric-val irr-ok">Below 20% hurdle</div></div></div>
+          </div>
+          <p style="font-size:10px;color:var(--t2);margin-top:12px;line-height:1.6;">
+            <strong>Key insight:</strong> Returns are below the typical 20% PE hurdle. The no-multiple-expansion scenario constrains upside — the deal is driven entirely by debt paydown and modest EBITDA growth. To improve returns: negotiate a lower entry multiple, improve FCF conversion, or find a path to margin expansion.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Case 1: GrowthTech -->
+    <div id="case-1" class="case-content" style="display:none;">
+      <div class="case-block">
+        <div class="block-title">Case Prompt — GrowthTech</div>
+        <p style="font-size:11px;color:var(--t2);line-height:1.7;margin-bottom:12px;">
+          A growth-focused PE fund is considering acquiring GrowthTech, a vertical SaaS company serving logistics firms. Assess whether this deal clears the fund's 20% IRR hurdle.
+        </p>
+        <div class="fact"><span class="fact-label">LTM Revenue</span><span class="fact-val">$100M</span></div>
+        <div class="fact"><span class="fact-label">LTM EBITDA Margin</span><span class="fact-val">20%</span></div>
+        <div class="fact"><span class="fact-label">Entry EV/EBITDA Multiple</span><span class="fact-val">12.0×</span></div>
+        <div class="fact"><span class="fact-label">Leverage</span><span class="fact-val">3.0× EBITDA</span></div>
+        <div class="fact"><span class="fact-label">Revenue Growth (annual)</span><span class="fact-val">15%</span></div>
+        <div class="fact"><span class="fact-label">EBITDA Margin (expands to 30% by Yr 5)</span><span class="fact-val">+2% / year</span></div>
+        <div class="fact"><span class="fact-label">FCF Conversion (% of EBITDA)</span><span class="fact-val">40%</span></div>
+        <div class="fact"><span class="fact-label">Exit Multiple</span><span class="fact-val">12.0×</span></div>
+        <div class="fact"><span class="fact-label">Hold Period</span><span class="fact-val">5 years</span></div>
+      </div>
+      <button class="btn-reveal" onclick="toggleSolution('sol-1')">Reveal Solution ▼</button>
+      <div class="solution" id="sol-1" style="margin-top:14px;">
+        <div class="step-block">
+          <div class="step-num">Step 1 — Entry</div>
+          <div class="step-title">Sources &amp; Uses</div>
+          <div class="calc">LTM EBITDA     = $100M × 20%        = $20M
+Purchase Price = $20M × 12.0×         = $240M
+Entry Debt     = $20M × 3.0×          = $60M
+Entry Equity   = $240M – $60M         = $180M</div>
+        </div>
+        <div class="step-block">
+          <div class="step-num">Step 2 — EBITDA Growth</div>
+          <div class="step-title">Project Revenue &amp; EBITDA (margin expands)</div>
+          <div class="calc">Year 0:  Rev $100M, Margin 20%, EBITDA $20M
+Year 1:  Rev $115M, Margin 22%, EBITDA $25.3M
+Year 2:  Rev $132M, Margin 24%, EBITDA $31.7M
+Year 3:  Rev $152M, Margin 26%, EBITDA $39.5M
+Year 4:  Rev $175M, Margin 28%, EBITDA $49.0M
+Year 5:  Rev $201M, Margin 30%, EBITDA $60.3M</div>
+        </div>
+        <div class="step-block">
+          <div class="step-num">Step 3 — Debt Paydown</div>
+          <div class="calc">Avg EBITDA (Yr 1–5) ≈ $41M
+Avg FCF/yr ≈ $41M × 40%               ≈ $16.4M
+Cumulative FCF ≈ $16.4M × 5           ≈ $82M
+
+Debt at Exit = $60M – $60M            = $0M  (fully paid down)</div>
+          <div style="font-size:10px;color:var(--t3);margin-top:6px;">Low leverage + growing FCF → debt fully repaid by Yr 4-5</div>
+        </div>
+        <div class="step-block">
+          <div class="step-num">Step 4 — Exit</div>
+          <div class="calc">Exit EV    = $60.3M × 12.0×           = $723.6M
+Exit Equity = $723.6M – $0            ≈ $723.6M</div>
+        </div>
+        <div class="step-block">
+          <div class="step-num">Step 5 — Returns</div>
+          <div class="calc">MoM = $723.6M / $180M               ≈ 4.0×</div>
+          <div class="result">IRR ≈ 32% (well above 20% hurdle for 5yr at 4×)</div>
+          <div style="margin-top:10px;display:flex;flex-wrap:wrap;">
+            <div class="key-metric"><div><div class="key-metric-label">MoM</div><div class="key-metric-val irr-good">4.0×</div></div></div>
+            <div class="key-metric"><div><div class="key-metric-label">IRR</div><div class="key-metric-val irr-good">~32%</div></div></div>
+            <div class="key-metric"><div><div class="key-metric-label">Verdict</div><div class="key-metric-val irr-good">Clears hurdle</div></div></div>
+          </div>
+          <p style="font-size:10px;color:var(--t2);margin-top:12px;line-height:1.6;">
+            <strong>Key insight:</strong> Returns are driven by EBITDA growth (revenue × margin expansion), not leverage. Low leverage means lower risk. The high entry multiple (12×) is justified by growth. Sensitivity: if exit multiple compresses to 10×, Exit EV = $603M, MoM ≈ 3.35×, IRR still ~27% — still a strong deal.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Case 2: TurnCo -->
+    <div id="case-2" class="case-content" style="display:none;">
+      <div class="case-block">
+        <div class="block-title">Case Prompt — TurnCo</div>
+        <p style="font-size:11px;color:var(--t2);line-height:1.7;margin-bottom:12px;">
+          TurnCo is a consumer products distributor with a cost structure that management believes can be significantly improved through operational changes. Assess the deal assuming the margin improvement plan succeeds.
+        </p>
+        <div class="fact"><span class="fact-label">LTM Revenue</span><span class="fact-val">$500M</span></div>
+        <div class="fact"><span class="fact-label">LTM EBITDA Margin</span><span class="fact-val">10%</span></div>
+        <div class="fact"><span class="fact-label">Entry EV/EBITDA Multiple</span><span class="fact-val">7.0×</span></div>
+        <div class="fact"><span class="fact-label">Leverage</span><span class="fact-val">5.0× EBITDA</span></div>
+        <div class="fact"><span class="fact-label">Revenue Growth (flat)</span><span class="fact-val">0%</span></div>
+        <div class="fact"><span class="fact-label">EBITDA Margin (improves linearly)</span><span class="fact-val">10% → 18% over 5 yrs</span></div>
+        <div class="fact"><span class="fact-label">FCF Conversion (% of EBITDA)</span><span class="fact-val">55%</span></div>
+        <div class="fact"><span class="fact-label">Exit Multiple</span><span class="fact-val">8.0× (re-rating on improved margins)</span></div>
+        <div class="fact"><span class="fact-label">Hold Period</span><span class="fact-val">5 years</span></div>
+      </div>
+      <button class="btn-reveal" onclick="toggleSolution('sol-2')">Reveal Solution ▼</button>
+      <div class="solution" id="sol-2" style="margin-top:14px;">
+        <div class="step-block">
+          <div class="step-num">Step 1 — Entry</div>
+          <div class="calc">LTM EBITDA     = $500M × 10%        = $50M
+Purchase Price = $50M × 7.0×          = $350M
+Entry Debt     = $50M × 5.0×          = $250M
+Entry Equity   = $350M – $250M        = $100M</div>
+        </div>
+        <div class="step-block">
+          <div class="step-num">Step 2 — EBITDA (margin expansion, flat rev)</div>
+          <div class="calc">Margin improves by +1.6%/yr (10% → 18% over 5yrs)
+Year 0:  Rev $500M, Margin 10%, EBITDA $50M
+Year 1:  Rev $500M, Margin 11.6%, EBITDA $58M
+Year 2:  Rev $500M, Margin 13.2%, EBITDA $66M
+Year 3:  Rev $500M, Margin 14.8%, EBITDA $74M
+Year 4:  Rev $500M, Margin 16.4%, EBITDA $82M
+Year 5:  Rev $500M, Margin 18.0%, EBITDA $90M</div>
+        </div>
+        <div class="step-block">
+          <div class="step-num">Step 3 — Debt Paydown</div>
+          <div class="calc">Avg EBITDA (Yr 1–5) ≈ $74M
+Avg FCF/yr ≈ $74M × 55%               ≈ $40.7M
+Cumulative FCF ≈ $40.7M × 5           ≈ $203.5M
+
+Debt at Exit = $250M – $203.5M        ≈ $46.5M</div>
+        </div>
+        <div class="step-block">
+          <div class="step-num">Step 4 — Exit (multiple expansion to 8×)</div>
+          <div class="calc">Exit EV    = $90M × 8.0×              = $720M
+Exit Equity = $720M – $46.5M          ≈ $673.5M</div>
+        </div>
+        <div class="step-block">
+          <div class="step-num">Step 5 — Returns</div>
+          <div class="calc">MoM = $673.5M / $100M               ≈ 6.7×</div>
+          <div class="result">IRR ≈ 46% (exceptionally high — driven by low entry equity + multiple expansion)</div>
+          <div style="margin-top:10px;display:flex;flex-wrap:wrap;">
+            <div class="key-metric"><div><div class="key-metric-label">MoM</div><div class="key-metric-val irr-good">6.7×</div></div></div>
+            <div class="key-metric"><div><div class="key-metric-label">IRR</div><div class="key-metric-val irr-good">~46%</div></div></div>
+            <div class="key-metric"><div><div class="key-metric-label">Verdict</div><div class="key-metric-val irr-good">Exceptional if thesis holds</div></div></div>
+          </div>
+          <p style="font-size:10px;color:var(--t2);margin-top:12px;line-height:1.6;">
+            <strong>Key insight:</strong> High leverage (5×) + low entry equity ($100M) creates massive equity upside — but also maximum downside risk if the margin thesis fails. If margins only improve to 14% (half the plan), EBITDA at exit = $70M, exit EV = $560M, equity ≈ $513M, MoM ≈ 5.1× — still excellent. The deal is resilient to partial failure because the entry equity base is small. This is classic operational turnaround PE logic.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KEY TERMS -->
+  <div class="section" id="keyterms">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Deal Structure</div>
+        <div class="fact"><span class="fact-label">Enterprise Value (EV)</span><span class="fact-val">Equity + Debt – Cash</span></div>
+        <div class="fact"><span class="fact-label">Equity Value</span><span class="fact-val">EV – Net Debt</span></div>
+        <div class="fact"><span class="fact-label">Purchase Price Premium</span><span class="fact-val">Over unaffected share price</span></div>
+        <div class="fact"><span class="fact-label">Sources = Uses</span><span class="fact-val">Debt + Equity = Purchase Price + Fees</span></div>
+        <div class="fact"><span class="fact-label">Net Debt</span><span class="fact-val">Total Debt – Cash</span></div>
+        <div class="fact"><span class="fact-label">PIK Interest</span><span class="fact-val">Accrues, not cash pay</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Leverage &amp; Debt</div>
+        <div class="fact"><span class="fact-label">Senior Secured (1L)</span><span class="fact-val">Lowest rate, first lien</span></div>
+        <div class="fact"><span class="fact-label">Senior Secured (2L)</span><span class="fact-val">Higher rate, second lien</span></div>
+        <div class="fact"><span class="fact-label">Mezzanine / Sub Debt</span><span class="fact-val">High yield, subordinated</span></div>
+        <div class="fact"><span class="fact-label">Typical LBO leverage</span><span class="fact-val">4–6× EBITDA</span></div>
+        <div class="fact"><span class="fact-label">Interest Coverage Ratio</span><span class="fact-val">EBITDA / Interest ≥ 2×</span></div>
+        <div class="fact"><span class="fact-label">Cash Sweep</span><span class="fact-val">Excess cash → debt repay</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Returns Metrics</div>
+        <div class="fact"><span class="fact-label">MoM (Money-on-Money)</span><span class="fact-val">Exit Equity / Entry Equity</span></div>
+        <div class="fact"><span class="fact-label">IRR</span><span class="fact-val">Annualised return on equity</span></div>
+        <div class="fact"><span class="fact-label">TVPI</span><span class="fact-val">Total Value / Paid-In Capital</span></div>
+        <div class="fact"><span class="fact-label">DPI</span><span class="fact-val">Distributions / Paid-In Capital</span></div>
+        <div class="fact"><span class="fact-label">PE Hurdle Rate</span><span class="fact-val">Typically 8% preferred return</span></div>
+        <div class="fact"><span class="fact-label">Carried Interest</span><span class="fact-val">20% of profits above hurdle</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Good LBO Candidate Traits</div>
+        <div class="fact"><span class="fact-label">Stable, predictable FCF</span><span class="fact-val" style="color:#4ADE80;">Debt service</span></div>
+        <div class="fact"><span class="fact-label">Low CapEx requirements</span><span class="fact-val" style="color:#4ADE80;">High FCF conversion</span></div>
+        <div class="fact"><span class="fact-label">Non-cyclical revenues</span><span class="fact-val" style="color:#4ADE80;">Covenant safety</span></div>
+        <div class="fact"><span class="fact-label">Strong market position</span><span class="fact-val" style="color:#4ADE80;">Pricing power</span></div>
+        <div class="fact"><span class="fact-label">Identifiable value creation</span><span class="fact-val" style="color:#4ADE80;">Operational thesis</span></div>
+        <div class="fact"><span class="fact-label">Clear exit path</span><span class="fact-val" style="color:#4ADE80;">Strategic / IPO</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Theme
+function toggleTheme(){
+  const d=document.documentElement;
+  d.dataset.theme=d.dataset.theme==='light'?'':'light';
+  localStorage.setItem('theme',d.dataset.theme);
+}
+(function(){const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t;})();
+
+// Tabs
+function switchTab(id){
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    const ids=['framework','practice','keyterms'];
+    t.classList.toggle('active',ids[i]===id);
+  });
+  document.querySelectorAll('.section').forEach(s=>{
+    s.classList.toggle('active',s.id===id);
+  });
+}
+
+// Case selector
+function selectCase(idx, el){
+  document.querySelectorAll('.case-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.querySelectorAll('.case-content').forEach((c,i)=>{
+    c.style.display=i===idx?'block':'none';
+  });
+  resetTimer();
+  // hide all solutions
+  document.querySelectorAll('.solution').forEach(s=>s.classList.remove('visible'));
+}
+
+// Solution reveal
+function toggleSolution(id){
+  const sol=document.getElementById(id);
+  const isVisible=sol.classList.contains('visible');
+  sol.classList.toggle('visible',!isVisible);
+  event.target.textContent=isVisible?'Reveal Solution ▼':'Hide Solution ▲';
+}
+
+// Timer
+let timerInterval=null;
+let secondsLeft=600;
+let running=false;
+
+function updateDisplay(){
+  const m=Math.floor(secondsLeft/60);
+  const s=secondsLeft%60;
+  const disp=document.getElementById('timerDisplay');
+  disp.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  disp.className='timer-display';
+  if(secondsLeft<=60)disp.classList.add('danger');
+  else if(secondsLeft<=180)disp.classList.add('warning');
+}
+
+function toggleTimer(){
+  const btn=document.getElementById('timerBtn');
+  if(!running){
+    running=true;
+    btn.textContent='PAUSE';
+    timerInterval=setInterval(()=>{
+      if(secondsLeft>0){
+        secondsLeft--;
+        updateDisplay();
+      } else {
+        clearInterval(timerInterval);
+        running=false;
+        btn.textContent='START';
+        document.getElementById('timerDisplay').textContent='TIME';
+      }
+    },1000);
+  } else {
+    running=false;
+    btn.textContent='RESUME';
+    clearInterval(timerInterval);
+  }
+}
+
+function resetTimer(){
+  clearInterval(timerInterval);
+  running=false;
+  secondsLeft=600;
+  document.getElementById('timerBtn').textContent='START';
+  updateDisplay();
+}
+</script>
+<script src="./nav.js"></script>
+</body>
+</html>

@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>if(!sessionStorage.getItem('cmd-auth-v1'))window.location.replace('./login.html');</script>
+<title>ACCOUNTING — IB PREP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#000000;--s1:#080C14;--s2:#0C1220;--card:#080C14;--card-h:#0C1220;
+  --b0:#0E1828;--b1:#162038;--b2:#1E2E4A;--b3:#2A3E5C;
+  --t1:#EEF2FF;--t2:#8898B8;--t3:#4A5A78;--t4:#2A3850;
+  --accent:#1B4FD8;--accent-l:#2D63F0;--accent-bg:rgba(27,79,216,.10);--accent-brd:rgba(27,79,216,.22);
+  --red:#C93C2E;--red-bg:rgba(201,60,46,.10);--red-brd:rgba(201,60,46,.22);
+  --green:#1E7A5A;--green-bg:rgba(30,122,90,.10);--green-brd:rgba(30,122,90,.22);
+  --yellow:#B8860B;--yellow-bg:rgba(184,134,11,.10);--yellow-brd:rgba(184,134,11,.22);
+}
+[data-theme="light"] {
+  --bg:#FFFFFF;--s1:#F8FAFC;--s2:#F1F5F9;--card:#F8FAFC;--card-h:#F1F5F9;
+  --b0:#E2E8F0;--b1:#E2E8F0;--b2:#CBD5E1;--b3:#94A3B8;
+  --t1:#0F172A;--t2:#475569;--t3:#94A3B8;--t4:#CBD5E1;
+  --accent:#1B4FD8;--accent-l:#2D63F0;--accent-bg:rgba(27,79,216,.06);--accent-brd:rgba(27,79,216,.20);
+  --red:#DC2626;--red-bg:rgba(220,38,38,.07);--red-brd:rgba(220,38,38,.20);
+  --green:#16A34A;--green-bg:rgba(22,163,74,.07);--green-brd:rgba(22,163,74,.20);
+  --yellow:#92400E;--yellow-bg:rgba(146,64,14,.07);--yellow-brd:rgba(146,64,14,.20);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:Arial,Helvetica,sans-serif;font-size:12px;}
+.hdr{height:52px;background:var(--s1);border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:16px;padding:0 20px;position:sticky;top:0;z-index:100;}
+.logo{font-weight:700;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--t1);display:flex;align-items:center;gap:7px;flex-shrink:0;text-decoration:none;}
+.logo-pip{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pip 2s ease-in-out infinite;}
+@keyframes pip{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.75);}}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.btn-back{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--s2);border:1px solid var(--b2);border-radius:3px;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--t2);text-decoration:none;transition:all .12s;}
+.btn-back:hover{color:var(--t1);border-color:var(--b3);}
+.theme-toggle{width:30px;height:30px;background:var(--s2);border:1px solid var(--b1);border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s;}
+.theme-toggle:hover{background:var(--b1);}
+.page{max-width:1100px;margin:0 auto;padding:24px 20px 60px;}
+.page-title{font-size:18px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t1);margin-bottom:4px;}
+.page-sub{font-size:11px;color:var(--t3);margin-bottom:28px;}
+.tabs{display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap;}
+.tab{padding:7px 14px;background:var(--s2);border:1px solid var(--b1);border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);cursor:pointer;transition:all .12s;}
+.tab:hover{color:var(--t2);border-color:var(--b2);}
+.tab.active{color:var(--accent);border-color:var(--accent-brd);background:var(--accent-bg);}
+.section{display:none;}
+.section.active{display:block;}
+/* cards */
+.grid{display:grid;gap:16px;}
+.grid-3{grid-template-columns:repeat(3,1fr);}
+.grid-2{grid-template-columns:repeat(2,1fr);}
+@media(max-width:900px){.grid-3{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.grid-3,.grid-2{grid-template-columns:1fr;}}
+.card{background:var(--card);border:1px solid var(--b1);border-radius:6px;padding:18px;}
+.card-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.card-title::after{content:'';flex:1;height:1px;background:var(--b1);}
+.row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--b0);gap:12px;}
+.row:last-child{border-bottom:none;}
+.row-label{color:var(--t2);font-size:11px;flex:1;}
+.row-label.indent{padding-left:14px;color:var(--t3);}
+.row-label.indent2{padding-left:28px;color:var(--t3);}
+.row-val{font-size:11px;color:var(--t1);text-align:right;font-family:'JetBrains Mono',monospace;white-space:nowrap;}
+.row-val.pos{color:#4ADE80;}
+.row-val.neg{color:var(--red);}
+.divider{height:1px;background:var(--b2);margin:6px 0;}
+.total-row{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;gap:12px;}
+.total-row .row-label{font-weight:700;color:var(--t1);}
+.total-row .row-val{font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--accent);}
+/* link diagram */
+.link-diagram{background:var(--card);border:1px solid var(--b1);border-radius:6px;padding:20px;margin-bottom:16px;}
+.link-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;}
+.link-flow{display:flex;align-items:flex-start;gap:0;overflow-x:auto;}
+.link-box{background:var(--s2);border:1px solid var(--b2);border-radius:4px;padding:12px 14px;min-width:180px;flex-shrink:0;}
+.link-box-title{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin-bottom:8px;}
+.link-item{font-size:10px;color:var(--t2);padding:2px 0;}
+.link-item.highlight{color:var(--accent);font-weight:700;}
+.link-item.highlight-g{color:#4ADE80;font-weight:700;}
+.arrow{display:flex;align-items:center;padding:0 10px;color:var(--t3);font-size:18px;flex-shrink:0;align-self:center;}
+/* Q&A */
+.qa-list{display:flex;flex-direction:column;gap:12px;}
+.qa-item{background:var(--card);border:1px solid var(--b1);border-radius:6px;overflow:hidden;}
+.qa-q{padding:14px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;transition:background .12s;}
+.qa-q:hover{background:var(--card-h);}
+.qa-q-text{font-size:11px;font-weight:700;color:var(--t1);flex:1;}
+.qa-tag{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 7px;border-radius:2px;flex-shrink:0;}
+.tag-core{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-brd);}
+.tag-hard{background:var(--red-bg);color:var(--red);border:1px solid var(--red-brd);}
+.tag-concept{background:var(--green-bg);color:var(--green);border:1px solid var(--green-brd);}
+.qa-chevron{font-size:10px;color:var(--t3);flex-shrink:0;transition:transform .2s;}
+.qa-item.open .qa-chevron{transform:rotate(180deg);}
+.qa-a{display:none;padding:0 16px 14px;border-top:1px solid var(--b1);}
+.qa-item.open .qa-a{display:block;}
+.qa-a p{color:var(--t2);font-size:11px;line-height:1.7;margin-top:12px;}
+.qa-a p+p{margin-top:8px;}
+.qa-a strong{color:var(--t1);}
+.qa-a .formula{background:var(--s2);border:1px solid var(--b1);border-radius:3px;padding:8px 12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);margin:8px 0;}
+.qa-a ul{margin:8px 0 0 16px;}
+.qa-a ul li{color:var(--t2);font-size:11px;line-height:1.7;}
+/* scenario table */
+.scenario-table{width:100%;border-collapse:collapse;margin-top:8px;}
+.scenario-table th{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);padding:8px 10px;text-align:left;border-bottom:1px solid var(--b1);}
+.scenario-table td{font-size:10px;color:var(--t2);padding:8px 10px;border-bottom:1px solid var(--b0);vertical-align:top;}
+.scenario-table td:first-child{color:var(--t1);font-weight:700;}
+.scenario-table tr:last-child td{border-bottom:none;}
+.plus{color:#4ADE80;}
+.minus{color:var(--red);}
+.zero{color:var(--t3);}
+/* badge */
+.section-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin:20px 0 10px;}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <a class="logo" href="./command-center.html">
+    <span class="logo-pip"></span>IB PREP
+  </a>
+  <span style="font-size:11px;color:var(--t3);">/ ACCOUNTING</span>
+  <div class="hdr-right">
+    <a class="btn-back" href="./command-center.html">← Command Center</a>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">☀</button>
+  </div>
+</header>
+
+<div class="page">
+  <div class="page-title">Accounting Cheat Sheet</div>
+  <div class="page-sub">3-statement model · linkages · interview Q&A · scenario drills</div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('statements')">3 Statements</div>
+    <div class="tab" onclick="switchTab('linkages')">Linkages</div>
+    <div class="tab" onclick="switchTab('qa')">Interview Q&A</div>
+    <div class="tab" onclick="switchTab('scenarios')">$10 Scenarios</div>
+  </div>
+
+  <!-- 3 STATEMENTS -->
+  <div class="section active" id="statements">
+    <div class="grid grid-3">
+
+      <!-- Income Statement -->
+      <div class="card">
+        <div class="card-title">Income Statement</div>
+        <div class="row"><span class="row-label">Revenue</span><span class="row-val">xxx</span></div>
+        <div class="row"><span class="row-label indent">– Cost of Goods Sold</span><span class="row-val neg">(xxx)</span></div>
+        <div class="divider"></div>
+        <div class="total-row"><span class="row-label">Gross Profit</span><span class="row-val">xxx</span></div>
+        <div class="row"><span class="row-label indent">– SG&A</span><span class="row-val neg">(xxx)</span></div>
+        <div class="row"><span class="row-label indent">– D&A</span><span class="row-val neg">(xxx)</span></div>
+        <div class="divider"></div>
+        <div class="total-row"><span class="row-label">EBIT (Operating Income)</span><span class="row-val">xxx</span></div>
+        <div class="row"><span class="row-label indent">– Interest Expense</span><span class="row-val neg">(xxx)</span></div>
+        <div class="row"><span class="row-label indent">+ Interest Income</span><span class="row-val pos">xxx</span></div>
+        <div class="divider"></div>
+        <div class="total-row"><span class="row-label">EBT (Pre-tax Income)</span><span class="row-val">xxx</span></div>
+        <div class="row"><span class="row-label indent">– Taxes (~21%)</span><span class="row-val neg">(xxx)</span></div>
+        <div class="divider"></div>
+        <div class="total-row"><span class="row-label">Net Income</span><span class="row-val">xxx</span></div>
+        <div style="margin-top:14px;padding-top:10px;border-top:1px solid var(--b1);">
+          <div class="row"><span class="row-label" style="color:var(--t3);font-size:10px;">EBITDA = EBIT + D&A</span></div>
+          <div class="row"><span class="row-label" style="color:var(--t3);font-size:10px;">EPS = Net Income / Diluted Shares</span></div>
+        </div>
+      </div>
+
+      <!-- Balance Sheet -->
+      <div class="card">
+        <div class="card-title">Balance Sheet</div>
+        <div class="row"><span class="row-label" style="font-weight:700;color:var(--t1);">ASSETS</span></div>
+        <div class="row"><span class="row-label indent">Cash &amp; Equivalents</span><span class="row-val pos">xxx</span></div>
+        <div class="row"><span class="row-label indent">Accounts Receivable</span><span class="row-val">xxx</span></div>
+        <div class="row"><span class="row-label indent">Inventory</span><span class="row-val">xxx</span></div>
+        <div class="row"><span class="row-label indent">Other Current Assets</span><span class="row-val">xxx</span></div>
+        <div class="total-row"><span class="row-label">Total Current Assets</span><span class="row-val">xxx</span></div>
+        <div class="row"><span class="row-label indent">PP&amp;E (net)</span><span class="row-val">xxx</span></div>
+        <div class="row"><span class="row-label indent">Goodwill &amp; Intangibles</span><span class="row-val">xxx</span></div>
+        <div class="total-row"><span class="row-label">Total Assets</span><span class="row-val">xxx</span></div>
+        <div class="divider"></div>
+        <div class="row"><span class="row-label" style="font-weight:700;color:var(--t1);">LIABILITIES</span></div>
+        <div class="row"><span class="row-label indent">Accounts Payable</span><span class="row-val">xxx</span></div>
+        <div class="row"><span class="row-label indent">Accrued Expenses</span><span class="row-val">xxx</span></div>
+        <div class="row"><span class="row-label indent">Deferred Revenue</span><span class="row-val">xxx</span></div>
+        <div class="total-row"><span class="row-label">Total Current Liabilities</span><span class="row-val">xxx</span></div>
+        <div class="row"><span class="row-label indent">Long-term Debt</span><span class="row-val">xxx</span></div>
+        <div class="row"><span class="row-label indent">Deferred Tax Liability</span><span class="row-val">xxx</span></div>
+        <div class="total-row"><span class="row-label">Total Liabilities</span><span class="row-val">xxx</span></div>
+        <div class="divider"></div>
+        <div class="row"><span class="row-label" style="font-weight:700;color:var(--t1);">EQUITY</span></div>
+        <div class="row"><span class="row-label indent">Common Stock + APIC</span><span class="row-val">xxx</span></div>
+        <div class="row"><span class="row-label indent">Retained Earnings</span><span class="row-val">xxx</span></div>
+        <div class="row"><span class="row-label indent">Treasury Stock</span><span class="row-val neg">(xxx)</span></div>
+        <div class="total-row"><span class="row-label">Total Equity</span><span class="row-val">xxx</span></div>
+        <div class="divider"></div>
+        <div class="total-row"><span class="row-label">Total L + E</span><span class="row-val" style="color:#4ADE80;">= Total Assets ✓</span></div>
+      </div>
+
+      <!-- Cash Flow Statement -->
+      <div class="card">
+        <div class="card-title">Cash Flow Statement</div>
+        <div class="row"><span class="row-label" style="font-weight:700;color:var(--t1);">OPERATING</span></div>
+        <div class="row"><span class="row-label indent">Net Income</span><span class="row-val">xxx</span></div>
+        <div class="row"><span class="row-label indent">+ D&amp;A</span><span class="row-val pos">xxx</span></div>
+        <div class="row"><span class="row-label indent">+ Stock-based Comp</span><span class="row-val pos">xxx</span></div>
+        <div class="row"><span class="row-label indent">– Δ Working Capital</span><span class="row-val">(xxx)</span></div>
+        <div class="row"><span class="row-label indent2">↑ AR = use of cash</span><span class="row-val neg">–</span></div>
+        <div class="row"><span class="row-label indent2">↑ Inventory = use of cash</span><span class="row-val neg">–</span></div>
+        <div class="row"><span class="row-label indent2">↑ AP = source of cash</span><span class="row-val pos">+</span></div>
+        <div class="total-row"><span class="row-label">CFO</span><span class="row-val">xxx</span></div>
+        <div class="divider"></div>
+        <div class="row"><span class="row-label" style="font-weight:700;color:var(--t1);">INVESTING</span></div>
+        <div class="row"><span class="row-label indent">– CapEx</span><span class="row-val neg">(xxx)</span></div>
+        <div class="row"><span class="row-label indent">± Acquisitions / Divestitures</span><span class="row-val">xxx</span></div>
+        <div class="total-row"><span class="row-label">CFI</span><span class="row-val neg">(xxx)</span></div>
+        <div class="divider"></div>
+        <div class="row"><span class="row-label" style="font-weight:700;color:var(--t1);">FINANCING</span></div>
+        <div class="row"><span class="row-label indent">+ Debt Issued</span><span class="row-val pos">xxx</span></div>
+        <div class="row"><span class="row-label indent">– Debt Repaid</span><span class="row-val neg">(xxx)</span></div>
+        <div class="row"><span class="row-label indent">– Dividends Paid</span><span class="row-val neg">(xxx)</span></div>
+        <div class="row"><span class="row-label indent">– Share Buybacks</span><span class="row-val neg">(xxx)</span></div>
+        <div class="total-row"><span class="row-label">CFF</span><span class="row-val">xxx</span></div>
+        <div class="divider"></div>
+        <div class="total-row"><span class="row-label">Net Change in Cash</span><span class="row-val" style="color:#4ADE80;">= CFO+CFI+CFF</span></div>
+        <div class="row"><span class="row-label indent">+ Beginning Cash</span><span class="row-val">xxx</span></div>
+        <div class="total-row"><span class="row-label">Ending Cash</span><span class="row-val" style="color:#4ADE80;">→ BS Cash ✓</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LINKAGES -->
+  <div class="section" id="linkages">
+    <div class="link-diagram">
+      <div class="link-title">How the 3 Statements Connect</div>
+      <div class="link-flow">
+        <div class="link-box">
+          <div class="link-box-title">Income Statement</div>
+          <div class="link-item">Revenue</div>
+          <div class="link-item">– COGS</div>
+          <div class="link-item">– OpEx</div>
+          <div class="link-item">– D&A</div>
+          <div class="link-item">– Interest</div>
+          <div class="link-item">– Taxes</div>
+          <div class="link-item highlight">= Net Income ──────────────→</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="link-box">
+          <div class="link-box-title">Cash Flow Statement</div>
+          <div class="link-item highlight">Net Income (from IS)</div>
+          <div class="link-item">+ D&A (non-cash add-back)</div>
+          <div class="link-item">± Δ Working Capital</div>
+          <div class="link-item">– CapEx</div>
+          <div class="link-item">± Debt / Equity</div>
+          <div class="link-item highlight-g">= Ending Cash ──────────→</div>
+        </div>
+        <div class="arrow">→</div>
+        <div class="link-box">
+          <div class="link-box-title">Balance Sheet</div>
+          <div class="link-item highlight-g">Cash (from CFS)</div>
+          <div class="link-item">PP&E = Prior PP&E + CapEx – D&A</div>
+          <div class="link-item highlight">Retained Earnings = Prior RE + Net Income – Dividends</div>
+          <div class="link-item" style="margin-top:8px;color:var(--accent);font-weight:700;">Assets = Liabilities + Equity ✓</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-label">Key Linkage Rules</div>
+    <div class="grid grid-2">
+      <div class="card">
+        <div class="card-title">D&A Flow</div>
+        <div class="row"><span class="row-label">IS: reduces EBIT, reduces taxes</span><span class="row-val neg">↓ NI</span></div>
+        <div class="row"><span class="row-label">CFS: added back (non-cash)</span><span class="row-val pos">+ CFO</span></div>
+        <div class="row"><span class="row-label">BS: reduces PP&E (net)</span><span class="row-val neg">↓ Assets</span></div>
+        <div class="row"><span class="row-label">BS: reduces retained earnings</span><span class="row-val neg">↓ Equity</span></div>
+        <div style="margin-top:10px;font-size:10px;color:var(--t3);">Net cash effect: positive (tax shield offsets NI drop)</div>
+      </div>
+      <div class="card">
+        <div class="card-title">CapEx Flow</div>
+        <div class="row"><span class="row-label">IS: no direct impact (not expensed)</span><span class="row-val zero">—</span></div>
+        <div class="row"><span class="row-label">CFS: cash outflow in investing</span><span class="row-val neg">↓ CFI</span></div>
+        <div class="row"><span class="row-label">BS: increases PP&E</span><span class="row-val pos">↑ Assets</span></div>
+        <div class="row"><span class="row-label">BS: decreases cash</span><span class="row-val neg">↓ Assets</span></div>
+        <div style="margin-top:10px;font-size:10px;color:var(--t3);">Net BS effect: zero (asset swap: cash → PP&E)</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Working Capital Changes</div>
+        <div class="row"><span class="row-label">↑ Accounts Receivable</span><span class="row-val neg">↓ Cash (use)</span></div>
+        <div class="row"><span class="row-label">↑ Inventory</span><span class="row-val neg">↓ Cash (use)</span></div>
+        <div class="row"><span class="row-label">↑ Accounts Payable</span><span class="row-val pos">↑ Cash (source)</span></div>
+        <div class="row"><span class="row-label">↑ Deferred Revenue</span><span class="row-val pos">↑ Cash (source)</span></div>
+        <div style="margin-top:10px;font-size:10px;color:var(--t3);">NWC = Current Assets (ex-cash) – Current Liabilities (ex-debt)</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Deferred Tax</div>
+        <div class="row"><span class="row-label">Book D&A &gt; Tax D&A</span><span class="row-val">DTL created</span></div>
+        <div class="row"><span class="row-label">IS: lower book tax expense</span><span class="row-val pos">↑ NI</span></div>
+        <div class="row"><span class="row-label">CFS: add-back DTL change</span><span class="row-val pos">+ CFO</span></div>
+        <div class="row"><span class="row-label">BS: DTL in long-term liabilities</span><span class="row-val pos">↑ L</span></div>
+        <div style="margin-top:10px;font-size:10px;color:var(--t3);">Reverses when tax D&A exceeds book D&A in later years</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q&A -->
+  <div class="section" id="qa">
+    <div class="qa-list">
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">Walk me through the 3 financial statements.</span>
+          <span class="qa-tag tag-core">CORE</span>
+          <span class="qa-chevron">▼</span>
+        </div>
+        <div class="qa-a">
+          <p>The <strong>Income Statement</strong> shows profitability over a period. Starting from revenue, we deduct COGS to get gross profit, then subtract operating expenses and D&A to reach EBIT. After interest and taxes we arrive at net income.</p>
+          <p>The <strong>Balance Sheet</strong> is a snapshot at a point in time. Assets equal liabilities plus equity. Net income flows into retained earnings on the equity side, and ending cash from the CFS flows into the cash line on the asset side.</p>
+          <p>The <strong>Cash Flow Statement</strong> reconciles net income to actual cash. We start with net income, add back non-cash charges (D&A, SBC), adjust for working capital changes, then show cash from investing (CapEx) and financing (debt, dividends, buybacks). The ending cash balance matches the cash line on the balance sheet.</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">If D&A increases by $10, walk through the impact on all 3 statements. (Tax rate 40%)</span>
+          <span class="qa-tag tag-core">CORE</span>
+          <span class="qa-chevron">▼</span>
+        </div>
+        <div class="qa-a">
+          <p><strong>Income Statement:</strong> EBIT falls $10 → taxes fall $4 (40%) → net income falls $6.</p>
+          <p><strong>Cash Flow Statement:</strong> Net income –$6, but D&A add-back +$10 → CFO increases by $4 (the tax shield).</p>
+          <p><strong>Balance Sheet:</strong> Cash +$4. PP&E –$10 (higher accumulated depreciation). Retained earnings –$6 (lower NI). Assets: net change = +$4 –$10 = –$6. Equity: –$6. Balanced ✓</p>
+          <div class="formula">Net cash benefit = $10 × tax rate = $10 × 40% = $4</div>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">If CapEx increases by $10, walk through all 3 statements.</span>
+          <span class="qa-tag tag-core">CORE</span>
+          <span class="qa-chevron">▼</span>
+        </div>
+        <div class="qa-a">
+          <p><strong>Income Statement:</strong> No impact. CapEx is capitalized, not expensed. Net income unchanged.</p>
+          <p><strong>Cash Flow Statement:</strong> CFI decreases by $10 (cash outflow in investing activities). Overall cash decreases by $10.</p>
+          <p><strong>Balance Sheet:</strong> PP&E +$10, Cash –$10. Net asset change = zero (asset swap). Equity unchanged. Balanced ✓</p>
+          <p style="color:var(--t3);font-size:10px;">Note: future periods will see higher D&A from this CapEx, which will then impact IS/CFS.</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">How do you go from net income to free cash flow?</span>
+          <span class="qa-tag tag-concept">CONCEPT</span>
+          <span class="qa-chevron">▼</span>
+        </div>
+        <div class="qa-a">
+          <div class="formula">FCF = Net Income + D&A – CapEx ± Δ Working Capital</div>
+          <p>Or alternatively starting from EBIT:</p>
+          <div class="formula">UFCF = EBIT × (1 – Tax Rate) + D&A – CapEx – Δ NWC</div>
+          <p>The key adjustments: add back non-cash charges (D&A, SBC), subtract real cash investments (CapEx), and adjust for the cash tied up or released from working capital changes.</p>
+          <p><strong>FCFF</strong> (unlevered) ignores capital structure — used in DCF. <strong>FCFE</strong> (levered) subtracts net debt repayment — used to value equity directly.</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">What is the difference between EBIT, EBITDA, and Net Income?</span>
+          <span class="qa-tag tag-concept">CONCEPT</span>
+          <span class="qa-chevron">▼</span>
+        </div>
+        <div class="qa-a">
+          <div class="formula">Net Income → + Taxes + Interest Expense = EBIT → + D&A = EBITDA</div>
+          <p><strong>EBITDA</strong> is a proxy for operating cash flow before capex. Used widely in valuation multiples (EV/EBITDA) because it strips out financing (interest), taxes, and non-cash charges, making it easier to compare across companies and capital structures.</p>
+          <p><strong>EBIT</strong> reflects operating profitability after D&A — useful when D&A is a meaningful cost (e.g. capital-intensive industries).</p>
+          <p><strong>Net Income</strong> is the bottom line after everything, but it's distorted by capital structure and tax differences — least useful for cross-company comparisons.</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">A company has $100 in revenue and 40% EBITDA margins. It is taxed at 30%. CapEx is $10 and D&A is $5. NWC increases by $3. What is FCF?</span>
+          <span class="qa-tag tag-hard">HARD</span>
+          <span class="qa-chevron">▼</span>
+        </div>
+        <div class="qa-a">
+          <div class="formula">EBITDA = $100 × 40% = $40
+EBIT = $40 – $5 = $35
+NOPAT = $35 × (1 – 30%) = $24.5
+FCF = $24.5 + $5 – $10 – $3 = $16.5</div>
+          <p>Starting from EBITDA: add back D&A to EBIT, tax-effect EBIT to get NOPAT, then add D&A back (non-cash), subtract CapEx (real cash), and subtract the NWC increase (cash tied up in operations).</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">If accounts receivable increases by $10, what happens to the 3 statements?</span>
+          <span class="qa-tag tag-core">CORE</span>
+          <span class="qa-chevron">▼</span>
+        </div>
+        <div class="qa-a">
+          <p><strong>Income Statement:</strong> No impact. Revenue is already recognized (accrual basis), regardless of cash collection.</p>
+          <p><strong>Cash Flow Statement:</strong> AR increase is a use of cash — CFO decreases by $10.</p>
+          <p><strong>Balance Sheet:</strong> AR +$10 (current asset). Cash –$10. Net asset change = zero. Equity unchanged. Balanced ✓</p>
+          <p style="color:var(--t3);font-size:10px;">Intuition: you've "earned" the revenue but haven't collected the cash yet. The cash flow statement reflects this timing difference.</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">Company issues $100 of debt and uses it to buy back $100 of stock. Walk through the impact.</span>
+          <span class="qa-tag tag-hard">HARD</span>
+          <span class="qa-chevron">▼</span>
+        </div>
+        <div class="qa-a">
+          <p><strong>Income Statement:</strong> No immediate impact (assume same period, no interest expense yet).</p>
+          <p><strong>Cash Flow Statement:</strong> CFF: +$100 (debt issued), –$100 (buyback) = net zero cash change.</p>
+          <p><strong>Balance Sheet:</strong> Debt +$100. Treasury Stock –$100 (equity). Cash unchanged. Assets unchanged. Total liabilities +$100, equity –$100 → balanced ✓</p>
+          <p>The key effect: leverage increases, equity decreases. In future periods, interest expense will reduce net income and retained earnings, creating a further shift from equity to liabilities.</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">What is goodwill and when is it created?</span>
+          <span class="qa-tag tag-concept">CONCEPT</span>
+          <span class="qa-chevron">▼</span>
+        </div>
+        <div class="qa-a">
+          <div class="formula">Goodwill = Purchase Price – Fair Value of Net Identifiable Assets</div>
+          <p>Created in an acquisition when you pay more than the fair value of the target's net assets. It represents intangible value: brand, customer relationships, synergies.</p>
+          <p>Under US GAAP, goodwill is not amortized but is tested annually for impairment. Under IFRS, some intangibles are amortized.</p>
+          <p>In IB, interviewers test whether you understand that goodwill on the buyer's balance sheet is the "premium" paid — and that it must be justified by synergies in the deal model.</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">Why can a company have positive net income but negative cash flow?</span>
+          <span class="qa-tag tag-concept">CONCEPT</span>
+          <span class="qa-chevron">▼</span>
+        </div>
+        <div class="qa-a">
+          <p>Several reasons:</p>
+          <ul>
+            <li><strong>Working capital build-up:</strong> revenue recognized but not collected (high AR), or inventory bought but not sold</li>
+            <li><strong>Heavy CapEx:</strong> large capital expenditures flow through investing, not the IS</li>
+            <li><strong>Debt repayment:</strong> financing outflows don't affect net income</li>
+            <li><strong>Deferred revenue reversal:</strong> cash collected earlier, revenue recognized now</li>
+          </ul>
+          <p>This is why CFO is often a better signal of business quality than net income — it's harder to manipulate.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SCENARIOS -->
+  <div class="section" id="scenarios">
+    <div class="card" style="margin-bottom:16px;">
+      <div class="card-title">$10 Change Scenarios — Tax Rate 40%</div>
+      <p style="font-size:10px;color:var(--t3);margin-bottom:14px;">Memorise these. They come up in every IB first round.</p>
+      <table class="scenario-table">
+        <thead>
+          <tr>
+            <th>Change</th>
+            <th>Income Statement</th>
+            <th>Cash Flow</th>
+            <th>Balance Sheet</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>D&amp;A ↑ $10</td>
+            <td>EBIT –$10 → NI –$6 (tax saves $4)</td>
+            <td class="plus">CFO +$4 (NI –$6, D&A +$10)</td>
+            <td>PP&E –$10, Cash +$4, RE –$6 ✓</td>
+          </tr>
+          <tr>
+            <td>CapEx ↑ $10</td>
+            <td class="zero">No impact</td>
+            <td class="minus">CFI –$10</td>
+            <td>PP&E +$10, Cash –$10 (net zero) ✓</td>
+          </tr>
+          <tr>
+            <td>AR ↑ $10</td>
+            <td class="zero">No impact</td>
+            <td class="minus">CFO –$10 (NWC use)</td>
+            <td>AR +$10, Cash –$10 (net zero) ✓</td>
+          </tr>
+          <tr>
+            <td>Inventory ↑ $10</td>
+            <td class="zero">No impact (not yet sold)</td>
+            <td class="minus">CFO –$10 (NWC use)</td>
+            <td>Inventory +$10, Cash –$10 (net zero) ✓</td>
+          </tr>
+          <tr>
+            <td>AP ↑ $10</td>
+            <td class="zero">No impact</td>
+            <td class="plus">CFO +$10 (NWC source)</td>
+            <td>AP +$10, Cash +$10. L +$10, A +$10 ✓</td>
+          </tr>
+          <tr>
+            <td>Revenue ↑ $10</td>
+            <td>Revenue +$10, NI +$6 (tax $4)</td>
+            <td class="plus">CFO +$6 (assuming collected)</td>
+            <td>Cash +$6, RE +$6 ✓</td>
+          </tr>
+          <tr>
+            <td>Debt issued $10</td>
+            <td class="zero">No impact (same period)</td>
+            <td class="plus">CFF +$10</td>
+            <td>Cash +$10, Debt +$10. A +$10, L +$10 ✓</td>
+          </tr>
+          <tr>
+            <td>Inventory write-down $10</td>
+            <td>COGS +$10, NI –$6</td>
+            <td>CFO: NI –$6, add back non-cash +$10 = +$4</td>
+            <td>Inventory –$10, Cash +$4, RE –$6. A –$6, E –$6 ✓</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">Quick Reference Rules</div>
+      <div class="row"><span class="row-label">Non-cash charge on IS → add back on CFS</span><span class="row-val pos">Always</span></div>
+      <div class="row"><span class="row-label">↑ Asset (not cash) on BS → use of cash on CFS</span><span class="row-val neg">CFO ↓</span></div>
+      <div class="row"><span class="row-label">↑ Liability on BS → source of cash on CFS</span><span class="row-val pos">CFO ↑</span></div>
+      <div class="row"><span class="row-label">Tax effect: multiply by (1 – tax rate)</span><span class="row-val">e.g. ×0.6 at 40%</span></div>
+      <div class="row"><span class="row-label">BS always balances: Assets = Liabilities + Equity</span><span class="row-val" style="color:#4ADE80;">✓ Always check</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(id){
+  document.querySelectorAll('.tab').forEach((t,i)=>{
+    const ids=['statements','linkages','qa','scenarios'];
+    t.classList.toggle('active',ids[i]===id);
+  });
+  document.querySelectorAll('.section').forEach(s=>{
+    s.classList.toggle('active',s.id===id);
+  });
+}
+function toggleQA(el){
+  el.closest('.qa-item').classList.toggle('open');
+}
+function toggleTheme(){
+  const d=document.documentElement;
+  d.dataset.theme=d.dataset.theme==='light'?'':'light';
+  localStorage.setItem('theme',d.dataset.theme);
+}
+(function(){
+  const t=localStorage.getItem('theme');
+  if(t)document.documentElement.dataset.theme=t;
+})();
+</script>
+<script src="./nav.js"></script>
+</body>
+</html>

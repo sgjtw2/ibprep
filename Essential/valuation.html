@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>if(!sessionStorage.getItem('cmd-auth-v1'))window.location.replace('./login.html');</script>
+<title>VALUATION — IB PREP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#000000;--s1:#080C14;--s2:#0C1220;--card:#080C14;--card-h:#0C1220;
+  --b0:#0E1828;--b1:#162038;--b2:#1E2E4A;--b3:#2A3E5C;
+  --t1:#EEF2FF;--t2:#8898B8;--t3:#4A5A78;--t4:#2A3850;
+  --accent:#1B4FD8;--accent-l:#2D63F0;--accent-bg:rgba(27,79,216,.10);--accent-brd:rgba(27,79,216,.22);
+  --red:#C93C2E;--red-bg:rgba(201,60,46,.10);--red-brd:rgba(201,60,46,.22);
+  --green:#1E7A5A;--green-bg:rgba(30,122,90,.10);--green-brd:rgba(30,122,90,.22);
+  --yellow:#B8860B;--yellow-bg:rgba(184,134,11,.12);--yellow-brd:rgba(184,134,11,.25);
+}
+[data-theme="light"]{
+  --bg:#FFFFFF;--s1:#F8FAFC;--s2:#F1F5F9;--card:#F8FAFC;--card-h:#F1F5F9;
+  --b0:#E2E8F0;--b1:#E2E8F0;--b2:#CBD5E1;--b3:#94A3B8;
+  --t1:#0F172A;--t2:#475569;--t3:#94A3B8;--t4:#CBD5E1;
+  --accent:#1B4FD8;--accent-l:#2D63F0;--accent-bg:rgba(27,79,216,.06);--accent-brd:rgba(27,79,216,.20);
+  --red:#DC2626;--red-bg:rgba(220,38,38,.07);--red-brd:rgba(220,38,38,.20);
+  --green:#16A34A;--green-bg:rgba(22,163,74,.07);--green-brd:rgba(22,163,74,.20);
+  --yellow:#92400E;--yellow-bg:rgba(146,64,14,.07);--yellow-brd:rgba(146,64,14,.20);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:Arial,Helvetica,sans-serif;font-size:12px;}
+.hdr{height:52px;background:var(--s1);border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:16px;padding:0 20px;position:sticky;top:0;z-index:100;}
+.logo{font-weight:700;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--t1);display:flex;align-items:center;gap:7px;flex-shrink:0;text-decoration:none;}
+.logo-pip{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pip 2s ease-in-out infinite;}
+@keyframes pip{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.75);}}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.btn-back{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--s2);border:1px solid var(--b2);border-radius:3px;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--t2);text-decoration:none;transition:all .12s;}
+.btn-back:hover{color:var(--t1);border-color:var(--b3);}
+.theme-toggle{width:30px;height:30px;background:var(--s2);border:1px solid var(--b1);border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+.theme-toggle:hover{background:var(--b1);}
+.page{max-width:1100px;margin:0 auto;padding:24px 20px 60px;}
+.page-title{font-size:18px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.page-sub{font-size:11px;color:var(--t3);margin-bottom:28px;}
+.tabs{display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap;}
+.tab{padding:7px 14px;background:var(--s2);border:1px solid var(--b1);border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);cursor:pointer;transition:all .12s;}
+.tab:hover{color:var(--t2);border-color:var(--b2);}
+.tab.active{color:var(--accent);border-color:var(--accent-brd);background:var(--accent-bg);}
+.section{display:none;}
+.section.active{display:block;}
+.card{background:var(--card);border:1px solid var(--b1);border-radius:6px;padding:18px;margin-bottom:16px;}
+.card-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.card-title::after{content:'';flex:1;height:1px;background:var(--b1);}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px;}
+@media(max-width:900px){.grid-3{grid-template-columns:1fr 1fr;}}
+@media(max-width:600px){.grid-2,.grid-3{grid-template-columns:1fr;}}
+.row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--b0);gap:12px;}
+.row:last-child{border-bottom:none;}
+.lbl{color:var(--t2);font-size:11px;flex:1;}
+.lbl.i{padding-left:14px;color:var(--t3);}
+.val{font-size:11px;color:var(--t1);text-align:right;font-family:'JetBrains Mono',monospace;white-space:nowrap;}
+.val.g{color:#4ADE80;}
+.val.r{color:var(--red);}
+.val.b{color:var(--accent);}
+.total{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;gap:12px;}
+.total .lbl{font-weight:700;color:var(--t1);}
+.total .val{font-weight:700;color:var(--accent);font-family:'JetBrains Mono',monospace;}
+.divider{height:1px;background:var(--b2);margin:6px 0;}
+.formula{background:var(--s2);border:1px solid var(--b1);border-radius:3px;padding:8px 12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);margin:8px 0;line-height:1.7;white-space:pre-wrap;}
+.note{font-size:10px;color:var(--t3);line-height:1.6;margin-top:8px;}
+/* QA */
+.qa-list{display:flex;flex-direction:column;gap:10px;}
+.qa-item{background:var(--card);border:1px solid var(--b1);border-radius:6px;overflow:hidden;}
+.qa-q{padding:13px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;transition:background .12s;}
+.qa-q:hover{background:var(--card-h);}
+.qa-q-text{font-size:11px;font-weight:700;color:var(--t1);flex:1;}
+.qa-tag{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 7px;border-radius:2px;flex-shrink:0;}
+.tag-core{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-brd);}
+.tag-hard{background:var(--red-bg);color:var(--red);border:1px solid var(--red-brd);}
+.tag-concept{background:var(--green-bg);color:var(--green);border:1px solid var(--green-brd);}
+.qa-chev{font-size:10px;color:var(--t3);transition:transform .2s;flex-shrink:0;}
+.qa-item.open .qa-chev{transform:rotate(180deg);}
+.qa-a{display:none;padding:0 16px 14px;border-top:1px solid var(--b1);}
+.qa-item.open .qa-a{display:block;}
+.qa-a p{color:var(--t2);font-size:11px;line-height:1.7;margin-top:10px;}
+.qa-a p+p{margin-top:6px;}
+.qa-a strong{color:var(--t1);}
+.qa-a ul{margin:8px 0 0 16px;}
+.qa-a ul li{color:var(--t2);font-size:11px;line-height:1.7;}
+/* sensitivity table */
+.sens-wrap{overflow-x:auto;margin-top:10px;}
+.sens-table{border-collapse:collapse;font-family:'JetBrains Mono',monospace;font-size:10px;}
+.sens-table th{background:var(--s2);color:var(--t3);font-size:9px;letter-spacing:.06em;text-transform:uppercase;padding:7px 12px;border:1px solid var(--b1);text-align:center;}
+.sens-table td{padding:7px 12px;border:1px solid var(--b1);text-align:center;color:var(--t2);}
+.sens-table .axis-lbl{background:var(--s2);color:var(--t3);font-size:9px;letter-spacing:.06em;text-transform:uppercase;}
+.sens-table .hi{color:#4ADE80;background:rgba(74,222,128,.07);}
+.sens-table .mid{color:var(--accent);}
+.sens-table .lo{color:var(--red);background:var(--red-bg);}
+.sens-table .center{background:var(--accent-bg);color:var(--accent);font-weight:700;border:1px solid var(--accent-brd);}
+/* football field */
+.ff-wrap{display:flex;flex-direction:column;gap:10px;margin-top:8px;}
+.ff-row{display:flex;align-items:center;gap:12px;}
+.ff-label{font-size:10px;color:var(--t2);width:180px;flex-shrink:0;text-align:right;}
+.ff-track{flex:1;height:28px;background:var(--s2);border:1px solid var(--b1);border-radius:3px;position:relative;}
+.ff-bar{position:absolute;height:100%;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;color:#fff;white-space:nowrap;}
+.ff-axis{display:flex;justify-content:space-between;font-size:9px;color:var(--t3);font-family:'JetBrains Mono',monospace;margin-top:4px;padding:0 0 0 192px;}
+/* comps table */
+.comps-table{width:100%;border-collapse:collapse;font-size:10px;}
+.comps-table th{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--t3);padding:8px 10px;text-align:right;border-bottom:1px solid var(--b1);}
+.comps-table th:first-child{text-align:left;}
+.comps-table td{padding:7px 10px;border-bottom:1px solid var(--b0);color:var(--t2);text-align:right;font-family:'JetBrains Mono',monospace;}
+.comps-table td:first-child{text-align:left;color:var(--t1);font-family:Arial,sans-serif;}
+.comps-table tr:last-child td{border-bottom:none;}
+.comps-table .stat-row td{color:var(--accent);font-weight:700;background:var(--accent-bg);border-top:1px solid var(--accent-brd);}
+.comps-table .stat-row td:first-child{font-family:Arial,sans-serif;}
+.section-lbl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin:20px 0 10px;}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <a class="logo" href="./command-center.html"><span class="logo-pip"></span>IB PREP</a>
+  <span style="font-size:11px;color:var(--t3);">/ VALUATION</span>
+  <div class="hdr-right">
+    <a class="btn-back" href="./command-center.html">← Command Center</a>
+    <button class="theme-toggle" onclick="toggleTheme()">☀</button>
+  </div>
+</header>
+
+<div class="page">
+  <div class="page-title">Valuation</div>
+  <div class="page-sub">DCF · trading comps · precedent transactions · football field · interview Q&A</div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('dcf')">DCF</div>
+    <div class="tab" onclick="switchTab('comps')">Trading Comps</div>
+    <div class="tab" onclick="switchTab('precedent')">Precedent Transactions</div>
+    <div class="tab" onclick="switchTab('football')">Football Field</div>
+    <div class="tab" onclick="switchTab('qa')">Q&amp;A</div>
+  </div>
+
+  <!-- DCF -->
+  <div class="section active" id="dcf">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">DCF — Step by Step</div>
+        <div class="row"><span class="lbl" style="font-weight:700;color:var(--t1);">Step 1: Project FCF (5–10 yrs)</span></div>
+        <div class="row"><span class="lbl i">EBIT × (1 – tax rate)</span><span class="val">= NOPAT</span></div>
+        <div class="row"><span class="lbl i">+ D&A</span></div>
+        <div class="row"><span class="lbl i">– CapEx</span></div>
+        <div class="row"><span class="lbl i">– Δ Net Working Capital</span></div>
+        <div class="row"><span class="lbl i">= Unlevered FCF (UFCF)</span><span class="val b">→ discount at WACC</span></div>
+        <div style="margin-top:14px;"></div>
+        <div class="row"><span class="lbl" style="font-weight:700;color:var(--t1);">Step 2: Calculate WACC</span></div>
+        <div class="formula">WACC = (E/V)×Re + (D/V)×Rd×(1–t)
+
+Re  = Rf + β × ERP          (CAPM)
+Rd  = yield on company debt
+E/V = equity weight, D/V = debt weight</div>
+        <div class="row"><span class="lbl" style="font-weight:700;color:var(--t1);">Step 3: Terminal Value</span></div>
+        <div class="formula">Gordon Growth:  TV = FCF_n+1 / (WACC – g)
+Exit Multiple:  TV = EBITDA_n × Exit Multiple
+
+Discount TV:   PV(TV) = TV / (1+WACC)^n</div>
+        <div class="row"><span class="lbl" style="font-weight:700;color:var(--t1);">Step 4: Enterprise → Equity Value</span></div>
+        <div class="formula">EV  = Σ PV(FCF) + PV(Terminal Value)
+Equity = EV – Net Debt
+Price/Share = Equity Value / Diluted Shares</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">WACC Components</div>
+        <div class="row"><span class="lbl">Risk-free rate (Rf)</span><span class="val">10-yr Treasury yield (~4.2%)</span></div>
+        <div class="row"><span class="lbl">Equity Risk Premium (ERP)</span><span class="val">~5.0–5.5%</span></div>
+        <div class="row"><span class="lbl">Beta (β) — levered</span><span class="val">Industry-specific</span></div>
+        <div class="row"><span class="lbl">Beta — unlevered</span><span class="val">β_u = β_L / (1 + D/E×(1–t))</span></div>
+        <div class="row"><span class="lbl">Re (cost of equity)</span><span class="val">Rf + β × ERP</span></div>
+        <div class="row"><span class="lbl">Rd (cost of debt)</span><span class="val">Pre-tax yield on debt</span></div>
+        <div class="row"><span class="lbl">Tax shield on debt</span><span class="val">Rd × (1 – tax rate)</span></div>
+        <div class="divider"></div>
+        <div class="section-lbl">Typical Ranges by Sector</div>
+        <div class="row"><span class="lbl">Technology</span><span class="val">9–12% WACC</span></div>
+        <div class="row"><span class="lbl">Consumer / Retail</span><span class="val">8–10% WACC</span></div>
+        <div class="row"><span class="lbl">Industrials</span><span class="val">8–10% WACC</span></div>
+        <div class="row"><span class="lbl">Healthcare</span><span class="val">8–11% WACC</span></div>
+        <div class="row"><span class="lbl">Utilities</span><span class="val">5–7% WACC</span></div>
+        <div class="row"><span class="lbl">Terminal growth rate (g)</span><span class="val">1.5–3% (≤ GDP growth)</span></div>
+        <div class="note">Rule: WACC must exceed terminal growth rate or TV becomes negative/infinite.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">DCF Sensitivity Table — Implied Share Price ($)</div>
+      <p class="note" style="margin-bottom:12px;">WACC (rows) vs Terminal Growth Rate (columns). Centre cell = base case.</p>
+      <div class="sens-wrap">
+        <table class="sens-table">
+          <thead>
+            <tr>
+              <th class="axis-lbl">WACC \ g</th>
+              <th>1.0%</th><th>1.5%</th><th>2.0%</th><th>2.5%</th><th>3.0%</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="axis-lbl">8.0%</td><td class="hi">$58</td><td class="hi">$63</td><td class="hi">$69</td><td class="hi">$76</td><td class="hi">$85</td></tr>
+            <tr><td class="axis-lbl">9.0%</td><td class="mid">$47</td><td class="mid">$51</td><td class="mid">$55</td><td class="mid">$60</td><td class="hi">$66</td></tr>
+            <tr><td class="axis-lbl">10.0%</td><td class="lo">$39</td><td class="mid">$42</td><td class="center">$45</td><td class="mid">$49</td><td class="mid">$53</td></tr>
+            <tr><td class="axis-lbl">11.0%</td><td class="lo">$33</td><td class="lo">$35</td><td class="lo">$37</td><td class="mid">$40</td><td class="mid">$43</td></tr>
+            <tr><td class="axis-lbl">12.0%</td><td class="lo">$28</td><td class="lo">$30</td><td class="lo">$32</td><td class="lo">$34</td><td class="lo">$36</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note" style="margin-top:10px;">In a real model you'd build this with data tables. In an interview, show that DCF is sensitive to assumptions — this is why you always present a range, not a single number.</div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">DCF Pros &amp; Cons</div>
+        <div class="row"><span class="lbl" style="color:#4ADE80;">Intrinsic, not market-dependent</span></div>
+        <div class="row"><span class="lbl" style="color:#4ADE80;">Captures long-term value creation</span></div>
+        <div class="row"><span class="lbl" style="color:#4ADE80;">Forces explicit assumptions</span></div>
+        <div class="divider"></div>
+        <div class="row"><span class="lbl" style="color:var(--red);">Highly sensitive to WACC and g</span></div>
+        <div class="row"><span class="lbl" style="color:var(--red);">Terminal value = 60–80% of total value</span></div>
+        <div class="row"><span class="lbl" style="color:var(--red);">Garbage in, garbage out</span></div>
+        <div class="row"><span class="lbl" style="color:var(--red);">Hard to apply to early-stage / unprofitable cos</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Terminal Value Methods</div>
+        <div class="row"><span class="lbl" style="font-weight:700;color:var(--t1);">Gordon Growth Model</span></div>
+        <div class="row"><span class="lbl i">Assumes FCF grows at constant rate g forever</span></div>
+        <div class="row"><span class="lbl i">More theoretical, sensitive to g assumption</span></div>
+        <div class="row"><span class="lbl i">Best for: mature, stable businesses</span></div>
+        <div style="margin-top:10px;"></div>
+        <div class="row"><span class="lbl" style="font-weight:700;color:var(--t1);">Exit Multiple Method</span></div>
+        <div class="row"><span class="lbl i">Apply market multiple (EV/EBITDA) to final year</span></div>
+        <div class="row"><span class="lbl i">More practical, anchored to market data</span></div>
+        <div class="row"><span class="lbl i">Risk: circular if multiples are inflated</span></div>
+        <div class="note" style="margin-top:10px;">IB standard: use both, sanity-check one against the other. If they diverge significantly, revisit assumptions.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRADING COMPS -->
+  <div class="section" id="comps">
+    <div class="card">
+      <div class="card-title">Trading Comps — How to Spread a Comp Set</div>
+      <div class="grid-2" style="margin-bottom:0;">
+        <div>
+          <div class="section-lbl">Step-by-Step Process</div>
+          <div class="row"><span class="lbl"><strong style="color:var(--t1);">1.</strong> Select comparable companies</span></div>
+          <div class="row"><span class="lbl i">Same industry, similar size, similar growth profile</span></div>
+          <div class="row"><span class="lbl"><strong style="color:var(--t1);">2.</strong> Pull financials (CapIQ / Factset)</span></div>
+          <div class="row"><span class="lbl i">LTM, NTM, 2-year forward estimates</span></div>
+          <div class="row"><span class="lbl"><strong style="color:var(--t1);">3.</strong> Calendarise to same fiscal year-end</span></div>
+          <div class="row"><span class="lbl"><strong style="color:var(--t1);">4.</strong> Calculate EV for each company</span></div>
+          <div class="row"><span class="lbl i">Market Cap + Debt + Minorities – Cash</span></div>
+          <div class="row"><span class="lbl"><strong style="color:var(--t1);">5.</strong> Compute multiples, find mean/median</span></div>
+          <div class="row"><span class="lbl"><strong style="color:var(--t1);">6.</strong> Apply to target's financials → implied EV</span></div>
+          <div class="row"><span class="lbl"><strong style="color:var(--t1);">7.</strong> Bridge EV → equity value → share price</span></div>
+        </div>
+        <div>
+          <div class="section-lbl">Key Multiples</div>
+          <div class="row"><span class="lbl">EV/EBITDA</span><span class="val b">Most common for M&A</span></div>
+          <div class="row"><span class="lbl">EV/EBIT</span><span class="val">When D&A is meaningful</span></div>
+          <div class="row"><span class="lbl">EV/Revenue</span><span class="val">Pre-profit / SaaS</span></div>
+          <div class="row"><span class="lbl">P/E</span><span class="val">Equity value multiple</span></div>
+          <div class="row"><span class="lbl">P/Book</span><span class="val">Banks &amp; financials</span></div>
+          <div class="row"><span class="lbl">EV/Subscribers</span><span class="val">Telecom / streaming</span></div>
+          <div class="row"><span class="lbl">EV/Beds</span><span class="val">Healthcare / hospitals</span></div>
+          <div class="note" style="margin-top:10px;">Always use NTM multiples when possible — they reflect forward-looking expectations. LTM multiples are backward-looking and may include one-time items.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Sample Comps Table — Industrial Manufacturer (Illustrative)</div>
+      <div style="overflow-x:auto;">
+        <table class="comps-table">
+          <thead>
+            <tr>
+              <th>Company</th>
+              <th>Mkt Cap ($M)</th>
+              <th>EV ($M)</th>
+              <th>LTM Rev ($M)</th>
+              <th>LTM EBITDA ($M)</th>
+              <th>EBITDA Margin</th>
+              <th>EV/LTM EBITDA</th>
+              <th>EV/NTM EBITDA</th>
+              <th>NTM P/E</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Company A</td><td>4,200</td><td>5,100</td><td>1,800</td><td>360</td><td>20.0%</td><td>14.2×</td><td>13.0×</td><td>22×</td></tr>
+            <tr><td>Company B</td><td>2,800</td><td>3,400</td><td>1,200</td><td>216</td><td>18.0%</td><td>15.7×</td><td>14.2×</td><td>24×</td></tr>
+            <tr><td>Company C</td><td>1,500</td><td>1,900</td><td>700</td><td>112</td><td>16.0%</td><td>17.0×</td><td>15.1×</td><td>26×</td></tr>
+            <tr><td>Company D</td><td>6,100</td><td>7,200</td><td>2,500</td><td>550</td><td>22.0%</td><td>13.1×</td><td>11.8×</td><td>20×</td></tr>
+            <tr><td>Company E</td><td>900</td><td>1,100</td><td>450</td><td>67</td><td>14.9%</td><td>16.4×</td><td>14.8×</td><td>25×</td></tr>
+            <tr class="stat-row"><td>Mean</td><td>—</td><td>—</td><td>—</td><td>—</td><td>18.2%</td><td>15.3×</td><td>13.8×</td><td>23×</td></tr>
+            <tr class="stat-row"><td>Median</td><td>—</td><td>—</td><td>—</td><td>—</td><td>18.0%</td><td>15.7×</td><td>14.2×</td><td>24×</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note" style="margin-top:10px;">Interviewers expect you to know whether to use mean or median — use median when there are outliers skewing the average. Always exclude clearly non-comparable peers.</div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Trading Comps Pros &amp; Cons</div>
+        <div class="row"><span class="lbl" style="color:#4ADE80;">Market-based, reflects current sentiment</span></div>
+        <div class="row"><span class="lbl" style="color:#4ADE80;">Easy to compute from public data</span></div>
+        <div class="row"><span class="lbl" style="color:#4ADE80;">Widely used benchmark for pricing</span></div>
+        <div class="divider"></div>
+        <div class="row"><span class="lbl" style="color:var(--red);">No control premium (minority basis)</span></div>
+        <div class="row"><span class="lbl" style="color:var(--red);">Distorted in bull/bear markets</span></div>
+        <div class="row"><span class="lbl" style="color:var(--red);">Hard to find truly comparable peers</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">EV Bridge — EV to Equity Value</div>
+        <div class="formula">Equity Value = EV
+  – Total Debt
+  – Preferred Stock
+  – Minority Interest
+  + Cash &amp; Equivalents
+  + Investments (if any)</div>
+        <div class="note">Always use diluted shares (options, warrants, convertibles) when computing implied share price. Use treasury stock method for in-the-money options.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRECEDENT TRANSACTIONS -->
+  <div class="section" id="precedent">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Precedent Transactions vs Trading Comps</div>
+        <div class="row"><span class="lbl">Basis</span><span class="val">Control premium included</span></div>
+        <div class="row"><span class="lbl">Typical premium</span><span class="val">20–40% over spot price</span></div>
+        <div class="row"><span class="lbl">Why higher than comps</span><span class="val">Synergies + control</span></div>
+        <div class="row"><span class="lbl">Time period</span><span class="val">Last 3–5 years (relevant market)</span></div>
+        <div class="row"><span class="lbl">Data source</span><span class="val">CapIQ, Factset, SEC filings</span></div>
+        <div class="row"><span class="lbl">When to use</span><span class="val">M&A fairness opinions, sell-side</span></div>
+        <div class="note" style="margin-top:10px;">Precedent transactions give the highest implied value — buyers pay a control premium. Use them to set the ceiling in a football field, trading comps as the floor.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Key Metrics to Spread</div>
+        <div class="row"><span class="lbl">EV/LTM EBITDA</span><span class="val b">Primary</span></div>
+        <div class="row"><span class="lbl">EV/LTM EBIT</span><span class="val">Secondary</span></div>
+        <div class="row"><span class="lbl">EV/LTM Revenue</span><span class="val">Growth businesses</span></div>
+        <div class="row"><span class="lbl">Premium to unaffected price</span><span class="val">30-day VWAP</span></div>
+        <div class="row"><span class="lbl">Premium to 52-week high</span><span class="val">Context check</span></div>
+        <div class="row"><span class="lbl">Deal size ($M)</span><span class="val">Filter for relevance</span></div>
+        <div class="note" style="margin-top:10px;">Always note whether multiples are based on pre-synergy or post-synergy EBITDA. Buyers often justify high multiples with synergies.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Sample Precedent Transactions — Industrial Sector (Illustrative)</div>
+      <div style="overflow-x:auto;">
+        <table class="comps-table">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Target</th>
+              <th>Acquirer</th>
+              <th>Deal Value ($M)</th>
+              <th>EV/LTM EBITDA</th>
+              <th>EV/LTM Revenue</th>
+              <th>Premium to Spot</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Jan 2024</td><td>Target A</td><td>Strategic Buyer</td><td>3,200</td><td>16.5×</td><td>2.1×</td><td>32%</td></tr>
+            <tr><td>Aug 2023</td><td>Target B</td><td>PE Sponsor</td><td>1,800</td><td>14.8×</td><td>1.8×</td><td>—</td></tr>
+            <tr><td>Mar 2023</td><td>Target C</td><td>Strategic Buyer</td><td>5,400</td><td>18.2×</td><td>2.4×</td><td>38%</td></tr>
+            <tr><td>Nov 2022</td><td>Target D</td><td>Strategic Buyer</td><td>900</td><td>13.6×</td><td>1.5×</td><td>25%</td></tr>
+            <tr><td>Jun 2022</td><td>Target E</td><td>PE Sponsor</td><td>2,100</td><td>15.9×</td><td>1.9×</td><td>—</td></tr>
+            <tr class="stat-row"><td>Mean</td><td>—</td><td>—</td><td>—</td><td>15.8×</td><td>1.9×</td><td>32%</td></tr>
+            <tr class="stat-row"><td>Median</td><td>—</td><td>—</td><td>—</td><td>15.9×</td><td>1.9×</td><td>32%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note" style="margin-top:10px;">PE-sponsored deals (no strategic synergies) typically price lower than strategic deals. Always note deal type when presenting precedents.</div>
+    </div>
+  </div>
+
+  <!-- FOOTBALL FIELD -->
+  <div class="section" id="football">
+    <div class="card">
+      <div class="card-title">Football Field — Implied Share Price by Methodology</div>
+      <p class="note" style="margin-bottom:20px;">Visual summary of all valuation methods. Present ranges, not point estimates. The overlap zone is your "fairness" range.</p>
+      <div class="ff-wrap">
+        <div class="ff-row">
+          <div class="ff-label">52-Week Trading Range</div>
+          <div class="ff-track">
+            <div class="ff-bar" style="left:5%;width:25%;background:#2A3E5C;">$28 – $41</div>
+          </div>
+        </div>
+        <div class="ff-row">
+          <div class="ff-label">Trading Comps (EV/EBITDA)</div>
+          <div class="ff-track">
+            <div class="ff-bar" style="left:15%;width:28%;background:var(--accent);">$36 – $52</div>
+          </div>
+        </div>
+        <div class="ff-row">
+          <div class="ff-label">DCF (WACC 9–11%, g 2–2.5%)</div>
+          <div class="ff-track">
+            <div class="ff-bar" style="left:20%;width:32%;background:var(--green);">$40 – $58</div>
+          </div>
+        </div>
+        <div class="ff-row">
+          <div class="ff-label">Precedent Transactions</div>
+          <div class="ff-track">
+            <div class="ff-bar" style="left:30%;width:30%;background:var(--yellow);">$51 – $67</div>
+          </div>
+        </div>
+        <div class="ff-row">
+          <div class="ff-label">LBO (20% IRR floor)</div>
+          <div class="ff-track">
+            <div class="ff-bar" style="left:10%;width:22%;background:var(--red);">$30 – $44</div>
+          </div>
+        </div>
+        <div class="ff-axis">
+          <span>$20</span><span>$30</span><span>$40</span><span>$50</span><span>$60</span><span>$70</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Valuation Hierarchy</div>
+        <div class="row"><span class="lbl">Highest implied value</span><span class="val" style="color:var(--yellow);">Precedent Transactions</span></div>
+        <div class="row"><span class="lbl">Mid range</span><span class="val b">DCF / Trading Comps</span></div>
+        <div class="row"><span class="lbl">Floor (financial buyer)</span><span class="val" style="color:var(--red);">LBO Analysis</span></div>
+        <div class="row"><span class="lbl">Market reality check</span><span class="val" style="color:var(--t3);">52-week range</span></div>
+        <div class="note" style="margin-top:10px;">In a sell-side mandate, you want to show the highest defensible valuation. In a buy-side mandate, you want to know the floor so you don't overpay.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">When to Use Each Method</div>
+        <div class="row"><span class="lbl">DCF</span><span class="val">Stable FCF, long track record</span></div>
+        <div class="row"><span class="lbl">Trading Comps</span><span class="val">Publicly traded peers exist</span></div>
+        <div class="row"><span class="lbl">Precedent Txns</span><span class="val">M&A context, fairness opinion</span></div>
+        <div class="row"><span class="lbl">LBO</span><span class="val">PE acquirer in process</span></div>
+        <div class="row"><span class="lbl">Sum-of-Parts</span><span class="val">Conglomerate / multi-segment</span></div>
+        <div class="row"><span class="lbl">NAV</span><span class="val">Real estate, mining, oil &amp; gas</span></div>
+        <div class="row"><span class="lbl">DDM</span><span class="val">Banks, insurance companies</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q&A -->
+  <div class="section" id="qa">
+    <div class="qa-list">
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">Walk me through a DCF.</span>
+          <span class="qa-tag tag-core">CORE</span><span class="qa-chev">▼</span>
+        </div>
+        <div class="qa-a">
+          <p>A DCF values a company based on the present value of its future free cash flows. There are four steps:</p>
+          <p><strong>1. Project unlevered FCF</strong> over a 5–10 year explicit forecast period. FCF = EBIT×(1–t) + D&A – CapEx – ΔNWC.</p>
+          <p><strong>2. Calculate WACC</strong> — the blended cost of capital. Cost of equity via CAPM (Rf + β×ERP), cost of debt after-tax, weighted by capital structure.</p>
+          <p><strong>3. Calculate terminal value</strong> — either Gordon Growth (FCF/(WACC–g)) or exit multiple (EBITDA × multiple). Discount it back to present value.</p>
+          <p><strong>4. Sum the PV of FCFs and PV of terminal value</strong> to get enterprise value. Subtract net debt to get equity value, divide by diluted shares for implied price.</p>
+          <p>The key weakness is that terminal value typically represents 60–80% of total value, making the result very sensitive to WACC and growth rate assumptions.</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">What happens to a DCF if WACC increases?</span>
+          <span class="qa-tag tag-core">CORE</span><span class="qa-chev">▼</span>
+        </div>
+        <div class="qa-a">
+          <p>Implied value decreases. A higher WACC means future cash flows are discounted more heavily, reducing their present value. Both the PV of the projection period FCFs and the PV of terminal value fall.</p>
+          <p>The terminal value is especially sensitive because it uses WACC in the denominator: TV = FCF/(WACC–g). A 1% increase in WACC on a company with 2% terminal growth rate and 10% WACC changes the denominator from 8% to 9% — an 11% reduction in terminal value.</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">Why do precedent transactions trade at a premium to trading comps?</span>
+          <span class="qa-tag tag-concept">CONCEPT</span><span class="qa-chev">▼</span>
+        </div>
+        <div class="qa-a">
+          <p>Two reasons: <strong>control premium</strong> and <strong>synergies</strong>.</p>
+          <p>Trading comps reflect minority, non-controlling interests — you're buying a share, not the whole company. When a buyer acquires a company outright, they gain control: the ability to change management, strategy, capital allocation. That control has value, so buyers pay a premium (typically 20–40%).</p>
+          <p>Strategic buyers also pay for synergies — cost savings (headcount reduction, procurement) and revenue synergies (cross-selling, distribution). These future benefits justify a higher price today.</p>
+          <p>PE buyers pay less than strategics because they don't realise revenue synergies — they rely on operational improvements and leverage.</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">How do you calculate WACC, and what are its components?</span>
+          <span class="qa-tag tag-core">CORE</span><span class="qa-chev">▼</span>
+        </div>
+        <div class="qa-a">
+          <p><strong>WACC = (E/V)×Re + (D/V)×Rd×(1–t)</strong></p>
+          <p>Cost of equity (Re) = Rf + β × ERP. The risk-free rate is the 10-year Treasury yield (~4.2% today). The equity risk premium is the excess return investors expect over risk-free (~5%). Beta measures systematic risk relative to the market.</p>
+          <p>Cost of debt (Rd) is the yield on the company's debt, tax-effected because interest is deductible.</p>
+          <p>Weights (E/V and D/V) should use <strong>market value</strong> of equity and debt, not book value. For a private company, you'd use a comparable public company's capital structure or the target capital structure.</p>
+          <p>Beta for private companies: unlever the beta of comparable public companies, then re-lever at the target's capital structure.</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">When would you NOT use a DCF?</span>
+          <span class="qa-tag tag-hard">HARD</span><span class="qa-chev">▼</span>
+        </div>
+        <div class="qa-a">
+          <p>DCF is unreliable when:</p>
+          <ul>
+            <li><strong>Unprofitable / early-stage companies</strong> — negative FCF for many years makes terminal value dominate entirely</li>
+            <li><strong>Highly cyclical businesses</strong> — normalisation of earnings is arbitrary</li>
+            <li><strong>Financial companies</strong> (banks, insurance) — FCF is not meaningful; use DDM or P/Book instead</li>
+            <li><strong>Companies in distress</strong> — going-concern assumptions break down; use liquidation or restructuring analysis</li>
+            <li><strong>Resource companies</strong> (mining, oil) — use NAV, which models reserves explicitly</li>
+          </ul>
+          <p>In practice, DCF is most reliable for mature, stable businesses with predictable FCF and a long operating history.</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">What is the difference between enterprise value and equity value?</span>
+          <span class="qa-tag tag-core">CORE</span><span class="qa-chev">▼</span>
+        </div>
+        <div class="qa-a">
+          <p><strong>Enterprise value (EV)</strong> is the total value of the business — what you'd pay to buy 100% of the company, including its debt. It represents value to all capital providers (debt and equity holders).</p>
+          <p><strong>Equity value</strong> is what remains for equity holders after debt is repaid. Equity Value = EV – Net Debt.</p>
+          <p>EV is capital-structure neutral, making it useful for comparing companies with different leverage. Most operating multiples (EV/EBITDA, EV/EBIT) use EV. Equity multiples (P/E) use equity value.</p>
+          <p>Key bridge: EV = Market Cap + Total Debt + Preferred Stock + Minority Interest – Cash &amp; Equivalents.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(id){
+  const ids=['dcf','comps','precedent','football','qa'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',ids[i]===id));
+  document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===id));
+}
+function toggleQA(el){el.closest('.qa-item').classList.toggle('open');}
+function toggleTheme(){
+  const d=document.documentElement;
+  d.dataset.theme=d.dataset.theme==='light'?'':'light';
+  localStorage.setItem('theme',d.dataset.theme);
+}
+(function(){const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t;})();
+</script>
+<script src="./nav.js"></script>
+</body>
+</html>

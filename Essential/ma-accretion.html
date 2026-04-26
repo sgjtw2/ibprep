@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>if(!sessionStorage.getItem('cmd-auth-v1'))window.location.replace('./login.html');</script>
+<title>M&A / ACCRETION — IB PREP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#000000;--s1:#080C14;--s2:#0C1220;--card:#080C14;--card-h:#0C1220;
+  --b0:#0E1828;--b1:#162038;--b2:#1E2E4A;--b3:#2A3E5C;
+  --t1:#EEF2FF;--t2:#8898B8;--t3:#4A5A78;--t4:#2A3850;
+  --accent:#1B4FD8;--accent-l:#2D63F0;--accent-bg:rgba(27,79,216,.10);--accent-brd:rgba(27,79,216,.22);
+  --red:#C93C2E;--red-bg:rgba(201,60,46,.10);--red-brd:rgba(201,60,46,.22);
+  --green:#1E7A5A;--green-bg:rgba(30,122,90,.10);--green-brd:rgba(30,122,90,.22);
+  --yellow:#B8860B;--yellow-bg:rgba(184,134,11,.12);--yellow-brd:rgba(184,134,11,.25);
+}
+[data-theme="light"]{
+  --bg:#FFFFFF;--s1:#F8FAFC;--s2:#F1F5F9;--card:#F8FAFC;--card-h:#F1F5F9;
+  --b0:#E2E8F0;--b1:#E2E8F0;--b2:#CBD5E1;--b3:#94A3B8;
+  --t1:#0F172A;--t2:#475569;--t3:#94A3B8;--t4:#CBD5E1;
+  --accent:#1B4FD8;--accent-l:#2D63F0;--accent-bg:rgba(27,79,216,.06);--accent-brd:rgba(27,79,216,.20);
+  --red:#DC2626;--red-bg:rgba(220,38,38,.07);--red-brd:rgba(220,38,38,.20);
+  --green:#16A34A;--green-bg:rgba(22,163,74,.07);--green-brd:rgba(22,163,74,.20);
+  --yellow:#92400E;--yellow-bg:rgba(146,64,14,.07);--yellow-brd:rgba(146,64,14,.20);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:Arial,Helvetica,sans-serif;font-size:12px;}
+.hdr{height:52px;background:var(--s1);border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:16px;padding:0 20px;position:sticky;top:0;z-index:100;}
+.logo{font-weight:700;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--t1);display:flex;align-items:center;gap:7px;flex-shrink:0;text-decoration:none;}
+.logo-pip{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pip 2s ease-in-out infinite;}
+@keyframes pip{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.75);}}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.btn-back{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--s2);border:1px solid var(--b2);border-radius:3px;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--t2);text-decoration:none;transition:all .12s;}
+.btn-back:hover{color:var(--t1);border-color:var(--b3);}
+.theme-toggle{width:30px;height:30px;background:var(--s2);border:1px solid var(--b1);border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+.theme-toggle:hover{background:var(--b1);}
+.page{max-width:1100px;margin:0 auto;padding:24px 20px 60px;}
+.page-title{font-size:18px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.page-sub{font-size:11px;color:var(--t3);margin-bottom:28px;}
+.tabs{display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap;}
+.tab{padding:7px 14px;background:var(--s2);border:1px solid var(--b1);border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);cursor:pointer;transition:all .12s;}
+.tab:hover{color:var(--t2);border-color:var(--b2);}
+.tab.active{color:var(--accent);border-color:var(--accent-brd);background:var(--accent-bg);}
+.section{display:none;}
+.section.active{display:block;}
+.card{background:var(--card);border:1px solid var(--b1);border-radius:6px;padding:18px;margin-bottom:16px;}
+.card-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.card-title::after{content:'';flex:1;height:1px;background:var(--b1);}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px;}
+@media(max-width:900px){.grid-3{grid-template-columns:1fr 1fr;}}
+@media(max-width:600px){.grid-2,.grid-3{grid-template-columns:1fr;}}
+.row{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:1px solid var(--b0);gap:12px;}
+.row:last-child{border-bottom:none;}
+.lbl{color:var(--t2);font-size:11px;flex:1;}
+.lbl.i{padding-left:14px;color:var(--t3);}
+.val{font-size:11px;color:var(--t1);text-align:right;font-family:'JetBrains Mono',monospace;white-space:nowrap;}
+.val.g{color:#4ADE80;}
+.val.r{color:var(--red);}
+.val.b{color:var(--accent);}
+.total{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;gap:12px;}
+.total .lbl{font-weight:700;color:var(--t1);}
+.total .val{font-weight:700;color:var(--accent);font-family:'JetBrains Mono',monospace;}
+.divider{height:1px;background:var(--b2);margin:6px 0;}
+.formula{background:var(--s2);border:1px solid var(--b1);border-radius:3px;padding:8px 12px;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);margin:8px 0;line-height:1.7;white-space:pre-wrap;}
+.note{font-size:10px;color:var(--t3);line-height:1.6;margin-top:6px;}
+.section-lbl{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--t3);margin:16px 0 8px;}
+/* accretion model */
+.model-table{width:100%;border-collapse:collapse;font-size:11px;}
+.model-table th{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--t3);padding:8px 14px;text-align:right;border-bottom:1px solid var(--b1);background:var(--s2);}
+.model-table th:first-child{text-align:left;}
+.model-table td{padding:7px 14px;border-bottom:1px solid var(--b0);font-family:'JetBrains Mono',monospace;text-align:right;color:var(--t2);}
+.model-table td:first-child{text-align:left;font-family:Arial,sans-serif;color:var(--t2);}
+.model-table .strong td{color:var(--t1);font-weight:700;}
+.model-table .strong td:first-child{color:var(--t1);}
+.model-table .result-row td{color:var(--accent);font-weight:700;background:var(--accent-bg);border-top:2px solid var(--accent-brd);}
+.model-table .result-row td:first-child{font-family:Arial,sans-serif;}
+.model-table .result-row.acc td{color:#4ADE80;background:var(--green-bg);}
+.model-table .result-row.dil td{color:var(--red);background:var(--red-bg);}
+/* badge */
+.badge{display:inline-block;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:2px;}
+.badge-acc{background:var(--green-bg);color:#4ADE80;border:1px solid var(--green-brd);}
+.badge-dil{background:var(--red-bg);color:var(--red);border:1px solid var(--red-brd);}
+.badge-neutral{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-brd);}
+/* QA */
+.qa-list{display:flex;flex-direction:column;gap:10px;}
+.qa-item{background:var(--card);border:1px solid var(--b1);border-radius:6px;overflow:hidden;}
+.qa-q{padding:13px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;transition:background .12s;}
+.qa-q:hover{background:var(--card-h);}
+.qa-q-text{font-size:11px;font-weight:700;color:var(--t1);flex:1;}
+.qa-tag{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 7px;border-radius:2px;flex-shrink:0;}
+.tag-core{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-brd);}
+.tag-hard{background:var(--red-bg);color:var(--red);border:1px solid var(--red-brd);}
+.tag-concept{background:var(--green-bg);color:var(--green);border:1px solid var(--green-brd);}
+.qa-chev{font-size:10px;color:var(--t3);transition:transform .2s;flex-shrink:0;}
+.qa-item.open .qa-chev{transform:rotate(180deg);}
+.qa-a{display:none;padding:0 16px 14px;border-top:1px solid var(--b1);}
+.qa-item.open .qa-a{display:block;}
+.qa-a p{color:var(--t2);font-size:11px;line-height:1.7;margin-top:10px;}
+.qa-a p+p{margin-top:6px;}
+.qa-a strong{color:var(--t1);}
+.qa-a ul{margin:8px 0 0 16px;}
+.qa-a ul li{color:var(--t2);font-size:11px;line-height:1.7;}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <a class="logo" href="./command-center.html"><span class="logo-pip"></span>IB PREP</a>
+  <span style="font-size:11px;color:var(--t3);">/ M&amp;A · ACCRETION</span>
+  <div class="hdr-right">
+    <a class="btn-back" href="./command-center.html">← Command Center</a>
+    <button class="theme-toggle" onclick="toggleTheme()">☀</button>
+  </div>
+</header>
+
+<div class="page">
+  <div class="page-title">M&amp;A &amp; Accretion / Dilution</div>
+  <div class="page-sub">Deal structure · accretion-dilution model · PPA · synergies · interview Q&A</div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('structure')">Deal Structure</div>
+    <div class="tab" onclick="switchTab('accretion')">Accretion / Dilution</div>
+    <div class="tab" onclick="switchTab('ppa')">PPA &amp; Goodwill</div>
+    <div class="tab" onclick="switchTab('synergies')">Synergies</div>
+    <div class="tab" onclick="switchTab('qa')">Q&amp;A</div>
+  </div>
+
+  <!-- DEAL STRUCTURE -->
+  <div class="section active" id="structure">
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-title">All-Cash Deal</div>
+        <div class="row"><span class="lbl">Consideration</span><span class="val">100% cash</span></div>
+        <div class="row"><span class="lbl">Funded by</span><span class="val">Debt + existing cash</span></div>
+        <div class="row"><span class="lbl">Dilution to buyer</span><span class="val g">None</span></div>
+        <div class="row"><span class="lbl">EPS impact</span><span class="val">Depends on after-tax cost of debt</span></div>
+        <div class="row"><span class="lbl">Target shareholders</span><span class="val">Exit fully, no upside</span></div>
+        <div class="row"><span class="lbl">Tax to target shareholders</span><span class="val r">Immediate capital gains tax</span></div>
+        <div class="note">Buyer takes on all risk. Accretive if target's earnings yield exceeds after-tax cost of debt.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">All-Stock Deal</div>
+        <div class="row"><span class="lbl">Consideration</span><span class="val">100% buyer shares</span></div>
+        <div class="row"><span class="lbl">Funded by</span><span class="val">New share issuance</span></div>
+        <div class="row"><span class="lbl">Dilution to buyer</span><span class="val r">Yes — shares outstanding ↑</span></div>
+        <div class="row"><span class="lbl">EPS impact</span><span class="val">Depends on relative P/E</span></div>
+        <div class="row"><span class="lbl">Target shareholders</span><span class="val">Retain upside in combined co.</span></div>
+        <div class="row"><span class="lbl">Tax to target shareholders</span><span class="val g">Tax-deferred (Section 368)</span></div>
+        <div class="note">Accretive if buyer P/E &gt; target P/E (buyer's stock is "cheap" currency). Dilutive if buyer P/E &lt; target P/E.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Mixed Deal (Cash + Stock)</div>
+        <div class="row"><span class="lbl">Consideration</span><span class="val">Split (e.g. 60% cash, 40% stock)</span></div>
+        <div class="row"><span class="lbl">Funded by</span><span class="val">Debt + new shares</span></div>
+        <div class="row"><span class="lbl">Risk sharing</span><span class="val">Partial — both parties exposed</span></div>
+        <div class="row"><span class="lbl">EPS impact</span><span class="val">Blend of cash &amp; stock effects</span></div>
+        <div class="row"><span class="lbl">Common in</span><span class="val">Large strategic deals</span></div>
+        <div class="row"><span class="lbl">Earnout structures</span><span class="val">Additional deferred consideration</span></div>
+        <div class="note">Most real-world deals are mixed. The split is negotiated based on buyer leverage capacity and target's desire for liquidity vs. upside participation.</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">M&A Process — Sell-Side</div>
+        <div class="row"><span class="lbl"><strong style="color:var(--t1);">1.</strong> Mandate &amp; Preparation</span><span class="val" style="color:var(--t3);">4–6 wks</span></div>
+        <div class="row"><span class="lbl i">CIM, management presentation, data room</span></div>
+        <div class="row"><span class="lbl"><strong style="color:var(--t1);">2.</strong> First Round — IOIs</span><span class="val" style="color:var(--t3);">3–4 wks</span></div>
+        <div class="row"><span class="lbl i">Indicative offers from strategic &amp; financial buyers</span></div>
+        <div class="row"><span class="lbl"><strong style="color:var(--t1);">3.</strong> Second Round — Best &amp; Final</span><span class="val" style="color:var(--t3);">4–6 wks</span></div>
+        <div class="row"><span class="lbl i">Management meetings, further diligence, binding bids</span></div>
+        <div class="row"><span class="lbl"><strong style="color:var(--t1);">4.</strong> Exclusivity &amp; Negotiation</span><span class="val" style="color:var(--t3);">4–8 wks</span></div>
+        <div class="row"><span class="lbl i">SPA negotiation, final due diligence, signing</span></div>
+        <div class="row"><span class="lbl"><strong style="color:var(--t1);">5.</strong> Closing</span><span class="val" style="color:var(--t3);">1–3 months</span></div>
+        <div class="row"><span class="lbl i">Regulatory approvals, conditions precedent, funds flow</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">Key M&A Documents</div>
+        <div class="row"><span class="lbl">CIM (Confidential Info Memo)</span><span class="val">Sell-side marketing doc</span></div>
+        <div class="row"><span class="lbl">IOI (Indication of Interest)</span><span class="val">Non-binding first bid</span></div>
+        <div class="row"><span class="lbl">LOI / Term Sheet</span><span class="val">Key terms, often binding</span></div>
+        <div class="row"><span class="lbl">NDA / CA</span><span class="val">Confidentiality agreement</span></div>
+        <div class="row"><span class="lbl">SPA (Stock Purchase Agreement)</span><span class="val">Binding acquisition contract</span></div>
+        <div class="row"><span class="lbl">Fairness Opinion</span><span class="val">Board-level valuation sign-off</span></div>
+        <div class="row"><span class="lbl">Proxy Statement</span><span class="val">Shareholder vote material</span></div>
+        <div class="row"><span class="lbl">HSR / Antitrust Filing</span><span class="val">Regulatory clearance</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACCRETION / DILUTION -->
+  <div class="section" id="accretion">
+    <div class="card">
+      <div class="card-title">Accretion / Dilution — Core Logic</div>
+      <div class="grid-2" style="margin-bottom:0;">
+        <div>
+          <div class="formula">Pro Forma EPS = (Buyer NI + Target NI + Synergies – Financing Costs)
+                  / Pro Forma Diluted Shares
+
+Accretion = Pro Forma EPS > Standalone EPS
+Dilution  = Pro Forma EPS < Standalone EPS</div>
+          <div class="section-lbl">All-Stock Breakeven Rule</div>
+          <div class="formula">Accretive if:  Buyer P/E > Target P/E (after premium)
+Dilutive if:  Buyer P/E < Target P/E (after premium)</div>
+          <div class="note">The "exchange ratio" in stock deals determines how many buyer shares the target gets. A higher exchange ratio = more dilution to buyer.</div>
+        </div>
+        <div>
+          <div class="section-lbl">All-Cash Breakeven Rule</div>
+          <div class="formula">Accretive if:  Target Earnings Yield > After-tax Cost of Debt
+               i.e. (Target NI / Purchase Price) > Rd×(1–t)</div>
+          <div class="section-lbl">Factors That Drive Accretion</div>
+          <div class="row"><span class="lbl">High target earnings relative to price</span><span class="val g">↑ accretive</span></div>
+          <div class="row"><span class="lbl">Cost synergies (immediate)</span><span class="val g">↑ accretive</span></div>
+          <div class="row"><span class="lbl">Low cost of financing (low rates)</span><span class="val g">↑ accretive</span></div>
+          <div class="row"><span class="lbl">High acquisition premium paid</span><span class="val r">↑ dilutive</span></div>
+          <div class="row"><span class="lbl">Lots of new shares issued</span><span class="val r">↑ dilutive</span></div>
+          <div class="row"><span class="lbl">D&A step-up from PPA</span><span class="val r">↑ dilutive</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Worked Example — Stock Deal Accretion / Dilution</div>
+      <div style="overflow-x:auto;">
+        <table class="model-table">
+          <thead>
+            <tr>
+              <th style="text-align:left;">Item</th>
+              <th>Acquirer</th>
+              <th>Target</th>
+              <th>Pro Forma Combined</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Net Income ($M)</td><td>500</td><td>100</td><td>—</td></tr>
+            <tr><td>Diluted Shares (M)</td><td>200</td><td>50</td><td>—</td></tr>
+            <tr><td>EPS ($)</td><td>2.50</td><td>2.00</td><td>—</td></tr>
+            <tr><td>Share Price ($)</td><td>50.00</td><td>30.00</td><td>—</td></tr>
+            <tr><td>P/E Multiple</td><td>20.0×</td><td>15.0×</td><td>—</td></tr>
+            <tr class="strong"><td colspan="4" style="padding-top:14px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);">Deal Assumptions</td></tr>
+            <tr><td>Acquisition Premium</td><td>—</td><td>30%</td><td>—</td></tr>
+            <tr><td>Offer Price per Share ($)</td><td>—</td><td>39.00</td><td>—</td></tr>
+            <tr><td>Deal Value ($M)</td><td>—</td><td>1,950</td><td>—</td></tr>
+            <tr><td>Exchange Ratio (Acquirer shares per Target)</td><td>—</td><td>0.78×</td><td>—</td></tr>
+            <tr><td>New Shares Issued (M)</td><td>—</td><td>—</td><td>39.0</td></tr>
+            <tr class="strong"><td colspan="4" style="padding-top:14px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);">Pro Forma Income Statement</td></tr>
+            <tr><td>Acquirer Net Income</td><td>500</td><td>—</td><td>500</td></tr>
+            <tr><td>Target Net Income</td><td>—</td><td>100</td><td>100</td></tr>
+            <tr><td>Pre-tax Synergies</td><td>—</td><td>—</td><td>20</td></tr>
+            <tr><td>Tax on Synergies (25%)</td><td>—</td><td>—</td><td>(5)</td></tr>
+            <tr><td>D&A Step-up (after-tax)</td><td>—</td><td>—</td><td>(8)</td></tr>
+            <tr class="result-row acc"><td>Pro Forma Net Income ($M)</td><td>—</td><td>—</td><td>607</td></tr>
+            <tr class="strong"><td colspan="4" style="padding-top:14px;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);">EPS Bridge</td></tr>
+            <tr><td>Pro Forma Diluted Shares (M)</td><td>200</td><td>—</td><td>239</td></tr>
+            <tr class="result-row acc"><td>Pro Forma EPS ($)</td><td>2.50</td><td>—</td><td>2.54</td></tr>
+            <tr class="result-row acc"><td>Accretion / (Dilution)</td><td>—</td><td>—</td><td>+$0.04 (+1.6%) ✓ ACCRETIVE</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note" style="margin-top:10px;">Accretive because buyer P/E (20×) &gt; effective target P/E after premium (19.5×). Without synergies, the deal is nearly breakeven — synergies push it accretive.</div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Breakeven Analysis</div>
+        <div class="formula">Breakeven synergies needed:
+= (Financing Cost – Target NI) / (1 – tax rate)
+
+For stock deal: breakeven when
+Pro Forma EPS = Standalone EPS</div>
+        <div class="note">Always ask: "what synergies does management need to assume to justify this deal?" If the breakeven is unrealistically high, the deal is questionable.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Common Interview Traps</div>
+        <div class="row"><span class="lbl">All-cash is always accretive</span><span class="val r">False — depends on cost of financing</span></div>
+        <div class="row"><span class="lbl">Accretive = good deal</span><span class="val r">False — may overpay with synergies</span></div>
+        <div class="row"><span class="lbl">Higher P/E buyer always accretive</span><span class="val r">False — need to compare post-premium P/E</span></div>
+        <div class="row"><span class="lbl">Dilutive deals should be avoided</span><span class="val r">False — may be strategically correct</span></div>
+        <div class="note" style="margin-top:10px;">Accretion/dilution is a short-term EPS metric. A deal can be dilutive in year 1 but create long-term value through growth and synergies.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PPA -->
+  <div class="section" id="ppa">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Purchase Price Allocation (PPA)</div>
+        <div class="formula">Goodwill = Purchase Price
+        – Fair Value of Net Identifiable Assets
+        – Fair Value Write-ups (PP&E, Intangibles)</div>
+        <div class="section-lbl">Step by Step</div>
+        <div class="row"><span class="lbl"><strong style="color:var(--t1);">1.</strong> Determine purchase price</span></div>
+        <div class="row"><span class="lbl"><strong style="color:var(--t1);">2.</strong> Identify all tangible assets &amp; liabilities at fair value</span></div>
+        <div class="row"><span class="lbl"><strong style="color:var(--t1);">3.</strong> Identify and value intangible assets (customer lists, IP, brand)</span></div>
+        <div class="row"><span class="lbl"><strong style="color:var(--t1);">4.</strong> Write-up PP&E to fair value (if book value understated)</span></div>
+        <div class="row"><span class="lbl"><strong style="color:var(--t1);">5.</strong> Residual = goodwill (not allocated to specific assets)</span></div>
+        <div class="note" style="margin-top:10px;">Under US GAAP, goodwill is not amortized but tested for impairment annually. Acquired intangibles with finite lives are amortized — this is the D&A step-up that hurts EPS.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Impact of PPA on Financials</div>
+        <div class="row"><span class="lbl">PP&E write-up</span><span class="val r">↑ D&A → ↓ NI</span></div>
+        <div class="row"><span class="lbl">Intangible write-up (finite life)</span><span class="val r">↑ Amort → ↓ NI</span></div>
+        <div class="row"><span class="lbl">Inventory write-up</span><span class="val r">One-time COGS hit when sold → ↓ NI</span></div>
+        <div class="row"><span class="lbl">Deferred revenue write-down</span><span class="val r">↓ Revenue in Year 1</span></div>
+        <div class="row"><span class="lbl">Goodwill (infinite life)</span><span class="val">No amortization (US GAAP)</span></div>
+        <div class="row"><span class="lbl">Deferred tax liability</span><span class="val r">Created by write-ups → ↑ L</span></div>
+        <div class="note" style="margin-top:10px;">PPA step-ups are non-cash (after initial recognition) but reduce GAAP net income. That's why analysts often add back amortization when comparing M&A deals — they use "Cash EPS" or "Adjusted EPS."</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Goodwill Impairment</div>
+      <div class="grid-2" style="margin-bottom:0;">
+        <div>
+          <div class="row"><span class="lbl">When tested</span><span class="val">Annually, or when trigger event</span></div>
+          <div class="row"><span class="lbl">Trigger events</span><span class="val">Stock price decline, revenue miss</span></div>
+          <div class="row"><span class="lbl">Process</span><span class="val">Compare carrying value to fair value</span></div>
+          <div class="row"><span class="lbl">If carrying value &gt; fair value</span><span class="val r">Write-down goodwill, record loss</span></div>
+          <div class="row"><span class="lbl">P&amp;L impact</span><span class="val r">Non-cash impairment charge on IS</span></div>
+          <div class="row"><span class="lbl">BS impact</span><span class="val r">Goodwill ↓, Retained Earnings ↓</span></div>
+        </div>
+        <div>
+          <div class="note" style="margin-top:0;">A goodwill impairment signals that the acquiring company overpaid — the acquired business is worth less than what was paid. It's a non-cash charge but is a significant negative signal to the market. Examples: AOL-Time Warner (2002), HP-Autonomy (2012).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SYNERGIES -->
+  <div class="section" id="synergies">
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Cost Synergies</div>
+        <div class="row"><span class="lbl">Headcount reduction</span><span class="val g">Most common</span></div>
+        <div class="row"><span class="lbl">Facility consolidation</span><span class="val g">Overlap offices/plants</span></div>
+        <div class="row"><span class="lbl">Procurement savings</span><span class="val g">Combined purchasing power</span></div>
+        <div class="row"><span class="lbl">IT &amp; systems integration</span><span class="val g">Eliminate duplicate systems</span></div>
+        <div class="row"><span class="lbl">G&amp;A overlap</span><span class="val g">One board, one C-suite</span></div>
+        <div class="divider"></div>
+        <div class="row"><span class="lbl">Typical realisation</span><span class="val">12–36 months</span></div>
+        <div class="row"><span class="lbl">One-time costs to achieve</span><span class="val r">Restructuring, severance</span></div>
+        <div class="row"><span class="lbl">Risk level</span><span class="val g">Lower — within buyer's control</span></div>
+        <div class="note" style="margin-top:10px;">Rule of thumb: 1-3 years to fully realise, with 50% in Year 1, 80% by Year 2. Always apply integration costs against synergies in a model.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Revenue Synergies</div>
+        <div class="row"><span class="lbl">Cross-selling</span><span class="val">Sell target's products to buyer's customers</span></div>
+        <div class="row"><span class="lbl">Geographic expansion</span><span class="val">Enter new markets via target's presence</span></div>
+        <div class="row"><span class="lbl">Pricing power</span><span class="val">Reduced competition → higher prices</span></div>
+        <div class="row"><span class="lbl">New product lines</span><span class="val">Expand portfolio</span></div>
+        <div class="row"><span class="lbl">Distribution expansion</span><span class="val">Access target's channels</span></div>
+        <div class="divider"></div>
+        <div class="row"><span class="lbl">Typical realisation</span><span class="val">3–5 years</span></div>
+        <div class="row"><span class="lbl">Risk level</span><span class="val r">Higher — depends on customers</span></div>
+        <div class="note" style="margin-top:10px;">Analysts heavily discount or exclude revenue synergies in models — they're speculative and almost always over-estimated. Cost synergies are more reliable. In interviews, always distinguish between the two.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">Synergy Valuation</div>
+      <div class="grid-2" style="margin-bottom:0;">
+        <div>
+          <div class="formula">PV of Synergies = Run-rate Synergies × (1–t) × (1+g)
+                              ÷ (WACC – g)
+                    – PV of Integration Costs</div>
+          <div class="section-lbl">Synergy Multiple Check</div>
+          <div class="row"><span class="lbl">Purchase premium ($M)</span><span class="val">e.g. $300M premium</span></div>
+          <div class="row"><span class="lbl">Required run-rate synergies</span><span class="val">= Premium × WACC / (1–t)</span></div>
+          <div class="row"><span class="lbl">At 10% WACC, 25% tax</span><span class="val">= $300M × 10% / 75% = $40M</span></div>
+          <div class="note">$40M in annual cost synergies to justify a $300M premium — is this realistic? Always sanity check.</div>
+        </div>
+        <div>
+          <div class="section-lbl">Key Terms</div>
+          <div class="row"><span class="lbl">Run-rate synergies</span><span class="val">Fully annualised, recurring benefit</span></div>
+          <div class="row"><span class="lbl">Phase-in period</span><span class="val">Time to reach run-rate</span></div>
+          <div class="row"><span class="lbl">Cost to achieve (CTA)</span><span class="val">One-time restructuring costs</span></div>
+          <div class="row"><span class="lbl">Synergy sharing</span><span class="val">% captured by seller via premium</span></div>
+          <div class="row"><span class="lbl">Dis-synergies</span><span class="val">Revenue lost post-merger (customer churn)</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Q&A -->
+  <div class="section" id="qa">
+    <div class="qa-list">
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">Walk me through an accretion / dilution analysis.</span>
+          <span class="qa-tag tag-core">CORE</span><span class="qa-chev">▼</span>
+        </div>
+        <div class="qa-a">
+          <p>An accretion/dilution analysis measures the impact of an acquisition on the buyer's EPS.</p>
+          <p><strong>Step 1:</strong> Calculate the buyer's standalone EPS (Net Income / Diluted Shares).</p>
+          <p><strong>Step 2:</strong> Calculate pro forma combined net income — add buyer NI + target NI + after-tax synergies – after-tax financing costs (interest on debt or opportunity cost of cash used) – after-tax D&A step-up from PPA.</p>
+          <p><strong>Step 3:</strong> Calculate pro forma diluted shares — buyer's existing shares + any new shares issued (in a stock deal).</p>
+          <p><strong>Step 4:</strong> Pro Forma EPS = Pro Forma NI / Pro Forma Shares. Compare to buyer's standalone EPS. If higher, the deal is accretive; if lower, dilutive.</p>
+          <p>The key insight: accretive doesn't mean the deal is good — it just means EPS goes up. You can make any deal accretive by using enough leverage.</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">When is a stock deal accretive vs dilutive?</span>
+          <span class="qa-tag tag-core">CORE</span><span class="qa-chev">▼</span>
+        </div>
+        <div class="qa-a">
+          <p>In a stock deal with no synergies: accretive if the buyer's P/E is <strong>higher</strong> than the target's effective P/E (purchase price / target EPS).</p>
+          <p>Intuition: if you're a 20× P/E buyer and you buy a company at 15× P/E, you're getting more earnings per dollar of stock issued than you're giving away. The deal is accretive.</p>
+          <p>If you're a 15× P/E buyer acquiring a 20× P/E target (paying 20× for their earnings), the deal is dilutive — you're issuing more expensive shares to buy cheaper earnings.</p>
+          <p>In practice, synergies often bridge a dilutive deal to accretive. The breakeven analysis tells you how much in synergies you need.</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">What is goodwill and how does it affect a merger model?</span>
+          <span class="qa-tag tag-concept">CONCEPT</span><span class="qa-chev">▼</span>
+        </div>
+        <div class="qa-a">
+          <p>Goodwill = Purchase Price – Fair Value of Net Identifiable Assets. It represents the intangible premium paid — brand, customer relationships, future synergies.</p>
+          <p>In the merger model: goodwill is created on the buyer's balance sheet at close. It is not amortized under US GAAP (tested for impairment annually instead). However, other acquired intangibles (customer lists, IP) with finite useful lives are amortized — this is the D&A step-up that reduces GAAP EPS post-acquisition.</p>
+          <p>Analysts often add back acquired intangible amortization when computing "adjusted EPS" to show the cash earnings power of the combined company.</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">Why would a company do a dilutive acquisition?</span>
+          <span class="qa-tag tag-hard">HARD</span><span class="qa-chev">▼</span>
+        </div>
+        <div class="qa-a">
+          <p>Accretion/dilution is a short-term, single-year EPS metric. A deal can be dilutive in year 1 but create substantial long-term value.</p>
+          <ul>
+            <li><strong>Strategic rationale:</strong> acquiring capabilities, technology, or market access that can't be built organically</li>
+            <li><strong>Revenue synergies:</strong> take time to materialise — the combined business may be transformatively more valuable in 3–5 years</li>
+            <li><strong>Defensive rationale:</strong> blocking a competitor from acquiring a key asset</li>
+            <li><strong>Scale benefits:</strong> market share or distribution gains that improve long-term unit economics</li>
+          </ul>
+          <p>Example: many technology acquisitions are immediately dilutive (buying loss-making companies at high multiples) but strategically justified. Boards and investors focus on long-term value creation, not just Year 1 EPS.</p>
+        </div>
+      </div>
+
+      <div class="qa-item">
+        <div class="qa-q" onclick="toggleQA(this)">
+          <span class="qa-q-text">What are the main regulatory considerations in M&A?</span>
+          <span class="qa-tag tag-concept">CONCEPT</span><span class="qa-chev">▼</span>
+        </div>
+        <div class="qa-a">
+          <p><strong>Antitrust / Competition:</strong> the primary risk. In the US, deals above a threshold must be filed with the FTC and DOJ under the Hart-Scott-Rodino (HSR) Act. Regulators assess whether the combined entity would harm competition. Remedies include divestitures of overlapping business units.</p>
+          <p><strong>Foreign investment review:</strong> CFIUS (Committee on Foreign Investment in the US) reviews deals involving foreign acquirers for national security risks. FIRB in Australia, NSIB in UK, etc.</p>
+          <p><strong>Sector-specific:</strong> financial services (Fed, OCC), media (FCC), defence (CFIUS). Certain industries have ownership restrictions.</p>
+          <p>Regulatory risk is priced into the deal spread — if markets expect regulatory challenges, the target trades at a bigger discount to the offer price.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(id){
+  const ids=['structure','accretion','ppa','synergies','qa'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',ids[i]===id));
+  document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===id));
+}
+function toggleQA(el){el.closest('.qa-item').classList.toggle('open');}
+function toggleTheme(){
+  const d=document.documentElement;
+  d.dataset.theme=d.dataset.theme==='light'?'':'light';
+  localStorage.setItem('theme',d.dataset.theme);
+}
+(function(){const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t;})();
+</script>
+<script src="./nav.js"></script>
+</body>
+</html>

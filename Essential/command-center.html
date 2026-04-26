@@ -68,7 +68,7 @@
   --yellow:    #1B4FD8;
 }
 .theme-toggle {
-  width: 30px; height: 30px;
+  width: 28px; height: 28px;
   background: var(--s2); border: 1px solid var(--b1);
   border-radius: 6px; cursor: pointer; font-size: 14px;
   display: flex; align-items: center; justify-content: center;
@@ -182,6 +182,53 @@ body {
 }
 .btn-new:hover { background: var(--amber-l); transform: translateY(-1px); }
 .btn-new:active { transform: translateY(0); }
+.study-wrap { position: relative; }
+.study-trigger { cursor: pointer; background: none; border: none; font-family: inherit; }
+.study-menu {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 190px;
+  background: var(--s1);
+  border: 1px solid var(--b2);
+  border-radius: 6px;
+  padding: 8px 0;
+  z-index: 200;
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+}
+.study-menu.open { display: block; }
+.study-section-lbl {
+  padding: 6px 14px 3px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--t4);
+}
+.study-item {
+  display: block;
+  padding: 7px 14px;
+  font-size: 11px;
+  color: var(--t2);
+  text-decoration: none;
+  transition: color .1s, background .1s;
+}
+.study-item:hover { color: var(--t1); background: var(--s2); }
+.study-divider { height: 1px; background: var(--b1); margin: 6px 0; }
+/* normalise all hdr-right interactive elements to the same height */
+.hdr-right .btn-new,
+.hdr-right .btn-ibprep,
+.hdr-right .btn-news,
+.hdr-right .sort-btn {
+  height: 28px;
+  box-sizing: border-box;
+  padding-top: 0;
+  padding-bottom: 0;
+  display: inline-flex;
+  align-items: center;
+}
+.btn-ibprep .ibprep-icon { width: 14px; height: 14px; }
 .btn-ibprep {
   display: inline-flex;
   align-items: center;
@@ -1898,7 +1945,7 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
   <div class="hdr-right">
     <span class="hdr-date" id="hdrDate"></span>
     <span class="kbd-hint">⌘N new · ⌘Z undo</span>
-    <button class="sort-btn" onclick="openCalendar()" style="padding:6px 12px;font-size:10px;font-weight:700;letter-spacing:.06em">📅 Calendar</button>
+    <button class="sort-btn" onclick="openCalendar()" style="font-size:10px;font-weight:700;letter-spacing:.06em;padding:0 12px;">📅 Calendar</button>
     <button class="theme-toggle" id="themeToggleBtn" onclick="toggleCCTheme()" title="Toggle light/dark">☀️</button>
     <a href="./news.html" class="btn-news">
       <span class="btn-news-dot"></span>
@@ -1906,9 +1953,25 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
     </a>
     <a href="./financial-model.html" class="btn-ibprep">
       <span class="ibprep-icon">IB</span>
-      <span>IB Prep</span>
+      <span>Model</span>
       <span class="ibprep-arrow">→</span>
     </a>
+    <div class="study-wrap" id="studyWrap">
+      <button class="btn-news study-trigger" onclick="toggleStudy(event)">
+        <span class="btn-news-dot"></span>
+        Study ▾
+      </button>
+      <div class="study-menu" id="studyMenu">
+        <div class="study-section-lbl">Technical</div>
+        <a class="study-item" href="./accounting.html">Accounting</a>
+        <a class="study-item" href="./valuation.html">Valuation</a>
+        <a class="study-item" href="./ma-accretion.html">M&amp;A / Accretion</a>
+        <a class="study-item" href="./lbo-practice.html">LBO Practice</a>
+        <div class="study-divider"></div>
+        <div class="study-section-lbl">Interview</div>
+        <a class="study-item" href="./behavioral.html">Behavioral</a>
+      </div>
+    </div>
     <button class="btn-new" onclick="openNewCard()">+ New Task</button>
   </div>
 </header>
@@ -3705,6 +3768,14 @@ setTimeout(initGoogleAuth, 500);
   const saved = localStorage.getItem('cc-theme');
   if (saved === 'light') { document.documentElement.setAttribute('data-theme','light'); document.getElementById('themeToggleBtn').textContent='🌙'; }
 })();
+function toggleStudy(e) {
+  e.stopPropagation();
+  document.getElementById('studyMenu').classList.toggle('open');
+}
+document.addEventListener('click', function() {
+  const m = document.getElementById('studyMenu');
+  if (m) m.classList.remove('open');
+});
 function toggleCCTheme() {
   const isLight = document.documentElement.getAttribute('data-theme') === 'light';
   if (isLight) {

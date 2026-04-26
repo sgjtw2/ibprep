@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>if(!sessionStorage.getItem('cmd-auth-v1'))window.location.replace('./login.html');</script>
+<title>BEHAVIORAL — IB PREP</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#000000;--s1:#080C14;--s2:#0C1220;--card:#080C14;--card-h:#0C1220;
+  --b0:#0E1828;--b1:#162038;--b2:#1E2E4A;--b3:#2A3E5C;
+  --t1:#EEF2FF;--t2:#8898B8;--t3:#4A5A78;--t4:#2A3850;
+  --accent:#1B4FD8;--accent-l:#2D63F0;--accent-bg:rgba(27,79,216,.10);--accent-brd:rgba(27,79,216,.22);
+  --red:#C93C2E;--red-bg:rgba(201,60,46,.10);--red-brd:rgba(201,60,46,.22);
+  --green:#1E7A5A;--green-bg:rgba(30,122,90,.10);--green-brd:rgba(30,122,90,.22);
+  --yellow:#B8860B;--yellow-bg:rgba(184,134,11,.12);--yellow-brd:rgba(184,134,11,.25);
+}
+[data-theme="light"]{
+  --bg:#FFFFFF;--s1:#F8FAFC;--s2:#F1F5F9;--card:#F8FAFC;--card-h:#F1F5F9;
+  --b0:#E2E8F0;--b1:#E2E8F0;--b2:#CBD5E1;--b3:#94A3B8;
+  --t1:#0F172A;--t2:#475569;--t3:#94A3B8;--t4:#CBD5E1;
+  --accent:#1B4FD8;--accent-l:#2D63F0;--accent-bg:rgba(27,79,216,.06);--accent-brd:rgba(27,79,216,.20);
+  --red:#DC2626;--red-bg:rgba(220,38,38,.07);--red-brd:rgba(220,38,38,.20);
+  --green:#16A34A;--green-bg:rgba(22,163,74,.07);--green-brd:rgba(22,163,74,.20);
+  --yellow:#92400E;--yellow-bg:rgba(146,64,14,.07);--yellow-brd:rgba(146,64,14,.20);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;background:var(--bg);color:var(--t1);font-family:Arial,Helvetica,sans-serif;font-size:12px;}
+.hdr{height:52px;background:var(--s1);border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:16px;padding:0 20px;position:sticky;top:0;z-index:100;}
+.logo{font-weight:700;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--t1);display:flex;align-items:center;gap:7px;flex-shrink:0;text-decoration:none;}
+.logo-pip{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pip 2s ease-in-out infinite;}
+@keyframes pip{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(.75);}}
+.hdr-right{margin-left:auto;display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.btn-back{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:var(--s2);border:1px solid var(--b2);border-radius:3px;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--t2);text-decoration:none;transition:all .12s;}
+.btn-back:hover{color:var(--t1);border-color:var(--b3);}
+.theme-toggle{width:30px;height:30px;background:var(--s2);border:1px solid var(--b1);border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;transition:background .15s;}
+.theme-toggle:hover{background:var(--b1);}
+.page{max-width:1100px;margin:0 auto;padding:24px 20px 60px;}
+.page-title{font-size:18px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;}
+.page-sub{font-size:11px;color:var(--t3);margin-bottom:28px;}
+.tabs{display:flex;gap:6px;margin-bottom:24px;flex-wrap:wrap;}
+.tab{padding:7px 14px;background:var(--s2);border:1px solid var(--b1);border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--t3);cursor:pointer;transition:all .12s;}
+.tab:hover{color:var(--t2);border-color:var(--b2);}
+.tab.active{color:var(--accent);border-color:var(--accent-brd);background:var(--accent-bg);}
+.section{display:none;}
+.section.active{display:block;}
+.card{background:var(--card);border:1px solid var(--b1);border-radius:6px;padding:18px;margin-bottom:16px;}
+.card-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.card-title::after{content:'';flex:1;height:1px;background:var(--b1);}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+@media(max-width:700px){.grid-2{grid-template-columns:1fr;}}
+.note{font-size:10px;color:var(--t3);line-height:1.6;margin-top:6px;}
+/* STAR framework */
+.star-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px;}
+@media(max-width:700px){.star-grid{grid-template-columns:1fr 1fr;}}
+.star-box{border-radius:6px;padding:16px;}
+.star-s{background:var(--accent-bg);border:1px solid var(--accent-brd);}
+.star-t{background:var(--yellow-bg);border:1px solid var(--yellow-brd);}
+.star-a{background:var(--green-bg);border:1px solid var(--green-brd);}
+.star-r{background:var(--red-bg);border:1px solid var(--red-brd);}
+.star-letter{font-size:28px;font-weight:700;font-family:'JetBrains Mono',monospace;margin-bottom:4px;}
+.star-s .star-letter{color:var(--accent);}
+.star-t .star-letter{color:var(--yellow);}
+.star-a .star-letter{color:#4ADE80;}
+.star-r .star-letter{color:var(--red);}
+.star-word{font-size:11px;font-weight:700;color:var(--t1);margin-bottom:8px;}
+.star-desc{font-size:10px;color:var(--t2);line-height:1.5;}
+.star-time{font-size:9px;color:var(--t3);margin-top:6px;font-family:'JetBrains Mono',monospace;}
+/* question bank */
+.q-categories{display:flex;gap:6px;margin-bottom:16px;flex-wrap:wrap;}
+.q-cat{padding:5px 11px;background:var(--s2);border:1px solid var(--b1);border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.04em;color:var(--t3);cursor:pointer;transition:all .12s;}
+.q-cat:hover{color:var(--t2);}
+.q-cat.active{color:var(--accent);border-color:var(--accent-brd);background:var(--accent-bg);}
+.q-list{display:flex;flex-direction:column;gap:8px;}
+.q-item{background:var(--card);border:1px solid var(--b1);border-radius:6px;overflow:hidden;transition:border-color .12s;}
+.q-item.hidden{display:none;}
+.q-header{padding:13px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:background .12s;}
+.q-header:hover{background:var(--card-h);}
+.q-freq{font-size:9px;font-weight:700;letter-spacing:.04em;padding:2px 6px;border-radius:2px;flex-shrink:0;}
+.freq-must{background:var(--red-bg);color:var(--red);border:1px solid var(--red-brd);}
+.freq-high{background:var(--yellow-bg);color:var(--yellow);border:1px solid var(--yellow-brd);}
+.freq-med{background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-brd);}
+.q-text{font-size:11px;font-weight:700;color:var(--t1);flex:1;}
+.q-cat-tag{font-size:9px;color:var(--t3);flex-shrink:0;}
+.q-chev{font-size:10px;color:var(--t3);transition:transform .2s;flex-shrink:0;}
+.q-item.open .q-chev{transform:rotate(180deg);}
+.q-tips{display:none;padding:0 16px 16px;border-top:1px solid var(--b1);}
+.q-item.open .q-tips{display:block;}
+.tip-block{margin-top:12px;}
+.tip-label{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--t3);margin-bottom:6px;}
+.tip-text{font-size:11px;color:var(--t2);line-height:1.7;}
+.tip-text strong{color:var(--t1);}
+.tip-text ul{margin:6px 0 0 16px;}
+.tip-text ul li{line-height:1.7;}
+.do-dont{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;}
+@media(max-width:500px){.do-dont{grid-template-columns:1fr;}}
+.do-block{background:var(--green-bg);border:1px solid var(--green-brd);border-radius:4px;padding:10px 12px;}
+.dont-block{background:var(--red-bg);border:1px solid var(--red-brd);border-radius:4px;padding:10px 12px;}
+.do-title{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:#4ADE80;margin-bottom:6px;}
+.dont-title{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--red);margin-bottom:6px;}
+.do-item,.dont-item{font-size:10px;color:var(--t2);line-height:1.6;padding:1px 0;}
+/* story builder */
+.story-list{display:flex;flex-direction:column;gap:12px;}
+.story-card{background:var(--card);border:1px solid var(--b1);border-radius:6px;overflow:hidden;}
+.story-header{padding:14px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:background .12s;}
+.story-header:hover{background:var(--card-h);}
+.story-name{font-size:11px;font-weight:700;color:var(--t1);flex:1;}
+.story-status{font-size:9px;font-weight:700;padding:2px 7px;border-radius:2px;flex-shrink:0;}
+.status-done{background:var(--green-bg);color:#4ADE80;border:1px solid var(--green-brd);}
+.status-empty{background:var(--s2);color:var(--t3);border:1px solid var(--b2);}
+.story-chev{font-size:10px;color:var(--t3);transition:transform .2s;}
+.story-card.open .story-chev{transform:rotate(180deg);}
+.story-body{display:none;padding:0 16px 16px;border-top:1px solid var(--b1);}
+.story-card.open .story-body{display:block;}
+.story-tags{display:flex;gap:6px;margin-top:12px;margin-bottom:14px;flex-wrap:wrap;}
+.story-tag{font-size:9px;padding:3px 8px;background:var(--s2);border:1px solid var(--b1);border-radius:2px;color:var(--t3);}
+.star-field{margin-bottom:14px;}
+.star-field-label{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:6px;}
+.star-field-label span{padding:2px 8px;border-radius:2px;font-size:9px;}
+.label-s{background:var(--accent-bg);color:var(--accent);}
+.label-t{background:var(--yellow-bg);color:var(--yellow);}
+.label-a{background:var(--green-bg);color:#4ADE80;}
+.label-r{background:var(--red-bg);color:var(--red);}
+.star-textarea{width:100%;background:var(--s2);border:1px solid var(--b1);border-radius:4px;padding:10px 12px;color:var(--t1);font-family:Arial,Helvetica,sans-serif;font-size:11px;line-height:1.6;resize:vertical;min-height:70px;outline:none;transition:border-color .15s;}
+.star-textarea:focus{border-color:var(--b3);}
+.star-textarea::placeholder{color:var(--t4);}
+.story-save-btn{padding:7px 16px;background:var(--accent);border:none;border-radius:3px;font-weight:700;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#fff;cursor:pointer;transition:background .12s;margin-top:4px;}
+.story-save-btn:hover{background:var(--accent-l);}
+.save-confirm{font-size:10px;color:#4ADE80;margin-left:10px;opacity:0;transition:opacity .3s;}
+/* timing guide */
+.timing-row{display:flex;align-items:center;gap:12px;padding:8px 0;border-bottom:1px solid var(--b0);}
+.timing-row:last-child{border-bottom:none;}
+.timing-q{font-size:11px;color:var(--t2);flex:1;}
+.timing-bar{width:120px;height:8px;background:var(--s2);border-radius:4px;overflow:hidden;flex-shrink:0;}
+.timing-fill{height:100%;border-radius:4px;background:var(--accent);}
+.timing-val{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--t3);width:36px;text-align:right;flex-shrink:0;}
+</style>
+</head>
+<body>
+<header class="hdr">
+  <a class="logo" href="./command-center.html"><span class="logo-pip"></span>IB PREP</a>
+  <span style="font-size:11px;color:var(--t3);">/ BEHAVIORAL</span>
+  <div class="hdr-right">
+    <a class="btn-back" href="./command-center.html">← Command Center</a>
+    <button class="theme-toggle" onclick="toggleTheme()">☀</button>
+  </div>
+</header>
+
+<div class="page">
+  <div class="page-title">Behavioral Prep</div>
+  <div class="page-sub">STAR framework · question bank · your story builder · do's &amp; don'ts</div>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchTab('star')">STAR Framework</div>
+    <div class="tab" onclick="switchTab('questions')">Question Bank</div>
+    <div class="tab" onclick="switchTab('stories')">My Stories</div>
+  </div>
+
+  <!-- STAR FRAMEWORK -->
+  <div class="section active" id="star">
+    <div class="star-grid">
+      <div class="star-box star-s">
+        <div class="star-letter">S</div>
+        <div class="star-word">Situation</div>
+        <div class="star-desc">Set the scene. Context: company, team, your role. Keep it brief — interviewers want the story, not the background.</div>
+        <div class="star-time">~15 seconds</div>
+      </div>
+      <div class="star-box star-t">
+        <div class="star-letter">T</div>
+        <div class="star-word">Task</div>
+        <div class="star-desc">What was your specific responsibility? What was at stake? Make your ownership clear — not the team's job, yours.</div>
+        <div class="star-time">~10 seconds</div>
+      </div>
+      <div class="star-box star-a">
+        <div class="star-letter">A</div>
+        <div class="star-word">Action</div>
+        <div class="star-desc">What did YOU do? Be specific and concrete. Use "I", not "we." This is the longest and most important part.</div>
+        <div class="star-time">~60–90 seconds</div>
+      </div>
+      <div class="star-box star-r">
+        <div class="star-letter">R</div>
+        <div class="star-word">Result</div>
+        <div class="star-desc">What happened? Quantify whenever possible. What did you learn? End with a forward-looking takeaway if time allows.</div>
+        <div class="star-time">~20–30 seconds</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">Timing Guide</div>
+        <div class="timing-row"><span class="timing-q">Tell me about yourself</span><div class="timing-bar"><div class="timing-fill" style="width:70%;"></div></div><span class="timing-val">~90s</span></div>
+        <div class="timing-row"><span class="timing-q">Why investment banking?</span><div class="timing-bar"><div class="timing-fill" style="width:60%;"></div></div><span class="timing-val">~75s</span></div>
+        <div class="timing-row"><span class="timing-q">Why this bank?</span><div class="timing-bar"><div class="timing-fill" style="width:50%;"></div></div><span class="timing-val">~60s</span></div>
+        <div class="timing-row"><span class="timing-q">Behavioural story (STAR)</span><div class="timing-bar"><div class="timing-fill" style="width:80%;"></div></div><span class="timing-val">~2min</span></div>
+        <div class="timing-row"><span class="timing-q">Walk me through your resume</span><div class="timing-bar"><div class="timing-fill" style="width:85%;"></div></div><span class="timing-val">~2min</span></div>
+        <div class="timing-row"><span class="timing-q">Do you have questions for me?</span><div class="timing-bar"><div class="timing-fill" style="width:30%;"></div></div><span class="timing-val">~30s</span></div>
+        <div class="note" style="margin-top:10px;">Always have your watch or clock visible. If you go over 2 minutes on any answer without a prompt to continue, the interviewer is being polite. Stop and ask if they want more detail.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Core Principles</div>
+        <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px;">
+          <div style="padding:10px 12px;background:var(--s2);border-left:3px solid var(--accent);border-radius:0 4px 4px 0;">
+            <div style="font-size:10px;font-weight:700;color:var(--t1);margin-bottom:3px;">Be specific, not generic</div>
+            <div style="font-size:10px;color:var(--t2);">Don't say "I'm hardworking." Say "I rebuilt the entire model overnight when the client changed assumptions at 10pm."</div>
+          </div>
+          <div style="padding:10px 12px;background:var(--s2);border-left:3px solid #4ADE80;border-radius:0 4px 4px 0;">
+            <div style="font-size:10px;font-weight:700;color:var(--t1);margin-bottom:3px;">Quantify everything</div>
+            <div style="font-size:10px;color:var(--t2);">"Reduced client onboarding time by 40%" beats "significantly improved the process" every time.</div>
+          </div>
+          <div style="padding:10px 12px;background:var(--s2);border-left:3px solid var(--yellow);border-radius:0 4px 4px 0;">
+            <div style="font-size:10px;font-weight:700;color:var(--t1);margin-bottom:3px;">Show self-awareness</div>
+            <div style="font-size:10px;color:var(--t2);">Interviewers test whether you know why you're a good fit — not just whether you want the job.</div>
+          </div>
+          <div style="padding:10px 12px;background:var(--s2);border-left:3px solid var(--red);border-radius:0 4px 4px 0;">
+            <div style="font-size:10px;font-weight:700;color:var(--t1);margin-bottom:3px;">Have 5–6 core stories</div>
+            <div style="font-size:10px;color:var(--t2);">Each story should be adaptable to multiple questions. One strong leadership story can answer: leadership, conflict, initiative, and failure questions.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUESTION BANK -->
+  <div class="section" id="questions">
+    <div class="q-categories">
+      <div class="q-cat active" onclick="filterCat('all',this)">All</div>
+      <div class="q-cat" onclick="filterCat('motivation',this)">Motivation</div>
+      <div class="q-cat" onclick="filterCat('leadership',this)">Leadership</div>
+      <div class="q-cat" onclick="filterCat('teamwork',this)">Teamwork</div>
+      <div class="q-cat" onclick="filterCat('challenge',this)">Challenge</div>
+      <div class="q-cat" onclick="filterCat('fit',this)">Fit</div>
+    </div>
+    <div class="q-list">
+
+      <!-- MOTIVATION -->
+      <div class="q-item" data-cat="motivation">
+        <div class="q-header" onclick="toggleQ(this)">
+          <span class="q-freq freq-must">MUST PREP</span>
+          <span class="q-text">Why investment banking?</span>
+          <span class="q-cat-tag">Motivation</span>
+          <span class="q-chev">▼</span>
+        </div>
+        <div class="q-tips">
+          <div class="tip-block">
+            <div class="tip-label">What they're really asking</div>
+            <div class="tip-text">Do you understand what the job actually is? Are you here for the right reasons or just chasing prestige and money?</div>
+          </div>
+          <div class="tip-block">
+            <div class="tip-label">Strong answer structure</div>
+            <div class="tip-text"><strong>1. The pull (not the push):</strong> Explain what attracted you to IB specifically — deal execution, advising companies at inflection points, the intersection of finance and strategy. Don't say "I want to learn a lot" or "the money."<br><br><strong>2. A specific trigger:</strong> A deal you followed, a person who influenced you, a class or internship that crystallised it.<br><br><strong>3. Demonstrated commitment:</strong> What have you done to prepare? (Models, networking, this prep app...)</div>
+          </div>
+          <div class="do-dont">
+            <div class="do-block">
+              <div class="do-title">Do</div>
+              <div class="do-item">Reference a specific deal or transaction</div>
+              <div class="do-item">Mention the analytical rigour you crave</div>
+              <div class="do-item">Connect to your long-term goals</div>
+              <div class="do-item">Show you know what analysts actually do</div>
+            </div>
+            <div class="dont-block">
+              <div class="dont-title">Don't</div>
+              <div class="dont-item">Say "I want to make a lot of money"</div>
+              <div class="dont-item">Give a generic "passion for finance" answer</div>
+              <div class="dont-item">Make it sound like a fallback option</div>
+              <div class="dont-item">Be vague about what IB actually does</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-item" data-cat="motivation">
+        <div class="q-header" onclick="toggleQ(this)">
+          <span class="q-freq freq-must">MUST PREP</span>
+          <span class="q-text">Why this bank specifically?</span>
+          <span class="q-cat-tag">Motivation</span>
+          <span class="q-chev">▼</span>
+        </div>
+        <div class="q-tips">
+          <div class="tip-block">
+            <div class="tip-label">What they're really asking</div>
+            <div class="tip-text">Have you done your research? Are you genuinely interested or just spraying applications? Will you turn down our offer for a better one?</div>
+          </div>
+          <div class="tip-block">
+            <div class="tip-label">Strong answer structure</div>
+            <div class="tip-text"><strong>3-part answer:</strong><br>1. Something specific about the bank's culture, deal flow, or team (from networking/research — not the website)<br>2. A deal the bank recently worked on that you found compelling<br>3. A person you spoke with at the bank and what they told you<br><br>Never say "top league table rankings" or "Goldman is the best bank" — that's lazy. Show you dug deeper.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-item" data-cat="motivation">
+        <div class="q-header" onclick="toggleQ(this)">
+          <span class="q-freq freq-must">MUST PREP</span>
+          <span class="q-text">Tell me about yourself / Walk me through your resume.</span>
+          <span class="q-cat-tag">Motivation</span>
+          <span class="q-chev">▼</span>
+        </div>
+        <div class="q-tips">
+          <div class="tip-block">
+            <div class="tip-label">Structure: 90-second narrative arc</div>
+            <div class="tip-text"><strong>Present → Past → Future</strong> (or reverse for chronological flow)<br><br>1. <strong>Where you are now</strong> (current degree/school, relevant context)<br>2. <strong>Key experience 1</strong> — most relevant role, 2 sentences max<br>3. <strong>Key experience 2</strong> — what you learned, how it connects<br>4. <strong>Why IB + why this bank</strong> — the logical conclusion of your story<br><br>This is not a resume recitation. It's a story that ends with "and that's why I'm sitting in front of you today."</div>
+          </div>
+          <div class="tip-block">
+            <div class="tip-label">Common mistakes</div>
+            <div class="tip-text">Going chronologically and reading your resume out loud. Starting with high school. Not connecting experiences together. Ending without a "why IB" hook.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LEADERSHIP -->
+      <div class="q-item" data-cat="leadership">
+        <div class="q-header" onclick="toggleQ(this)">
+          <span class="q-freq freq-must">MUST PREP</span>
+          <span class="q-text">Tell me about a time you led a team or project.</span>
+          <span class="q-cat-tag">Leadership</span>
+          <span class="q-chev">▼</span>
+        </div>
+        <div class="q-tips">
+          <div class="tip-block">
+            <div class="tip-label">What they're testing</div>
+            <div class="tip-text">Can you drive outcomes without direct authority? Do you know how to motivate people and manage up?</div>
+          </div>
+          <div class="tip-block">
+            <div class="tip-label">Strong story elements</div>
+            <div class="tip-text">
+              <ul>
+                <li>A concrete deliverable with a deadline</li>
+                <li>A specific challenge you had to navigate (conflict, resource constraint, ambiguity)</li>
+                <li>Actions YOU took — not "we decided"</li>
+                <li>A quantifiable outcome (revenue, % improvement, recognition)</li>
+                <li>A reflection: what you'd do differently</li>
+              </ul>
+            </div>
+          </div>
+          <div class="do-dont">
+            <div class="do-block">
+              <div class="do-title">Do</div>
+              <div class="do-item">Show how you handled conflict within the team</div>
+              <div class="do-item">Demonstrate you empowered others, not just delegated</div>
+              <div class="do-item">Own the result — good or bad</div>
+            </div>
+            <div class="dont-block">
+              <div class="dont-title">Don't</div>
+              <div class="dont-item">Pick a group project where you all "worked together"</div>
+              <div class="dont-item">Take credit for the team's work without showing your role</div>
+              <div class="dont-item">Use a story with no clear outcome</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-item" data-cat="leadership">
+        <div class="q-header" onclick="toggleQ(this)">
+          <span class="q-freq freq-high">HIGH</span>
+          <span class="q-text">Describe a time you showed initiative / went above and beyond.</span>
+          <span class="q-cat-tag">Leadership</span>
+          <span class="q-chev">▼</span>
+        </div>
+        <div class="q-tips">
+          <div class="tip-block">
+            <div class="tip-label">What they're testing</div>
+            <div class="tip-text">IB analysts work without supervision at 2am. They want to know you're self-directed and don't wait to be told what to do.</div>
+          </div>
+          <div class="tip-block">
+            <div class="tip-label">Good story types</div>
+            <div class="tip-text">Identified a problem nobody else noticed → fixed it without being asked. Delivered more than what was requested. Took on a task outside your role to help the team succeed. Proposed a new process or idea that was adopted.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TEAMWORK -->
+      <div class="q-item" data-cat="teamwork">
+        <div class="q-header" onclick="toggleQ(this)">
+          <span class="q-freq freq-must">MUST PREP</span>
+          <span class="q-text">Tell me about a time you had a conflict with a colleague / teammate.</span>
+          <span class="q-cat-tag">Teamwork</span>
+          <span class="q-chev">▼</span>
+        </div>
+        <div class="q-tips">
+          <div class="tip-block">
+            <div class="tip-label">What they're testing</div>
+            <div class="tip-text">Can you work with difficult people professionally? Banking teams are high-pressure — interviewers screen for people who manage conflict maturely.</div>
+          </div>
+          <div class="tip-block">
+            <div class="tip-label">Structure</div>
+            <div class="tip-text">Pick a real conflict (not "we disagreed on the font colour"). Show that you <strong>sought to understand the other person's perspective</strong>, approached it directly and professionally (not passive-aggressively), and reached a resolution that benefited the project. Don't make the other person the villain.</div>
+          </div>
+          <div class="do-dont">
+            <div class="do-block">
+              <div class="do-title">Do</div>
+              <div class="do-item">Show emotional maturity and self-reflection</div>
+              <div class="do-item">Demonstrate the conflict was resolved</div>
+              <div class="do-item">Acknowledge what you could have done better</div>
+            </div>
+            <div class="dont-block">
+              <div class="dont-title">Don't</div>
+              <div class="dont-item">Badmouth the other person</div>
+              <div class="dont-item">Pick a story where you were clearly in the wrong</div>
+              <div class="dont-item">Pick a trivial disagreement that wasn't really a conflict</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-item" data-cat="teamwork">
+        <div class="q-header" onclick="toggleQ(this)">
+          <span class="q-freq freq-high">HIGH</span>
+          <span class="q-text">Tell me about a time you had to work with someone very different from you.</span>
+          <span class="q-cat-tag">Teamwork</span>
+          <span class="q-chev">▼</span>
+        </div>
+        <div class="q-tips">
+          <div class="tip-block">
+            <div class="tip-label">What they're testing</div>
+            <div class="tip-text">Cultural intelligence, empathy, adaptability. Diverse teams are the norm in IB — you'll work with people from different backgrounds, countries, and communication styles.</div>
+          </div>
+          <div class="tip-block">
+            <div class="tip-label">Strong angle</div>
+            <div class="tip-text">Focus on how you adapted your communication style or approach, not just that you "respected differences." Show a concrete example of adjusting your behaviour and the positive outcome.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHALLENGE -->
+      <div class="q-item" data-cat="challenge">
+        <div class="q-header" onclick="toggleQ(this)">
+          <span class="q-freq freq-must">MUST PREP</span>
+          <span class="q-text">Tell me about your greatest failure or biggest mistake.</span>
+          <span class="q-cat-tag">Challenge</span>
+          <span class="q-chev">▼</span>
+        </div>
+        <div class="q-tips">
+          <div class="tip-block">
+            <div class="tip-label">What they're testing</div>
+            <div class="tip-text">Self-awareness and resilience. They want to see you can admit real mistakes and learn from them — not spin a "weakness" into a strength.</div>
+          </div>
+          <div class="tip-block">
+            <div class="tip-label">Rules</div>
+            <div class="tip-text">
+              <ul>
+                <li>Pick something real and meaningful — not "I worked too hard" or "I'm a perfectionist"</li>
+                <li>Own the failure fully — don't blame circumstances or others</li>
+                <li>Spend 40% of the answer on what you learned and changed</li>
+                <li>Show you applied the lesson in a subsequent situation</li>
+              </ul>
+            </div>
+          </div>
+          <div class="do-dont">
+            <div class="do-block">
+              <div class="do-title">Do</div>
+              <div class="do-item">Be genuinely vulnerable — it builds trust</div>
+              <div class="do-item">Show concrete change in behaviour afterwards</div>
+              <div class="do-item">End on the learning, not the failure</div>
+            </div>
+            <div class="dont-block">
+              <div class="dont-title">Don't</div>
+              <div class="dont-item">Use a "disguised strength" failure</div>
+              <div class="dont-item">Pick something career-ending or character-damaging</div>
+              <div class="dont-item">Blame external factors</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-item" data-cat="challenge">
+        <div class="q-header" onclick="toggleQ(this)">
+          <span class="q-freq freq-high">HIGH</span>
+          <span class="q-text">Tell me about a time you worked under pressure or met a tight deadline.</span>
+          <span class="q-cat-tag">Challenge</span>
+          <span class="q-chev">▼</span>
+        </div>
+        <div class="q-tips">
+          <div class="tip-block">
+            <div class="tip-label">What they're testing</div>
+            <div class="tip-text">IB is a high-pressure environment. This is almost a litmus test: "Can you function at 2am with a pitch due at 6am?"</div>
+          </div>
+          <div class="tip-block">
+            <div class="tip-label">Strong story elements</div>
+            <div class="tip-text">Concrete timeline (e.g. 48-hour crunch). What you prioritised and why. How you managed your energy and focus. The outcome — delivered on time, result quality. Importantly: how you'd handle it even better next time.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FIT -->
+      <div class="q-item" data-cat="fit">
+        <div class="q-header" onclick="toggleQ(this)">
+          <span class="q-freq freq-must">MUST PREP</span>
+          <span class="q-text">What is your greatest strength and greatest weakness?</span>
+          <span class="q-cat-tag">Fit</span>
+          <span class="q-chev">▼</span>
+        </div>
+        <div class="q-tips">
+          <div class="tip-block">
+            <div class="tip-label">Strength</div>
+            <div class="tip-text">Pick something genuinely relevant to IB (analytical rigour, attention to detail, resilience, client communication). Prove it with a specific example — don't just assert it.</div>
+          </div>
+          <div class="tip-block">
+            <div class="tip-label">Weakness — the right approach</div>
+            <div class="tip-text">Pick a real weakness that is not a core job requirement. Show genuine self-awareness AND concrete steps you've taken to improve. The improvement journey is more important than the weakness itself.<br><br>Example: "I used to struggle with delegating — I'd redo work myself instead of coaching others. I realised this was a bottleneck, so I started doing structured check-ins before diving in myself, and deliberately held back even when I could have fixed it faster."</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-item" data-cat="fit">
+        <div class="q-header" onclick="toggleQ(this)">
+          <span class="q-freq freq-high">HIGH</span>
+          <span class="q-text">Where do you see yourself in 5–10 years?</span>
+          <span class="q-cat-tag">Fit</span>
+          <span class="q-chev">▼</span>
+        </div>
+        <div class="q-tips">
+          <div class="tip-block">
+            <div class="tip-label">What they're testing</div>
+            <div class="tip-text">Are you using IB as a stepping stone (PE/HF exit), or are you genuinely interested in a banking career? Neither is wrong, but your answer should be coherent and show you've thought about it.</div>
+          </div>
+          <div class="tip-block">
+            <div class="tip-label">Good answer</div>
+            <div class="tip-text">Near-term: become excellent at execution, build sector expertise, take on deal responsibility. Medium-term: VP/Director path or move to a buy-side role where you can apply deal judgment more directly. Be honest — interviewers have heard every version of this answer, and authenticity wins over the "perfect" answer.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="q-item" data-cat="fit">
+        <div class="q-header" onclick="toggleQ(this)">
+          <span class="q-freq freq-med">MEDIUM</span>
+          <span class="q-text">Do you have any questions for me?</span>
+          <span class="q-cat-tag">Fit</span>
+          <span class="q-chev">▼</span>
+        </div>
+        <div class="q-tips">
+          <div class="tip-block">
+            <div class="tip-label">Why this matters</div>
+            <div class="tip-text">This is an opportunity to show intellectual curiosity and genuine interest in the person across from you. Never say "no, I think you've covered everything."</div>
+          </div>
+          <div class="tip-block">
+            <div class="tip-label">Strong questions</div>
+            <div class="tip-text">
+              <ul>
+                <li>"What deal have you worked on that you found most intellectually challenging, and why?"</li>
+                <li>"What's something you wish you'd known before joining the group?"</li>
+                <li>"How has the team's deal mix shifted over the past few years — and where do you see it going?"</li>
+                <li>"What differentiates the analysts who really thrive here from those who struggle?"</li>
+              </ul>
+            </div>
+          </div>
+          <div class="do-dont">
+            <div class="do-block">
+              <div class="do-title">Do</div>
+              <div class="do-item">Ask about their personal experience</div>
+              <div class="do-item">Ask something you genuinely want to know</div>
+              <div class="do-item">Have 3–4 questions ready (some may get answered)</div>
+            </div>
+            <div class="dont-block">
+              <div class="dont-title">Don't</div>
+              <div class="dont-item">Ask about salary or hours</div>
+              <div class="dont-item">Ask anything easily Googleable</div>
+              <div class="dont-item">Ask more than 2–3 questions</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- MY STORIES (localStorage) -->
+  <div class="section" id="stories">
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-title">How to use this</div>
+      <p style="font-size:11px;color:var(--t2);line-height:1.7;">Write your STAR stories below. They're saved in your browser (localStorage) and will persist across sessions on this device. Aim for 5–6 versatile stories that can each answer multiple question types.</p>
+    </div>
+    <div class="story-list" id="storyList"></div>
+  </div>
+</div>
+
+<script>
+// Theme
+function toggleTheme(){
+  const d=document.documentElement;
+  d.dataset.theme=d.dataset.theme==='light'?'':'light';
+  localStorage.setItem('theme',d.dataset.theme);
+}
+(function(){const t=localStorage.getItem('theme');if(t)document.documentElement.dataset.theme=t;})();
+
+// Tabs
+function switchTab(id){
+  const ids=['star','questions','stories'];
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.toggle('active',ids[i]===id));
+  document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===id));
+  if(id==='stories') renderStories();
+}
+
+// Q filter
+function filterCat(cat, el){
+  document.querySelectorAll('.q-cat').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.q-item').forEach(item=>{
+    if(cat==='all') item.classList.remove('hidden');
+    else item.classList.toggle('hidden', item.dataset.cat !== cat);
+  });
+}
+
+// Q expand
+function toggleQ(el){
+  el.closest('.q-item').classList.toggle('open');
+}
+
+// Stories
+const STORY_TEMPLATES = [
+  {id:'leadership', name:'Leadership / Initiative', tags:['Why IB','Leadership','Greatest Achievement']},
+  {id:'teamwork',   name:'Teamwork / Collaboration', tags:['Teamwork','Conflict','Different Perspectives']},
+  {id:'failure',    name:'Failure / Mistake', tags:['Weakness','Failure','What Would You Do Differently']},
+  {id:'pressure',   name:'Working Under Pressure', tags:['Deadline','Hours','Resilience']},
+  {id:'analytical', name:'Analytical / Problem Solving', tags:['Technical Thinking','Attention to Detail']},
+  {id:'conflict',   name:'Conflict / Disagreement', tags:['Conflict','Difficult Colleague','Pushback']},
+];
+
+function loadStory(id){
+  try{return JSON.parse(localStorage.getItem('beh_story_'+id)||'{}');}catch{return {};}
+}
+function saveStory(id, data){
+  localStorage.setItem('beh_story_'+id, JSON.stringify(data));
+}
+
+function renderStories(){
+  const list = document.getElementById('storyList');
+  list.innerHTML = STORY_TEMPLATES.map(tpl => {
+    const saved = loadStory(tpl.id);
+    const hasSome = ['situation','task','action','result'].some(k=>saved[k]&&saved[k].trim());
+    return `
+    <div class="story-card" id="sc_${tpl.id}">
+      <div class="story-header" onclick="toggleStory('${tpl.id}')">
+        <span class="story-name">${tpl.name}</span>
+        <span class="story-status ${hasSome?'status-done':'status-empty'}" id="ss_${tpl.id}">${hasSome?'Written':'Empty'}</span>
+        <span class="story-chev">▼</span>
+      </div>
+      <div class="story-body">
+        <div class="story-tags">${tpl.tags.map(t=>`<span class="story-tag">${t}</span>`).join('')}</div>
+        ${['situation','task','action','result'].map(k=>`
+        <div class="star-field">
+          <div class="star-field-label">
+            <span class="label-${k[0]}">${k.toUpperCase()}</span>
+            ${k==='situation'?'Set the scene briefly'
+             :k==='task'?'Your specific responsibility'
+             :k==='action'?'What YOU did — use "I", be specific'
+             :'Outcome — quantify if possible'}
+          </div>
+          <textarea class="star-textarea" id="sf_${tpl.id}_${k}" placeholder="${
+            k==='situation'?'e.g. During my internship at X, I was working on...'
+           :k==='task'?'e.g. I was responsible for...'
+           :k==='action'?'e.g. I first approached the problem by...'
+           :'e.g. As a result, we achieved... / I learned that...'
+          }" rows="3">${saved[k]||''}</textarea>
+        </div>`).join('')}
+        <button class="story-save-btn" onclick="saveThisStory('${tpl.id}')">Save Story</button>
+        <span class="save-confirm" id="sc_confirm_${tpl.id}">Saved</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleStory(id){
+  const card = document.getElementById('sc_'+id);
+  card.classList.toggle('open');
+}
+
+function saveThisStory(id){
+  const data = {};
+  ['situation','task','action','result'].forEach(k=>{
+    const el = document.getElementById(`sf_${id}_${k}`);
+    if(el) data[k] = el.value;
+  });
+  saveStory(id, data);
+  const hasSome = Object.values(data).some(v=>v.trim());
+  const ss = document.getElementById('ss_'+id);
+  if(ss){ss.textContent = hasSome?'Written':'Empty'; ss.className='story-status '+(hasSome?'status-done':'status-empty');}
+  const confirm = document.getElementById('sc_confirm_'+id);
+  if(confirm){confirm.style.opacity='1'; setTimeout(()=>confirm.style.opacity='0',1500);}
+}
+</script>
+<script src="./nav.js"></script>
+</body>
+</html>
