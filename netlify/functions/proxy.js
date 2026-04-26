@@ -18,6 +18,7 @@ const ALLOWED = new Set([
   'www.coindesk.com',
   'etfdb.com',
   'www.etftrends.com',
+  'www.benzinga.com',
 ]);
 
 exports.handler = async (event) => {

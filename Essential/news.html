@@ -530,7 +530,7 @@ const TABS = [
       { id:'bbc',         name:'BBC Business',  tag:'BBC',  clr:'#BB1919', url:'https://feeds.bbci.co.uk/news/business/rss.xml' },
       { id:'nyt',         name:'NY Times',      tag:'NYT',  clr:'#1a1a1a', url:'https://rss.nytimes.com/services/xml/rss/nyt/Economy.xml' },
       { id:'yahoo',       name:'Yahoo Finance', tag:'Y!',   clr:'#6001D2', url:'https://news.google.com/rss/search?q=site:finance.yahoo.com+markets&hl=en-US&gl=US&ceid=US:en&tbs=sbd:1' },
-      { id:'finviz',      name:'FinViz',        tag:'FV',   clr:'#FF3300', type:'finviz' },
+      { id:'benzinga',    name:'Benzinga',      tag:'BZ',   clr:'#00A6ED', url:'https://www.benzinga.com/feeds/market-news' },
     ]
   },
   {
@@ -621,19 +621,11 @@ function parseItems(xmlText, feed) {
 
 async function fetchRSSFeed(feed) {
   try {
-    let xmlText;
-    if (feed.url.startsWith('https://news.google.com/')) {
-      const res = await fetch(feed.url, { cache: 'no-store' });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      xmlText = await res.text();
-    } else {
-      const res = await fetch(PROXY + encodeURIComponent(feed.url), { cache: 'no-store' });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const json = await res.json();
-      if (!json.contents) throw new Error('empty response');
-      xmlText = json.contents;
-    }
-    return parseItems(xmlText, feed);
+    const res = await fetch(PROXY + encodeURIComponent(feed.url), { cache: 'no-store' });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    if (!json.contents) throw new Error('empty response');
+    return parseItems(json.contents, feed);
   } catch (e) {
     console.warn('[rss]', feed.name, '—', e.message);
     failed.push(feed.name);
@@ -641,61 +633,8 @@ async function fetchRSSFeed(feed) {
   }
 }
 
-/* ── FETCH: FINVIZ HTML ──────────────────────────────────── */
-async function fetchFinVizFeed(feed) {
-  try {
-    const res = await fetch('/.netlify/functions/finviz', { cache: 'no-store' });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const json = await res.json();
-    if (!json.contents) throw new Error('empty response');
-
-    const doc   = new DOMParser().parseFromString(json.contents, 'text/html');
-    const table = doc.querySelector('#news-table');
-    if (!table) throw new Error('news-table not found');
-
-    let lastDateStr = '';
-    const items = [];
-
-    [...table.querySelectorAll('tr')].forEach(row => {
-      const cells = [...row.querySelectorAll('td')];
-      if (cells.length < 2) return;
-      const dateText = cells[0].textContent.trim();
-      const linkEl   = cells[1].querySelector('a');
-      if (!linkEl) return;
-      const title = linkEl.textContent.trim();
-      const link  = linkEl.getAttribute('href') || '';
-
-      let date;
-      if (/Today/i.test(dateText)) {
-        const timeStr = dateText.replace(/Today\s*/i, '');
-        date = new Date(new Date().toDateString() + ' ' + timeStr);
-      } else if (dateText.includes('-')) {
-        const spaceIdx  = dateText.indexOf(' ');
-        lastDateStr     = dateText.slice(0, spaceIdx);         // "Apr-25-24"
-        const timeStr   = dateText.slice(spaceIdx + 1);        // "08:15AM"
-        const [mon, day, yr] = lastDateStr.split('-');
-        date = new Date(`${mon} ${day} 20${yr} ${timeStr}`);
-      } else if (lastDateStr) {
-        const [mon, day, yr] = lastDateStr.split('-');
-        date = new Date(`${mon} ${day} 20${yr} ${dateText}`);
-      } else {
-        date = new Date();
-      }
-      if (isNaN(date)) date = new Date();
-
-      items.push({ title, link, date, feed, key: link || title });
-    });
-
-    return items.filter(i => i.title.length > 6).slice(0, 60);
-  } catch (e) {
-    console.warn('[finviz]', feed.name, '—', e.message);
-    failed.push(feed.name);
-    return [];
-  }
-}
-
 function fetchFeed(feed) {
-  return feed.type === 'finviz' ? fetchFinVizFeed(feed) : fetchRSSFeed(feed);
+  return fetchRSSFeed(feed);
 }
 
 /* ── FETCH: TICKER ───────────────────────────────────────── */
