@@ -423,6 +423,50 @@
       .article { padding: 13px 14px; }
       .tab { padding: 11px 10px 10px; }
     }
+
+    /* ── FINVIZ EMBED ────────────────────────────────────────── */
+    .tab-sep {
+      width: 1px;
+      background: var(--border2);
+      margin: 8px 8px;
+      flex-shrink: 0;
+      align-self: stretch;
+    }
+    #fvFrame {
+      display: none;
+      width: 100%;
+    }
+    #fvFrame iframe {
+      display: block;
+      width: 100%;
+      height: calc(100vh - 126px);
+      border: none;
+      background: var(--bg2);
+    }
+    #fvBlock {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      height: calc(100vh - 126px);
+      color: var(--muted);
+      font-size: 13px;
+    }
+    #fvBlock a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+    body.fv-active #filterBar,
+    body.fv-active #main,
+    body.fv-active #statusBar,
+    body.fv-active .search-wrap,
+    body.fv-active #refreshBtn,
+    body.fv-active #countdown { display: none !important; }
+    body.fv-active #fvFrame   { display: block; }
+    @media (max-width: 768px) {
+      #fvFrame iframe, #fvBlock { height: calc(100vh - 130px); }
+    }
   </style>
 </head>
 <body>
@@ -471,11 +515,23 @@
   <button class="tab"    data-id="stocks"  onclick="switchTab('stocks')">Stocks News</button>
   <button class="tab"    data-id="etf"     onclick="switchTab('etf')">ETF News</button>
   <button class="tab"    data-id="crypto"  onclick="switchTab('crypto')">Crypto News</button>
+  <div class="tab-sep"></div>
+  <button class="tab" data-id="fv-screener" onclick="switchTab('fv-screener')">Screener</button>
+  <button class="tab" data-id="fv-map"      onclick="switchTab('fv-map')">Map</button>
+  <button class="tab" data-id="fv-insider"  onclick="switchTab('fv-insider')">Insider</button>
+  <button class="tab" data-id="fv-mgrs"     onclick="switchTab('fv-mgrs')">Mgr Insider</button>
+  <button class="tab" data-id="fv-funds"    onclick="switchTab('fv-funds')">Fund Insider</button>
+  <button class="tab" data-id="fv-econ"     onclick="switchTab('fv-econ')">Econ Cal</button>
 </div>
 
 <!-- ── FILTER BAR ──────────────────────────────────────── -->
 <div id="filterBar">
   <button class="chip on" onclick="setFilter('all')">All</button>
+</div>
+
+<!-- ── FINVIZ EMBED ────────────────────────────────────── -->
+<div id="fvFrame">
+  <iframe id="fvEmbed" src="" allow="fullscreen" title="FinViz"></iframe>
 </div>
 
 <!-- ── CONTENT ─────────────────────────────────────────── -->
@@ -736,17 +792,37 @@ async function loadTab(tabId, force) {
   setStatus(getFiltered().length);
 }
 
+/* ── FINVIZ TABS ─────────────────────────────────────────── */
+const FV_TABS = {
+  'fv-screener': 'https://finviz.com/screener.ashx',
+  'fv-map':      'https://finviz.com/map.ashx',
+  'fv-insider':  'https://finviz.com/insidertrading',
+  'fv-mgrs':     'https://finviz.com/insidertrading/managers',
+  'fv-funds':    'https://finviz.com/insidertrading/funds',
+  'fv-econ':     'https://finviz.com/calendar/economic',
+};
+
 /* ── SWITCH TAB ──────────────────────────────────────────── */
 function switchTab(tabId) {
   if (activeTabId === tabId) return;
   activeTabId = tabId;
-  activeSrc   = 'all';
-  query       = '';
-  document.getElementById('searchBox').value = '';
   document.querySelectorAll('.tab').forEach(t =>
     t.classList.toggle('on', t.dataset.id === tabId)
   );
-  loadTab(tabId);
+  if (tabId in FV_TABS) {
+    document.body.classList.add('fv-active');
+    const iframe = document.getElementById('fvEmbed');
+    if (iframe.dataset.loaded !== tabId) {
+      iframe.src = FV_TABS[tabId];
+      iframe.dataset.loaded = tabId;
+    }
+  } else {
+    document.body.classList.remove('fv-active');
+    activeSrc = 'all';
+    query     = '';
+    document.getElementById('searchBox').value = '';
+    loadTab(tabId);
+  }
 }
 
 /* ── RENDER: FEED ────────────────────────────────────────── */
