@@ -516,6 +516,12 @@
   <button class="tab"    data-id="etf"     onclick="switchTab('etf')">ETF News</button>
   <button class="tab"    data-id="crypto"  onclick="switchTab('crypto')">Crypto News</button>
   <div class="tab-sep"></div>
+  <button class="tab" data-id="fv-news"     onclick="switchTab('fv-news')">FV All</button>
+  <button class="tab" data-id="fv-news6"    onclick="switchTab('fv-news6')">FV Major</button>
+  <button class="tab" data-id="fv-news3"    onclick="switchTab('fv-news3')">FV Stocks</button>
+  <button class="tab" data-id="fv-news4"    onclick="switchTab('fv-news4')">FV Blog</button>
+  <button class="tab" data-id="fv-news5"    onclick="switchTab('fv-news5')">FV Press</button>
+  <div class="tab-sep"></div>
   <button class="tab" data-id="fv-screener" onclick="switchTab('fv-screener')">Screener</button>
   <button class="tab" data-id="fv-map"      onclick="switchTab('fv-map')">Map</button>
   <button class="tab" data-id="fv-insider"  onclick="switchTab('fv-insider')">Insider</button>
@@ -794,6 +800,11 @@ async function loadTab(tabId, force) {
 
 /* ── FINVIZ TABS ─────────────────────────────────────────── */
 const FV_TABS = {
+  'fv-news':     'https://finviz.com/news.ashx',
+  'fv-news6':    'https://finviz.com/news.ashx?v=6',
+  'fv-news3':    'https://finviz.com/news.ashx?v=3',
+  'fv-news4':    'https://finviz.com/news.ashx?v=4',
+  'fv-news5':    'https://finviz.com/news.ashx?v=5',
   'fv-screener': 'https://finviz.com/screener.ashx',
   'fv-map':      'https://finviz.com/map.ashx',
   'fv-insider':  'https://finviz.com/insidertrading',
