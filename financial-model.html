@@ -10214,12 +10214,11 @@ function toggleLivePanel() {
 
 async function fetchRfRate() {
   try {
-    const url = 'https://query1.finance.yahoo.com/v7/finance/quote?symbols=%5ETNX';
+    const url = 'https://query1.finance.yahoo.com/v8/finance/chart/%5ETNX?interval=1d&range=1d';
     const res = await fetch(PROXY_FM + encodeURIComponent(url));
-    const json = await res.json();
-    const data = JSON.parse(json.contents);
-    const q = data?.quoteResponse?.result?.[0];
-    if (q) {
+    const data = JSON.parse((await res.json()).contents);
+    const q = data?.chart?.result?.[0]?.meta;
+    if (q?.regularMarketPrice) {
       lpRfRate = q.regularMarketPrice;
       renderWACC();
     }
@@ -10235,7 +10234,7 @@ async function loadLiveCompany() {
   box.innerHTML = '<div class="lp-spinner">Loading…</div>';
 
   try {
-    const quoteUrl  = `https://query1.finance.yahoo.com/v7/finance/quote?symbols=${ticker}`;
+    const quoteUrl  = `https://query1.finance.yahoo.com/v8/finance/chart/${ticker}?interval=1d&range=1d`;
     const summUrl   = `https://query2.finance.yahoo.com/v10/finance/quoteSummary/${ticker}?modules=incomeStatementHistory,balanceSheetHistory,cashflowStatementHistory,defaultKeyStatistics,financialData`;
     const [qRes, sRes] = await Promise.all([
       fetch(PROXY_FM + encodeURIComponent(quoteUrl)),
@@ -10244,13 +10243,13 @@ async function loadLiveCompany() {
     const qData = JSON.parse((await qRes.json()).contents);
     const sData = JSON.parse((await sRes.json()).contents);
 
-    const q   = qData?.quoteResponse?.result?.[0];
+    const q   = qData?.chart?.result?.[0]?.meta;
     const fd  = sData?.quoteSummary?.result?.[0]?.financialData;
     const ks  = sData?.quoteSummary?.result?.[0]?.defaultKeyStatistics;
     const is0 = sData?.quoteSummary?.result?.[0]?.incomeStatementHistory?.incomeStatementHistory?.[0];
     const bs0 = sData?.quoteSummary?.result?.[0]?.balanceSheetHistory?.balanceSheetHistory?.[0];
 
-    if (!q) throw new Error('Ticker not found');
+    if (!q?.regularMarketPrice) throw new Error('Ticker not found');
 
     const fmt = (v, unit='B', dp=2) => {
       if (v == null) return '—';
@@ -10261,10 +10260,11 @@ async function loadLiveCompany() {
     const fmtX   = v => v == null ? '—' : v.toFixed(1) + 'x';
 
     const price   = q.regularMarketPrice;
-    const chg     = q.regularMarketChangePercent;
-    const mktCap  = q.marketCap;
+    const rawChg  = q.regularMarketChangePercent;
+    const chg     = rawChg != null ? (Math.abs(rawChg) > 1 ? rawChg : rawChg * 100) : ((q.regularMarketPrice - q.chartPreviousClose) / q.chartPreviousClose * 100);
+    const mktCap  = fd?.marketCap?.raw ?? ks?.marketCap?.raw;
     const name    = q.shortName || q.longName || ticker;
-    const sector  = q.sector || '';
+    const sector  = '';
     const rev     = is0?.totalRevenue?.raw ?? fd?.totalRevenue?.raw;
     const ebitda  = fd?.ebitda?.raw;
     const ni      = is0?.netIncome?.raw;
@@ -10277,7 +10277,7 @@ async function loadLiveCompany() {
     const evEbitda= ks?.enterpriseToEbitda?.raw;
     const evRev   = ks?.enterpriseToRevenue?.raw;
     const pe      = ks?.forwardPE?.raw;
-    const shares  = q.sharesOutstanding ?? ks?.sharesOutstanding?.raw;
+    const shares  = ks?.sharesOutstanding?.raw;
 
     const chgClass = chg > 0 ? 'up' : 'dn';
     const chgSign  = chg > 0 ? '+' : '';
@@ -11465,12 +11465,19 @@ async function fetchMacroData() {
 
   const symbols = ['^TNX','^IRX','^VIX','^GSPC','HYG','LQD'];
   try {
-    const url = 'https://query1.finance.yahoo.com/v7/finance/quote?symbols=' + symbols.join(',');
-    const res = await fetch(PROXY_FM + encodeURIComponent(url));
-    const data = JSON.parse((await res.json()).contents);
-    const results = data?.quoteResponse?.result ?? [];
+    const fetches = await Promise.all(
+      symbols.map(s => fetch(PROXY_FM + encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(s)}?interval=1d&range=1d`)))
+    );
+    const jsons = await Promise.all(fetches.map(r => r.json()));
     const by = {};
-    results.forEach(q => { by[q.symbol] = q; });
+    symbols.forEach((s,i) => {
+      const meta = JSON.parse(jsons[i].contents)?.chart?.result?.[0]?.meta;
+      if (meta) {
+        const rawPct = meta.regularMarketChangePercent;
+        meta.regularMarketChangePercent = rawPct != null ? (Math.abs(rawPct) > 1 ? rawPct : rawPct * 100) : ((meta.regularMarketPrice - meta.chartPreviousClose) / meta.chartPreviousClose * 100);
+        by[s] = meta;
+      }
+    });
 
     const fmt1 = v => v == null ? '—' : v.toFixed(2);
     const fmtPct = v => v == null ? '—' : (v > 0 ? '+' : '') + v.toFixed(2) + '%';
