@@ -140,13 +140,11 @@ body { background: var(--bg); color: var(--t1); font-family: Arial, Helvetica, s
 .tools-menu.open { display: block; }
 .tools-menu-tabs {
   display: flex; border-bottom: 2px solid var(--b1); background: var(--s1);
-  overflow-x: auto; -webkit-overflow-scrolling: touch;
 }
-.tools-menu-tabs::-webkit-scrollbar { display: none; }
 .tools-menu-tab {
-  flex-shrink: 0; padding: 9px 7px; border: none; background: none;
+  flex: 1; padding: 9px 2px; border: none; background: none; text-align: center;
   font-family: Arial, Helvetica, sans-serif; font-weight: 700;
-  font-size: 8px; letter-spacing: .04em; text-transform: uppercase;
+  font-size: 7.5px; letter-spacing: .03em; text-transform: uppercase;
   color: var(--t3); cursor: pointer; transition: color .12s, background .12s;
   border-bottom: 2px solid transparent; margin-bottom: -2px; white-space: nowrap;
 }
@@ -994,7 +992,7 @@ tr.row-output .val-td { color: var(--blue); font-weight: 700; font-size: 13px; }
   /* Tools menu */
   .tools-menu { width:280px; }
   .tools-item { padding:10px 12px; font-size:11.5px; }
-  .tools-menu-tab { font-size:9.5px; padding:10px 10px; }
+  .tools-menu-tab { font-size:9px; padding:10px 2px; }
 
   /* Modals — near-full screen, slight padding */
   .xdrill-modal,
@@ -2069,6 +2067,7 @@ body.wt-open #gridWrap{padding-bottom:150px;}
           <button class="tools-menu-tab on" id="ttabBuild" onclick="setToolsTab('build')">Build</button>
           <button class="tools-menu-tab" id="ttabDrills" onclick="setToolsTab('drills')">Drills</button>
           <button class="tools-menu-tab" id="ttabInterview" onclick="setToolsTab('interview')">Interview</button>
+          <button class="tools-menu-tab" id="ttabReference" onclick="setToolsTab('reference')">Reference</button>
           <button class="tools-menu-tab" id="ttabCareer" onclick="setToolsTab('career')">Career</button>
         </div>
         <!-- BUILD TAB -->
@@ -2141,7 +2140,6 @@ body.wt-open #gridWrap{padding-bottom:150px;}
         </div>
         <!-- INTERVIEW TAB -->
         <div class="tools-tab-content hidden" id="ttab-interview">
-          <span class="tools-item-section">Prep</span>
           <button class="tools-item" id="qaBtn" onclick="toggleQA();closeToolsMenu()">
             Interview Q&amp;A<span class="tools-item-badge"></span>
           </button>
@@ -2160,7 +2158,9 @@ body.wt-open #gridWrap{padding-bottom:150px;}
           <button class="tools-item" id="iafBtn" onclick="toggleIAF();closeToolsMenu()">
             Answer Frameworks<span class="tools-item-badge">NEW</span>
           </button>
-          <div class="tools-divider"></div>
+        </div>
+        <!-- REFERENCE TAB -->
+        <div class="tools-tab-content hidden" id="ttab-reference">
           <span class="tools-item-section">Market Data</span>
           <button class="tools-item" id="pulseBtn" onclick="togglePulse();closeToolsMenu()">
             Markets Pulse<span class="tools-item-badge"></span>
@@ -4149,8 +4149,8 @@ function closeToolsMenu() {
 }
 
 let activeToolsTab = 'build';
-const TOOL_TABS = ['build','drills','interview','career'];
-const TOOL_TAB_BTN_IDS = {build:'ttabBuild',drills:'ttabDrills',interview:'ttabInterview',career:'ttabCareer'};
+const TOOL_TABS = ['build','drills','interview','reference','career'];
+const TOOL_TAB_BTN_IDS = {build:'ttabBuild',drills:'ttabDrills',interview:'ttabInterview',reference:'ttabReference',career:'ttabCareer'};
 function setToolsTab(tab) {
   activeToolsTab = tab;
   TOOL_TABS.forEach(t => {
@@ -10216,17 +10216,26 @@ function toggleLivePanel() {
   const btn = document.getElementById('liveDataBtn');
   const open = p.classList.toggle('open');
   if (btn) btn.classList.toggle('guide-on', open);
-  if (open && lpRfRate === null) fetchRfRate();
+  if (open) {
+    if (lpRfRate === null) fetchRfRate();
+    else renderWACC();
+  }
 }
 
 async function fetchRfRate() {
+  const yfUrl = 'https://query1.finance.yahoo.com/v8/finance/chart/%5ETNX?interval=1d&range=1d';
   try {
-    const url = 'https://query1.finance.yahoo.com/v8/finance/chart/%5ETNX?interval=1d&range=1d';
-    const res = await fetch(PROXY_FM + encodeURIComponent(url));
+    const res = await fetch(PROXY_FM + encodeURIComponent(yfUrl));
+    if (!res.ok) throw new Error('proxy_fail');
     const data = JSON.parse((await res.json()).contents);
-    const q = data?.chart?.result?.[0]?.meta;
-    lpRfRate = q?.regularMarketPrice ?? 4.5;
-  } catch(e) { lpRfRate = 4.5; }
+    lpRfRate = data?.chart?.result?.[0]?.meta?.regularMarketPrice ?? 4.5;
+  } catch(e) {
+    try {
+      const res2 = await fetch(yfUrl);
+      const data2 = await res2.json();
+      lpRfRate = data2?.chart?.result?.[0]?.meta?.regularMarketPrice ?? 4.5;
+    } catch(e2) { lpRfRate = 4.5; }
+  }
   renderWACC();
 }
 
@@ -10238,18 +10247,12 @@ async function loadLiveCompany() {
   btn.disabled = true;
   box.innerHTML = '<div class="lp-spinner">Loading…</div>';
 
-  try {
-    const res  = await fetch(`/.netlify/functions/fmp?ticker=${encodeURIComponent(ticker)}`);
-    const d    = await res.json();
-    if (!res.ok || d.error) throw new Error(d.error || 'Load failed');
-
+  const renderCompany = (d, source) => {
     const fmt    = (v, unit='B', dp=2) => v == null ? '—' : '$' + (v/(unit==='B'?1e9:unit==='M'?1e6:1)).toFixed(dp) + unit;
     const fmtPct = v => v == null ? '—' : (v*100).toFixed(1) + '%';
     const fmtX   = v => v == null ? '—' : v.toFixed(1) + 'x';
-
     const chgClass = (d.change ?? 0) > 0 ? 'up' : 'dn';
     const chgSign  = (d.change ?? 0) > 0 ? '+' : '';
-
     box.innerHTML = `
       <div class="lp-section">
         <div class="lp-section-hdr">Company</div>
@@ -10269,7 +10272,7 @@ async function loadLiveCompany() {
         <div class="lp-row"><span class="lp-lbl">EV / EBITDA</span><span class="lp-val">${fmtX(d.evEbitda)}</span></div>
         <div class="lp-row"><span class="lp-lbl">P/E</span><span class="lp-val">${fmtX(d.pe)}</span></div>
       </div>
-      <div class="lp-section">
+      ${d.revenue != null ? `<div class="lp-section">
         <div class="lp-section-hdr">Financials (last fiscal year)</div>
         <div class="lp-row"><span class="lp-lbl">Revenue</span><span class="lp-val">${fmt(d.revenue)}</span></div>
         <div class="lp-row"><span class="lp-lbl">Gross Margin</span><span class="lp-val">${fmtPct(d.grossMargin)}</span></div>
@@ -10277,17 +10280,60 @@ async function loadLiveCompany() {
         <div class="lp-row"><span class="lp-lbl">EBITDA Margin</span><span class="lp-val">${fmtPct(d.ebitdaMargin)}</span></div>
         <div class="lp-row"><span class="lp-lbl">Net Income</span><span class="lp-val">${fmt(d.netIncome)}</span></div>
         <div class="lp-row"><span class="lp-lbl">Net Margin</span><span class="lp-val">${fmtPct(d.netMargin)}</span></div>
-      </div>
-      <div class="lp-section">
+      </div>` : ''}
+      ${d.totalDebt != null || d.cash != null ? `<div class="lp-section">
         <div class="lp-section-hdr">Balance Sheet</div>
         <div class="lp-row"><span class="lp-lbl">Total Debt</span><span class="lp-val">${fmt(d.totalDebt)}</span></div>
         <div class="lp-row"><span class="lp-lbl">Cash & Equivalents</span><span class="lp-val">${fmt(d.cash)}</span></div>
         <div class="lp-row"><span class="lp-lbl">Net Debt</span><span class="lp-val">${fmt(d.netDebt)}</span></div>
-      </div>
-      <div class="lp-note">Source: Financial Modeling Prep · last fiscal year financials.</div>
+      </div>` : ''}
+      <div class="lp-note">Source: ${source}</div>
     `;
+  };
+
+  try {
+    // Try Netlify function (FMP) first
+    const res = await fetch(`/.netlify/functions/fmp?ticker=${encodeURIComponent(ticker)}`);
+    if (!res.ok) throw new Error('fn_unavailable');
+    const d = await res.json();
+    if (d.error) throw new Error(d.error);
+    renderCompany(d, 'Financial Modeling Prep · last fiscal year financials.');
   } catch(e) {
-    box.innerHTML = `<div class="lp-empty">Could not load <strong>${ticker}</strong>. ${e.message || 'Try again in a moment.'}</div>`;
+    // Fallback: Yahoo Finance quoteSummary (works without server)
+    try {
+      const yfUrl = `https://query1.finance.yahoo.com/v10/finance/quoteSummary/${encodeURIComponent(ticker)}?modules=price,financialData,defaultKeyStatistics`;
+      const yr = await fetch(yfUrl);
+      const yj = await yr.json();
+      const res = yj.quoteSummary?.result?.[0];
+      if (!res) throw new Error('Not found');
+      const p = res.price, fin = res.financialData, ks = res.defaultKeyStatistics;
+      const mktCap = p.marketCap?.raw;
+      const ev = ks.enterpriseValue?.raw;
+      const rev = fin.totalRevenue?.raw;
+      const ebitda = fin.ebitda?.raw;
+      renderCompany({
+        name: p.longName || p.shortName || ticker,
+        price: p.regularMarketPrice?.raw,
+        change: (p.regularMarketChangePercent?.raw ?? 0) * 100,
+        marketCap: mktCap,
+        ev,
+        shares: p.sharesOutstanding?.raw,
+        pe: p.trailingPE?.raw,
+        evEbitda: ks.enterpriseToEbitda?.raw,
+        evRev: ks.enterpriseToRevenue?.raw,
+        revenue: rev,
+        grossMargin: fin.grossMargins?.raw,
+        ebitda,
+        ebitdaMargin: fin.ebitdaMargins?.raw,
+        netIncome: fin.netIncomeToCommon?.raw,
+        netMargin: fin.profitMargins?.raw,
+        totalDebt: fin.totalDebt?.raw,
+        cash: fin.totalCash?.raw,
+        netDebt: fin.netDebt?.raw,
+      }, 'Yahoo Finance');
+    } catch(e2) {
+      box.innerHTML = `<div class="lp-empty">Could not load <strong>${ticker}</strong>. ${e2.message !== 'Not found' ? 'Try again in a moment.' : 'Ticker not found.'}</div>`;
+    }
   }
   btn.disabled = false;
 }
@@ -11432,19 +11478,37 @@ async function fetchMacroData() {
   if (btn) btn.disabled = true;
 
   const symbols = ['^TNX','^IRX','^VIX','^GSPC','HYG','LQD'];
+  const yfChartUrl = s => `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(s)}?interval=1d&range=1d`;
+
+  const parseMeta = (json, viaProxy) => {
+    const raw = viaProxy ? JSON.parse(json.contents) : json;
+    const meta = raw?.chart?.result?.[0]?.meta;
+    if (!meta) return null;
+    const rawPct = meta.regularMarketChangePercent;
+    meta.regularMarketChangePercent = rawPct != null ? (Math.abs(rawPct) > 1 ? rawPct : rawPct * 100) : ((meta.regularMarketPrice - meta.chartPreviousClose) / meta.chartPreviousClose * 100);
+    return meta;
+  };
+
   try {
-    const results = await Promise.allSettled(
-      symbols.map(s => fetch(PROXY_FM + encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(s)}?interval=1d&range=1d`)).then(r => r.json()))
-    );
+    // Try proxy first, fall back to direct Yahoo Finance fetch
+    const fetchSym = async s => {
+      try {
+        const r = await fetch(PROXY_FM + encodeURIComponent(yfChartUrl(s)));
+        if (!r.ok) throw new Error('proxy_fail');
+        return { json: await r.json(), viaProxy: true };
+      } catch(e) {
+        const r2 = await fetch(yfChartUrl(s));
+        return { json: await r2.json(), viaProxy: false };
+      }
+    };
+
+    const results = await Promise.allSettled(symbols.map(fetchSym));
     const by = {};
     symbols.forEach((s, i) => {
       if (results[i].status !== 'fulfilled') return;
       try {
-        const meta = JSON.parse(results[i].value.contents)?.chart?.result?.[0]?.meta;
-        if (!meta) return;
-        const rawPct = meta.regularMarketChangePercent;
-        meta.regularMarketChangePercent = rawPct != null ? (Math.abs(rawPct) > 1 ? rawPct : rawPct * 100) : ((meta.regularMarketPrice - meta.chartPreviousClose) / meta.chartPreviousClose * 100);
-        by[s] = meta;
+        const meta = parseMeta(results[i].value.json, results[i].value.viaProxy);
+        if (meta) by[s] = meta;
       } catch(e) {}
     });
     if (!Object.keys(by).length) throw new Error('All symbols failed');

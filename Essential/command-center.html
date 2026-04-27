@@ -719,6 +719,56 @@ body {
 .kc.pr-high     { border-left: 2px solid var(--amber); }
 .kc.pr-medium   { border-left: 2px solid var(--blue); }
 .kc.pr-low      { border-left: 2px solid var(--b3); }
+/* card colors — dark theme (muted tints) */
+.kc.cc-sky    { background: rgba(59,130,246,0.10); }
+.kc.cc-sage   { background: rgba(34,197,94,0.09); }
+.kc.cc-honey  { background: rgba(234,179,8,0.10); }
+.kc.cc-peach  { background: rgba(249,115,22,0.10); }
+.kc.cc-rose   { background: rgba(239,68,68,0.10); }
+.kc.cc-lilac  { background: rgba(168,85,247,0.10); }
+.kc.cc-blush  { background: rgba(236,72,153,0.10); }
+.kc.cc-mint   { background: rgba(20,184,166,0.10); }
+/* card colors — light theme pastel */
+[data-theme="light"] .kc.cc-sky    { background: #DBEAFE; border-color: #BFDBFE; }
+[data-theme="light"] .kc.cc-sage   { background: #DCFCE7; border-color: #BBF7D0; }
+[data-theme="light"] .kc.cc-honey  { background: #FEF9C3; border-color: #FEF08A; }
+[data-theme="light"] .kc.cc-peach  { background: #FFEDD5; border-color: #FED7AA; }
+[data-theme="light"] .kc.cc-rose   { background: #FEE2E2; border-color: #FECACA; }
+[data-theme="light"] .kc.cc-lilac  { background: #F3E8FF; border-color: #E9D5FF; }
+[data-theme="light"] .kc.cc-blush  { background: #FCE7F3; border-color: #FBCFE8; }
+[data-theme="light"] .kc.cc-mint   { background: #CCFBF1; border-color: #99F6E4; }
+/* within-column drop indicator */
+.kc.drop-before { box-shadow: 0 -3px 0 var(--amber-l), 0 4px 14px rgba(0,0,0,.35) !important; }
+.kc.drop-after  { box-shadow: 0  3px 0 var(--amber-l), 0 4px 14px rgba(0,0,0,.35) !important; }
+/* color swatch picker */
+.color-swatches { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.cswatch {
+  width: 22px; height: 22px; border-radius: 4px;
+  border: 2px solid transparent; cursor: pointer;
+  transition: border-color .12s, transform .1s;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; color: var(--t3);
+}
+.cswatch:hover { transform: scale(1.12); }
+.cswatch.active { border-color: var(--t1); transform: scale(1.15); }
+/* world clock bar */
+.wc-bar {
+  flex-shrink: 0;
+  display: flex; align-items: center; gap: 0;
+  background: var(--s1); border-bottom: 1px solid var(--b1);
+  padding: 0 16px; height: 26px; overflow: hidden;
+}
+.wc-city {
+  display: flex; align-items: center; gap: 6px;
+  padding: 0 14px 0 0;
+  margin-right: 14px;
+  border-right: 1px solid var(--b1);
+  white-space: nowrap;
+}
+.wc-city:last-child { border-right: none; padding-right: 0; margin-right: 0; }
+.wc-name { font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: var(--t3); font-weight: 700; }
+.wc-time { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--t2); font-weight: 500; }
+.wc-dot  { width: 4px; height: 4px; border-radius: 50%; background: var(--b3); flex-shrink: 0; }
 .kc.is-ov .kc-title-row::after {
   content: 'OVERDUE';
   font-size: 7px;
@@ -1877,6 +1927,8 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
   .hdr-right { margin-left: auto; gap: 6px; flex-wrap: nowrap; }
   .kbd-hint { display: none; }
   .hdr-date { display: none; }
+  .wc-bar { padding: 0 10px; gap: 0; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .wc-bar::-webkit-scrollbar { display: none; }
   .sort-btn  { font-size: 9px; padding: 4px 8px; }
   .btn-new   { font-size: 9px; padding: 6px 10px; }
 
@@ -1946,6 +1998,8 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
     <span class="hdr-date" id="hdrDate"></span>
     <span class="kbd-hint">⌘N new · ⌘Z undo</span>
     <button class="sort-btn" onclick="openCalendar()" style="font-size:10px;font-weight:700;letter-spacing:.06em;padding:0 12px;">📅 Calendar</button>
+    <button class="sort-btn" onclick="exportData()" title="Export data as JSON" style="font-size:10px;font-weight:700;letter-spacing:.06em;padding:0 10px;">⬇ Export</button>
+    <label class="sort-btn" title="Import data from JSON" style="font-size:10px;font-weight:700;letter-spacing:.06em;padding:0 10px;cursor:pointer;">⬆ Import<input type="file" accept=".json" onchange="importData(event)" style="display:none"></label>
     <button class="theme-toggle" id="themeToggleBtn" onclick="toggleCCTheme()" title="Toggle light/dark">☀️</button>
     <a href="./news.html" class="btn-news">
       <span class="btn-news-dot"></span>
@@ -1975,6 +2029,15 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
     <button class="btn-new" onclick="openNewCard()">+ New Task</button>
   </div>
 </header>
+
+<!-- WORLD CLOCK -->
+<div class="wc-bar" id="wcBar">
+  <div class="wc-city"><span class="wc-name">Singapore</span><span class="wc-dot"></span><span class="wc-time" id="wc-sg">—</span></div>
+  <div class="wc-city"><span class="wc-name">London</span><span class="wc-dot"></span><span class="wc-time" id="wc-lon">—</span></div>
+  <div class="wc-city"><span class="wc-name">Paris</span><span class="wc-dot"></span><span class="wc-time" id="wc-par">—</span></div>
+  <div class="wc-city"><span class="wc-name">Dubai</span><span class="wc-dot"></span><span class="wc-time" id="wc-dxb">—</span></div>
+  <div class="wc-city"><span class="wc-name">New York</span><span class="wc-dot"></span><span class="wc-time" id="wc-nyc">—</span></div>
+</div>
 
 <!-- METRICS -->
 <div class="metrics">
@@ -2219,8 +2282,8 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
 </div>
 
 <!-- CARD MODAL -->
-<div class="modal-bg" id="cardModal">
-  <div class="modal">
+<div class="modal-bg" id="cardModal" onclick="handleModalBgClick(event)">
+  <div class="modal" onkeydown="handleModalKey(event)">
     <div class="modal-hdr">
       <span class="modal-ttl" id="modalTitle">New Task</span>
       <button class="modal-x" onclick="closeModal()">×</button>
@@ -2265,6 +2328,10 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
           <input class="finput" id="fWho" type="text" placeholder="@name">
         </div>
       </div>
+      <div class="fg">
+        <label class="flabel">Card Color</label>
+        <div class="color-swatches" id="fColorSwatches"></div>
+      </div>
     </div>
     <div class="modal-ftr">
       <button class="btn-sec" onclick="closeModal()">Cancel</button>
@@ -2305,14 +2372,29 @@ let S = {
 };
 
 let hideDone = false;
-let editId   = null;   // card being edited
-let noteId   = null;   // note being edited
-let ctxId    = null;   // card for context menu
-let dragId   = null;   // card being dragged
+let editId       = null;   // card being edited
+let noteId       = null;   // note being edited
+let ctxId        = null;   // card for context menu
+let dragId       = null;   // card being dragged
+let dropTargetId = null;   // card to insert before/after
+let dropBefore   = true;   // insert before dropTargetId?
 let undos    = [];     // undo stack
 let noteSave = null;   // debounce timer
+let selectedColor = '';    // chosen card color id
 
 const PRI = { critical:0, high:1, medium:2, low:3 };
+
+const CARD_COLORS = [
+  { id:'',         swatch:'var(--b2)',               label:'None' },
+  { id:'cc-sky',   swatch:'rgba(59,130,246,0.45)',   label:'Blue' },
+  { id:'cc-sage',  swatch:'rgba(34,197,94,0.40)',    label:'Green' },
+  { id:'cc-honey', swatch:'rgba(234,179,8,0.45)',    label:'Yellow' },
+  { id:'cc-peach', swatch:'rgba(249,115,22,0.45)',   label:'Orange' },
+  { id:'cc-rose',  swatch:'rgba(239,68,68,0.40)',    label:'Red' },
+  { id:'cc-lilac', swatch:'rgba(168,85,247,0.40)',   label:'Purple' },
+  { id:'cc-blush', swatch:'rgba(236,72,153,0.40)',   label:'Pink' },
+  { id:'cc-mint',  swatch:'rgba(20,184,166,0.40)',   label:'Teal' },
+];
 
 /* ============================================================
    PERSISTENCE
@@ -2324,6 +2406,32 @@ function hydrate() {
     const d = localStorage.getItem(LS);
     if (d) S = { ...S, ...JSON.parse(d) };
   } catch(e) {}
+}
+function exportData() {
+  const blob = new Blob([JSON.stringify(S, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'command-center-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('Data exported');
+}
+function importData(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try {
+      const parsed = JSON.parse(ev.target.result);
+      S = { ...S, ...parsed };
+      persist(); render();
+      toast('Data imported — ' + (parsed.cards?.length ?? 0) + ' tasks loaded');
+    } catch(err) {
+      toast('Import failed: invalid file', true);
+    }
+    e.target.value = '';
+  };
+  reader.readAsText(file);
 }
 
 /* ============================================================
@@ -2561,6 +2669,21 @@ function renderDate() {
     new Date().toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
 }
 
+const WC_ZONES = [
+  { id:'wc-sg',  tz:'Asia/Singapore' },
+  { id:'wc-lon', tz:'Europe/London' },
+  { id:'wc-par', tz:'Europe/Paris' },
+  { id:'wc-dxb', tz:'Asia/Dubai' },
+  { id:'wc-nyc', tz:'America/New_York' },
+];
+function renderWorldClock() {
+  const now = new Date();
+  WC_ZONES.forEach(({ id, tz }) => {
+    const el = document.getElementById(id);
+    if (el) el.textContent = now.toLocaleTimeString('en-US', { timeZone: tz, hour:'2-digit', minute:'2-digit', hour12: false });
+  });
+}
+
 function renderMetrics() {
   const ac = S.cards.filter(c => !c.archived);
   document.getElementById('mOvN').textContent = ac.filter(c => isOv(c)).length;
@@ -2634,11 +2757,13 @@ function cardHTML(c) {
   const due = c.dueDate ? dueFmt(c.dueDate) : null;
   const ov  = isOv(c);
   const desc = c.desc ? c.desc.substring(0,72) + (c.desc.length > 72 ? '…' : '') : '';
-  return `<div class="kc pr-${c.priority} ${ov ? 'is-ov' : ''}"
+  const cc = c.color || '';
+  return `<div class="kc pr-${c.priority} ${cc} ${ov ? 'is-ov' : ''}"
     id="kc-${c.id}"
     draggable="true"
     ondragstart="onDragStart(event,'${c.id}')"
-    ondragend="onDragEnd(event)"
+    ondragend="onDragEnd()"
+    ondragover="onCardDragOver(event,'${c.id}')"
     ondblclick="openEditCard('${c.id}')"
     oncontextmenu="showCtx(event,'${c.id}')">
     <div class="kc-title-row">
@@ -2657,14 +2782,33 @@ function cardHTML(c) {
 }
 
 /* ── DRAG & DROP ── */
+function clearDropIndicators() {
+  document.querySelectorAll('.kc.drop-before,.kc.drop-after').forEach(el => {
+    el.classList.remove('drop-before','drop-after');
+  });
+}
 function onDragStart(e, id) {
   dragId = id;
+  dropTargetId = null;
   e.dataTransfer.effectAllowed = 'move';
   requestAnimationFrame(() => document.getElementById('kc-'+id)?.classList.add('dragging'));
 }
 function onDragEnd() {
   document.getElementById('kc-'+dragId)?.classList.remove('dragging');
   document.querySelectorAll('.col-cards').forEach(el => el.classList.remove('drag-over'));
+  clearDropIndicators();
+  dropTargetId = null;
+}
+function onCardDragOver(e, id) {
+  e.preventDefault();
+  e.stopPropagation();
+  if (id === dragId) return;
+  const rect = e.currentTarget.getBoundingClientRect();
+  const before = e.clientY < rect.top + rect.height / 2;
+  clearDropIndicators();
+  e.currentTarget.classList.add(before ? 'drop-before' : 'drop-after');
+  dropTargetId = id;
+  dropBefore = before;
 }
 function onDragOver(e, status) {
   e.preventDefault();
@@ -2678,15 +2822,33 @@ function onDragLeave(e) {
 function onDrop(e, ns) {
   e.preventDefault();
   document.querySelectorAll('.col-cards').forEach(el => el.classList.remove('drag-over'));
+  clearDropIndicators();
   if (!dragId) return;
   const c = S.cards.find(c => c.id === dragId);
-  if (!c || c.status === ns) return;
-  const os = c.status;
-  c.status = ns; c.updatedAt = Date.now();
-  logAct(`Moved "${c.title}" ${os} → ${ns}`, 'move');
+  if (!c) { dragId = null; return; }
+
+  const idx = S.cards.indexOf(c);
+  S.cards.splice(idx, 1);
+
+  if (dropTargetId && dropTargetId !== dragId) {
+    const ti = S.cards.findIndex(x => x.id === dropTargetId);
+    S.cards.splice(ti === -1 ? S.cards.length : (dropBefore ? ti : ti + 1), 0, c);
+  } else {
+    // drop on empty column or no card target — push to end of column
+    const colCards = S.cards.filter(x => x.status === ns && !x.archived);
+    const lastIdx = colCards.length ? S.cards.indexOf(colCards[colCards.length - 1]) + 1 : S.cards.length;
+    S.cards.splice(lastIdx, 0, c);
+  }
+
+  if (c.status !== ns) {
+    const os = c.status;
+    c.status = ns;
+    logAct(`Moved "${c.title}" ${os} → ${ns}`, 'move');
+    toast('Moved to ' + ns);
+  }
+  c.updatedAt = Date.now();
   persist(); render();
-  toast('Moved to ' + ns);
-  dragId = null;
+  dragId = null; dropTargetId = null;
 }
 
 /* ── TODOS ── */
@@ -2808,8 +2970,33 @@ function renderAct() {
 
 /* ── CARD MODAL ── */
 let newCardStatus = 'todo';
+function renderColorSwatches(current) {
+  const wrap = document.getElementById('fColorSwatches');
+  if (!wrap) return;
+  wrap.innerHTML = CARD_COLORS.map(col => {
+    const active = (col.id === current) ? ' active' : '';
+    const icon = col.id === '' ? '✕' : '';
+    return `<button class="cswatch${active}" title="${col.label}"
+      style="background:${col.swatch || 'var(--b1)'}"
+      onclick="selectColor('${col.id}')">${icon}</button>`;
+  }).join('');
+}
+function selectColor(id) {
+  selectedColor = id;
+  renderColorSwatches(id);
+}
+function handleModalKey(e) {
+  if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+    e.preventDefault();
+    saveCard();
+  }
+  if (e.key === 'Escape') closeModal();
+}
+function handleModalBgClick(e) {
+  if (e.target === document.getElementById('cardModal')) saveCard();
+}
 function openNewCard(status = 'todo') {
-  newCardStatus = status; editId = null;
+  newCardStatus = status; editId = null; selectedColor = '';
   document.getElementById('modalTitle').textContent = 'New Task';
   document.getElementById('fTitle').value   = '';
   document.getElementById('fDesc').value    = '';
@@ -2817,13 +3004,14 @@ function openNewCard(status = 'todo') {
   document.getElementById('fPriority').value= 'medium';
   document.getElementById('fDue').value     = '';
   document.getElementById('fWho').value     = '';
+  renderColorSwatches('');
   document.getElementById('cardModal').classList.add('on');
   setTimeout(() => document.getElementById('fTitle').focus(), 80);
 }
 function openEditCard(id) {
   const c = S.cards.find(c => c.id === id);
   if (!c) return;
-  editId = id;
+  editId = id; selectedColor = c.color || '';
   document.getElementById('modalTitle').textContent = 'Edit Task';
   document.getElementById('fTitle').value   = c.title;
   document.getElementById('fDesc').value    = c.desc||'';
@@ -2831,6 +3019,7 @@ function openEditCard(id) {
   document.getElementById('fPriority').value= c.priority;
   document.getElementById('fDue').value     = c.dueDate||'';
   document.getElementById('fWho').value     = c.who||'';
+  renderColorSwatches(c.color || '');
   document.getElementById('cardModal').classList.add('on');
   setTimeout(() => document.getElementById('fTitle').focus(), 80);
 }
@@ -2850,6 +3039,7 @@ function saveCard() {
       c.priority = document.getElementById('fPriority').value;
       c.dueDate  = document.getElementById('fDue').value||null;
       c.who      = document.getElementById('fWho').value.trim();
+      c.color    = selectedColor;
       c.updatedAt= Date.now();
       logAct(`Updated "${title}"`, 'update');
     }
@@ -2861,13 +3051,15 @@ function saveCard() {
       priority:document.getElementById('fPriority').value,
       dueDate: document.getElementById('fDue').value||null,
       who:     document.getElementById('fWho').value.trim(),
+      color:   selectedColor,
       createdAt:Date.now(), updatedAt:Date.now(), archived:false
     };
     S.cards.unshift(c);
     logAct(`Created "${title}"`, 'create');
   }
+  const wasEdit = !!editId;
   persist(); render(); closeModal();
-  toast(editId ? 'Task updated' : 'Task created');
+  toast(wasEdit ? 'Task updated' : 'Task created');
 }
 
 /* ── CONTEXT MENU ── */
@@ -3026,7 +3218,9 @@ function seed() {
 hydrate();
 seed();
 render();
+renderWorldClock();
 setInterval(() => { renderAct(); renderMetrics(); renderDate(); }, 60000);
+setInterval(renderWorldClock, 1000);
 
 /* ============================================================
    GOOGLE CALENDAR + TASKS
