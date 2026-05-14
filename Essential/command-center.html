@@ -1728,6 +1728,10 @@ body {
 .cal-dogs-year-sel { display:flex; align-items:center; gap:8px; padding:10px 0 12px; }
 .cal-dogs-year-btn { background:var(--s2); border:1px solid var(--b2); border-radius:3px; width:24px; height:24px; display:flex; align-items:center; justify-content:center; color:var(--t2); cursor:pointer; font-size:11px; transition:all .12s; }
 .cal-dogs-year-btn:hover { border-color:var(--b3); color:var(--t1); }
+.cal-dogs-year-btn:disabled { opacity:.35; cursor:default; pointer-events:none; }
+.cal-dogs-all-btn { margin-left:4px; background:var(--s2); border:1px solid var(--b2); border-radius:3px; padding:3px 9px; font-size:10px; font-weight:700; letter-spacing:.06em; color:var(--t3); cursor:pointer; transition:all .12s; }
+.cal-dogs-all-btn:hover { color:var(--t2); border-color:var(--b3); }
+.cal-dogs-all-btn.on { background:var(--amber); border-color:var(--amber); color:#000; }
 .cal-dogs-year-lbl { font-size:12px; font-weight:700; color:var(--t1); min-width:40px; text-align:center; }
 .cal-dogs-hdr { display:grid; grid-template-columns:1fr 60px 90px 90px 80px; padding:6px 0; border-bottom:2px solid var(--b2); font-size:8.5px; font-weight:700; letter-spacing:.10em; text-transform:uppercase; color:var(--t3); }
 .cal-dogs-row { display:grid; grid-template-columns:1fr 60px 90px 90px 80px; padding:9px 0; border-bottom:1px solid var(--b1); align-items:center; transition:background .1s; }
@@ -4116,50 +4120,76 @@ function proratePayment(ev, pay) {
 }
 
 /* ── DOGS LEDGER ── */
+let dogsViewAll = false;
+
 function parseDogEntry(title) {
   if (!title) return null;
-  // Strip payment annotation first
   const stripped = title
     .replace(/\s*\(Paid\s+[^)]*\)/gi, '')
     .replace(/\s*\(\$[\d,]+(?:\.\d+)?\)/gi, '')
     .trim();
   if (!stripped) return null;
-  // Split on em-dash (—) or spaced hyphen ( - ) to separate name(s) from breed(s)
-  const dashIdx = stripped.search(/\s*[—–]\s*|\s+-\s+/);
-  if (dashIdx !== -1) {
-    const namesPart  = stripped.slice(0, dashIdx).trim();
-    const breedPart  = stripped.slice(stripped.search(/[—–]|-(?=\s)/) + 1).trim();
-    return { names: namesPart, breed: breedPart };
-  }
+  // Split on em-dash or spaced hyphen to separate names from breed
+  const m = stripped.match(/^(.+?)\s*[—–]\s*(.+)$/) || stripped.match(/^(.+?)\s+-\s+(.+)$/);
+  if (m) return { names: m[1].trim(), breed: m[2].trim() };
   return { names: stripped, breed: null };
 }
 
-function normalizeDogKey(namesPart) {
-  // Only sort the NAMES (not breed) so "Ruby & Ruben" === "Ruben & Ruby"
-  return namesPart.split(/\s*&\s*/).map(s => s.trim()).filter(Boolean)
+function normalizeDogKey(entry) {
+  // Sort names only; include breed so Charlie-Beagle ≠ Charlie-BorderCollie
+  const names = entry.names.split(/\s*&\s*/).map(s => s.trim()).filter(Boolean)
     .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
     .join(' & ');
+  return names + (entry.breed ? ' | ' + entry.breed.toLowerCase().trim() : '');
+}
+
+function toggleDogsAll() {
+  dogsViewAll = !dogsViewAll;
+  renderDogsView();
 }
 
 async function renderDogsView() {
   const content = document.getElementById('calDogsContent');
   if (!content) return;
-  content.innerHTML = '<div class="cal-dogs-empty">Loading ' + calYear + '…</div>';
-  document.getElementById('calMonthLabel').textContent = String(calYear);
+  document.getElementById('calMonthLabel').textContent = dogsViewAll ? 'All Time' : String(calYear);
 
-  const events = await loadCalendarYear(calYear);
+  const yearNav = `
+    <div class="cal-dogs-year-sel">
+      <button class="cal-dogs-year-btn" onclick="calShift(-1)" ${dogsViewAll ? 'disabled' : ''}>‹</button>
+      <span class="cal-dogs-year-lbl">${dogsViewAll ? 'All' : calYear}</span>
+      <button class="cal-dogs-year-btn" onclick="calShift(1)" ${dogsViewAll ? 'disabled' : ''}>›</button>
+      <button class="cal-dogs-all-btn${dogsViewAll ? ' on' : ''}" onclick="toggleDogsAll()">All Time</button>
+    </div>`;
+
+  content.innerHTML = yearNav + `<div class="cal-dogs-empty">Loading…</div>`;
+
+  let events;
+  if (dogsViewAll) {
+    const thisYear = new Date().getFullYear();
+    const allResults = await Promise.all(
+      [thisYear - 3, thisYear - 2, thisYear - 1, thisYear].map(y => loadCalendarYear(y).catch(() => []))
+    );
+    events = allResults.flat();
+  } else {
+    events = await loadCalendarYear(calYear);
+  }
+
   const dogs = {};
-
   events.forEach(ev => {
     if (calHiddenIds.has(ev._calId)) return;
     const pay = parsePayment(ev.summary) || parsePayment(ev.description);
     if (!pay) return;
     const entry = parseDogEntry(ev.summary);
     if (!entry || !entry.names) return;
-    const key = normalizeDogKey(entry.names);
+    const key = normalizeDogKey(entry);
     if (!key) return;
-    if (!dogs[key]) dogs[key] = { display: key, breed: entry.breed || null, bookings: 0, received: 0, total: 0 };
-    // Keep breed if not yet stored
+    if (!dogs[key]) {
+      // Display name: sorted names + breed subtitle separately
+      const displayNames = entry.names.split(/\s*&\s*/).map(s => s.trim()).filter(Boolean)
+        .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+        .join(' & ');
+      dogs[key] = { display: displayNames, breed: entry.breed || null, bookings: 0, received: 0, total: 0 };
+    }
     if (!dogs[key].breed && entry.breed) dogs[key].breed = entry.breed;
     dogs[key].bookings++;
     dogs[key].received += pay.received;
@@ -4169,15 +4199,8 @@ async function renderDogsView() {
   const rows = Object.values(dogs).sort((a, b) => b.total - a.total || a.display.localeCompare(b.display));
   const fmt  = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-  const yearNav = `
-    <div class="cal-dogs-year-sel">
-      <button class="cal-dogs-year-btn" onclick="calShift(-1)">‹</button>
-      <span class="cal-dogs-year-lbl">${calYear}</span>
-      <button class="cal-dogs-year-btn" onclick="calShift(1)">›</button>
-    </div>`;
-
   if (!rows.length) {
-    content.innerHTML = yearNav + `<div class="cal-dogs-empty">No payment data found for ${calYear}.</div>`;
+    content.innerHTML = yearNav + `<div class="cal-dogs-empty">No payment data found${dogsViewAll ? '' : ' for ' + calYear}.</div>`;
     return;
   }
 
