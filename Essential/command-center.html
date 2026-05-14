@@ -509,6 +509,49 @@ body {
   text-align: center;
 }
 
+/* ── CALENDAR MODAL TABS ── */
+.cal-tabs { display:flex; border-bottom:1px solid var(--b1); background:var(--s1); flex-shrink:0; }
+.cal-tab {
+  padding:9px 18px; font-family:Arial,Helvetica,sans-serif; font-size:11px; font-weight:700;
+  letter-spacing:.06em; text-transform:uppercase; color:var(--t3); border:none; background:none;
+  cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px; transition:color .12s;
+}
+.cal-tab:hover { color:var(--t2); }
+.cal-tab.on { color:var(--blue); border-bottom-color:var(--blue); background:var(--bg); }
+
+/* ── DOGS LEDGER TAB ── */
+.dogs-wrap { padding:16px 20px 24px; }
+.dogs-topbar { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+.dogs-range { font-size:10px; color:var(--t3); margin-left:auto; }
+.dogs-summary {
+  display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:18px;
+}
+.dogs-stat { background:var(--s2); border:1px solid var(--b1); border-radius:5px; padding:12px 14px; }
+.dogs-stat-label { font-size:9px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--t3); margin-bottom:5px; }
+.dogs-stat-val { font-family:Arial,Helvetica,sans-serif; font-size:20px; font-weight:700; color:var(--t1); line-height:1; }
+.dogs-stat-val.green { color:#43A047; }
+.dogs-table-wrap { overflow-x:auto; }
+.dogs-table { width:100%; border-collapse:collapse; font-size:11px; font-family:Arial,Helvetica,sans-serif; }
+.dogs-table th {
+  font-size:8px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--t3); padding:7px 10px; border-bottom:1px solid var(--b2);
+  text-align:left; white-space:nowrap; cursor:pointer; user-select:none;
+}
+.dogs-table th:hover { color:var(--t2); }
+.dogs-table th.sorted { color:var(--blue); }
+.dogs-table th.sorted::after { content:' ↓'; }
+.dogs-table th.sorted.asc::after { content:' ↑'; }
+.dogs-table td { padding:9px 10px; border-bottom:1px solid var(--b1); color:var(--t2); white-space:nowrap; }
+.dogs-table tr:last-child td { border-bottom:none; }
+.dogs-table tr:hover td { background:var(--s2); }
+.dogs-table td.dn { color:var(--t1); font-weight:600; max-width:160px; overflow:hidden; text-overflow:ellipsis; }
+.dogs-table td.nr { text-align:right; font-variant-numeric:tabular-nums; }
+.dogs-table td.gr { text-align:right; font-variant-numeric:tabular-nums; color:#43A047; font-weight:600; }
+.dogs-table td.am { text-align:right; font-variant-numeric:tabular-nums; color:var(--amber-color,#B87A12); }
+.dogs-table td.red { text-align:right; font-variant-numeric:tabular-nums; color:#C93C2E; }
+.dogs-loading { padding:48px; text-align:center; color:var(--t3); font-size:12px; }
+.dogs-empty { padding:32px; text-align:center; color:var(--t4); font-size:11px; }
+
 /* ── METRICS BAR ─────────────────────────────────────────── */
 .metrics {
   flex-shrink: 0;
@@ -2326,7 +2369,20 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
         <button class="cal-close" onclick="closeCalendar()">×</button>
       </div>
     </div>
+    <div class="cal-tabs">
+      <button class="cal-tab on" id="calTabCal" onclick="setCalTab('cal')">Calendar</button>
+      <button class="cal-tab" id="calTabDogs" onclick="setCalTab('dogs')">🐾 Dogs</button>
+    </div>
     <div class="cal-body">
+      <div id="calDogsPanel" style="display:none">
+        <div class="dogs-wrap">
+          <div class="dogs-topbar">
+            <div class="dogs-summary" id="dogsSummary" style="display:none;width:100%"></div>
+          </div>
+          <div id="dogsContent"><div class="dogs-loading">Loading dog ledger…</div></div>
+        </div>
+      </div>
+      <div id="calMainPanel">
       <div class="cal-earnings" id="calEarnings" style="display:none">
         <div class="cal-earn-cell" onclick="toggleEarnDrop('received',event)">
           <div class="cal-earn-label">Received</div>
@@ -2380,6 +2436,7 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
           <div class="cal-year-loading">Loading yearly data…</div>
         </div>
       </div>
+      </div><!-- /calMainPanel -->
     </div>
   </div>
 </div>
@@ -4183,6 +4240,142 @@ document.addEventListener('click', () => {
     earnDropOpen = null;
   }
 });
+
+/* ── CALENDAR TAB SWITCHING ── */
+let calActiveTab = 'cal';
+
+function setCalTab(tab) {
+  calActiveTab = tab;
+  document.getElementById('calTabCal').classList.toggle('on', tab === 'cal');
+  document.getElementById('calTabDogs').classList.toggle('on', tab === 'dogs');
+  document.getElementById('calMainPanel').style.display = tab === 'cal' ? '' : 'none';
+  document.getElementById('calDogsPanel').style.display = tab === 'dogs' ? '' : 'none';
+  // hide earnings strip in dogs view
+  const earn = document.getElementById('calEarnings');
+  if (earn) earn.style.display = 'none';
+  if (tab === 'dogs') loadDogsLedger();
+}
+
+/* ── DOGS LEDGER ── */
+let gDogsCache = null;   // cached after first load
+
+async function loadDogsLedger() {
+  if (!gAccessToken) {
+    document.getElementById('dogsContent').innerHTML = '<div class="dogs-empty">Connect Google Calendar to load the dog ledger.</div>';
+    return;
+  }
+  if (gDogsCache) { renderDogsLedger(gDogsCache); return; }
+
+  document.getElementById('dogsContent').innerHTML = '<div class="dogs-loading">Fetching all bookings… this may take a moment.</div>';
+  document.getElementById('dogsSummary').style.display = 'none';
+
+  try {
+    const cals = await getCalList();
+    const now = new Date();
+    const timeMin = new Date(now.getFullYear() - 3, now.getMonth(), 1).toISOString();
+    const timeMax = now.toISOString();
+
+    const results = await Promise.all(cals.map(cal =>
+      gFetch(`https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(cal.id)}/events?timeMin=${encodeURIComponent(timeMin)}&timeMax=${encodeURIComponent(timeMax)}&singleEvents=true&orderBy=startTime&maxResults=2500`)
+        .then(d => tagEvents(d.items || [], cal)).catch(() => [])
+    ));
+
+    const allEvents = sortByTime(results.flat());
+    // keep only events with payment notation
+    gDogsCache = allEvents.filter(ev => parsePayment(ev.summary) || parsePayment(ev.description || ''));
+    renderDogsLedger(gDogsCache);
+  } catch(e) {
+    document.getElementById('dogsContent').innerHTML = `<div class="dogs-empty">Failed to load: ${esc(e.message)}</div>`;
+  }
+}
+
+function parseDogName(ev) {
+  const text = ev.summary || '';
+  // Strip payment notation and trailing punctuation to extract the dog/client name
+  return text
+    .replace(/\s*\(Paid\s+PS\s+\$?[\d,]+(?:\.\d+)?\)/gi, '')
+    .replace(/\s*\(Paid\s+\$?[\d,]+(?:\.\d+)?(?:\s*\/\s*\$?[\d,]+(?:\.\d+)?)?\)/gi, '')
+    .replace(/\s*\(\$[\d,]+(?:\.\d+)?\)/gi, '')
+    .replace(/\s*[-–—]\s*\d+\s*(nights?|days?|hrs?|hours?)\s*$/i, '')
+    .trim() || '(Unnamed)';
+}
+
+let dogsSortKey = 'total';
+let dogsSortAsc = false;
+
+function renderDogsLedger(events) {
+  const fmt = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const fmtDate = d => { const dt = new Date(d + 'T00:00:00'); return dt.toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' }); };
+
+  // Aggregate by dog name
+  const dogs = {};
+  events.forEach(ev => {
+    const name = parseDogName(ev);
+    const pay  = parsePayment(ev.summary) || parsePayment(ev.description || '');
+    if (!pay) return;
+    if (!dogs[name]) dogs[name] = { name, sessions: 0, received: 0, total: 0, lastDate: '' };
+    const d = dogs[name];
+    d.sessions++;
+    d.received += pay.received;
+    d.total    += pay.total;
+    const date = ev.start.date || (ev.start.dateTime || '').slice(0, 10);
+    if (date > d.lastDate) d.lastDate = date;
+  });
+
+  const rows = Object.values(dogs);
+  rows.sort((a, b) => {
+    const va = a[dogsSortKey], vb = b[dogsSortKey];
+    if (typeof va === 'string') return dogsSortAsc ? va.localeCompare(vb) : vb.localeCompare(va);
+    return dogsSortAsc ? va - vb : vb - va;
+  });
+
+  // Summary stats
+  const totalDogs = rows.length;
+  const totalReceived = rows.reduce((s, r) => s + r.received, 0);
+  const totalInvoiced = rows.reduce((s, r) => s + r.total, 0);
+  const totalOutstanding = totalInvoiced - totalReceived;
+
+  const summaryEl = document.getElementById('dogsSummary');
+  summaryEl.style.display = 'grid';
+  summaryEl.innerHTML = `
+    <div class="dogs-stat"><div class="dogs-stat-label">Dogs / Clients</div><div class="dogs-stat-val">${totalDogs}</div></div>
+    <div class="dogs-stat"><div class="dogs-stat-label">Total Received</div><div class="dogs-stat-val green">${fmt(totalReceived)}</div></div>
+    <div class="dogs-stat"><div class="dogs-stat-label">Total Invoiced</div><div class="dogs-stat-val">${fmt(totalInvoiced)}</div></div>
+    <div class="dogs-stat"><div class="dogs-stat-label">Outstanding</div><div class="dogs-stat-val" style="color:${totalOutstanding>0?'#C93C2E':'var(--t1)'}">${fmt(totalOutstanding)}</div></div>`;
+
+  const thCls = key => `class="${dogsSortKey===key ? (dogsSortAsc?'sorted asc':'sorted') : ''}"`;
+  const sortFn = key => `onclick="dogsSort('${key}')"`;
+
+  document.getElementById('dogsContent').innerHTML = rows.length === 0
+    ? '<div class="dogs-empty">No events with payment information found in the last 3 years.</div>'
+    : `<div class="dogs-table-wrap"><table class="dogs-table">
+    <thead><tr>
+      <th ${thCls('name')} ${sortFn('name')}>Dog / Client</th>
+      <th ${thCls('sessions')} ${sortFn('sessions')} style="text-align:right">Sessions</th>
+      <th ${thCls('received')} ${sortFn('received')} style="text-align:right">Received</th>
+      <th ${thCls('total')} ${sortFn('total')} style="text-align:right">Invoiced</th>
+      <th style="text-align:right">Outstanding</th>
+      <th ${thCls('lastDate')} ${sortFn('lastDate')}>Last Visit</th>
+    </tr></thead>
+    <tbody>${rows.map(r => {
+      const outstanding = r.total - r.received;
+      return `<tr>
+        <td class="dn">${esc(r.name)}</td>
+        <td class="nr">${r.sessions}</td>
+        <td class="gr">${fmt(r.received)}</td>
+        <td class="nr">${fmt(r.total)}</td>
+        <td class="${outstanding > 0 ? 'red' : 'gr'}">${outstanding > 0 ? fmt(outstanding) : '—'}</td>
+        <td>${r.lastDate ? fmtDate(r.lastDate) : '—'}</td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table></div>`;
+}
+
+function dogsSort(key) {
+  if (dogsSortKey === key) dogsSortAsc = !dogsSortAsc;
+  else { dogsSortKey = key; dogsSortAsc = false; }
+  if (gDogsCache) renderDogsLedger(gDogsCache);
+}
 
 function placeEventsInLanes(events) {
   const sorted = [...events].sort((a, b) => {
