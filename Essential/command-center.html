@@ -1734,10 +1734,12 @@ body {
 .cal-dogs-all-btn.on { background:var(--amber); border-color:var(--amber); color:#000; }
 .cal-dogs-year-lbl { font-size:12px; font-weight:700; color:var(--t1); min-width:40px; text-align:center; }
 .cal-dogs-hdr { display:grid; grid-template-columns:1fr 60px 90px 90px 80px; padding:6px 0; border-bottom:2px solid var(--b2); font-size:8.5px; font-weight:700; letter-spacing:.10em; text-transform:uppercase; color:var(--t3); }
-.cal-dogs-row { display:grid; grid-template-columns:1fr 60px 90px 90px 80px; padding:9px 0; border-bottom:1px solid var(--b1); align-items:center; transition:background .1s; }
-.cal-dogs-row:hover { background:var(--s2); border-radius:4px; }
-.cal-dogs-row:last-of-type { border-bottom:none; }
+.cal-dogs-entry { border-bottom:1px solid var(--b1); }
+.cal-dogs-entry:last-of-type { border-bottom:none; }
+.cal-dogs-row { display:grid; grid-template-columns:1fr 60px 90px 90px 80px; padding:9px 0; align-items:center; cursor:pointer; transition:background .1s; border-radius:4px; }
+.cal-dogs-entry:hover .cal-dogs-row { background:var(--s2); }
 .cal-dogs-name { font-size:12px; font-weight:600; color:var(--t1); }
+.cal-dogs-chevron { font-size:9px; margin-right:4px; color:var(--t3); display:inline-block; transition:transform .15s; }
 .cal-dogs-cell { font-size:11px; font-family:Arial,Helvetica,sans-serif; color:var(--t2); text-align:right; padding-right:10px; font-variant-numeric:tabular-nums; }
 .cal-dogs-cell.green { color:#43A047; font-weight:600; }
 .cal-dogs-cell.amber { color:var(--amber-col,#B87A12); }
@@ -1747,6 +1749,12 @@ body {
 .cal-dogs-total .cal-dogs-cell.green { color:#43A047; }
 .cal-dogs-total .cal-dogs-cell.amber { color:var(--amber-col,#B87A12); }
 .cal-dogs-breed { font-size:10px; color:var(--t3); margin-top:2px; font-style:italic; }
+.cal-dogs-detail { display:none; padding:2px 4px 10px 12px; }
+.cal-dogs-bk-row { display:grid; grid-template-columns:95px 1fr 80px; font-size:10px; color:var(--t2); padding:4px 0; border-top:1px solid var(--b1); gap:8px; align-items:start; }
+.cal-dogs-bk-row:first-child { border-top:none; }
+.cal-dogs-bk-date { color:var(--t3); font-size:9.5px; white-space:nowrap; padding-top:1px; }
+.cal-dogs-bk-title { color:var(--t2); line-height:1.35; }
+.cal-dogs-bk-amt { text-align:right; font-family:monospace; color:var(--t2); white-space:nowrap; padding-right:10px; }
 .cal-dogs-empty { padding:32px; text-align:center; font-size:11px; color:var(--t3); }
 .cal-year-view { padding: 0 0 8px; }
 .cal-year-hdr {
@@ -4171,6 +4179,22 @@ function toggleDogsAll() {
   renderDogsView();
 }
 
+function toggleDogDetail(entry) {
+  const detail = entry.querySelector('.cal-dogs-detail');
+  const chevron = entry.querySelector('.cal-dogs-chevron');
+  if (!detail) return;
+  const open = detail.style.display === '';
+  detail.style.display = open ? 'none' : '';
+  if (chevron) chevron.style.transform = open ? '' : 'rotate(90deg)';
+}
+
+function fmtEvDate(ev) {
+  const raw = ev.start ? (ev.start.date || (ev.start.dateTime || '').substring(0, 10)) : '';
+  if (!raw) return { sort: '', display: '?' };
+  const d = new Date(raw + 'T00:00:00');
+  return { sort: raw, display: d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) };
+}
+
 async function renderDogsView() {
   const content = document.getElementById('calDogsContent');
   if (!content) return;
@@ -4208,16 +4232,20 @@ async function renderDogsView() {
     const key = normalizeDogKey(entry);
     if (!raw[key]) raw[key] = { display: entry.names, breedMap: {}, noBreed: null };
     const bk = entry.breed ? entry.breed.toLowerCase() : null;
+    const evDate = fmtEvDate(ev);
+    const evRec = { sort: evDate.sort, display: evDate.display, title: ev.summary || '', total: pay.total };
     if (bk) {
-      if (!raw[key].breedMap[bk]) raw[key].breedMap[bk] = { breed: entry.breed, bookings: 0, received: 0, total: 0 };
+      if (!raw[key].breedMap[bk]) raw[key].breedMap[bk] = { breed: entry.breed, bookings: 0, received: 0, total: 0, events: [] };
       raw[key].breedMap[bk].bookings++;
       raw[key].breedMap[bk].received += pay.received;
       raw[key].breedMap[bk].total    += pay.total;
+      raw[key].breedMap[bk].events.push(evRec);
     } else {
-      if (!raw[key].noBreed) raw[key].noBreed = { bookings: 0, received: 0, total: 0 };
+      if (!raw[key].noBreed) raw[key].noBreed = { bookings: 0, received: 0, total: 0, events: [] };
       raw[key].noBreed.bookings++;
       raw[key].noBreed.received += pay.received;
       raw[key].noBreed.total    += pay.total;
+      raw[key].noBreed.events.push(evRec);
     }
   });
 
@@ -4235,16 +4263,18 @@ async function renderDogsView() {
   Object.entries(mergedInto).forEach(([src, dest]) => {
     const s = raw[src], d = raw[dest];
     Object.entries(s.breedMap).forEach(([bk, sv]) => {
-      if (!d.breedMap[bk]) d.breedMap[bk] = { breed: sv.breed, bookings: 0, received: 0, total: 0 };
+      if (!d.breedMap[bk]) d.breedMap[bk] = { breed: sv.breed, bookings: 0, received: 0, total: 0, events: [] };
       d.breedMap[bk].bookings += sv.bookings;
       d.breedMap[bk].received += sv.received;
       d.breedMap[bk].total    += sv.total;
+      d.breedMap[bk].events.push(...sv.events);
     });
     if (s.noBreed) {
-      if (!d.noBreed) d.noBreed = { bookings: 0, received: 0, total: 0 };
+      if (!d.noBreed) d.noBreed = { bookings: 0, received: 0, total: 0, events: [] };
       d.noBreed.bookings += s.noBreed.bookings;
       d.noBreed.received += s.noBreed.received;
       d.noBreed.total    += s.noBreed.total;
+      d.noBreed.events.push(...s.noBreed.events);
     }
     delete raw[src];
   });
@@ -4256,20 +4286,21 @@ async function renderDogsView() {
     const breedKeys = Object.keys(r.breedMap);
     if (breedKeys.length <= 1) {
       const be = breedKeys.length ? r.breedMap[breedKeys[0]] : null;
-      const nb = r.noBreed || { bookings: 0, received: 0, total: 0 };
-      const b  = be        || { bookings: 0, received: 0, total: 0 };
+      const nb = r.noBreed || { bookings: 0, received: 0, total: 0, events: [] };
+      const b  = be        || { bookings: 0, received: 0, total: 0, events: [] };
       dogs[key] = { display: r.display, breed: be ? be.breed : null,
-        bookings: b.bookings + nb.bookings, received: b.received + nb.received, total: b.total + nb.total };
+        bookings: b.bookings + nb.bookings, received: b.received + nb.received, total: b.total + nb.total,
+        events: [...b.events, ...nb.events] };
     } else {
       breedKeys.forEach(bk => {
         const be = r.breedMap[bk];
         dogs[key + '|' + bk] = { display: r.display, breed: be.breed,
-          bookings: be.bookings, received: be.received, total: be.total };
+          bookings: be.bookings, received: be.received, total: be.total, events: be.events };
       });
       // No-breed events where breed is ambiguous get their own row
       if (r.noBreed && r.noBreed.bookings) {
         dogs[key + '|?'] = { display: r.display, breed: null,
-          bookings: r.noBreed.bookings, received: r.noBreed.received, total: r.noBreed.total };
+          bookings: r.noBreed.bookings, received: r.noBreed.received, total: r.noBreed.total, events: r.noBreed.events };
       }
     }
   });
@@ -4297,15 +4328,25 @@ async function renderDogsView() {
     </div>
     ${rows.map(r => {
       const owed = r.total - r.received;
-      return `<div class="cal-dogs-row">
-        <div>
-          <div class="cal-dogs-name">${esc(r.display)}</div>
-          ${r.breed ? `<div class="cal-dogs-breed">${esc(r.breed)}</div>` : ''}
+      const sorted = [...r.events].sort((a, b) => b.sort.localeCompare(a.sort));
+      return `<div class="cal-dogs-entry">
+        <div class="cal-dogs-row" onclick="toggleDogDetail(this.parentElement)">
+          <div>
+            <div class="cal-dogs-name"><span class="cal-dogs-chevron">▸</span>${esc(r.display)}</div>
+            ${r.breed ? `<div class="cal-dogs-breed">${esc(r.breed)}</div>` : ''}
+          </div>
+          <div class="cal-dogs-cell">${r.bookings}</div>
+          <div class="cal-dogs-cell">${fmt(r.total)}</div>
+          <div class="cal-dogs-cell green">${fmt(r.received)}</div>
+          <div class="cal-dogs-cell${owed > 0.005 ? ' amber' : ''}">${owed > 0.005 ? fmt(owed) : '—'}</div>
         </div>
-        <div class="cal-dogs-cell">${r.bookings}</div>
-        <div class="cal-dogs-cell">${fmt(r.total)}</div>
-        <div class="cal-dogs-cell green">${fmt(r.received)}</div>
-        <div class="cal-dogs-cell${owed > 0.005 ? ' amber' : ''}">${owed > 0.005 ? fmt(owed) : '—'}</div>
+        <div class="cal-dogs-detail">
+          ${sorted.map(e => `<div class="cal-dogs-bk-row">
+            <span class="cal-dogs-bk-date">${e.display}</span>
+            <span class="cal-dogs-bk-title">${esc(e.title)}</span>
+            <span class="cal-dogs-bk-amt">${fmt(e.total)}</span>
+          </div>`).join('')}
+        </div>
       </div>`;
     }).join('')}
     <div class="cal-dogs-total">
