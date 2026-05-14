@@ -4122,6 +4122,17 @@ function proratePayment(ev, pay) {
 /* ── DOGS LEDGER ── */
 let dogsViewAll = false;
 
+// Spelling corrections for individual name parts (lowercase → corrected display)
+const DOG_NAME_ALIASES = { 'megana': 'Mangena' };
+
+// When breed is embedded in name without em-dash (e.g. "Peanut Zuchon ($x)")
+// Key: full normalised name (lowercase, sorted, Training stripped)
+const DOG_NAME_OVERRIDES = { 'peanut zuchon': { name: 'Peanut', breed: 'Zuchon' } };
+
+function cleanNamePart(part) {
+  return part.replace(/\bTraining\b/gi, '').replace(/\s+/g, ' ').trim();
+}
+
 function parseDogEntry(title) {
   if (!title) return null;
   const stripped = title
@@ -4129,18 +4140,30 @@ function parseDogEntry(title) {
     .replace(/\s*\(\$[\d,]+(?:\.\d+)?\)/gi, '')
     .trim();
   if (!stripped) return null;
-  // Split on em-dash or spaced hyphen to separate names from breed
+
+  let rawNames, breed = null;
   const m = stripped.match(/^(.+?)\s*[—–]\s*(.+)$/) || stripped.match(/^(.+?)\s+-\s+(.+)$/);
-  if (m) return { names: m[1].trim(), breed: m[2].trim() };
-  return { names: stripped, breed: null };
+  if (m) { rawNames = m[1].trim(); breed = m[2].trim() || null; }
+  else    { rawNames = stripped; }
+
+  // Normalise commas as & separator, strip "Training" word, apply spelling aliases
+  const parts = rawNames.replace(/,/g, '&').split(/\s*&\s*/)
+    .map(n => cleanNamePart(n)).filter(Boolean)
+    .map(n => DOG_NAME_ALIASES[n.toLowerCase()] || n);
+  if (!parts.length) return null;
+
+  const names = parts.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())).join(' & ');
+
+  // Override: breed embedded in name without separator
+  if (!breed) {
+    const ov = DOG_NAME_OVERRIDES[names.toLowerCase()];
+    if (ov) return { names: ov.name, breed: ov.breed };
+  }
+  return { names, breed };
 }
 
 function normalizeDogKey(entry) {
-  // Sort names only; include breed so Charlie-Beagle ≠ Charlie-BorderCollie
-  const names = entry.names.split(/\s*&\s*/).map(s => s.trim()).filter(Boolean)
-    .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-    .join(' & ');
-  return names + (entry.breed ? ' | ' + entry.breed.toLowerCase().trim() : '');
+  return entry.names.toLowerCase();
 }
 
 function toggleDogsAll() {
@@ -4174,7 +4197,8 @@ async function renderDogsView() {
     events = await loadCalendarYear(calYear);
   }
 
-  const dogs = {};
+  // Step 1: collect into raw map keyed by sorted names only; track breeds separately
+  const raw = {};
   events.forEach(ev => {
     if (calHiddenIds.has(ev._calId)) return;
     const pay = parsePayment(ev.summary) || parsePayment(ev.description);
@@ -4182,18 +4206,72 @@ async function renderDogsView() {
     const entry = parseDogEntry(ev.summary);
     if (!entry || !entry.names) return;
     const key = normalizeDogKey(entry);
-    if (!key) return;
-    if (!dogs[key]) {
-      // Display name: sorted names + breed subtitle separately
-      const displayNames = entry.names.split(/\s*&\s*/).map(s => s.trim()).filter(Boolean)
-        .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-        .join(' & ');
-      dogs[key] = { display: displayNames, breed: entry.breed || null, bookings: 0, received: 0, total: 0 };
+    if (!raw[key]) raw[key] = { display: entry.names, breedMap: {}, noBreed: null };
+    const bk = entry.breed ? entry.breed.toLowerCase() : null;
+    if (bk) {
+      if (!raw[key].breedMap[bk]) raw[key].breedMap[bk] = { breed: entry.breed, bookings: 0, received: 0, total: 0 };
+      raw[key].breedMap[bk].bookings++;
+      raw[key].breedMap[bk].received += pay.received;
+      raw[key].breedMap[bk].total    += pay.total;
+    } else {
+      if (!raw[key].noBreed) raw[key].noBreed = { bookings: 0, received: 0, total: 0 };
+      raw[key].noBreed.bookings++;
+      raw[key].noBreed.received += pay.received;
+      raw[key].noBreed.total    += pay.total;
     }
-    if (!dogs[key].breed && entry.breed) dogs[key].breed = entry.breed;
-    dogs[key].bookings++;
-    dogs[key].received += pay.received;
-    dogs[key].total    += pay.total;
+  });
+
+  // Step 2: merge single-name keys into pair-name keys when unambiguous
+  // "ruby" → "ruben & ruby", "megan" → "mangena & megan"
+  const allKeys = Object.keys(raw);
+  const mergedInto = {};
+  allKeys.forEach(singleKey => {
+    const parts = singleKey.split(' & ');
+    if (parts.length !== 1) return;
+    const name = parts[0];
+    const matches = allKeys.filter(k => k !== singleKey && k.split(' & ').includes(name));
+    if (matches.length === 1) mergedInto[singleKey] = matches[0]; // skip if ambiguous (2+ pairs)
+  });
+  Object.entries(mergedInto).forEach(([src, dest]) => {
+    const s = raw[src], d = raw[dest];
+    Object.entries(s.breedMap).forEach(([bk, sv]) => {
+      if (!d.breedMap[bk]) d.breedMap[bk] = { breed: sv.breed, bookings: 0, received: 0, total: 0 };
+      d.breedMap[bk].bookings += sv.bookings;
+      d.breedMap[bk].received += sv.received;
+      d.breedMap[bk].total    += sv.total;
+    });
+    if (s.noBreed) {
+      if (!d.noBreed) d.noBreed = { bookings: 0, received: 0, total: 0 };
+      d.noBreed.bookings += s.noBreed.bookings;
+      d.noBreed.received += s.noBreed.received;
+      d.noBreed.total    += s.noBreed.total;
+    }
+    delete raw[src];
+  });
+
+  // Step 3: flatten to display rows
+  // ≤1 distinct breed → one merged row; ≥2 breeds → one row per breed (keeps Charlie-Beagle ≠ Charlie-Collie)
+  const dogs = {};
+  Object.entries(raw).forEach(([key, r]) => {
+    const breedKeys = Object.keys(r.breedMap);
+    if (breedKeys.length <= 1) {
+      const be = breedKeys.length ? r.breedMap[breedKeys[0]] : null;
+      const nb = r.noBreed || { bookings: 0, received: 0, total: 0 };
+      const b  = be        || { bookings: 0, received: 0, total: 0 };
+      dogs[key] = { display: r.display, breed: be ? be.breed : null,
+        bookings: b.bookings + nb.bookings, received: b.received + nb.received, total: b.total + nb.total };
+    } else {
+      breedKeys.forEach(bk => {
+        const be = r.breedMap[bk];
+        dogs[key + '|' + bk] = { display: r.display, breed: be.breed,
+          bookings: be.bookings, received: be.received, total: be.total };
+      });
+      // No-breed events where breed is ambiguous get their own row
+      if (r.noBreed && r.noBreed.bookings) {
+        dogs[key + '|?'] = { display: r.display, breed: null,
+          bookings: r.noBreed.bookings, received: r.noBreed.received, total: r.noBreed.total };
+      }
+    }
   });
 
   const rows = Object.values(dogs).sort((a, b) => b.total - a.total || a.display.localeCompare(b.display));
