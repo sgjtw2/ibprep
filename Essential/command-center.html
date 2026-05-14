@@ -2,7 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <script>if(!sessionStorage.getItem('cmd-auth-v1'))window.location.replace('./login.html');</script>
 <title>COMMAND CENTER</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -140,7 +142,7 @@ body {
   padding: 6px 10px 6px 28px;
   color: var(--t1);
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 11px;
+  font-size: 13px;
   outline: none;
   transition: border-color .15s;
 }
@@ -164,7 +166,7 @@ body {
 .fltr.on { color: var(--amber); border-color: var(--amber-brd); background: var(--amber-bg); }
 .fltr.on.red { color: var(--red); border-color: var(--red-brd); background: var(--red-bg); }
 .hdr-right { margin-left: auto; display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-.hdr-date { font-size: 10px; color: var(--t3); }
+.hdr-date { font-size: 10px; color: var(--t3); font-family: 'JetBrains Mono', monospace; letter-spacing: .04em; }
 .kbd-hint { font-size: 9px; color: var(--t4); letter-spacing: .04em; }
 .btn-new {
   background: var(--amber);
@@ -209,7 +211,7 @@ body {
 .study-item {
   display: block;
   padding: 7px 14px;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--t2);
   text-decoration: none;
   transition: color .1s, background .1s;
@@ -511,14 +513,14 @@ body {
 .metrics {
   flex-shrink: 0;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, 1fr);
   border-bottom: 1px solid var(--b1);
   gap: 0;
   background: var(--b0);
 }
 .met {
   background: var(--s1);
-  padding: 12px 18px;
+  padding: 8px 14px;
   border-right: 1px solid var(--b0);
   cursor: pointer;
   transition: background .12s;
@@ -545,7 +547,7 @@ body {
 .met-value {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 700;
-  font-size: 26px;
+  font-size: 20px;
   line-height: 1;
   color: var(--t1);
 }
@@ -627,14 +629,15 @@ body {
 .kb-board::-webkit-scrollbar-track { background: var(--s1); }
 .kb-board::-webkit-scrollbar-thumb { background: var(--b3); border-radius: 2px; }
 .kb-col {
-  flex: 0 0 220px;
+  flex: 1 1 170px;
+  min-width: 170px;
   display: flex;
   flex-direction: column;
   border-right: 1px solid var(--b1);
   overflow: hidden;
   transition: background .12s;
 }
-.kb-col:last-child { border-right: none; flex: 0 0 221px; }
+.kb-col:last-child { border-right: none; }
 .col-hdr {
   flex-shrink: 0;
   padding: 10px 12px;
@@ -653,7 +656,7 @@ body {
 .col-nm {
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 600;
-  font-size: 10px;
+  font-size: 12px;
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--t2);
@@ -719,24 +722,24 @@ body {
 .kc.pr-high     { border-left: 2px solid var(--amber); }
 .kc.pr-medium   { border-left: 2px solid var(--blue); }
 .kc.pr-low      { border-left: 2px solid var(--b3); }
-/* card colors — dark theme (muted tints) */
-.kc.cc-sky    { background: rgba(59,130,246,0.10); }
-.kc.cc-sage   { background: rgba(34,197,94,0.09); }
-.kc.cc-honey  { background: rgba(234,179,8,0.10); }
-.kc.cc-peach  { background: rgba(249,115,22,0.10); }
-.kc.cc-rose   { background: rgba(239,68,68,0.10); }
-.kc.cc-lilac  { background: rgba(168,85,247,0.10); }
-.kc.cc-blush  { background: rgba(236,72,153,0.10); }
-.kc.cc-mint   { background: rgba(20,184,166,0.10); }
-/* card colors — light theme pastel */
-[data-theme="light"] .kc.cc-sky    { background: #DBEAFE; border-color: #BFDBFE; }
-[data-theme="light"] .kc.cc-sage   { background: #DCFCE7; border-color: #BBF7D0; }
-[data-theme="light"] .kc.cc-honey  { background: #FEF9C3; border-color: #FEF08A; }
-[data-theme="light"] .kc.cc-peach  { background: #FFEDD5; border-color: #FED7AA; }
-[data-theme="light"] .kc.cc-rose   { background: #FEE2E2; border-color: #FECACA; }
-[data-theme="light"] .kc.cc-lilac  { background: #F3E8FF; border-color: #E9D5FF; }
-[data-theme="light"] .kc.cc-blush  { background: #FCE7F3; border-color: #FBCFE8; }
-[data-theme="light"] .kc.cc-mint   { background: #CCFBF1; border-color: #99F6E4; }
+/* card colors — left stripe (overrides priority border when set) */
+.kc.cc-sky    { border-left: 3px solid #3b82f6; }
+.kc.cc-sage   { border-left: 3px solid #22c55e; }
+.kc.cc-honey  { border-left: 3px solid #eab308; }
+.kc.cc-peach  { border-left: 3px solid #f97316; }
+.kc.cc-rose   { border-left: 3px solid #ef4444; }
+.kc.cc-lilac  { border-left: 3px solid #a855f7; }
+.kc.cc-blush  { border-left: 3px solid #ec4899; }
+.kc.cc-mint   { border-left: 3px solid #14b8a6; }
+/* card color tints the priority badge to match */
+.kc.cc-sky   .bdg { background: rgba(59,130,246,.15); color: #3b82f6; border-color: rgba(59,130,246,.35); }
+.kc.cc-sage  .bdg { background: rgba(34,197,94,.15);  color: #16a34a; border-color: rgba(34,197,94,.35);  }
+.kc.cc-honey .bdg { background: rgba(234,179,8,.15);  color: #ca8a04; border-color: rgba(234,179,8,.35);  }
+.kc.cc-peach .bdg { background: rgba(249,115,22,.15); color: #ea580c; border-color: rgba(249,115,22,.35); }
+.kc.cc-rose  .bdg { background: rgba(239,68,68,.15);  color: #dc2626; border-color: rgba(239,68,68,.35);  }
+.kc.cc-lilac .bdg { background: rgba(168,85,247,.15); color: #9333ea; border-color: rgba(168,85,247,.35); }
+.kc.cc-blush .bdg { background: rgba(236,72,153,.15); color: #db2777; border-color: rgba(236,72,153,.35); }
+.kc.cc-mint  .bdg { background: rgba(20,184,166,.15); color: #0d9488; border-color: rgba(20,184,166,.35);  }
 /* within-column drop indicator */
 .kc.drop-before { box-shadow: 0 -3px 0 var(--amber-l), 0 4px 14px rgba(0,0,0,.35) !important; }
 .kc.drop-after  { box-shadow: 0  3px 0 var(--amber-l), 0 4px 14px rgba(0,0,0,.35) !important; }
@@ -754,21 +757,27 @@ body {
 /* world clock bar */
 .wc-bar {
   flex-shrink: 0;
-  display: flex; align-items: center; gap: 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 0;
   background: var(--s1); border-bottom: 1px solid var(--b1);
-  padding: 0 16px; height: 26px; overflow: hidden;
+  padding: 0 20px; height: 28px; overflow: hidden;
 }
 .wc-city {
-  display: flex; align-items: center; gap: 6px;
+  display: flex; align-items: center; gap: 5px;
   padding: 0 14px 0 0;
   margin-right: 14px;
   border-right: 1px solid var(--b1);
   white-space: nowrap;
+  flex: 1;
 }
 .wc-city:last-child { border-right: none; padding-right: 0; margin-right: 0; }
-.wc-name { font-size: 9px; letter-spacing: .08em; text-transform: uppercase; color: var(--t3); font-weight: 700; }
-.wc-time { font-size: 10px; font-family: 'JetBrains Mono', monospace; color: var(--t2); font-weight: 500; }
-.wc-dot  { width: 4px; height: 4px; border-radius: 50%; background: var(--b3); flex-shrink: 0; }
+.wc-name { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--t3); font-weight: 700; }
+.wc-ex   { font-size: 9px; letter-spacing: .06em; color: var(--t4); font-weight: 700; text-transform: uppercase; background: var(--b0); border-radius: 2px; padding: 1px 3px; }
+.wc-time { font-size: 12px; font-family: 'JetBrains Mono', monospace; color: var(--t2); font-weight: 500; margin-left: auto; }
+.wc-dot  { width: 5px; height: 5px; border-radius: 50%; background: var(--b3); flex-shrink: 0; transition: background .4s; }
+.wc-dot.open   { background: #22c55e; box-shadow: 0 0 4px rgba(34,197,94,.5); }
+.wc-dot.pre    { background: var(--amber); opacity: .75; }
+.wc-dot.post   { background: var(--amber); opacity: .75; }
+.wc-dot.closed { background: var(--b3); }
 .kc.is-ov .kc-title-row::after {
   content: 'OVERDUE';
   font-size: 7px;
@@ -791,7 +800,7 @@ body {
   margin-bottom: 5px;
 }
 .kc-title {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 500;
   color: var(--t1);
   line-height: 1.4;
@@ -812,7 +821,7 @@ body {
 .kc:hover .kc-menu { opacity: 1; }
 .kc-menu:hover { color: var(--t2); }
 .kc-desc {
-  font-size: 10px;
+  font-size: 12px;
   color: var(--t3);
   line-height: 1.4;
   margin-bottom: 7px;
@@ -826,7 +835,7 @@ body {
 }
 .kc-badges { display: flex; gap: 3px; }
 .bdg {
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 600;
   letter-spacing: .06em;
   text-transform: uppercase;
@@ -838,10 +847,27 @@ body {
 .bdg-medium   { background: var(--blue-bg); color: var(--blue); border: 1px solid var(--blue-brd); }
 .bdg-low      { background: var(--b0); color: var(--t4); border: 1px solid var(--b1); }
 .kc-info { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
-.kc-due { font-size: 9px; color: var(--t3); white-space: nowrap; }
+.kc-due { font-size: 11px; color: var(--t3); white-space: nowrap; }
+/* ── MEET column ── */
+.met.m-mt            { --met-clr: #9333ea; }
+.met.m-mt .met-value { color: #9333ea; }
+.bdg-meet { background: rgba(147,51,234,.15); color: #9333ea; border: 1px solid rgba(147,51,234,.3); }
+[data-theme="light"] .bdg-meet { background: #F3E8FF; color: #7e22ce; border-color: #E9D5FF; }
+.kc-meet-row { display: flex; align-items: center; gap: 5px; margin-top: 5px; flex-wrap: wrap; }
+.kc-meet-time { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--t2); margin-left: auto; }
+.kc-meet-time.soon { color: #9333ea; font-weight: 600; }
+.kc-meet-loc { font-size: 11px; color: var(--t3); margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+.kc-meet-loc a { color: #9333ea; text-decoration: none; }
+.kc-meet-loc a:hover { text-decoration: underline; }
+.kc-gcal { display: inline-block; font-size: 11px; margin-top: 4px; color: var(--t4); text-decoration: none; font-family: inherit; }
+.kc-gcal:hover { color: #9333ea; }
+.meet-fields { display: none; flex-direction: column; gap: 13px; }
+.meet-fields.show { display: flex; }
+.kc-onhold  { font-size: 9px; font-weight: 600; letter-spacing: .06em; color: var(--amber); margin-top: 4px; }
+.kc-done-at { font-size: 9px; font-weight: 600; letter-spacing: .04em; color: #22c55e; margin-top: 4px; }
 .kc-due.ov { color: var(--red); font-weight: 600; }
 .kc-due.soon { color: var(--amber); }
-.kc-who { font-size: 9px; color: var(--t4); }
+.kc-who { font-size: 11px; color: var(--t4); }
 .col-empty {
   flex: 1;
   display: flex;
@@ -967,7 +993,7 @@ body {
 .todo-row.done .chk { background: var(--green); border-color: var(--green); color: #fff; }
 .todo-txt {
   flex: 1;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--t1);
   line-height: 1.35;
 }
@@ -1032,7 +1058,7 @@ body {
 .note-row.on { background: var(--s2); border-left: 2px solid var(--amber); }
 .note-row-title {
   flex: 1;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--t2);
   white-space: nowrap;
   overflow: hidden;
@@ -1066,7 +1092,7 @@ body {
   color: var(--t1);
   font-family: Arial, Helvetica, sans-serif;
   font-weight: 700;
-  font-size: 12px;
+  font-size: 14px;
   outline: none;
   flex-shrink: 0;
 }
@@ -1078,7 +1104,7 @@ body {
   padding: 11px 13px;
   color: var(--t2);
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 11px;
+  font-size: 13px;
   line-height: 1.65;
   outline: none;
   resize: none;
@@ -1148,7 +1174,7 @@ body {
 .act-dot.move    { background: var(--amber); }
 .act-dot.complete{ background: var(--green); }
 .act-body { flex: 1; }
-.act-txt { font-size: 10px; color: var(--t2); line-height: 1.4; }
+.act-txt { font-size: 12px; color: var(--t2); line-height: 1.4; }
 .act-time { font-size: 9px; color: var(--t4); margin-top: 2px; }
 .act-empty { padding: 24px; text-align: center; color: var(--t4); font-size: 10px; }
 
@@ -1352,7 +1378,7 @@ body {
 .modal-body { padding: 18px; display: flex; flex-direction: column; gap: 13px; }
 .fg { display: flex; flex-direction: column; gap: 5px; }
 .flabel {
-  font-size: 9px;
+  font-size: 11px;
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--t3);
@@ -1364,7 +1390,7 @@ body {
   padding: 8px 10px;
   color: var(--t1);
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 11px;
+  font-size: 13px;
   outline: none;
   transition: border-color .15s;
 }
@@ -1387,7 +1413,7 @@ body {
   border-radius: 3px;
   padding: 7px 14px;
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 11px;
+  font-size: 13px;
   color: var(--t2);
   cursor: pointer;
   transition: all .12s;
@@ -1400,18 +1426,18 @@ body {
   position: fixed;
   background: var(--card);
   border: 1px solid var(--b2);
-  border-radius: 5px;
-  padding: 3px;
+  border-radius: 7px;
+  padding: 4px;
   z-index: 250;
-  min-width: 156px;
+  min-width: 210px;
   box-shadow: 0 8px 26px rgba(0,0,0,.55);
   animation: fd .08s ease;
 }
 .ctx.on { display: block; }
 .ctx-item {
   padding: 7px 11px;
-  border-radius: 3px;
-  font-size: 11px;
+  border-radius: 4px;
+  font-size: 13px;
   color: var(--t2);
   cursor: pointer;
   display: flex;
@@ -1420,8 +1446,63 @@ body {
   transition: all .08s;
 }
 .ctx-item:hover { background: var(--s2); color: var(--t1); }
+.ctx-item.danger { color: var(--red); }
 .ctx-item.danger:hover { background: var(--red-bg); color: var(--red); }
 .ctx-sep { height: 1px; background: var(--b1); margin: 3px 8px; }
+.ctx-lbl {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  color: var(--t4);
+  padding: 5px 11px 2px;
+  text-transform: uppercase;
+}
+.ctx-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 4px 8px 6px;
+}
+.ctx-pri-btn {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all .1s;
+  background: var(--s1);
+  color: var(--t2);
+}
+.ctx-pri-btn:hover, .ctx-pri-btn.active { color: #fff; border-color: transparent; }
+.ctx-pri-btn[data-p="critical"]          { --pc: var(--red);    }
+.ctx-pri-btn[data-p="high"]              { --pc: var(--orange);  }
+.ctx-pri-btn[data-p="medium"]            { --pc: var(--amber);   }
+.ctx-pri-btn[data-p="low"]               { --pc: var(--blue);    }
+.ctx-pri-btn:hover  { background: var(--pc); color: #fff; }
+.ctx-pri-btn.active { background: var(--pc); color: #fff; }
+.ctx-clr {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: transform .1s, border-color .1s;
+  flex-shrink: 0;
+}
+.ctx-clr:hover  { transform: scale(1.2); }
+.ctx-clr.active { border-color: var(--t1); transform: scale(1.15); }
+.ctx-col-chip {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--b2);
+  cursor: pointer;
+  color: var(--t2);
+  background: var(--s1);
+  transition: all .1s;
+  white-space: nowrap;
+}
+.ctx-col-chip:hover { color: #fff; background: var(--cc, var(--blue)); border-color: transparent; }
 
 /* ── TOAST ───────────────────────────────────────────────── */
 .toast-wrap {
@@ -1959,7 +2040,7 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
     -webkit-overflow-scrolling: touch;
     height: auto; min-height: 280px;
   }
-  .kb-col { flex: 0 0 240px; height: auto; overflow: visible; }
+  .kb-col { flex: 0 0 220px; min-width: 220px; height: auto; overflow: visible; }
   .col-cards { overflow-y: visible; max-height: none; }
 
   /* Sidebar / tabs */
@@ -1971,6 +2052,34 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
   .tab { font-size: 8.5px; padding: 10px 4px; }
   .tab-pane { overflow: visible; height: auto; min-height: 200px; }
   .todo-list, .act-list { overflow: visible; height: auto; max-height: none; }
+}
+
+/* ── PORTRAIT orientation (any width) ─────────────────────── */
+@media (orientation: portrait) {
+  html, body { overflow: auto; height: auto; }
+  .workspace {
+    display: flex; flex-direction: column;
+    overflow: visible; height: auto;
+  }
+  .kb-section {
+    overflow: visible; height: auto;
+    border-right: none; border-bottom: 1px solid var(--b1);
+  }
+  .kb-board {
+    overflow-x: auto; overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    height: auto; min-height: 260px;
+  }
+  .kb-col { flex: 0 0 200px; min-width: 200px; height: auto; overflow: visible; }
+  .col-cards { overflow-y: visible; max-height: none; }
+  .sidebar { overflow: visible; height: auto; }
+  .tab-pane { overflow: visible; height: auto; min-height: 180px; }
+  .todo-list, .act-list { overflow: visible; height: auto; max-height: none; }
+  .metrics { display: flex; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .metrics::-webkit-scrollbar { display: none; }
+  .met { flex: 0 0 110px; }
+  .wc-bar { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .wc-bar::-webkit-scrollbar { display: none; }
 }
 </style>
 </head>
@@ -1991,12 +2100,12 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
   </div>
   <div class="hdr-filters">
     <button class="fltr red" id="fOv" onclick="toggleFilter('overdue')">Overdue</button>
-    <button class="fltr" id="fBl" onclick="toggleFilter('blocked')">Blocked</button>
+    <button class="fltr" id="fBl" onclick="toggleFilter('blocked')">On Hold</button>
     <button class="fltr" id="fCr" onclick="toggleFilter('critical')">Critical</button>
   </div>
   <div class="hdr-right">
     <span class="hdr-date" id="hdrDate"></span>
-    <span class="kbd-hint">⌘N new · ⌘Z undo</span>
+    <span class="kbd-hint">⌘N new · ⌘Z undo · ⌘Y redo</span>
     <button class="sort-btn" onclick="openCalendar()" style="font-size:10px;font-weight:700;letter-spacing:.06em;padding:0 12px;">📅 Calendar</button>
     <button class="sort-btn" onclick="exportData()" title="Export data as JSON" style="font-size:10px;font-weight:700;letter-spacing:.06em;padding:0 10px;">⬇ Export</button>
     <label class="sort-btn" title="Import data from JSON" style="font-size:10px;font-weight:700;letter-spacing:.06em;padding:0 10px;cursor:pointer;">⬆ Import<input type="file" accept=".json" onchange="importData(event)" style="display:none"></label>
@@ -2030,13 +2139,14 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
   </div>
 </header>
 
-<!-- WORLD CLOCK -->
+<!-- WORLD CLOCK / MARKET HOURS -->
 <div class="wc-bar" id="wcBar">
-  <div class="wc-city"><span class="wc-name">Singapore</span><span class="wc-dot"></span><span class="wc-time" id="wc-sg">—</span></div>
-  <div class="wc-city"><span class="wc-name">London</span><span class="wc-dot"></span><span class="wc-time" id="wc-lon">—</span></div>
-  <div class="wc-city"><span class="wc-name">Paris</span><span class="wc-dot"></span><span class="wc-time" id="wc-par">—</span></div>
-  <div class="wc-city"><span class="wc-name">Dubai</span><span class="wc-dot"></span><span class="wc-time" id="wc-dxb">—</span></div>
-  <div class="wc-city"><span class="wc-name">New York</span><span class="wc-dot"></span><span class="wc-time" id="wc-nyc">—</span></div>
+  <div class="wc-city"><span class="wc-name">Tokyo</span><span class="wc-ex">TSE</span><span class="wc-dot closed" id="wcs-tok"></span><span class="wc-time" id="wc-tok">—</span></div>
+  <div class="wc-city"><span class="wc-name">Hong Kong</span><span class="wc-ex">HKEX</span><span class="wc-dot closed" id="wcs-hkg"></span><span class="wc-time" id="wc-hkg">—</span></div>
+  <div class="wc-city"><span class="wc-name">Singapore</span><span class="wc-ex">SGX</span><span class="wc-dot closed" id="wcs-sg"></span><span class="wc-time" id="wc-sg">—</span></div>
+  <div class="wc-city"><span class="wc-name">London</span><span class="wc-ex">LSE</span><span class="wc-dot closed" id="wcs-lon"></span><span class="wc-time" id="wc-lon">—</span></div>
+  <div class="wc-city"><span class="wc-name">Frankfurt</span><span class="wc-ex">XETRA</span><span class="wc-dot closed" id="wcs-fra"></span><span class="wc-time" id="wc-fra">—</span></div>
+  <div class="wc-city"><span class="wc-name">New York</span><span class="wc-ex">NYSE</span><span class="wc-dot closed" id="wcs-nyc"></span><span class="wc-time" id="wc-nyc">—</span></div>
 </div>
 
 <!-- METRICS -->
@@ -2046,10 +2156,10 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
     <div class="met-value" id="mOvN">0</div>
     <div class="met-sub">past due</div>
   </div>
-  <div class="met m-bl" id="mBl" onclick="toggleFilter('blocked')" title="Filter blocked">
-    <div class="met-label">Blocked</div>
+  <div class="met m-bl" id="mBl" onclick="toggleFilter('blocked')" title="Filter on hold">
+    <div class="met-label">On Hold</div>
     <div class="met-value" id="mBlN">0</div>
-    <div class="met-sub">need action</div>
+    <div class="met-sub">paused</div>
   </div>
   <div class="met m-ip">
     <div class="met-label">In Progress</div>
@@ -2065,6 +2175,11 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
     <div class="met-label">Completed</div>
     <div class="met-value" id="mDnN">0</div>
     <div class="met-sub">this board</div>
+  </div>
+  <div class="met m-mt">
+    <div class="met-label">Meetings</div>
+    <div class="met-value" id="mMtN">0</div>
+    <div class="met-sub">this week</div>
   </div>
 </div>
 
@@ -2300,12 +2415,13 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
       <div class="frow">
         <div class="fg">
           <label class="flabel">Status</label>
-          <select class="fselect" id="fStatus">
+          <select class="fselect" id="fStatus" onchange="toggleMeetFields()">
             <option value="backlog">Backlog</option>
             <option value="todo">Todo</option>
             <option value="in-progress">In Progress</option>
-            <option value="blocked">Blocked</option>
+            <option value="blocked">On Hold</option>
             <option value="done">Done</option>
+            <option value="meet">Meet</option>
           </select>
         </div>
         <div class="fg">
@@ -2320,11 +2436,11 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
       </div>
       <div class="frow">
         <div class="fg">
-          <label class="flabel">Due Date</label>
+          <label class="flabel" id="lDue">Due Date</label>
           <input class="finput" id="fDue" type="date">
         </div>
         <div class="fg">
-          <label class="flabel">Assignee</label>
+          <label class="flabel" id="lWho">Assignee</label>
           <input class="finput" id="fWho" type="text" placeholder="@name">
         </div>
       </div>
@@ -2332,26 +2448,38 @@ mark { background: var(--amber-bg); color: var(--amber); border-radius: 2px; pad
         <label class="flabel">Card Color</label>
         <div class="color-swatches" id="fColorSwatches"></div>
       </div>
+      <div class="meet-fields" id="meetFields">
+        <div class="frow">
+          <div class="fg">
+            <label class="flabel">Time</label>
+            <input class="finput" id="fMeetTime" type="time">
+          </div>
+          <div class="fg">
+            <label class="flabel">Type</label>
+            <select class="fselect" id="fMeetType">
+              <option value="">— None —</option>
+              <option value="virtual">Virtual</option>
+              <option value="in-person">In-Person</option>
+              <option value="phone">Phone</option>
+              <option value="coffee">Coffee</option>
+            </select>
+          </div>
+        </div>
+        <div class="fg">
+          <label class="flabel">Location / Link</label>
+          <input class="finput" id="fLocation" type="text" placeholder="Address or meeting link (https://…)">
+        </div>
+      </div>
     </div>
     <div class="modal-ftr">
       <button class="btn-sec" onclick="closeModal()">Cancel</button>
-      <button class="btn-new" onclick="saveCard()">Save Task</button>
+      <button class="btn-new" id="btnSaveCard" onclick="saveCard()">Save Task</button>
     </div>
   </div>
 </div>
 
 <!-- CONTEXT MENU -->
-<div class="ctx" id="ctxMenu">
-  <div class="ctx-item" onclick="ctxAction('edit')">✎ Edit</div>
-  <div class="ctx-item" onclick="ctxAction('move','backlog')">→ Backlog</div>
-  <div class="ctx-item" onclick="ctxAction('move','todo')">→ Todo</div>
-  <div class="ctx-item" onclick="ctxAction('move','in-progress')">→ In Progress</div>
-  <div class="ctx-item" onclick="ctxAction('move','blocked')">→ Blocked</div>
-  <div class="ctx-item" onclick="ctxAction('move','done')">→ Done</div>
-  <div class="ctx-sep"></div>
-  <div class="ctx-item" onclick="ctxAction('archive')">⊘ Archive</div>
-  <div class="ctx-item danger" onclick="ctxAction('delete')">✕ Delete</div>
-</div>
+<div class="ctx" id="ctxMenu"></div>
 
 <!-- TOASTS -->
 <div class="toast-wrap" id="toasts"></div>
@@ -2378,7 +2506,9 @@ let ctxId        = null;   // card for context menu
 let dragId       = null;   // card being dragged
 let dropTargetId = null;   // card to insert before/after
 let dropBefore   = true;   // insert before dropTargetId?
-let undos    = [];     // undo stack
+let undos    = [];     // todo restore stack (legacy)
+let undoStack = [];    // card amendment snapshots
+let redoStack = [];
 let noteSave = null;   // debounce timer
 let selectedColor = '';    // chosen card color id
 
@@ -2474,10 +2604,72 @@ function dueFmt(ds) {
 }
 
 function isOv(c) {
-  if (!c.dueDate || c.status === 'done') return false;
+  if (!c.dueDate || c.status === 'done' || c.status === 'meet') return false;
   const d = new Date(c.dueDate + 'T00:00:00');
   const t = new Date(); t.setHours(0,0,0,0);
   return d < t;
+}
+
+function fmtMeetCountdown(dueDate, meetTime) {
+  if (!dueDate) return null;
+  const [h, m] = (meetTime || '00:00').split(':').map(Number);
+  const dt = new Date(dueDate + 'T00:00:00');
+  dt.setHours(h, m, 0, 0);
+  const now = new Date();
+  const diff = dt - now;
+  const timeStr = meetTime
+    ? dt.toLocaleTimeString('en-US', { hour:'numeric', minute:'2-digit', hour12:true })
+    : null;
+  const absDiff = Math.abs(diff);
+  const hrs  = Math.floor(absDiff / 3600000);
+  const mins = Math.floor((absDiff % 3600000) / 60000);
+  const days = Math.floor(diff / 86400000);
+  let label = '', soon = false;
+  if (diff < 0)       { label = 'Ended'; }
+  else if (hrs < 1)   { label = `in ${mins}m`; soon = true; }
+  else if (hrs < 4)   { label = `in ${hrs}h ${mins}m`; soon = true; }
+  else if (days === 0){ label = 'Today'; }
+  else if (days === 1){ label = 'Tomorrow'; }
+  else                { label = `in ${days}d`; }
+  return { display: [timeStr, label].filter(Boolean).join(' · '), soon };
+}
+
+function gcalLink(c) {
+  if (!c.dueDate) return null;
+  const [h, m] = (c.meetTime || '09:00').split(':').map(Number);
+  const start = new Date(c.dueDate + 'T00:00:00');
+  start.setHours(h, m, 0, 0);
+  const end = new Date(start.getTime() + 3600000);
+  const fmt = d => d.toISOString().replace(/[-:.]/g,'').slice(0,15) + 'Z';
+  const p = new URLSearchParams({ action:'TEMPLATE', text:c.title,
+    dates: fmt(start)+'/'+fmt(end), details: c.desc||'', location: c.location||'' });
+  return `https://calendar.google.com/calendar/render?${p}`;
+}
+
+function buildMeetExtras(c) {
+  const types = { virtual:'Virtual', 'in-person':'In-Person', phone:'Phone', coffee:'Coffee' };
+  const typeLbl = types[c.meetType] || '';
+  const cd = c.dueDate ? fmtMeetCountdown(c.dueDate, c.meetTime) : null;
+  const isUrl = c.location && (c.location.startsWith('http://') || c.location.startsWith('https://'));
+  const gcal = gcalLink(c);
+  return `
+    <div class="kc-meet-row">
+      ${typeLbl ? `<span class="bdg bdg-meet">${esc(typeLbl)}</span>` : ''}
+      ${cd ? `<span class="kc-meet-time${cd.soon?' soon':''}">${esc(cd.display)}</span>` : ''}
+    </div>
+    ${c.location ? `<div class="kc-meet-loc">${isUrl
+      ? `<a href="${esc(c.location)}" target="_blank" rel="noopener">Open link</a>`
+      : esc(c.location)}</div>` : ''}
+    ${gcal ? `<a class="kc-gcal" href="${gcal}" target="_blank" rel="noopener">+ Google Calendar</a>` : ''}
+  `;
+}
+
+function toggleMeetFields() {
+  const isMeet = document.getElementById('fStatus').value === 'meet';
+  document.getElementById('meetFields').classList.toggle('show', isMeet);
+  document.getElementById('lDue').textContent      = isMeet ? 'Meeting Date' : 'Due Date';
+  document.getElementById('lWho').textContent      = isMeet ? 'With'         : 'Assignee';
+  document.getElementById('btnSaveCard').textContent = isMeet ? 'Save Meeting' : 'Save Task';
 }
 
 /* ============================================================
@@ -2665,22 +2857,39 @@ function render() {
 }
 
 function renderDate() {
-  document.getElementById('hdrDate').textContent =
-    new Date().toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+  const now = new Date();
+  const date = now.toLocaleDateString('en-US', { weekday:'short', month:'short', day:'numeric' });
+  const time = now.toLocaleTimeString('en-US', { hour:'2-digit', minute:'2-digit', second:'2-digit', hour12:false });
+  document.getElementById('hdrDate').textContent = date + '  ' + time;
 }
 
 const WC_ZONES = [
-  { id:'wc-sg',  tz:'Asia/Singapore' },
-  { id:'wc-lon', tz:'Europe/London' },
-  { id:'wc-par', tz:'Europe/Paris' },
-  { id:'wc-dxb', tz:'Asia/Dubai' },
-  { id:'wc-nyc', tz:'America/New_York' },
+  { id:'wc-tok', sid:'wcs-tok', tz:'Asia/Tokyo',       oh:9,  om:0,  ch:15, cm:30 },
+  { id:'wc-hkg', sid:'wcs-hkg', tz:'Asia/Hong_Kong',   oh:9,  om:30, ch:16, cm:0  },
+  { id:'wc-sg',  sid:'wcs-sg',  tz:'Asia/Singapore',   oh:9,  om:0,  ch:17, cm:0  },
+  { id:'wc-lon', sid:'wcs-lon', tz:'Europe/London',    oh:8,  om:0,  ch:16, cm:30 },
+  { id:'wc-fra', sid:'wcs-fra', tz:'Europe/Berlin',    oh:9,  om:0,  ch:17, cm:30 },
+  { id:'wc-nyc', sid:'wcs-nyc', tz:'America/New_York', oh:9,  om:30, ch:16, cm:0  },
 ];
+function marketOpen(tz, oh, om, ch, cm) {
+  const now = new Date();
+  const local = new Date(now.toLocaleString('en-US', { timeZone: tz }));
+  const day = local.getDay();
+  if (day === 0 || day === 6) return 'closed';
+  const t = local.getHours() * 60 + local.getMinutes();
+  const open = oh * 60 + om, close = ch * 60 + cm;
+  if (t >= open && t < close) return 'open';
+  if (t >= open - 30 && t < open) return 'pre';
+  if (t >= close && t < close + 30) return 'post';
+  return 'closed';
+}
 function renderWorldClock() {
   const now = new Date();
-  WC_ZONES.forEach(({ id, tz }) => {
+  WC_ZONES.forEach(({ id, sid, tz, oh, om, ch, cm }) => {
     const el = document.getElementById(id);
-    if (el) el.textContent = now.toLocaleTimeString('en-US', { timeZone: tz, hour:'2-digit', minute:'2-digit', hour12: false });
+    if (el) el.textContent = now.toLocaleTimeString('en-US', { timeZone: tz, hour:'2-digit', minute:'2-digit', second:'2-digit', hour12: false });
+    const dot = document.getElementById(sid);
+    if (dot) dot.className = 'wc-dot ' + marketOpen(tz, oh, om, ch, cm);
   });
 }
 
@@ -2691,6 +2900,12 @@ function renderMetrics() {
   document.getElementById('mIpN').textContent = ac.filter(c => c.status === 'in-progress').length;
   document.getElementById('mPeN').textContent = ac.filter(c => c.status === 'backlog' || c.status === 'todo').length;
   document.getElementById('mDnN').textContent = ac.filter(c => c.status === 'done').length;
+  const now = new Date(); const weekEnd = new Date(now); weekEnd.setDate(now.getDate() + 7);
+  document.getElementById('mMtN').textContent = ac.filter(c => {
+    if (c.status !== 'meet' || !c.dueDate) return false;
+    const d = new Date(c.dueDate + 'T00:00:00');
+    return d >= now && d <= weekEnd;
+  }).length;
 
   // lit state for active filters
   ['Ov','Bl'].forEach(k => {
@@ -2701,11 +2916,12 @@ function renderMetrics() {
 
 /* ── KANBAN ── */
 const COLS = [
-  { id:'backlog',    nm:'Backlog',     cs:'col-backlog', pc:'var(--t4)' },
-  { id:'todo',       nm:'Todo',        cs:'col-todo',    pc:'var(--yellow)' },
-  { id:'in-progress',nm:'In Progress', cs:'col-progress',pc:'var(--blue)' },
-  { id:'blocked',    nm:'Blocked',     cs:'col-blocked', pc:'var(--amber)' },
-  { id:'done',       nm:'Done',        cs:'col-done',    pc:'var(--green)' },
+  { id:'meet',        nm:'Meet',        cs:'col-meet',    pc:'#9333ea', defaultColor:'cc-lilac' },
+  { id:'in-progress', nm:'In Progress', cs:'col-progress',pc:'#3b82f6', defaultColor:'cc-sky'   },
+  { id:'blocked',     nm:'On Hold',     cs:'col-blocked', pc:'#f59e0b', defaultColor:'cc-rose'  },
+  { id:'todo',        nm:'Todo',        cs:'col-todo',    pc:'#eab308', defaultColor:'cc-honey' },
+  { id:'backlog',     nm:'Backlog',     cs:'col-backlog', pc:'#ec4899', defaultColor:'cc-blush'  },
+  { id:'done',        nm:'Done',        cs:'col-done',    pc:'#22c55e', defaultColor:'cc-sage'  },
 ];
 
 function filteredCards(status) {
@@ -2738,7 +2954,7 @@ function renderKanban() {
       <div class="col-hdr">
         <div class="col-id">
           <span class="col-pip" style="background:${col.pc}"></span>
-          <span class="col-nm">${col.nm}</span>
+          <span class="col-nm" style="color:${col.pc}">${col.nm}</span>
           <span class="col-ct">${total}</span>
         </div>
         <button class="col-add-btn" onclick="openNewCard('${col.id}')" title="Add to ${col.nm}">+</button>
@@ -2754,10 +2970,16 @@ function renderKanban() {
 }
 
 function cardHTML(c) {
-  const due = c.dueDate ? dueFmt(c.dueDate) : null;
+  const isMeet = c.status === 'meet';
+  const isOnHold = c.status === 'blocked';
+  const due = !isMeet && c.dueDate ? dueFmt(c.dueDate) : null;
   const ov  = isOv(c);
+  const holdDays = isOnHold ? Math.floor((Date.now() - (c.onHoldSince || c.updatedAt)) / 86400000) : 0;
+  const doneAt = c.status === 'done' && c.doneAt ? (() => { const d = new Date(c.doneAt); return d.toLocaleDateString('en-US',{month:'short',day:'numeric'}) + ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0'); })() : null;
   const desc = c.desc ? c.desc.substring(0,72) + (c.desc.length > 72 ? '…' : '') : '';
   const cc = c.color || '';
+  const cardColDef = COLS.find(x => x.id === c.status);
+  const titleClr = cardColDef ? cardColDef.pc : 'var(--t1)';
   return `<div class="kc pr-${c.priority} ${cc} ${ov ? 'is-ov' : ''}"
     id="kc-${c.id}"
     draggable="true"
@@ -2767,7 +2989,7 @@ function cardHTML(c) {
     ondblclick="openEditCard('${c.id}')"
     oncontextmenu="showCtx(event,'${c.id}')">
     <div class="kc-title-row">
-      <span class="kc-title">${hi(c.title)}</span>
+      <span class="kc-title" style="color:${titleClr}">${hi(c.title)}</span>
       <button class="kc-menu" onclick="showCtx(event,'${c.id}')">⋯</button>
     </div>
     ${desc ? `<div class="kc-desc">${hi(desc)}</div>` : ''}
@@ -2778,6 +3000,9 @@ function cardHTML(c) {
         ${c.who ? `<span class="kc-who">${esc(c.who)}</span>` : ''}
       </div>
     </div>
+    ${isMeet ? buildMeetExtras(c) : ''}
+    ${isOnHold && holdDays > 0 ? `<div class="kc-onhold">Waiting ${holdDays}d — needs action</div>` : ''}
+    ${doneAt ? `<div class="kc-done-at">✓ ${doneAt}</div>` : ''}
   </div>`;
 }
 
@@ -2841,10 +3066,15 @@ function onDrop(e, ns) {
   }
 
   if (c.status !== ns) {
+    pushUndo();
     const os = c.status;
     c.status = ns;
+    const col = COLS.find(x => x.id === ns);
+    if (col) c.color = col.defaultColor;
+    if (ns === 'blocked') c.onHoldSince = Date.now(); else delete c.onHoldSince;
+    if (ns === 'done') c.doneAt = Date.now(); else delete c.doneAt;
     logAct(`Moved "${c.title}" ${os} → ${ns}`, 'move');
-    toast('Moved to ' + ns);
+    toast('Moved to ' + (col?.nm || ns));
   }
   c.updatedAt = Date.now();
   persist(); render();
@@ -2996,15 +3226,21 @@ function handleModalBgClick(e) {
   if (e.target === document.getElementById('cardModal')) saveCard();
 }
 function openNewCard(status = 'todo') {
-  newCardStatus = status; editId = null; selectedColor = '';
-  document.getElementById('modalTitle').textContent = 'New Task';
-  document.getElementById('fTitle').value   = '';
-  document.getElementById('fDesc').value    = '';
-  document.getElementById('fStatus').value  = status;
-  document.getElementById('fPriority').value= 'medium';
-  document.getElementById('fDue').value     = '';
-  document.getElementById('fWho').value     = '';
-  renderColorSwatches('');
+  newCardStatus = status; editId = null;
+  const colDef = COLS.find(c => c.id === status);
+  selectedColor = colDef?.defaultColor || '';
+  document.getElementById('modalTitle').textContent = status === 'meet' ? 'New Meeting' : 'New Task';
+  document.getElementById('fTitle').value    = '';
+  document.getElementById('fDesc').value     = '';
+  document.getElementById('fStatus').value   = status;
+  document.getElementById('fPriority').value = 'medium';
+  document.getElementById('fDue').value      = '';
+  document.getElementById('fWho').value      = '';
+  document.getElementById('fMeetTime').value = '';
+  document.getElementById('fMeetType').value = '';
+  document.getElementById('fLocation').value = '';
+  renderColorSwatches(selectedColor);
+  toggleMeetFields();
   document.getElementById('cardModal').classList.add('on');
   setTimeout(() => document.getElementById('fTitle').focus(), 80);
 }
@@ -3012,14 +3248,18 @@ function openEditCard(id) {
   const c = S.cards.find(c => c.id === id);
   if (!c) return;
   editId = id; selectedColor = c.color || '';
-  document.getElementById('modalTitle').textContent = 'Edit Task';
-  document.getElementById('fTitle').value   = c.title;
-  document.getElementById('fDesc').value    = c.desc||'';
-  document.getElementById('fStatus').value  = c.status;
-  document.getElementById('fPriority').value= c.priority;
-  document.getElementById('fDue').value     = c.dueDate||'';
-  document.getElementById('fWho').value     = c.who||'';
+  document.getElementById('modalTitle').textContent = c.status === 'meet' ? 'Edit Meeting' : 'Edit Task';
+  document.getElementById('fTitle').value    = c.title;
+  document.getElementById('fDesc').value     = c.desc||'';
+  document.getElementById('fStatus').value   = c.status;
+  document.getElementById('fPriority').value = c.priority;
+  document.getElementById('fDue').value      = c.dueDate||'';
+  document.getElementById('fWho').value      = c.who||'';
+  document.getElementById('fMeetTime').value = c.meetTime||'';
+  document.getElementById('fMeetType').value = c.meetType||'';
+  document.getElementById('fLocation').value = c.location||'';
   renderColorSwatches(c.color || '');
+  toggleMeetFields();
   document.getElementById('cardModal').classList.add('on');
   setTimeout(() => document.getElementById('fTitle').focus(), 80);
 }
@@ -3030,28 +3270,39 @@ function closeModal() {
 function saveCard() {
   const title = document.getElementById('fTitle').value.trim();
   if (!title) { document.getElementById('fTitle').focus(); return; }
+  pushUndo();
+  const status = document.getElementById('fStatus').value;
+  const isMeet = status === 'meet';
   if (editId) {
     const c = S.cards.find(c => c.id === editId);
     if (c) {
       c.title    = title;
       c.desc     = document.getElementById('fDesc').value.trim();
-      c.status   = document.getElementById('fStatus').value;
+      c.status   = status;
       c.priority = document.getElementById('fPriority').value;
       c.dueDate  = document.getElementById('fDue').value||null;
       c.who      = document.getElementById('fWho').value.trim();
       c.color    = selectedColor;
+      if (isMeet) {
+        c.meetTime = document.getElementById('fMeetTime').value||null;
+        c.meetType = document.getElementById('fMeetType').value||null;
+        c.location = document.getElementById('fLocation').value.trim()||null;
+      }
       c.updatedAt= Date.now();
       logAct(`Updated "${title}"`, 'update');
     }
   } else {
     const c = {
       id:uid(), title,
-      desc:    document.getElementById('fDesc').value.trim(),
-      status:  document.getElementById('fStatus').value,
-      priority:document.getElementById('fPriority').value,
-      dueDate: document.getElementById('fDue').value||null,
-      who:     document.getElementById('fWho').value.trim(),
-      color:   selectedColor,
+      desc:     document.getElementById('fDesc').value.trim(),
+      status,
+      priority: document.getElementById('fPriority').value,
+      dueDate:  document.getElementById('fDue').value||null,
+      who:      document.getElementById('fWho').value.trim(),
+      color:    selectedColor,
+      meetTime: isMeet ? document.getElementById('fMeetTime').value||null : null,
+      meetType: isMeet ? document.getElementById('fMeetType').value||null : null,
+      location: isMeet ? document.getElementById('fLocation').value.trim()||null : null,
       createdAt:Date.now(), updatedAt:Date.now(), archived:false
     };
     S.cards.unshift(c);
@@ -3059,16 +3310,68 @@ function saveCard() {
   }
   const wasEdit = !!editId;
   persist(); render(); closeModal();
-  toast(wasEdit ? 'Task updated' : 'Task created');
+  toast(wasEdit ? (isMeet ? 'Meeting updated' : 'Task updated') : (isMeet ? 'Meeting added' : 'Task created'));
 }
 
 /* ── CONTEXT MENU ── */
+const CTX_PRI = [
+  { v:'critical', label:'Critical', col:'var(--red)'    },
+  { v:'high',     label:'High',     col:'var(--orange)'  },
+  { v:'medium',   label:'Medium',   col:'var(--amber)'   },
+  { v:'low',      label:'Low',      col:'var(--blue)'    },
+];
+
+function buildCtxHTML(c) {
+  const priRow = CTX_PRI.map(p =>
+    `<button class="ctx-pri-btn${c.priority===p.v?' active':''}" data-p="${p.v}"
+      style="--pc:${p.col}"
+      onclick="ctxAction('priority','${p.v}')">${p.label}</button>`
+  ).join('');
+
+  const clrRow = CARD_COLORS.map(cc =>
+    `<div class="ctx-clr${c.color===cc.id?' active':''}"
+      style="background:${cc.swatch};outline:${cc.id===''?'1px solid var(--b2)':'none'}"
+      title="${cc.label}"
+      onclick="ctxAction('color','${cc.id}')"></div>`
+  ).join('');
+
+  const moveRow = COLS.filter(col => col.id !== c.status).map(col =>
+    `<span class="ctx-col-chip" style="--cc:${col.pc}"
+      onclick="ctxAction('move','${col.id}')">${col.nm}</span>`
+  ).join('');
+
+  const markDone = c.status !== 'done'
+    ? `<div class="ctx-item" onclick="ctxAction('move','done')">✓ Mark as Done</div>` : '';
+
+  return `
+    <div class="ctx-item" onclick="ctxAction('edit')">✎ Edit</div>
+    <div class="ctx-sep"></div>
+    <div class="ctx-lbl">Priority</div>
+    <div class="ctx-row">${priRow}</div>
+    <div class="ctx-sep"></div>
+    <div class="ctx-lbl">Color</div>
+    <div class="ctx-row">${clrRow}</div>
+    <div class="ctx-sep"></div>
+    <div class="ctx-lbl">Move to</div>
+    <div class="ctx-row">${moveRow}</div>
+    <div class="ctx-sep"></div>
+    ${markDone}
+    <div class="ctx-item" onclick="ctxAction('duplicate')">⧉ Duplicate</div>
+    <div class="ctx-sep"></div>
+    <div class="ctx-item" onclick="ctxAction('archive')">⊘ Archive</div>
+    <div class="ctx-item danger" onclick="ctxAction('delete')">✕ Delete</div>
+  `;
+}
+
 function showCtx(e, id) {
   e.preventDefault(); e.stopPropagation();
   ctxId = id;
+  const c = S.cards.find(c => c.id === id);
+  if (!c) return;
   const m = document.getElementById('ctxMenu');
-  m.style.left = Math.min(e.clientX, innerWidth-170)  + 'px';
-  m.style.top  = Math.min(e.clientY, innerHeight-260) + 'px';
+  m.innerHTML = buildCtxHTML(c);
+  m.style.left = Math.min(e.clientX, innerWidth-230) + 'px';
+  m.style.top  = Math.min(e.clientY, innerHeight-340) + 'px';
   m.classList.add('on');
 }
 function closeCtx() { document.getElementById('ctxMenu').classList.remove('on'); }
@@ -3077,22 +3380,51 @@ function ctxAction(act, val) {
   const c = S.cards.find(c => c.id === ctxId);
   if (!c) return;
   if (act === 'edit') { openEditCard(ctxId); return; }
+  if (act === 'priority') {
+    if (c.priority === val) return;
+    pushUndo();
+    logAct(`Priority "${c.title}" → ${val}`, 'update');
+    c.priority = val; c.updatedAt = Date.now();
+    persist(); render(); toast(`Priority → ${val}`);
+    return;
+  }
+  if (act === 'color') {
+    pushUndo();
+    c.color = val; c.updatedAt = Date.now();
+    persist(); render(); toast(val ? `Color changed` : `Color cleared`);
+    return;
+  }
   if (act === 'move') {
     if (c.status === val) return;
+    pushUndo();
+    const col = COLS.find(x => x.id === val);
+    if (col) c.color = col.defaultColor;
+    if (val === 'blocked') c.onHoldSince = Date.now(); else delete c.onHoldSince;
+    if (val === 'done') c.doneAt = Date.now(); else delete c.doneAt;
     logAct(`Moved "${c.title}" → ${val}`, 'move');
     c.status = val; c.updatedAt = Date.now();
-    persist(); render(); toast('Moved to ' + val);
+    persist(); render(); toast('Moved to ' + (col?.nm || val));
+    return;
+  }
+  if (act === 'duplicate') {
+    pushUndo();
+    const copy = JSON.parse(JSON.stringify(c));
+    copy.id = uid(); copy.title = c.title + ' (copy)';
+    copy.createdAt = copy.updatedAt = Date.now();
+    S.cards.splice(S.cards.indexOf(c) + 1, 0, copy);
+    logAct(`Duplicated "${c.title}"`, 'create');
+    persist(); render(); toast('Duplicated');
     return;
   }
   if (act === 'archive') {
-    undos.push({ type:'card', data: JSON.parse(JSON.stringify(c)) });
+    pushUndo();
     c.archived = true; c.updatedAt = Date.now();
     logAct(`Archived "${c.title}"`, 'delete');
     persist(); render(); toast(`Archived`, true);
     return;
   }
   if (act === 'delete') {
-    undos.push({ type:'card', data: JSON.parse(JSON.stringify(c)) });
+    pushUndo();
     S.cards = S.cards.filter(x => x.id !== ctxId);
     logAct(`Deleted "${c.title}"`, 'delete');
     persist(); render(); toast(`Deleted "${c.title}"`, true);
@@ -3131,19 +3463,32 @@ function setTab(name, btn) {
   document.getElementById('tab-'+name)?.classList.add('on');
 }
 
-/* ── UNDO ── */
+/* ── UNDO / REDO ── */
+function pushUndo() {
+  undoStack.push(JSON.parse(JSON.stringify(S.cards)));
+  if (undoStack.length > 50) undoStack.shift();
+  redoStack = [];
+}
 function undo() {
+  if (undoStack.length) {
+    redoStack.push(JSON.parse(JSON.stringify(S.cards)));
+    S.cards = undoStack.pop();
+    persist(); render(); toast('Undone');
+    return;
+  }
   const u = undos.pop();
   if (!u) return;
-  if (u.type === 'card') {
-    u.data.archived = false;
-    S.cards.unshift(u.data);
-    logAct(`Restored "${u.data.title}"`, 'create');
-  } else if (u.type === 'todo') {
+  if (u.type === 'todo') {
     S.todos.unshift(u.data);
     logAct(`Restored todo: "${u.data.txt}"`, 'create');
+    persist(); render(); toast('Restored');
   }
-  persist(); render(); toast('Restored');
+}
+function redo() {
+  if (!redoStack.length) return;
+  undoStack.push(JSON.parse(JSON.stringify(S.cards)));
+  S.cards = redoStack.pop();
+  persist(); render(); toast('Redone');
 }
 
 /* ── TOAST ── */
@@ -3164,7 +3509,8 @@ function toast(msg, withUndo=false) {
 /* ── KEYBOARD ── */
 document.addEventListener('keydown', e => {
   if (e.key === 'Escape') { closeModal(); closeCtx(); }
-  if ((e.metaKey||e.ctrlKey) && e.key === 'z') { e.preventDefault(); undo(); }
+  if ((e.metaKey||e.ctrlKey) && !e.shiftKey && e.key === 'z') { e.preventDefault(); undo(); }
+  if ((e.metaKey||e.ctrlKey) && e.key === 'y') { e.preventDefault(); redo(); }
   if ((e.metaKey||e.ctrlKey) && e.key === 'k') { e.preventDefault(); document.getElementById('gSearch').focus(); }
   if ((e.metaKey||e.ctrlKey) && e.key === 'n') {
     if (!document.getElementById('cardModal').classList.contains('on')) {
@@ -3219,8 +3565,8 @@ hydrate();
 seed();
 render();
 renderWorldClock();
-setInterval(() => { renderAct(); renderMetrics(); renderDate(); }, 60000);
-setInterval(renderWorldClock, 1000);
+setInterval(() => { renderAct(); renderMetrics(); }, 60000);
+setInterval(() => { renderWorldClock(); renderDate(); }, 1000);
 
 /* ============================================================
    GOOGLE CALENDAR + TASKS

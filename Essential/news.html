@@ -171,6 +171,61 @@
     }
     .theme-toggle:hover { background: var(--border); }
 
+    /* ── RATES BAR ───────────────────────────────────────────── */
+    #ratesBar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 18px;
+      height: 36px;
+      background: var(--bg2);
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      scrollbar-width: none;
+      flex-shrink: 0;
+    }
+    #ratesBar::-webkit-scrollbar { display: none; }
+    .rb-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+      color: var(--text3);
+      white-space: nowrap;
+      margin-right: 2px;
+    }
+    .rb-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 9px;
+      border-radius: 20px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      white-space: nowrap;
+      color: var(--text1);
+    }
+    .rb-chip .rb-val { color: var(--accent); font-variant-numeric: tabular-nums; }
+    .rb-chip .rb-prob-cut  { color: #22c55e; }
+    .rb-chip .rb-prob-hike { color: #ef4444; }
+    .rb-chip .rb-prob-hold { color: var(--text2); }
+    .rb-sep { width: 1px; height: 18px; background: var(--border); flex-shrink: 0; }
+    .rb-link {
+      font-size: 10px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 20px;
+      border: 1px solid var(--accent);
+      color: var(--accent);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background .15s;
+    }
+    .rb-link:hover { background: var(--accent); color: #fff; }
+    .rb-loading { font-size: 11px; color: var(--text3); }
+
     /* ── TICKER TAPE ─────────────────────────────────────────── */
     #tickerWrap {
       height: 34px;
@@ -516,9 +571,7 @@
 <div id="topbar">
   <div class="logo">
     <span class="logo-dot"></span>
-    <span class="logo-name">IB Prep</span>
-    <span class="logo-sep">·</span>
-    <span class="logo-sub">News Terminal</span>
+    <span class="logo-name">News Terminal</span>
   </div>
 
   <div class="tb-gap"></div>
@@ -548,6 +601,9 @@
     <span class="tk-loading">Loading market data…</span>
   </div>
 </div>
+
+<!-- ── RATES BAR ─────────────────────────────────────────── -->
+<div id="ratesBar"><span class="rb-loading">Loading rates…</span></div>
 
 <!-- ── TAB BAR ─────────────────────────────────────────── -->
 <div id="tabBar">
@@ -630,7 +686,7 @@ const TABS = [
       { id:'bbc',         name:'BBC Business',  tag:'BBC',  clr:'#BB1919', url:'https://feeds.bbci.co.uk/news/business/rss.xml' },
       { id:'nyt',         name:'NY Times',      tag:'NYT',  clr:'#1a1a1a', url:'https://rss.nytimes.com/services/xml/rss/nyt/Economy.xml' },
       { id:'yahoo',       name:'Yahoo Finance', tag:'Y!',   clr:'#6001D2', url:'https://news.google.com/rss/search?q=site:finance.yahoo.com+markets&hl=en-US&gl=US&ceid=US:en&tbs=sbd:1' },
-      { id:'benzinga',    name:'Benzinga',      tag:'BZ',   clr:'#00A6ED', url:'https://www.benzinga.com/feeds/market-news' },
+      { id:'benzinga',    name:'Benzinga',      tag:'BZ',   clr:'#00A6ED', url:'https://www.benzinga.com/feed' },
     ]
   },
   {
@@ -798,6 +854,107 @@ function buildTicker(quotes) {
   });
 }
 
+/* ── RATES BAR ───────────────────────────────────────────── */
+async function loadRates() {
+  const bar = document.getElementById('ratesBar');
+  const P = url => fetch(PROXY + encodeURIComponent(url)).then(r => r.json());
+
+  const [effrR, usCpiR, ueR, zqR, sgCpiR, soraR] = await Promise.allSettled([
+    P('https://markets.newyorkfed.org/api/rates/unsecured/effr/last/1.json'),
+    P('https://api.worldbank.org/v2/country/US/indicator/FP.CPI.TOTL.ZG?format=json&mrv=2'),
+    P('https://api.worldbank.org/v2/country/US/indicator/SL.UEM.TOTL.ZS?format=json&mrv=2'),
+    P('https://query1.finance.yahoo.com/v8/finance/chart/ZQ%3DF?interval=1d&range=5d'),
+    P('https://api.worldbank.org/v2/country/SG/indicator/FP.CPI.TOTL.ZG?format=json&mrv=2'),
+    P('https://eservices.mas.gov.sg/api/action/datastore/search.json?resource_id=9a0bf149-308c-4bd2-832d-76c8e6cb47ed&limit=1&sort=end_of_day%20desc'),
+  ]);
+
+  const parseWBLatest = r => {
+    try {
+      const rows = JSON.parse(r.value.contents);
+      return Array.isArray(rows[1]) ? rows[1].find(x => x.value != null)?.value ?? null : null;
+    } catch { return null; }
+  };
+
+  // US: Effective Fed Funds Rate (NY Fed)
+  let dff = null;
+  if (effrR.status === 'fulfilled' && effrR.value?.contents) {
+    try { dff = JSON.parse(effrR.value.contents)?.refRates?.[0]?.percentRate ?? null; } catch {}
+  }
+
+  // US: CPI YoY from World Bank (annual)
+  let usCpiYoy = null;
+  if (usCpiR.status === 'fulfilled' && usCpiR.value?.contents) usCpiYoy = parseWBLatest(usCpiR);
+
+  // US: Unemployment from World Bank (annual)
+  let ue = null;
+  if (ueR.status === 'fulfilled' && ueR.value?.contents) ue = parseWBLatest(ueR);
+
+  // FedWatch: implied rate from ZQ=F futures
+  let impliedRate = null, cutProb = null, holdProb = null, hikeProb = null;
+  if (zqR.status === 'fulfilled' && zqR.value?.contents) {
+    const meta = JSON.parse(zqR.value.contents)?.chart?.result?.[0]?.meta;
+    if (meta?.regularMarketPrice) impliedRate = 100 - meta.regularMarketPrice;
+  }
+  if (dff != null && impliedRate != null) {
+    const diff = dff - impliedRate;
+    if (diff >= 0.125)       { cutProb  = Math.min(100, Math.round(diff / 0.25 * 100)); holdProb = 100 - cutProb; }
+    else if (diff <= -0.125) { hikeProb = Math.min(100, Math.round(-diff / 0.25 * 100)); holdProb = 100 - hikeProb; }
+    else                     { holdProb = 100; }
+  }
+
+  // SG: CPI from World Bank (annual)
+  let sgCpi = null;
+  if (sgCpiR.status === 'fulfilled' && sgCpiR.value?.contents) sgCpi = parseWBLatest(sgCpiR);
+
+  // SG: SORA from MAS (may be under maintenance)
+  let sora = null;
+  if (soraR.status === 'fulfilled' && soraR.value?.contents) {
+    try {
+      const records = JSON.parse(soraR.value.contents)?.result?.records;
+      sora = parseFloat(records?.[0]?.['on_rate'] ?? records?.[0]?.['sora'] ?? records?.[0]?.['rate']);
+      if (isNaN(sora)) sora = null;
+    } catch {}
+  }
+
+  // Build HTML
+  const fmt = (v, dec=2) => v != null ? v.toFixed(dec) + '%' : '—';
+  const arrow = v => v == null ? '' : v > 0 ? ' ▲' : v < 0 ? ' ▼' : '';
+
+  let html = '';
+
+  // US section
+  html += `<span class="rb-label">🇺🇸 US</span>`;
+  html += `<span class="rb-chip" title="Effective Fed Funds Rate (NY Fed EFFR)">FFR <span class="rb-val">${fmt(dff)}</span></span>`;
+  html += `<span class="rb-chip" title="US CPI Inflation YoY% (World Bank, annual)">CPI <span class="rb-val">${fmt(usCpiYoy, 1)}${arrow(usCpiYoy)}</span></span>`;
+  html += `<span class="rb-chip" title="US Unemployment Rate (World Bank, annual)">UE <span class="rb-val">${fmt(ue, 1)}</span></span>`;
+
+  // FedWatch
+  html += `<span class="rb-sep"></span>`;
+  html += `<span class="rb-label">FedWatch</span>`;
+  if (impliedRate != null)
+    html += `<span class="rb-chip" title="Implied rate from ZQ=F Fed Funds Futures">Implied <span class="rb-val">${impliedRate.toFixed(2)}%</span></span>`;
+  if (cutProb != null)
+    html += `<span class="rb-chip">Cut <span class="rb-prob-cut">${cutProb}%</span> Hold <span class="rb-prob-hold">${holdProb}%</span></span>`;
+  else if (hikeProb != null)
+    html += `<span class="rb-chip">Hike <span class="rb-prob-hike">${hikeProb}%</span> Hold <span class="rb-prob-hold">${holdProb}%</span></span>`;
+  else if (holdProb != null)
+    html += `<span class="rb-chip">Hold <span class="rb-prob-hold">${holdProb}%</span></span>`;
+
+  // SG section
+  html += `<span class="rb-sep"></span>`;
+  html += `<span class="rb-label">🇸🇬 SG</span>`;
+  html += `<span class="rb-chip" title="Singapore CPI Inflation YoY% (World Bank, annual)">CPI <span class="rb-val">${sgCpi != null ? sgCpi.toFixed(1)+'%' : '—'}</span></span>`;
+  html += `<span class="rb-chip" title="SORA (MAS) — offline if showing —">SORA <span class="rb-val">${sora != null ? sora.toFixed(2)+'%' : '—'}</span></span>`;
+
+  // Links
+  html += `<span class="rb-sep"></span>`;
+  html += `<a class="rb-link" href="https://www.cmegroup.com/markets/interest-rates/cme-fedwatch-tool.html" target="_blank" rel="noopener">CME FedWatch ↗</a>`;
+  html += `<a class="rb-link" href="https://fred.stlouisfed.org/series/DFF" target="_blank" rel="noopener">FRED ↗</a>`;
+  html += `<a class="rb-link" href="https://www.mas.gov.sg/monetary-policy-and-economics/monetary-policy/the-singapore-overnight-rate-average-sora" target="_blank" rel="noopener">MAS SORA ↗</a>`;
+
+  bar.innerHTML = html;
+}
+
 /* ── LOAD TAB ────────────────────────────────────────────── */
 async function loadTab(tabId, force) {
   const tab = TABS.find(t => t.id === tabId);
@@ -963,7 +1120,7 @@ function manualRefresh() {
   const btn = document.getElementById('refreshBtn');
   btn.classList.add('spin');
   delete tabCache[activeTabId];
-  Promise.all([loadTab(activeTabId, true), loadTicker()]).then(() => {
+  Promise.all([loadTab(activeTabId, true), loadTicker(), loadRates()]).then(() => {
     btn.classList.remove('spin');
   });
 }
@@ -1030,6 +1187,7 @@ function safeAttr(s) {
 /* ── INIT ────────────────────────────────────────────────── */
 loadTab('market');
 loadTicker();
+loadRates();
 </script>
 </body>
 </html>

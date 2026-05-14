@@ -55,7 +55,7 @@ exports.handler = async (event) => {
         netMargin:   is?.netIncomeRatio   ?? null,
         totalDebt:   bs?.totalDebt        ?? null,
         cash:        cash || null,
-        netDebt:     bs?.netDebt          ?? (debt - cash) || null,
+        netDebt:     bs?.netDebt          ?? ((debt - cash) || null),
       }),
     };
   } catch (err) {

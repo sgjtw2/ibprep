@@ -1,0 +1,1235 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>if(!sessionStorage.getItem('cmd-auth-v1')&&!sessionStorage.getItem('ibprep-auth-v1'))window.location.replace('./login.html');</script>
+<title>GT Corporate Finance Interview — Jay Tan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#000000; --s1:#080C14; --s2:#0C1220; --card:#080C14; --card-h:#0C1220;
+  --b0:#0E1828; --b1:#162038; --b2:#1E2E4A; --b3:#2A3E5C;
+  --t1:#EEF2FF; --t2:#8898B8; --t3:#4A5A78; --t4:#2A3850;
+  --blue:#1B4FD8; --bluel:#2D63F0; --bbg:rgba(27,79,216,.10); --bbrd:rgba(27,79,216,.22);
+  --red:#C93C2E; --redbg:rgba(201,60,46,.10); --redbrd:rgba(201,60,46,.22);
+  --green:#1E7A5A; --greenbg:rgba(30,122,90,.10); --greenbrd:rgba(30,122,90,.22);
+  --amber:#B87A12; --amberbg:rgba(184,122,18,.10); --amberbrd:rgba(184,122,18,.22);
+  --gold:#C9A227;
+}
+[data-theme="light"] {
+  --bg:#FFFFFF; --s1:#F8FAFC; --s2:#F1F5F9; --card:#F8FAFC; --card-h:#F1F5F9;
+  --b0:#E2E8F0; --b1:#E2E8F0; --b2:#CBD5E1; --b3:#94A3B8;
+  --t1:#0F172A; --t2:#475569; --t3:#94A3B8; --t4:#CBD5E1;
+  --blue:#1B4FD8; --bluel:#2D63F0; --bbg:rgba(27,79,216,.06); --bbrd:rgba(27,79,216,.20);
+  --red:#DC2626; --redbg:rgba(220,38,38,.07); --redbrd:rgba(220,38,38,.20);
+  --green:#16A34A; --greenbg:rgba(22,163,74,.07); --greenbrd:rgba(22,163,74,.20);
+  --amber:#B45309; --amberbg:rgba(180,83,9,.07); --amberbrd:rgba(180,83,9,.20);
+  --gold:#B45309;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;}
+body{background:var(--bg);color:var(--t1);font-family:'JetBrains Mono',monospace;font-size:12px;display:flex;flex-direction:column;}
+
+/* ── TOPBAR ─────────────────────────────────────────── */
+.topbar{flex-shrink:0;height:48px;background:var(--s1);border-bottom:1px solid var(--b1);display:flex;align-items:center;gap:12px;padding:0 16px;}
+.back-btn{font-size:11px;color:var(--t2);text-decoration:none;padding:4px 10px;border:1px solid var(--b2);border-radius:4px;transition:all .12s;white-space:nowrap;}
+.back-btn:hover{border-color:var(--blue);color:var(--blue);}
+.top-sep{width:1px;height:20px;background:var(--b1);flex-shrink:0;}
+.top-title{font-size:12px;font-weight:600;color:var(--t1);letter-spacing:.04em;}
+.top-sub{font-size:10px;color:var(--t3);margin-top:1px;}
+.top-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.theme-btn{width:28px;height:28px;background:var(--s2);border:1px solid var(--b1);border-radius:5px;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;}
+.theme-btn:hover{background:var(--b1);}
+.reset-btn{font-size:10px;padding:4px 12px;background:var(--redbg);border:1px solid var(--redbrd);border-radius:4px;color:var(--red);cursor:pointer;font-family:inherit;letter-spacing:.06em;text-transform:uppercase;}
+.reset-btn:hover{background:var(--red);color:#fff;}
+
+/* ── STAGE BAR ──────────────────────────────────────── */
+.stage-bar{flex-shrink:0;background:var(--s2);border-bottom:1px solid var(--b1);padding:0 16px;display:flex;align-items:stretch;gap:0;overflow-x:auto;}
+.stage-tab{display:inline-flex;align-items:center;gap:6px;padding:0 14px;height:36px;font-size:9px;letter-spacing:.10em;text-transform:uppercase;color:var(--t3);border-bottom:2px solid transparent;margin-bottom:-1px;white-space:nowrap;cursor:default;}
+.stage-tab.active{color:var(--blue);border-bottom-color:var(--blue);}
+.stage-tab.done{color:var(--green);}
+.stage-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0;}
+
+/* ── MAIN LAYOUT ────────────────────────────────────── */
+.main{flex:1;display:flex;gap:0;overflow:hidden;}
+
+/* ── LEFT PANEL: question + answer ─────────────────── */
+.q-panel{flex:1;display:flex;flex-direction:column;overflow:hidden;border-right:1px solid var(--b1);}
+.q-scroll{flex:1;overflow-y:auto;padding:20px;}
+.interviewer-chip{display:inline-flex;align-items:center;gap:8px;padding:5px 10px;background:var(--bbg);border:1px solid var(--bbrd);border-radius:20px;margin-bottom:14px;}
+.interviewer-chip-dot{width:7px;height:7px;border-radius:50%;background:var(--blue);}
+.interviewer-chip-txt{font-size:9px;letter-spacing:.10em;text-transform:uppercase;color:var(--blue);}
+.q-number{font-size:9px;color:var(--t3);letter-spacing:.10em;text-transform:uppercase;margin-bottom:8px;}
+.q-text{font-size:14px;font-weight:600;color:var(--t1);line-height:1.55;margin-bottom:18px;font-family:'JetBrains Mono',monospace;}
+.q-context{font-size:11px;color:var(--t2);line-height:1.6;padding:10px 13px;background:var(--s2);border:1px solid var(--b1);border-radius:5px;margin-bottom:16px;}
+.q-context strong{color:var(--t1);}
+.answer-label{font-size:9px;letter-spacing:.10em;text-transform:uppercase;color:var(--t3);margin-bottom:6px;}
+.answer-area{width:100%;min-height:130px;background:var(--s2);border:1px solid var(--b2);border-radius:5px;color:var(--t1);font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.6;padding:10px 12px;resize:vertical;transition:border .12s;}
+.answer-area:focus{outline:none;border-color:var(--blue);}
+.answer-area::placeholder{color:var(--t3);}
+.q-actions{flex-shrink:0;padding:12px 20px;border-top:1px solid var(--b1);display:flex;align-items:center;gap:10px;}
+.btn-submit{padding:8px 22px;background:var(--blue);color:#fff;border:none;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.06em;cursor:pointer;transition:background .12s;}
+.btn-submit:hover{background:var(--bluel);}
+.btn-submit:disabled{background:var(--b2);color:var(--t3);cursor:not-allowed;}
+.btn-next{padding:8px 22px;background:var(--greenbg);color:var(--green);border:1px solid var(--greenbrd);border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.06em;cursor:pointer;transition:all .12s;}
+.btn-next:hover{background:var(--green);color:#fff;}
+.q-progress{font-size:10px;color:var(--t3);margin-left:auto;}
+
+/* ── RIGHT PANEL: feedback ──────────────────────────── */
+.f-panel{width:420px;flex-shrink:0;display:flex;flex-direction:column;overflow:hidden;}
+.f-panel-hdr{flex-shrink:0;height:36px;background:var(--s2);border-bottom:1px solid var(--b1);display:flex;align-items:center;padding:0 14px;gap:8px;}
+.f-panel-title{font-size:9px;letter-spacing:.10em;text-transform:uppercase;color:var(--t3);}
+.f-scroll{flex:1;overflow-y:auto;padding:14px;}
+.f-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;color:var(--t3);}
+.f-empty-icon{font-size:28px;opacity:.4;}
+.f-empty-txt{font-size:11px;text-align:center;line-height:1.6;max-width:200px;}
+
+/* feedback blocks */
+.fb-section{margin-bottom:14px;}
+.fb-label{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);margin-bottom:7px;padding-bottom:5px;border-bottom:1px solid var(--b1);}
+.fb-verdict{padding:10px 12px;border-radius:5px;font-size:11px;line-height:1.6;}
+.fb-verdict.warn{background:var(--amberbg);border:1px solid var(--amberbrd);color:var(--amber);}
+.fb-verdict.info{background:var(--bbg);border:1px solid var(--bbrd);color:var(--blue);}
+.fb-model{background:var(--s2);border:1px solid var(--b1);border-radius:5px;padding:12px;font-size:11px;line-height:1.75;color:var(--t2);}
+.fb-model strong{color:var(--t1);display:block;margin-bottom:4px;}
+.fb-model em{color:var(--blue);font-style:normal;}
+.fb-checklist{display:flex;flex-direction:column;gap:5px;}
+.fb-check-item{display:flex;align-items:flex-start;gap:8px;font-size:11px;color:var(--t2);line-height:1.5;}
+.fb-check-item .chk{flex-shrink:0;margin-top:2px;font-size:12px;}
+.fb-check-item.hit .chk{color:var(--green);}
+.fb-check-item.miss .chk{color:var(--red);}
+.probe-box{padding:9px 11px;background:var(--redbg);border:1px solid var(--redbrd);border-radius:5px;}
+.probe-label{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:5px;}
+.probe-txt{font-size:11px;color:var(--t2);line-height:1.6;}
+
+/* ── SCREENS ────────────────────────────────────────── */
+.screen{display:none;flex:1;flex-direction:column;overflow:hidden;}
+.screen.active{display:flex;}
+
+/* intro screen */
+.intro-body{flex:1;overflow-y:auto;padding:40px;display:flex;flex-direction:column;align-items:center;gap:0;}
+.intro-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 14px;background:var(--redbg);border:1px solid var(--redbrd);border-radius:20px;margin-bottom:22px;}
+.intro-badge-dot{width:7px;height:7px;border-radius:50%;background:var(--red);}
+.intro-badge-txt{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--red);}
+.intro-title{font-size:22px;font-weight:700;color:var(--t1);text-align:center;line-height:1.3;margin-bottom:8px;max-width:540px;}
+.intro-sub{font-size:12px;color:var(--t2);text-align:center;line-height:1.7;margin-bottom:28px;max-width:500px;}
+.intro-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:600px;margin-bottom:28px;}
+.intro-card{padding:14px;background:var(--s2);border:1px solid var(--b1);border-radius:6px;}
+.intro-card-label{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--t3);margin-bottom:6px;}
+.intro-card-val{font-size:12px;color:var(--t1);line-height:1.6;}
+.intro-card-val span{color:var(--blue);}
+.btn-start{padding:12px 36px;background:var(--blue);color:#fff;border:none;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.08em;cursor:pointer;transition:background .12s;}
+.btn-start:hover{background:var(--bluel);}
+.intro-warn{font-size:10px;color:var(--t3);margin-top:12px;text-align:center;}
+
+/* gap analysis screen */
+.gap-screen{flex:1;overflow-y:auto;padding:24px;}
+.gap-title{font-size:16px;font-weight:700;color:var(--t1);margin-bottom:4px;}
+.gap-sub{font-size:11px;color:var(--t2);margin-bottom:18px;}
+.gap-table{width:100%;border-collapse:collapse;font-size:11px;}
+.gap-table th{text-align:left;padding:7px 10px;font-size:8px;letter-spacing:.10em;text-transform:uppercase;color:var(--t3);border-bottom:1px solid var(--b2);font-weight:600;}
+.gap-table td{padding:9px 10px;border-bottom:1px solid var(--b1);vertical-align:top;line-height:1.6;color:var(--t2);}
+.gap-table tr:last-child td{border-bottom:none;}
+.gap-table td:first-child{color:var(--t1);font-weight:500;white-space:nowrap;}
+.badge-strong{display:inline-block;padding:2px 7px;border-radius:3px;background:var(--greenbg);border:1px solid var(--greenbrd);color:var(--green);font-size:9px;letter-spacing:.06em;text-transform:uppercase;}
+.badge-moderate{display:inline-block;padding:2px 7px;border-radius:3px;background:var(--bbg);border:1px solid var(--bbrd);color:var(--blue);font-size:9px;letter-spacing:.06em;text-transform:uppercase;}
+.badge-weak{display:inline-block;padding:2px 7px;border-radius:3px;background:var(--amberbg);border:1px solid var(--amberbrd);color:var(--amber);font-size:9px;letter-spacing:.06em;text-transform:uppercase;}
+.badge-missing{display:inline-block;padding:2px 7px;border-radius:3px;background:var(--redbg);border:1px solid var(--redbrd);color:var(--red);font-size:9px;letter-spacing:.06em;text-transform:uppercase;}
+.gap-next{margin-top:18px;display:flex;justify-content:flex-end;}
+
+/* scoring screen */
+.score-screen{flex:1;overflow-y:auto;padding:24px;}
+.score-title{font-size:16px;font-weight:700;color:var(--t1);margin-bottom:4px;}
+.score-sub{font-size:11px;color:var(--t2);margin-bottom:20px;}
+.score-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px;}
+.score-card{padding:14px;background:var(--s2);border:1px solid var(--b1);border-radius:6px;}
+.score-card-label{font-size:9px;letter-spacing:.10em;text-transform:uppercase;color:var(--t3);margin-bottom:8px;}
+.score-bar-wrap{height:6px;background:var(--b1);border-radius:3px;overflow:hidden;margin-bottom:5px;}
+.score-bar{height:100%;border-radius:3px;transition:width .6s;}
+.score-val{font-size:18px;font-weight:700;color:var(--t1);}
+.score-denom{font-size:11px;color:var(--t3);}
+.triads{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px;}
+.triad-card{padding:14px;border-radius:6px;}
+.triad-card.strengths{background:var(--greenbg);border:1px solid var(--greenbrd);}
+.triad-card.weaknesses{background:var(--redbg);border:1px solid var(--redbrd);}
+.triad-label{font-size:8px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:9px;}
+.triad-card.strengths .triad-label{color:var(--green);}
+.triad-card.weaknesses .triad-label{color:var(--red);}
+.triad-item{display:flex;gap:7px;font-size:11px;line-height:1.6;color:var(--t2);margin-bottom:6px;}
+.triad-item::before{content:'→';color:var(--t3);flex-shrink:0;}
+.polished-box{padding:14px;background:var(--s2);border:1px solid var(--b1);border-radius:6px;margin-bottom:14px;}
+.polished-label{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:9px;}
+.polished-txt{font-size:11px;color:var(--t2);line-height:1.75;}
+.polished-txt strong{color:var(--t1);}
+.concerns-box{padding:14px;background:var(--amberbg);border:1px solid var(--amberbrd);border-radius:6px;margin-bottom:20px;}
+.concerns-label{font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:9px;}
+.concerns-item{display:flex;gap:7px;font-size:11px;line-height:1.6;color:var(--t2);margin-bottom:5px;}
+.concerns-item::before{content:'⚠';color:var(--amber);flex-shrink:0;}
+.restart-bar{display:flex;justify-content:center;gap:12px;padding-bottom:24px;}
+
+@media(max-width:900px){
+  .f-panel{display:none;}
+  .intro-grid{grid-template-columns:1fr;}
+  .score-grid{grid-template-columns:1fr;}
+  .triads{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <a class="back-btn" href="financial-model.html">← Financial Model</a>
+  <div class="top-sep"></div>
+  <div>
+    <div class="top-title">Grant Thornton — Corporate Finance Interview</div>
+    <div class="top-sub">Senior Associate / Assistant Manager · Singapore</div>
+  </div>
+  <div class="top-right">
+    <button class="reset-btn" onclick="confirmReset()">Reset</button>
+    <button class="theme-btn" onclick="toggleTheme()" title="Toggle theme">☀️</button>
+  </div>
+</div>
+
+<!-- STAGE BAR -->
+<div class="stage-bar" id="stageBar">
+  <div class="stage-tab active" id="stg0"><span class="stage-dot"></span>Intro</div>
+  <div class="stage-tab" id="stg1"><span class="stage-dot"></span>Resume</div>
+  <div class="stage-tab" id="stg2"><span class="stage-dot"></span>JD Fit</div>
+  <div class="stage-tab" id="stg3"><span class="stage-dot"></span>Deep Dive</div>
+  <div class="stage-tab" id="stg4"><span class="stage-dot"></span>Technical</div>
+  <div class="stage-tab" id="stg5"><span class="stage-dot"></span>Behavioural</div>
+  <div class="stage-tab" id="stg6"><span class="stage-dot"></span>Gap Analysis</div>
+  <div class="stage-tab" id="stg7"><span class="stage-dot"></span>Scoring</div>
+</div>
+
+<!-- SCREEN: INTRO -->
+<div class="screen active" id="screenIntro">
+  <div class="intro-body">
+    <div class="intro-badge"><div class="intro-badge-dot"></div><div class="intro-badge-txt">Live Mock Interview</div></div>
+    <div class="intro-title">Grant Thornton Corporate Finance<br>Senior Associate / AM — Singapore</div>
+    <div class="intro-sub">A strict, realistic mock interview built around your CV. Each question is followed by direct feedback, a CF-ready model answer, and specific phrasing improvements. Be direct. Be technical. Don't over-explain.</div>
+    <div class="intro-grid">
+      <div class="intro-card">
+        <div class="intro-card-label">Candidate</div>
+        <div class="intro-card-val"><span>Jay Tan Wee Wang, CAIA</span><br>CFA Level II Candidate<br>Financial Alliance → Prudential</div>
+      </div>
+      <div class="intro-card">
+        <div class="intro-card-label">Role</div>
+        <div class="intro-card-val"><span>Corporate Finance</span><br>Senior Associate / AM<br>Grant Thornton Singapore</div>
+      </div>
+      <div class="intro-card">
+        <div class="intro-card-label">Interview Stages</div>
+        <div class="intro-card-val">
+          1 · Resume Walkthrough<br>
+          2 · JD Requirement Fit<br>
+          3 · Experience Deep Dive<br>
+          4 · Technical Questions<br>
+          5 · Behavioural Questions
+        </div>
+      </div>
+      <div class="intro-card">
+        <div class="intro-card-label">Total Questions</div>
+        <div class="intro-card-val"><span>28 questions</span><br>+ Gap Analysis table<br>+ Final scoring (8 dimensions)</div>
+      </div>
+    </div>
+    <button class="btn-start" onclick="startInterview()">Begin Interview →</button>
+    <div class="intro-warn">Type your real answer before revealing the model response. That's the only way this works.</div>
+  </div>
+</div>
+
+<!-- SCREEN: INTERVIEW -->
+<div class="screen" id="screenInterview">
+  <div class="main">
+    <!-- LEFT: Q + Answer -->
+    <div class="q-panel">
+      <div class="q-scroll" id="qScroll">
+        <div class="interviewer-chip"><div class="interviewer-chip-dot"></div><div class="interviewer-chip-txt">Grant Thornton · Corporate Finance · Singapore</div></div>
+        <div class="q-number" id="qNumber">Question 1 of 28 · Stage 1: Resume Walkthrough</div>
+        <div class="q-text" id="qText">Loading...</div>
+        <div class="q-context" id="qContext" style="display:none"></div>
+        <div class="answer-label">Your Answer</div>
+        <textarea class="answer-area" id="answerArea" placeholder="Type your answer here. Be specific — vague answers will be called out."></textarea>
+      </div>
+      <div class="q-actions">
+        <button class="btn-submit" id="btnSubmit" onclick="submitAnswer()">Submit Answer</button>
+        <button class="btn-next" id="btnNext" onclick="nextQuestion()" style="display:none">Next Question →</button>
+        <div class="q-progress" id="qProgress">1 / 28</div>
+      </div>
+    </div>
+    <!-- RIGHT: Feedback -->
+    <div class="f-panel">
+      <div class="f-panel-hdr">
+        <div class="f-panel-title">Interviewer Feedback</div>
+      </div>
+      <div class="f-scroll" id="fScroll">
+        <div class="f-empty" id="fEmpty">
+          <div class="f-empty-icon">💬</div>
+          <div class="f-empty-txt">Submit your answer to receive direct feedback and the CF-ready model response.</div>
+        </div>
+        <div id="fContent" style="display:none"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN: GAP ANALYSIS -->
+<div class="screen" id="screenGap">
+  <div class="gap-screen">
+    <div class="gap-title">Gap Analysis</div>
+    <div class="gap-sub">Candid assessment of your evidence against each JD requirement. Based on your CV and the interview you just completed.</div>
+    <table class="gap-table">
+      <thead>
+        <tr>
+          <th>Requirement</th>
+          <th>Evidence from Your Background</th>
+          <th>Strength</th>
+          <th>Gap / How to Improve</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>M&amp;A Interest &amp; Deal Orientation</td>
+          <td>Evaluated two sell-side cases (seafood, timber); advising founders on exit and pricing; framed buyer universe and deal structure in timber case.</td>
+          <td><span class="badge-moderate">Moderate</span></td>
+          <td>No live transaction closed. Frame your cases as deal-adjacent work, not investment analysis. Lead with "sell-side mandate" not "client situation."</td>
+        </tr>
+        <tr>
+          <td>Financial Modelling</td>
+          <td>Built DCF, comps, downside/base/upside scenarios at Financial Alliance. Built EBITDA normalization model for timber and seafood cases.</td>
+          <td><span class="badge-moderate">Moderate</span></td>
+          <td>No integrated three-statement model with debt schedule and revolver. Practice building full 3-statement → DCF in Excel before interview. Know the mechanics cold.</td>
+        </tr>
+        <tr>
+          <td>DCF Valuation</td>
+          <td>Used DCF to assess expected returns on private investments. Can articulate WACC, terminal value, FCF build.</td>
+          <td><span class="badge-moderate">Moderate</span></td>
+          <td>Anchor every DCF answer in deal context — "what multiple does this DCF imply?" Practice WACC from scratch including beta relevering.</td>
+        </tr>
+        <tr>
+          <td>Comparable Company Analysis</td>
+          <td>Used comps to derive 4.5x–6.0x range for timber case. Applied private company discount for illiquidity and size.</td>
+          <td><span class="badge-strong">Strong</span></td>
+          <td>Be able to name specific comparables and justify each inclusion/exclusion criteria in the room. Prep a comps set for 2–3 industries GT covers.</td>
+        </tr>
+        <tr>
+          <td>Precedent Transaction Analysis</td>
+          <td>Conceptually understand the methodology. Not explicitly applied in documented cases.</td>
+          <td><span class="badge-weak">Weak</span></td>
+          <td>Study 5–10 real precedent transactions in SE Asia (Bloomberg, MergerMarket). Know the control premium concept and why precedents trade above comps. Practice articulating the difference.</td>
+        </tr>
+        <tr>
+          <td>Pitch Decks &amp; Investment Memoranda</td>
+          <td>Prepared investment recommendation documents at Financial Alliance (IC-style materials). No formal sell-side IM produced.</td>
+          <td><span class="badge-weak">Weak</span></td>
+          <td>Draft a mock IM for one of your sell-side cases (seafood or timber). Use standard IM structure. Bring a printed copy to the interview if possible — tangible evidence is compelling.</td>
+        </tr>
+        <tr>
+          <td>Due Diligence</td>
+          <td>Conducted investment and operational DD on 30+ fund managers. Applied DD lens to seafood case (customer concentration, margin, WC).</td>
+          <td><span class="badge-strong">Strong</span></td>
+          <td>Translate fund manager DD language into company DD language. "Manager DD" → "management quality review." "Portfolio fit" → "strategic rationale." Reframe actively in the interview.</td>
+        </tr>
+        <tr>
+          <td>Company &amp; Industry Research</td>
+          <td>Evaluated fund strategies across asset classes; analyzed trading businesses including sector dynamics.</td>
+          <td><span class="badge-moderate">Moderate</span></td>
+          <td>Prep a 1-page industry note on a sector GT has advised in (logistics, F&amp;B, manufacturing). Demonstrates initiative and market awareness.</td>
+        </tr>
+        <tr>
+          <td>Capital Raising</td>
+          <td>No direct capital raising or fundraising advisory experience documented.</td>
+          <td><span class="badge-missing">Missing</span></td>
+          <td>Be honest — "I haven't run a capital raise, but I understand the process from the investor screening side given my DD work on 30+ managers." Frame the lack of experience as a gap you're closing, not a gap you're hiding.</td>
+        </tr>
+        <tr>
+          <td>Client / Stakeholder Management</td>
+          <td>SGD 50m AUA at HNWI level. Advised founders on exit and pricing. Presented recommendations to clients with real capital consequences.</td>
+          <td><span class="badge-strong">Strong</span></td>
+          <td>This is a genuine strength. Lead with the founder-facing work — it's more CF-relevant than HNWI portfolio management. Emphasize delivering difficult valuation news credibly.</td>
+        </tr>
+        <tr>
+          <td>Transaction Execution</td>
+          <td>No live transaction closed. No data room, SPA, or completion experience.</td>
+          <td><span class="badge-missing">Missing</span></td>
+          <td>The largest gap. Don't try to close it verbally — acknowledge it, then immediately pivot to what you bring that complements it. The interviewer knows; get ahead of it.</td>
+        </tr>
+        <tr>
+          <td>Excel &amp; PowerPoint</td>
+          <td>Advanced Excel (VBA/Macros), Bloomberg. CAIA and CFA modelling competency.</td>
+          <td><span class="badge-strong">Strong</span></td>
+          <td>Offer to bring a live model to the second round. Demonstrating is worth 10x claiming.</td>
+        </tr>
+        <tr>
+          <td>Deadline Management / Multiple Workstreams</td>
+          <td>Managed 30+ manager DD processes. SGD 50m AUA across multi-asset portfolios concurrently.</td>
+          <td><span class="badge-moderate">Moderate</span></td>
+          <td>Prepare a specific story: "I ran three simultaneous DD processes while managing monthly portfolio reviews — here is how I structured my week." Specific beats generic.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="gap-next">
+      <button class="btn-next" onclick="showScoring()">View Final Scoring →</button>
+    </div>
+  </div>
+</div>
+
+<!-- SCREEN: SCORING -->
+<div class="screen" id="screenScoring">
+  <div class="score-screen">
+    <div class="score-title">Final Assessment</div>
+    <div class="score-sub">Scored as a GT Corporate Finance interviewer would score you. Honest. No grade inflation.</div>
+
+    <div class="score-grid" id="scoreGrid"></div>
+
+    <div class="triads">
+      <div class="triad-card strengths">
+        <div class="triad-label">Top 3 Strengths</div>
+        <div class="triad-item">Valuation analytical depth — you can build and defend a comparable company analysis, EBITDA normalization, and scenario model with real deal context behind it.</div>
+        <div class="triad-item">Client-facing credibility — four years presenting investment recommendations to HNWI founders with real capital at stake. This is rare at SA/AM level.</div>
+        <div class="triad-item">CAIA + CFA L2 credentials signal genuine commitment to investment and corporate finance, not a lateral from a non-financial background.</div>
+      </div>
+      <div class="triad-card weaknesses">
+        <div class="triad-label">Top 3 Weaknesses</div>
+        <div class="triad-item">No transaction execution experience — no live deal closed, no IM drafted in a transactional context, no data room managed. This is the primary objection.</div>
+        <div class="triad-item">Precedent transaction analysis is conceptual only — you cannot name specific deals and walk through the multiple derivation the way a direct M&amp;A hire can.</div>
+        <div class="triad-item">Capital raising is a gap — GT CF includes equity capital markets and fundraising advisory; you have no experience on the origination or execution side of raising capital for a client.</div>
+      </div>
+    </div>
+
+    <div class="concerns-box">
+      <div class="concerns-label">Likely Interviewer Concerns</div>
+      <div class="concerns-item">Can he actually close a transaction, or will he need 12 months before he can contribute independently to deal execution?</div>
+      <div class="concerns-item">His deal experience is self-directed analysis, not supervised M&amp;A work — how much of the valuation framework is solid versus situationally learned?</div>
+      <div class="concerns-item">Wealth management background means he's trained to manage client expectations, not to drive a process to completion on a deadline. Will he adapt quickly?</div>
+      <div class="concerns-item">Psychology and Communication degree — no accounting or finance undergraduate foundation. Can he speak to audited financials, tax structuring, and deal mechanics credibly?</div>
+    </div>
+
+    <div class="polished-box">
+      <div class="polished-label">Stronger "Tell Me About Yourself"</div>
+      <div class="polished-txt">
+        <strong>"I have four years in financial services, and the thread across every role is investment analysis with real capital consequences.</strong>
+        At Prudential, I built the client-facing foundation — advising accredited and HNWI clients on portfolio structuring and risk allocation. At Financial Alliance, I moved into investment advisory where I ran full investment DD on over 30 fund managers, built DCF and comparable company models to assess return attractiveness, and managed SGD 50m in client assets across multi-asset portfolios.
+        <br><br>
+        The work that's most relevant to your team is the lower-middle-market sell-side evaluation work I did on two private businesses — a seafood trading company and a timber trading business. For both, I normalized EBITDA, ran comparable company analysis, built scenario models, and framed valuation ranges and buyer affordability. That's the analytical core of a GT CF sell-side mandate.
+        <br><br>
+        What I'm moving toward is transaction execution — actually driving a process, producing the IM, running the buyer outreach, and closing. That's the gap I'm here to close, and I think my analytical foundation and client-facing experience make me a faster build than a graduate hire."
+      </div>
+    </div>
+
+    <div class="polished-box">
+      <div class="polished-label">Stronger "Why Grant Thornton Corporate Finance?"</div>
+      <div class="polished-txt">
+        <strong>"Grant Thornton's corporate finance practice in Singapore focuses on mid-market M&amp;A and valuations — which maps precisely to the deal size and company profile I've been analyzing.</strong>
+        The businesses I evaluated — SGD 1–1.2m EBITDA seafood trading, a timber trading company at 4.5x–6.0x EBITDA — are exactly the profile your team advises.
+        <br><br>
+        At a bulge bracket, I'd spend two years in the background of large-cap deals. At GT, the team structure means I'll be drafting sections of IMs and attending client meetings within the first six months. That's the acceleration I need to build execution experience quickly.
+        <br><br>
+        The specific reason I'm targeting your CF team over the Big 4 TAS practices is that advisory is your primary focus, not a line item in a broader advisory services group. I want to be in an environment where M&amp;A is the only thing we do."
+      </div>
+    </div>
+
+    <div class="restart-bar">
+      <button class="btn-submit" onclick="confirmReset()">Restart Interview</button>
+      <a class="btn-next" href="financial-model.html" style="text-decoration:none;display:inline-flex;align-items:center;">← Back to Financial Model</a>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── THEME ──────────────────────────────────────────── */
+function toggleTheme(){
+  const d=document.documentElement;
+  const t=d.getAttribute('data-theme')==='dark'?'light':'dark';
+  d.setAttribute('data-theme',t);
+  document.getElementById('themeBtn') && (document.querySelector('.theme-btn').textContent=t==='dark'?'☀️':'🌙');
+}
+(()=>{const s=localStorage.getItem('gt-theme')||'dark';document.documentElement.setAttribute('data-theme',s);})();
+
+/* ── QUESTIONS DATA ─────────────────────────────────── */
+const STAGES=[
+  {id:1,label:'Resume'},
+  {id:2,label:'JD Fit'},
+  {id:3,label:'Deep Dive'},
+  {id:4,label:'Technical'},
+  {id:5,label:'Behavioural'}
+];
+
+const QUESTIONS=[
+  /* ═══════════ STAGE 1: RESUME WALKTHROUGH ═══════════ */
+  {
+    stage:1,stageLabel:'Stage 1: Resume Walkthrough',
+    q:`Walk me through your resume and explain why you are now targeting corporate finance / M&A.`,
+    context:`This is your opening statement. The interviewer is looking for: a clear narrative arc (not a list of job descriptions), commercial logic for the career transition, and evidence that you have already done deal-adjacent work. You have 3 minutes. Do not recite your CV — connect the dots.`,
+    criteria:[
+      'Clear narrative arc — not a job description recitation',
+      'Explicitly connects wealth management work to CF analytical skills',
+      'Mentions the sell-side evaluation cases (seafood / timber) proactively',
+      'Acknowledges the gap (no live transaction closed) before being asked',
+      'Ends with a forward-looking reason for this specific role'
+    ],
+    feedback:`The most common failure here is reciting a career history instead of telling a story. A GT CF interviewer wants to hear: (1) what you actually did analytically, (2) where you already crossed into M&A/valuation territory, and (3) why now — with a credible, non-defensive explanation.`,
+    probe:`Follow-up: "You've been in wealth management for four years. Why didn't you make this move two years ago?"`,
+    model:`"I have four years in financial services, and the thread across every role is investment analysis with real capital consequences.
+
+At Prudential, I built the client-facing foundation — advising accredited and high-net-worth clients on portfolio structuring and risk allocation across multi-asset portfolios.
+
+At Financial Alliance, I moved into investment advisory where I ran full investment DD on 30+ fund managers, built DCF and comparable company models, and managed SGD 50m in client assets. More relevantly to your team — I evaluated two lower-middle-market sell-side cases: a seafood trading business generating SGD 1.0–1.2m EBITDA and a timber trading business. For both, I normalized EBITDA, ran comparable company analysis, built scenario models, and framed valuation ranges and buyer affordability. That is the analytical core of a sell-side M&A mandate.
+
+What I'm moving toward is transaction execution — producing the IM, running the buyer process, closing. The gap I'm here to close is deal execution experience. My analytical foundation and client-facing credentials — CAIA, CFA Level II — make me a faster build than a graduate hire, and I'm clear-eyed about the delta I need to close."`,
+    probeModel:`"I could have made the move earlier, but I chose to build genuine analytical depth first — the CAIA designation, the CFA programme, and the sell-side valuation work. I didn't want to join a CF team with credentials but no real analytical output to show. The work I've done in the last 18 months gives me something concrete to stand behind in this interview."`
+  },
+  /* ═══════════ STAGE 2: JD FIT ═══════════ */
+  {
+    stage:2,stageLabel:'Stage 2: JD Requirement Fit',
+    q:`Walk me through the most complex financial model you have built. What was it for, what inputs did you use, and what was the output?`,
+    context:`The interviewer is testing whether your modelling experience is genuine or cosmetic. Vague answers ("I built DCF models") will be challenged. They want to hear: what model type, what the inputs were, how you stress-tested it, and what decision it supported.`,
+    criteria:[
+      'Names a specific model (DCF, comps, 3-statement, LBO)',
+      'Describes the input drivers — not just "revenue and costs"',
+      'Explains how it was stress-tested or sensitised',
+      'States the output and the decision it supported',
+      'Honest about the limits of what was built'
+    ],
+    feedback:`If you cannot describe a model in mechanical detail — what the revenue drivers were, how working capital was modelled, what the terminal value assumption was — the interviewer will conclude the modelling was superficial. Depth of detail is the signal.`,
+    probe:`"If I opened your Excel model right now and asked you to walk me through the three-statement link, could you do it?"`,
+    model:`"The most detailed model I built was for the timber trading sell-side evaluation. It was a three-scenario model — downside, base, upside — anchored to normalized EBITDA.
+
+The inputs: I started with two years of management accounts. Revenue was broken into customer segments by volume and margin. I stripped out: owner compensation above a market-rate replacement cost, one-off revenues from a non-recurring contract, and personal expenses run through the P&L. That normalization reduced reported EBITDA by roughly 15% to give me a sustainable earnings figure.
+
+I then built the scenario model — each scenario had its own revenue growth assumption and margin profile. The downside assumed a 20% revenue decline reflecting key-person risk and customer concentration. The upside assumed a 10% revenue lift from a new customer pipeline the owner had identified.
+
+From normalized EBITDA, I applied a 4.5x–6.0x multiple range derived from comparable listed trading and distribution companies, discounted for size and illiquidity. The output was an enterprise value range with a proceeds bridge — EV minus net debt and working capital peg — showing the founder's expected cash at close under each scenario.
+
+The honest gap is that this was a deal analysis model, not a full integrated three-statement model with a revolving credit facility and a debt schedule. I've been building toward that through CFA Level II and active practice. I can walk through the three-statement link in detail — I know the mechanics."`,
+    probeModel:`"Yes. Net income from the income statement flows into retained earnings on the balance sheet and into operating cash flow on the cash flow statement as the starting point. D&A is added back in operating CF and reduces PP&E on the balance sheet. Capex is a cash outflow in investing activities and increases gross PP&E. Ending cash from the CFS plugs to the cash balance on the balance sheet. The model checks when assets equal liabilities plus equity."`
+  },
+  {
+    stage:2,stageLabel:'Stage 2: JD Requirement Fit',
+    q:`Have you produced an information memorandum or an investment teaser? If not, walk me through how you would structure one for a founder-owned SGD 20m EV manufacturing business.`,
+    context:`GT's CF team produces IMs on every sell-side mandate. If you haven't produced one, say so — but demonstrate you understand the structure and purpose cold.`,
+    criteria:[
+      'Honest about whether you have produced a formal IM',
+      'Correctly identifies the sections of an IM (exec summary → financial section → risk factors)',
+      'Understands the audience — strategic vs. financial buyers require different emphasis',
+      'Knows what "investment highlights" are and why they come before financials in the document',
+      'Can articulate the difference between an IM and an investment pitch deck'
+    ],
+    feedback:`Do not claim you have produced an IM if you haven't. The follow-up will expose it. The credible answer is: "I have produced IC-style recommendation documents with the same structural logic — here is how I would build an IM." Then show you know the structure cold.`,
+    probe:`"What is the single most important section in the IM, and why?"`,
+    model:`"I haven't produced a formal sell-side IM in a transactional context. What I have produced are investment recommendation documents with structurally similar logic — executive summary, investment thesis, financial analysis, risk factors, and recommendation.
+
+For a SGD 20m EV manufacturing business, the IM structure would be:
+
+Executive Summary — headline financials (revenue, EBITDA, margins), deal rationale, asking price range or process terms. One to two pages. This is what a buyer reads to decide whether to request the full document.
+
+Investment Highlights — three to five key reasons to buy: market position, revenue quality, management depth, growth levers. These lead the financial narrative.
+
+Company Overview — history, ownership, legal structure, products and services, key customer and supplier relationships.
+
+Industry and Market — sector dynamics, competitive landscape, addressable market, macro tailwinds or headwinds.
+
+Financial Section — three to five years of audited historicals, EBITDA normalization bridge, forward projections with key assumptions, working capital analysis, and capex requirements.
+
+Risk Factors — customer concentration, key-person dependency, regulatory exposure, cyclicality.
+
+Management Team — founder profile, succession depth, key operational staff.
+
+The most important section is the executive summary — a poorly written executive summary means a buyer rejects the deal before they read the financials. The narrative has to be crisp and the numbers have to be credible at a glance."`,
+    probeModel:`"The executive summary. A buyer receives 10–15 deal books a week. If the first two pages don't establish a clear investment thesis and credible headline financials, they stop reading. Everything else — the industry section, the management profiles — exists to support a decision a buyer has already started making on page two."`
+  },
+  {
+    stage:2,stageLabel:'Stage 2: JD Requirement Fit',
+    q:`You say you conducted due diligence on 30+ fund managers. How is that relevant to M&A due diligence on a company? Walk me through the workstreams you would run on a target company.`,
+    context:`The interviewer is testing whether you can translate your DD language into M&A DD language. Fund manager DD and company M&A DD share a framework but differ significantly in depth and focus.`,
+    criteria:[
+      'Does not over-claim that fund manager DD is equivalent to M&A company DD',
+      'Correctly identifies the M&A DD workstreams (financial, commercial, legal, tax, operational)',
+      'Can apply the financial DD lens to a real example from their background',
+      'Understands what "quality of earnings" means in an M&A context',
+      'Knows what a QoE report is and who produces it'
+    ],
+    feedback:`The risk here is conflating two different exercises. Fund manager DD focuses on strategy, governance, and track record. Company M&A DD focuses on earnings quality, balance sheet integrity, commercial sustainability, and deal risk. Be precise about the difference — and then show where the framework transfers.`,
+    probe:`"What is a Quality of Earnings report, and would you be able to produce one?"`,
+    model:`"They share a framework but differ in depth and focus. Let me separate them clearly.
+
+My fund manager DD covered: strategy and process evaluation, track record attribution, governance and controls, portfolio transparency, fee structure, and alignment. That last element — assessing whether incentive structures align with investor outcomes — directly parallels evaluating whether a management team's compensation structure aligns with buyer interests in a deal.
+
+For M&A company DD, the workstreams I would run are:
+
+Financial DD — verify and normalize reported EBITDA, assess revenue quality (customer concentration, contract terms, recurring vs. non-recurring), stress-test margins, analyze working capital trends, identify off-balance-sheet liabilities and contingent exposures. This produces a Quality of Earnings analysis.
+
+Commercial DD — competitive positioning, market share, pricing power, customer switching costs, supplier dependency, pipeline visibility.
+
+Operational DD — management depth beyond the founder, key-person risk, IT systems, scalability of operations.
+
+Legal DD — contracts, IP ownership, employment agreements, regulatory compliance, pending litigation.
+
+Tax DD — group structure, transfer pricing, deferred tax positions.
+
+I haven't led the legal or tax workstreams — at GT, I'd be working alongside external legal and tax advisers on those. My direct contribution would be on financial and commercial DD, where my background is strongest.
+
+A QoE report is a financial DD output — typically produced by an accounting firm — that adjusts reported EBITDA for non-recurring items, owner-related costs, and normalizing entries to give a buyer a reliable sustainable earnings figure. I've produced the normalization analysis internally for the seafood and timber cases; a formal QoE would be a more rigorous, audited version of that process."`,
+    probeModel:`"A QoE — Quality of Earnings report — adjusts reported EBITDA to isolate sustainable, recurring earnings. It strips out owner above-market compensation, one-time revenues and costs, related-party transactions at non-arm's-length terms, and any accounting treatments that inflate reported earnings. I produced the normalization analysis myself for both sell-side cases. A formal QoE from an accounting firm applies the same logic with audit-level rigour and gives a buyer the confidence to bid based on the adjusted number."`
+  },
+  {
+    stage:2,stageLabel:'Stage 2: JD Requirement Fit',
+    q:`You have managed SGD 50m in assets. Walk me through how you managed multiple client workstreams simultaneously, and give me a specific example of a time you delivered under a tight deadline.`,
+    context:`This is a process and execution question. The interviewer is probing whether you can manage multiple simultaneous workstreams — which is table stakes in CF, where you might be on 3–4 live deals at once.`,
+    criteria:[
+      'Describes a real system or framework for managing parallel workstreams',
+      'Gives a specific, named example — not a generic description',
+      'Quantifies the stakes or the deadline',
+      'Shows how prioritisation was done under constraint',
+      'Honest about mistakes or near-misses'
+    ],
+    feedback:`"I'm good at managing multiple tasks" is not an answer. Describe a real system and give a specific example with a real deadline. If you have never missed a deadline in your life, the interviewer won't believe you — acknowledge a near-miss and show how you handled it.`,
+    probe:`"What's the hardest deadline you've ever missed, and what was the consequence?"`,
+    model:`"At Financial Alliance, I was running DD on three fund managers concurrently — each requiring a full strategy evaluation, track record review, and governance assessment — while managing monthly portfolio reviews for 50m AUM clients and responding to time-sensitive client requests around market events.
+
+My system: each Monday I listed every open workstream with a delivery date and a task dependency map — which inputs I needed from external parties before I could complete my analysis. Anything with a hard client deadline got scheduled to complete 48 hours early. Fund manager DD went in parallel slots that didn't have fixed external deadlines.
+
+The specific example: in Q4 2024, I had two fund manager investment recommendations due to an allocation committee in the same week as a major market volatility event that required me to update portfolio positions and communicate to clients within 24 hours. I completed the client comms first — that was a client-facing, hard deadline. I then worked through the weekend to deliver the fund recommendations on Monday. Both were submitted on time without material quality compromise.
+
+The honest near-miss: I misjudged how long the EBITDA normalization analysis for the timber case would take because I underestimated how inconsistently the management accounts had been prepared. I had to reset expectations with the client on timing — which I did proactively, not after the fact. That's the lesson I carry: flag the timeline risk early, don't manage it silently."`,
+    probeModel:`"The timber case timeline slipped by about five days. The management accounts were inconsistently formatted across three years, and I underestimated the time required to restate them on a comparable basis. I told the client directly, explained why, and gave a revised delivery date that I hit. It wasn't a failure of effort — it was a failure of initial scoping. I now build a buffer for data quality risk on any case where I'm working from management-provided financials."`
+  },
+  {
+    stage:2,stageLabel:'Stage 2: JD Requirement Fit',
+    q:`We do a significant amount of pitch preparation and proposal writing. Have you prepared pitch materials? If so, walk me through the structure of the last pitch deck you built.`,
+    context:`GT CF pitches for mandates — sell-side, buy-side, valuation engagements. The ability to build a credible pitch deck and articulate a deal thesis is a core SA/AM function.`,
+    criteria:[
+      'Honest about whether they have built a formal pitch deck',
+      'Can describe the logical flow of a pitch: market context → company overview → GT's approach → deal thesis → team and credentials',
+      'Understands that a pitch deck is a selling document, not an analytical report',
+      'Can distinguish between an indicative offer deck and a full sell-side pitch'
+    ],
+    feedback:`Investment recommendation documents are not pitch decks. An IM is not a pitch. Know the difference and be clear about which you have and haven't produced.`,
+    probe:`"If I gave you the timber trading case and asked you to build a two-page pitch to a financial buyer, what would those two pages contain?"`,
+    model:`"I've built investment recommendation documents and portfolio review presentations — structured presentations designed to support a capital allocation decision. I have not built a formal GT-style mandate pitch deck, and I want to be direct about that.
+
+The structure I understand a CF pitch deck to follow:
+
+Cover and executive summary — deal overview, headline financials, why this deal is actionable now.
+
+Market and industry context — why the sector is interesting to a buyer today. Macro tailwinds, consolidation dynamics, multiple expansion potential.
+
+Company overview — revenue, EBITDA, margin profile, growth trajectory. Three to five investment highlights.
+
+Financial summary — key metrics, LTM performance, forward projections. Enough to establish credibility without overwhelming the buyer before they sign an NDA.
+
+GT's proposed approach — how we would run the process: timeline, buyer universe, data room preparation, bid management.
+
+Team credentials — relevant GT deal experience in the sector.
+
+The two-page pitch for the timber case: Page one — investment highlights and headline financials. Revenue trajectory, normalized EBITDA, margin stability, valuation range. Page two — buyer universe rationale (strategic buyers in regional distribution consolidation play vs. financial buyers who can service acquisition debt at the 4.5x–6.0x entry multiple) and proposed process timeline."`,
+    probeModel:`"Page one: the investment thesis. Why is this business worth buying — normalized EBITDA of SGD X, stable margins, diversified customer base improving post-normalization, owner willing to stay for a 12-month transition. Valuation range headline: 4.5x–6.0x EBITDA. Page two: buyer universe and process. Strategic buyers — regional distributors, F&B groups with vertical integration ambitions. Financial buyers — PE funds with lower-middle-market mandates who can lever the business at 2.5x–3.5x debt. Process: 8–10 week timeline, teaser distribution, management presentations, indicative bids, exclusivity, closing."`
+  },
+  /* ═══════════ STAGE 3: EXPERIENCE DEEP DIVE ═══════════ */
+  {
+    stage:3,stageLabel:'Stage 3: Experience Deep Dive',
+    q:`You managed SGD 50m in AUA. Help me understand exactly what decisions you were making. Was this genuine investment management or was it primarily relationship management?`,
+    context:`This is a pressure test. The interviewer is probing whether your AUA figure represents analytical work or client service work. Be direct — don't oversell the analytical component, and don't undersell the genuine investment decision-making.`,
+    criteria:[
+      'Distinguishes between relationship management and investment decision-making clearly',
+      'Gives specific investment decisions made — not generic portfolio reviews',
+      'Explains what "allocation decision" means and what it was based on',
+      'Acknowledges that wealth advisory and CF have different accountability structures'
+    ],
+    feedback:`The temptation is to frame SGD 50m AUA as equivalent to running a fund. It is not, and the interviewer knows that. The credible answer explains what was genuinely analytical — manager selection, allocation decisions, scenario analysis — and what was client-facing, without conflating them.`,
+    probe:`"Give me one specific allocation decision you made — the analysis behind it and the outcome."`,
+    model:`"Fair challenge. Let me separate it clearly.
+
+The relationship management component: client communication, portfolio reviews, expectation management, and reporting. That was a meaningful part of the role.
+
+The genuine investment decision-making: asset allocation across multi-asset portfolios — determining the equity-to-alternatives ratio based on each client's liability profile and risk tolerance. Manager selection — evaluating 30+ fund managers and deciding which strategies to allocate capital to. That involved full investment and operational DD, strategy assessment, track record attribution, and fee analysis. Performance attribution — identifying which positions were driving portfolio returns and whether the attribution was consistent with the investment thesis.
+
+The specific outcome: allocation decisions I led improved portfolio return by 120 basis points versus the benchmark while reducing portfolio volatility by 8%, over a 12-month period across the full book.
+
+Where it is different from corporate finance: in wealth advisory, the client bears the investment risk and the consequence of a wrong call is portfolio underperformance. In CF, the client's exit proceeds or acquisition decision is the consequence — and the stakes, the time pressure, and the accountability are structurally different. I'm not claiming equivalence. I'm claiming that the analytical foundation I built — valuation, DD, scenario analysis — is directly transferable, and the client-facing accountability is a genuine asset."`,
+    probeModel:`"In Q3 2024, I reallocated a client's alternative sleeve from a single-strategy hedge fund to a multi-strategy alternatives platform. My analysis: the single strategy had a Sharpe ratio declining over 18 months, correlation to equities increasing during drawdowns — which eliminated the diversification benefit — and transparency on portfolio positioning was deteriorating. The multi-strategy platform offered better risk-adjusted returns, lower correlation, and monthly liquidity. The outcome: the reallocation reduced portfolio drawdown in Q4 2024 by approximately 3% relative to the prior allocation."`
+  },
+  {
+    stage:3,stageLabel:'Stage 3: Experience Deep Dive',
+    q:`Walk me through the timber trading sell-side evaluation in detail. Who was the client, what was the transaction structure, how did you arrive at the 4.5x–6.0x EBITDA range, and what was the outcome?`,
+    context:`This is the most M&A-relevant work on your CV. The interviewer will probe every number and every assumption. If you can't defend the multiple range, the comparables used, and the normalization process in detail, this becomes a liability instead of an asset.`,
+    criteria:[
+      'Can explain the normalization process — what was adjusted and why',
+      'Can name the comparable companies used or the methodology for selecting them',
+      'Can explain why 4.5x–6.0x rather than 5x–7x or 3x–5x',
+      'Understands the cash-equity transaction structure and the risk allocation implications',
+      'Knows what the outcome was — or is honest that it did not proceed to a transaction'
+    ],
+    feedback:`The 4.5x–6.0x range sounds like it was selected to sound credible. The interviewer will ask how you derived it. If you cannot defend the floor and the ceiling with reference to specific comparables and adjustments, the number loses credibility. Know the derivation cold.`,
+    probe:`"The ceiling is 6.0x. What would the business need to look like — what conditions would have to be true — to justify 6.0x to a buyer?"`,
+    model:`"The client was a founder-owned timber trading business — importing and distributing timber products to local construction and manufacturing buyers. The founder was evaluating a mixed cash-equity transaction with a regional buyer, meaning a portion of the consideration was in the form of equity in the acquiring entity.
+
+Normalization: I pulled three years of management accounts. Adjustments I made: (1) owner compensation — the founder was drawing SGD 280k per annum; I replaced that with a market-rate GM salary of SGD 120k, adding SGD 160k back to normalized EBITDA. (2) one-time revenue from a non-recurring government procurement contract in year two, which I excluded from the sustainable earnings base. (3) personal vehicle and travel expenses run through the business, which I excluded.
+
+After normalization, the EBITDA was approximately SGD 850k–950k, down from the reported SGD 1.0–1.1m — roughly a 10–15% normalization haircut.
+
+The 4.5x–6.0x range: I selected five comparable listed companies in the timber, building materials distribution, and specialty trading space in Southeast Asia — including listed entities in Malaysia and Singapore. The trading comps showed a median EV/EBITDA of approximately 7x for listed companies. I applied a 15–25% private company discount for illiquidity and size to arrive at the 5.5x–6.0x ceiling. The floor of 4.5x reflected the customer concentration risk and the key-person dependency — if the founder exited fully, a buyer would need to discount for transition risk.
+
+The mixed cash-equity structure: at 4.5x EV, approximately 60% cash at close and 40% in acquirer equity — the seller retained upside exposure but also absorbed the acquirer's operating risk. I modelled downside scenarios where the deferred equity component eroded significantly if the acquirer's revenue declined 20%.
+
+The outcome: the evaluation did not proceed to a transaction. The founder concluded the valuation range was below his expectation, and he chose to delay the sale. That's a real outcome — and the lesson is that the adviser's job is to give an accurate picture, not a flattering one."`,
+    probeModel:`"To justify 6.0x: the business would need a clean customer base — no single customer exceeding 20% of revenue — and documented revenue contracted through the next 12–18 months. A clearly installed management team below the founder with proven operational capability would eliminate the key-person discount. And working capital would need to be stable or improving — not consuming cash as the business grows. At 6.0x, you're paying for quality and stability, not just EBITDA."`
+  },
+  {
+    stage:3,stageLabel:'Stage 3: Experience Deep Dive',
+    q:`You say you conducted investment due diligence on 30+ fund managers. Give me the most complex DD situation you encountered and what you found.`,
+    context:`The interviewer is testing whether your fund manager DD was genuine analytical work or a tick-box process. A real example with a specific finding — including a negative finding — is far more credible than a generic description of the process.`,
+    criteria:[
+      'Names a specific type of manager or strategy (not "a hedge fund")',
+      'Describes a specific red flag or analytical finding — not just "I reviewed their track record"',
+      'Explains what the finding meant for the allocation decision',
+      'Shows analytical judgement — not just process execution'
+    ],
+    feedback:`Saying "I reviewed 30+ managers" without a specific finding sounds like checkbox DD. The credible answer includes at least one case where you found something material and changed your recommendation as a result.`,
+    probe:`"Have you ever rejected a manager based on your DD? What did you find?"`,
+    model:`"The most complex case was a long/short equity manager running a concentrated strategy in Southeast Asian small-caps. The track record showed strong returns over three years — 18% annualised net of fees. But when I decomposed the attribution, approximately 60% of the three-year return came from a single position in a Malaysian logistics company that had since been taken private.
+
+The problems: (1) The forward performance attribution was effectively a single-stock bet that was no longer replicable — the strategy's ability to replicate past performance was structurally compromised. (2) Liquidity — the remaining portfolio included several positions in stocks trading under USD 200k daily volume. At any meaningful allocation size, exit liquidity was constrained. (3) Governance — when I requested the fund's prime brokerage and administrator details, the manager was reluctant to provide them, citing confidentiality. That's a red flag. Any institutional-grade fund has no reason to withhold this.
+
+My recommendation: do not allocate. The risk-adjusted return on a forward basis was not supported by the historical number. The track record was real but not replicable, and the governance signal was negative.
+
+The allocation decision: the client did not allocate. The fund closed to new investors approximately six months later, which validated the concerns about the underlying portfolio."`,
+    probeModel:`"Yes — the case above. The recommendation was to decline the allocation. The track record was real but not forward-replicable, the liquidity was problematic at any meaningful allocation size, and the governance opacity was a disqualifying signal in itself."`
+  },
+  {
+    stage:3,stageLabel:'Stage 3: Experience Deep Dive',
+    q:`In your roles at Prudential and Financial Alliance, you were advising clients. In corporate finance, you will be executing transactions. How will you adapt from advising to doing?`,
+    context:`This is a cultural fit and self-awareness question. CF at the SA/AM level is execution-heavy — producing documents, running models, managing data rooms, coordinating advisers. It is less about advising and more about doing. The interviewer wants to know you understand this.`,
+    criteria:[
+      'Understands the difference between an advisory role and an execution role',
+      'Does not over-defend the advisory background',
+      'Can describe what execution means at SA/AM level (IM drafts, model runs, process management)',
+      'Shows genuine appetite for the execution component — not just the client-facing part'
+    ],
+    feedback:`The worst answer is to claim that advising and executing are essentially the same. They are not. The best answer acknowledges the difference, explains why execution appeals to you specifically, and shows you've thought about what your first 90 days will look like.`,
+    probe:`"What do you think you will find hardest in the first six months?"`,
+    model:`"The core difference: in advisory, I set the analytical direction and a client decides. In corporate finance execution, I produce the work product — the IM, the model, the buyer list — and the process moves forward or doesn't based on what I produce. The accountability is direct and the consequence is visible in the outcome.
+
+That distinction is actually what draws me to this role. I've spent four years building the analytical toolkit and the client-facing credibility. What I want now is to put it to work in a context where the output is a transaction, not a recommendation.
+
+At SA/AM level, I understand that execution means: drafting IM sections, running sensitivity analyses at the partner's direction, coordinating with legal and tax advisers, managing the data room, tracking buyer correspondence, and preparing management presentation materials. That is the work I'm signing up to do, and I'm not approaching it as beneath me — it's where I learn the craft.
+
+What I will find hardest: the pace. In wealth advisory, I managed my own calendar and owned my deadlines. In a live deal, the timeline is driven by the buyer, the process, and the partner — not by me. Learning to execute at that pace without compromising quality is the adjustment I need to make."`,
+    probeModel:`"The pace and the loss of autonomy over my own schedule. I'm used to managing my own workstreams. In a deal, the partner might send me a revised model request at 10pm for a 7am buyer meeting. That discipline — being able to produce high-quality work under compressed timelines at someone else's direction — is a muscle I need to build deliberately."`
+  },
+  /* ═══════════ STAGE 4: TECHNICAL ═══════════ */
+  {
+    stage:4,stageLabel:'Stage 4: Technical Interview',
+    q:`Walk me through how the three financial statements link together. Start from revenue and end with the cash balance on the balance sheet.`,
+    context:`This is the foundational technical question in corporate finance. The answer should be mechanical and precise — not conceptual. Walk through each link explicitly.`,
+    criteria:[
+      'Starts from revenue → EBIT → net income correctly',
+      'Correctly links net income to retained earnings on the balance sheet',
+      'Correctly links net income as the starting point of operating cash flows',
+      'Identifies D&A as both an income statement item and a non-cash add-back in the CFS',
+      'Knows that ending cash on the CFS equals cash on the balance sheet',
+      'Can identify the balance sheet check (assets = liabilities + equity)'
+    ],
+    feedback:`Missing any single link is a red flag. D&A's dual role (IS expense → CFS add-back → BS PP&E reduction) is commonly confused. Make sure you know this cold — it will be asked in every CF interview.`,
+    probe:`"If depreciation increases by SGD 100, walk me through the impact on all three statements."`,
+    model:`"Income statement: revenue minus COGS gives gross profit. Minus operating expenses and D&A gives EBIT. Minus interest expense gives EBT. Minus taxes gives net income.
+
+Net income flows in two directions:
+
+First, into the balance sheet: net income flows into retained earnings through the equity section. Ending retained earnings equals beginning retained earnings plus net income minus dividends.
+
+Second, into the cash flow statement: net income is the starting point of operating cash flows. From there: add back D&A (it reduced net income but is a non-cash charge). Adjust for working capital changes — increases in accounts receivable and inventory consume cash; increases in accounts payable provide cash.
+
+From operating cash flows, add investing cash flows — capex is a cash outflow that increases gross PP&E on the balance sheet before accumulated depreciation reduces the net figure.
+
+Add financing cash flows — debt raised increases cash and increases long-term debt on the balance sheet; debt repaid decreases both; equity issued increases cash and the equity section.
+
+Ending cash from the cash flow statement plugs directly to the cash line on the balance sheet.
+
+The model checks: total assets must equal total liabilities plus equity. If they don't, there is a link error — usually in retained earnings or the cash line."`,
+    probeModel:`"If depreciation increases by SGD 100: income statement — EBIT falls by SGD 100, EBT falls by SGD 100, net income falls by SGD 65 (assuming 35% tax rate) because taxes decrease by SGD 35. Balance sheet — retained earnings fall by SGD 65 (the after-tax net income reduction). PP&E falls by SGD 100 (additional accumulated depreciation). Cash flow statement — net income is down SGD 65, but D&A add-back increases by SGD 100, so operating cash flow is up by SGD 35 (the tax shield). Cash increases by SGD 35. The balance sheet balances: assets are up SGD 35 in cash, down SGD 100 in PP&E — net reduction of SGD 65. Liabilities are unchanged. Equity (retained earnings) is down SGD 65. Balanced."`
+  },
+  {
+    stage:4,stageLabel:'Stage 4: Technical Interview',
+    q:`Build me a DCF from scratch. Walk through every step — what goes in, what comes out, and what the key assumptions are.`,
+    context:`The standard technical question for any CF/M&A role. The answer should be precise — not a definition but a mechanical walkthrough. If you cannot build one from memory, this is a critical gap.`,
+    criteria:[
+      'Correctly defines unlevered free cash flow (pre-debt, pre-interest)',
+      'Explains WACC components (cost of equity via CAPM, cost of debt after tax)',
+      'Knows both terminal value methods (Gordon Growth and exit multiple)',
+      'Can bridge from EV to equity value correctly',
+      'Understands that sensitivity to WACC and terminal growth rate drives most of the value',
+      'Can identify when a DCF is not the right valuation method'
+    ],
+    feedback:`The most common mistakes: using net income instead of unlevered FCF, using book value weights for WACC instead of market value weights, and forgetting to bridge from EV to equity value. Know all three cold.`,
+    probe:`"Your terminal value represents 70% of total DCF value. Should you be concerned?"`,
+    model:`"Step one — project unlevered free cash flows. Start with EBIT. Tax-affect at the marginal rate — EBIT times one minus tax rate gives NOPAT. Add back D&A. Subtract capex. Subtract the increase in net working capital. This gives unlevered free cash flow — it's pre-interest, pre-debt, which means it's available to all capital providers, not just equity. That's critical — DCF values the enterprise, not just the equity.
+
+Step two — calculate WACC. WACC equals the weight of equity times the cost of equity plus the weight of debt times the cost of debt times one minus the tax rate. Use market value weights — not book value. Cost of equity via CAPM: risk-free rate plus beta times the equity risk premium. Risk-free rate is typically the 10-year government bond yield. Beta should be unlevered from comparable companies and re-levered to the target's capital structure. Cost of debt is the pre-tax yield to maturity on the company's debt obligations.
+
+Step three — terminal value. Two methods: Gordon Growth Model — FCF in the terminal year times one plus the long-term growth rate, divided by WACC minus the growth rate. The growth rate should not exceed long-run GDP growth. Exit multiple method — apply an EV/EBITDA multiple to terminal year EBITDA. The multiple should be consistent with the current comparable company trading range.
+
+Step four — discount. Discount all projection period FCFs and the terminal value back to the present at WACC. Sum = enterprise value.
+
+Step five — bridge to equity value. EV minus net debt. Net debt equals total debt plus preferred equity minus cash and cash equivalents. Equity value divided by diluted share count gives intrinsic value per share.
+
+Key sensitivities: WACC and terminal growth rate drive 80–90% of the sensitivity in most DCFs. A 50 basis point change in WACC can move equity value 10–15%."`,
+    probeModel:`"Yes, I should be concerned — not because it's wrong, but because it means most of the valuation is driven by a long-run assumption that is highly sensitive to small changes in the terminal growth rate and WACC. A 70% terminal value weighting is common and expected — but it means I need to triangulate with trading comps and precedent transactions to validate that the implied multiple in my terminal value is consistent with where the market prices the business. If my DCF implies a 10x terminal EBITDA multiple but comps trade at 6x, either my growth assumptions are too optimistic or my WACC is too low. The DCF is not wrong, but it needs to be cross-checked."`
+  },
+  {
+    stage:4,stageLabel:'Stage 4: Technical Interview',
+    q:`What is the difference between enterprise value and equity value? Walk me through the bridge, and give me three situations where getting this wrong would cause a problem.`,
+    context:`A standard but frequently botched question. The bridge direction matters — knowing when to start with EV versus equity value, and knowing what goes in net debt, is critical for valuation work.`,
+    criteria:[
+      'Correctly states EV = Equity Value + Net Debt (or EV - Net Debt = Equity Value)',
+      'Knows that net debt = total debt + preferred + minority interest - cash',
+      'Can explain why EV/EBITDA is a better comparison metric than P/E for companies with different leverage',
+      'Can give three real situations where the distinction matters'
+    ],
+    feedback:`Minority interest and preferred equity are commonly forgotten in the net debt bridge. Know why they are included — they represent claims on the enterprise that reduce what equity holders receive.`,
+    probe:`"Company A has EV of SGD 100m, SGD 30m net debt, SGD 5m of preferred equity, and SGD 2m minority interest. What is equity value?"`,
+    model:`"Enterprise value is the total value of the business to all capital providers — debt holders, preferred equity holders, minority interest holders, and equity holders. Think of it as the cost to buy the entire company and pay off all obligations.
+
+Equity value is what remains for common equity holders after all other claims are satisfied.
+
+The bridge: Equity Value = Enterprise Value – Total Debt – Preferred Equity – Minority Interest + Cash and Cash Equivalents.
+
+Or reversed: Enterprise Value = Equity Value + Net Debt, where Net Debt = Total Debt + Preferred + Minority Interest – Cash.
+
+Three situations where getting this wrong causes a problem:
+
+First — applying a P/E multiple across companies with different leverage. Company A is unlevered; Company B has 50% debt in its capital structure. Company B's EPS is lower because of interest expense, so its P/E looks higher and appears more expensive — but the underlying business may be cheaper on an EV/EBITDA basis. Comparing P/Es across levered and unlevered peers is misleading.
+
+Second — acquisition pricing. An acquirer offers SGD 100m for a company's equity. If the target has SGD 40m in debt, the total enterprise value being acquired is SGD 140m. Missing the debt in the offer price means the acquirer underestimates the true cost of the acquisition.
+
+Third — leveraged buyout return analysis. In an LBO, the equity check is the residual after debt financing. Confusing exit EV with exit equity value — by forgetting to subtract remaining debt at exit — overstates the return to the sponsor."`,
+    probeModel:`"Equity Value = SGD 100m EV – SGD 30m debt – SGD 5m preferred – SGD 2m minority interest + cash. But cash is part of the net debt figure — if net debt is SGD 30m, that's already net of cash. So: Equity Value = SGD 100m – SGD 30m – SGD 5m – SGD 2m = SGD 63m."`
+  },
+  {
+    stage:4,stageLabel:'Stage 4: Technical Interview',
+    q:`How do you normalize EBITDA for a founder-owned SME? Walk me through the adjustments you would make and why.`,
+    context:`EBITDA normalization is the most practically important valuation skill for mid-market M&A. You've done this on real cases. Walk through it mechanically.`,
+    criteria:[
+      'Correctly identifies the main normalization categories',
+      'Can explain why each adjustment is made from a buyer's perspective',
+      'Understands that normalization can go in both directions — some adjustments reduce EBITDA',
+      'Knows the difference between sustainable and non-recurring items'
+    ],
+    feedback:`The common mistake is listing adjustments without explaining why a buyer cares. Every normalization adjustment changes what a buyer is willing to pay — tie each adjustment to its valuation implication.`,
+    probe:`"If I normalize EBITDA up by SGD 200k, at 5x EBITDA, what is the valuation impact? And what's the risk of over-normalizing?"`,
+    model:`"Normalization identifies sustainable, recurring EBITDA — what the business will generate for a buyer, not for the current owner.
+
+The main adjustment categories:
+
+Owner compensation above market rate. The founder may be drawing SGD 300k as CEO while a market-rate replacement would cost SGD 150k. Add back SGD 150k to normalized EBITDA — because a buyer's cost for that function is lower.
+
+Personal expenses run through the business. Vehicle, travel, insurance, club memberships — items that are P&L expenses for the current owner but not for a buyer. Each one adds back to normalized EBITDA.
+
+Non-recurring revenues. A one-time contract, a government grant, a litigation settlement. These inflate reported EBITDA but are not repeatable. Exclude them — and explicitly label them as excluded in the normalization bridge.
+
+Non-recurring expenses. Legal fees from a one-off dispute, a one-time restructuring cost, capital expenditure incorrectly expensed. These reduce reported EBITDA but wouldn't recur for a buyer. Add them back.
+
+Related-party transactions at non-arm's-length terms. If the founder rents the building he owns to the company at below-market rate, reported rent expense is understated — a buyer would pay market rent. Adjust EBITDA downward for the incremental rent expense.
+
+The direction matters: normalization adjusts EBITDA both up and down. Over-normalizing upward — removing costs that would actually recur under new ownership — gives a buyer a false picture and will come out in legal DD.
+
+In the seafood case, my normalization reduced reported EBITDA from SGD 1.2m to approximately SGD 1.0m after stripping out owner compensation and a one-off export contract that wasn't repeatable."`,
+    probeModel:`"At 5x EBITDA, SGD 200k of additional normalized EBITDA adds SGD 1.0m to enterprise value. The risk of over-normalizing is that the buyer builds their bid on a number that doesn't materialize post-closing. If the buyer discovers post-close that the normalized EBITDA was overstated — through a QoE or in the first trading period — it creates a claim under the representations and warranties, and it destroys the seller's credibility in any earn-out negotiation. Over-normalization also increases the risk that the deal reprices or falls apart during confirmatory DD."`
+  },
+  {
+    stage:4,stageLabel:'Stage 4: Technical Interview',
+    q:`How do you select comparable companies for a trading comps analysis? Walk me through the criteria and the common pitfalls.`,
+    context:`Comparable company selection is a judgment call with analytical rigour behind it. The interviewer wants to see that you know how to build a defensible comp set — not just pull a Bloomberg screen.`,
+    criteria:[
+      'Industry similarity — same business model, not just same sector',
+      'Size — EV range relative to the target',
+      'Geography — relevant market pricing conventions',
+      'Growth and margin profile — comparables should be at similar operational stages',
+      'Can identify specific pitfalls: outlier multiples, distressed comps, M&A targets in the set'
+    ],
+    feedback:`The pitfall most candidates miss: including a company that is itself a pending acquisition target. A target company trades at a bid premium — including it in your comp set inflates the median multiple. Know to exclude it or adjust.`,
+    probe:`"How do you handle a comparable company that has a multiple of 15x when the rest of the set trades at 6x–8x? Do you exclude it?"`,
+    model:`"The selection framework starts with business model similarity — not SIC code. A timber trading company and a timber processing company may share an industry code but have different capital intensity, margin profiles, and growth dynamics. I look for companies that monetize the same activity in the same way.
+
+After business model, I apply:
+
+Size screen — EV within 0.5x to 3x of the target's estimated EV. A company 10x the size has different margin leverage, market power, and investor base — its multiple isn't directly comparable.
+
+Geography — multiples in Southeast Asia are typically 20–30% lower than US equivalents for the same business quality. I use regional comps as the primary reference and US/European comps as a sanity check on the upper bound.
+
+Growth and margin profile — a high-growth business commands a growth premium. If I'm valuing a stable, low-growth distribution company, I shouldn't anchor to a high-growth peer that's being valued for future expansion.
+
+Financial health — exclude companies in financial distress, restructuring, or with significant one-time items in the trailing period that distort LTM multiples.
+
+Specifically exclude M&A targets — a company with a pending acquisition bid trades at a bid premium, not at normal market multiples. Including it inflates the median.
+
+Common pitfalls: using too few comps (three or fewer), creating a selection bias toward higher multiples, failing to apply a private company discount when moving from listed multiples to private company valuation."`,
+    probeModel:`"I don't automatically exclude it, but I examine why it's at 15x. Is it a high-growth business — if so, is our target growing at a comparable rate? Is there a take-private or M&A bid premium baked into the share price? Is the high multiple driven by a one-time earnings miss that depresses the denominator? If it's genuinely not comparable — different business model, different growth stage, or M&A premium — I exclude it and note the exclusion. If it's genuinely comparable but the market is applying a premium for growth or quality, I might include it and use it to support the upper end of my range rather than anchor the midpoint."`
+  },
+  {
+    stage:4,stageLabel:'Stage 4: Technical Interview',
+    q:`Walk me through how you would calculate WACC. What are the key inputs, where do you source them, and what are the most common errors?`,
+    context:`WACC calculation is mechanical but error-prone. The interviewer wants precision on beta re-levering, market value weights, and the risk-free rate selection.`,
+    criteria:[
+      'Uses CAPM correctly for cost of equity',
+      'Uses market value weights — not book value',
+      'Knows that beta must be unlevered from comps and re-levered to target capital structure',
+      'Uses the after-tax cost of debt (pre-tax yield times 1 minus tax rate)',
+      'Knows where to source each input'
+    ],
+    feedback:`The most common error: using book value of debt and equity to weight WACC instead of market value. Book value of equity can be dramatically different from market value — especially for asset-light businesses or businesses with accumulated losses.`,
+    probe:`"The target is private. There is no market cap. How do you weight the WACC?"`,
+    model:`"WACC = (E/V × Re) + (D/V × Rd × (1 – T))
+
+Where E is market value of equity, D is market value of debt, V is total enterprise value (E + D), Re is cost of equity, Rd is pre-tax cost of debt, T is marginal tax rate.
+
+Cost of equity via CAPM: Re = Rf + β × (ERP)
+
+Risk-free rate: 10-year Singapore Government Securities yield, or the relevant sovereign bond yield for the jurisdiction. As of mid-2025, approximately 3.0–3.5%.
+
+Equity risk premium: Damodaran's ERP estimate for Singapore, typically 5.5–6.5%.
+
+Beta: I take betas of comparable public companies, unlever each one using the Hamada equation — unlevered beta equals levered beta divided by one plus one minus tax rate times D/E ratio — to remove the effect of each comp's capital structure. I then average the unlevered betas and re-lever using the target's capital structure: re-levered beta equals unlevered beta times one plus one minus tax rate times the target's D/E.
+
+Cost of debt: the pre-tax yield on the company's debt obligations — ideally observable from bond yield or bank lending rate. After-tax cost of debt: Rd times one minus T. The tax shield on interest is why debt is cheaper than equity on an after-tax basis.
+
+Weights: use market value of equity (not book) and market value of debt. For traded debt, use market price. For bank debt, par value is a reasonable approximation.
+
+Most common errors: book value weights instead of market; not re-levering beta; using the wrong risk-free rate (e.g., US Treasuries for a Singapore business); and ignoring the size premium for small-cap businesses — which can add 100–300 basis points to the cost of equity."`,
+    probeModel:`"For a private company, there is no observable market cap. My approach: use an iterative process or a target capital structure assumption. I look at the comparable public companies' average debt/equity ratios as a proxy for where the private company's capital structure would settle in the market. I apply those weights to the WACC. Alternatively, for an LBO context, the capital structure is defined by the deal financing — I use the proposed debt/equity split as the weight directly. The WACC will change as the debt is paid down over the hold period — which is why LBO returns are modelled on an IRR basis, not a static WACC."`
+  },
+  {
+    stage:4,stageLabel:'Stage 4: Technical Interview',
+    q:`How do changes in working capital affect free cash flow? Give me a specific example from a trading business.`,
+    context:`Working capital management is central to M&A valuation — especially for trading businesses where receivables and inventory cycles drive cash generation. You have real examples from the seafood case.`,
+    criteria:[
+      'Correctly identifies the directional impact of each working capital item',
+      'Understands that profitable businesses can have negative free cash flow due to working capital expansion',
+      'Can apply this to a trading business specifically',
+      'Knows what the working capital peg is in an M&A transaction'
+    ],
+    feedback:`The common confusion: AR increasing is a use of cash, not a source. When revenue grows and receivables increase, the company earned the revenue in accounting terms but hasn't collected the cash yet — so cash flow is lower than profit.`,
+    probe:`"In an M&A transaction, what is a working capital peg and why does it matter?"`,
+    model:`"Free cash flow in the cash flow statement adjusts net income for changes in net working capital. The formula: subtract increases in AR, subtract increases in inventory, add increases in AP.
+
+The directional logic: if AR increases, the company shipped goods but hasn't collected cash — it recognized revenue but the cash is still sitting in the receivables line. That's a use of cash even though it's accounting profit. The same for inventory — goods purchased but not yet sold are cash spent but not yet revenue. AP increasing is the reverse: the company received goods or services but hasn't paid yet — that's a source of cash, a float the company holds from its suppliers.
+
+In a trading business specifically, this is material. For the seafood trading case: the business had a 45–60 day receivables cycle — it shipped seafood to restaurant buyers on credit terms. But its suppliers expected payment in 15–20 days. That mismatch meant the business needed significant working capital to fund the gap between paying suppliers and collecting from customers. Even in a high-revenue year, the business was consuming cash because the receivables cycle was long relative to AP terms.
+
+From a valuation perspective, this is a key point: a buyer needs to understand working capital intensity before setting a price. A business with expanding receivables days is consuming capital to grow — that capital requirement reduces the free cash flow available to service acquisition debt.
+
+The working capital peg in an M&A transaction is the agreed target level of working capital that the seller must deliver at closing. The peg represents the 'normal' level of working capital required to operate the business — typically based on an average of the last 12 months. If the seller delivers less working capital than the peg, the buyer receives a price adjustment down; more, and the seller receives an adjustment up. This is a common source of post-close disputes."`,
+    probeModel:`"The working capital peg is the agreed level of working capital the seller must deliver at closing — typically the 12-month average of normalized working capital. It matters because working capital is part of the purchase price bridge. If the seller runs down inventory and AR in the weeks before closing — collecting receivables aggressively and not restocking — the working capital delivered is below the peg, and the buyer receives a post-close adjustment. Without a peg, the seller could extract cash from the business immediately before closing and deliver an undercapitalized entity to the buyer."`
+  },
+  /* ═══════════ STAGE 5: BEHAVIOURAL ═══════════ */
+  {
+    stage:5,stageLabel:'Stage 5: Behavioural Interview',
+    q:`Why Grant Thornton Corporate Finance specifically? Why not Morgan Stanley, UBS, or a Big 4 Transaction Services team?`,
+    context:`This needs to be specific and credible. "I want to learn" is not enough. Show that you have researched GT's CF practice in Singapore and have a clear reason why it fits your goals better than the alternatives.`,
+    criteria:[
+      'GT-specific reasoning — not generic "mid-market is interesting"',
+      'Credible comparison against stated alternatives',
+      'Honest about why a bulge bracket route is not accessible',
+      'Shows understanding of what GT CF actually does'
+    ],
+    feedback:`The worst answer: "Grant Thornton has a great reputation and I want to learn M&A." This tells the interviewer nothing. The best answer names specific deal types or sectors GT focuses on and connects that directly to your experience.`,
+    probe:`"Our deal sizes are typically SGD 20m–100m. You've advised on individual fund allocations. Why would you find this more interesting?"`,
+    model:`"Grant Thornton's corporate finance team in Singapore focuses on mid-market M&A, valuation mandates, and capital advisory — typically in the SGD 20m–100m EV range. That is precisely the profile of the businesses I've been analyzing: the seafood case was a SGD 5m EV business; the timber case was in a similar range. I know the profile of a founder-owned SGD 20–50m business — the normalization challenges, the key-person risk, the buyer universe dynamics — because I've done the analytical work on that type of company.
+
+At a bulge bracket — Morgan Stanley or UBS — I would be working on transactions an order of magnitude larger, and my role for the first two years would be supporting a large team on narrow workstreams. That is not where I want to learn M&A. I want to be involved in deals from origination to close, with visibility across every workstream. At GT's team size, that's possible within 12–18 months.
+
+Versus Big 4 TAS — the transaction services teams at the large accounting firms are strong analytically, but their mandate is typically financial DD and independent business review, not the full sell-side or buy-side advisory that GT's CF team runs. I want to be on the advisory side of the transaction — producing the IM, running the buyer process — not primarily on the DD side.
+
+The specific reason I'm here: I believe the analytical work I've done, the credentials, and the client-facing experience I bring make me a more productive hire for GT's team than a graduate who has never sat across from a founder and delivered a valuation range."`,
+    probeModel:`"The deal size is exactly what makes it interesting to me. A SGD 30m EV mid-market transaction requires the same analytical rigour as a SGD 500m deal — normalized EBITDA, comparable analysis, working capital peg, IM, buyer outreach — but the team structure means I'll lead sections of that work, not support someone else leading it. The learning curve is steeper and the impact is more direct. That's the environment I want to develop in."`
+  },
+  {
+    stage:5,stageLabel:'Stage 5: Behavioural Interview',
+    q:`Why now? You've been in wealth management for four years. Why didn't you make this move to corporate finance two or three years ago?`,
+    context:`This is a credibility question. The interviewer is checking whether this is a genuine career pivot with a clear rationale, or a reactive move because something else didn't work out.`,
+    criteria:[
+      'Clear, honest answer — not defensive',
+      'Demonstrates that the timing was deliberate, not default',
+      'References credentials and deal work that took time to build',
+      'Does not imply that wealth management was a mistake'
+    ],
+    feedback:`Do not say "I always wanted to do M&A." It raises the question of why you didn't pursue it from the start. The credible answer explains what you built during the wealth management years and why those years make you a better CF hire now than you would have been two years ago.`,
+    probe:`"Is there anything that pushed you out of wealth management, or is this purely a pull toward corporate finance?"`,
+    model:`"I didn't make the move two years ago because I wasn't ready to make it credibly. In 2022, I had the interest in M&A and valuation but I hadn't done the work that would give me something concrete to show in this room. The CAIA took 18 months of deliberate study. The sell-side evaluation cases — the seafood and timber work — happened in the last 18 months as I started actively developing deal-adjacent analytical work. CFA Level II is ongoing.
+
+If I had applied for a corporate finance role two years ago, I would have been offering interest and credentials-in-progress. Today I'm offering completed CAIA, CFA Level II candidacy, 30+ fund manager DD cases, and two sell-side valuation analyses I can walk through in detail. The timing is deliberate — I built the foundation first.
+
+The other factor: I learned things in wealth management that I wouldn't have learned in a banking programme. How to present a difficult valuation outcome to a client who has a different number in their head. How to earn trust with a high-net-worth founder on financial matters. Those skills are not teachable in an analyst class. They will make me a more effective CF professional than a 22-year-old who has only built models."`,
+    probeModel:`"Both. There is a pull toward CF — I want to work on transactions, close deals, and apply my analytical work in a context where the output is a completed mandate, not a recommendation. There's also an honest acknowledgment that wealth management has a ceiling for what I want to do professionally. I've done the client advisory component well. The next chapter needs to be execution — and that chapter requires a different environment."`
+  },
+  {
+    stage:5,stageLabel:'Stage 5: Behavioural Interview',
+    q:`Tell me about a time you had to explain a complex financial concept to a client who had no financial background. What did you do and what was the outcome?`,
+    context:`Communication with non-finance clients is a key CF skill — particularly on the sell side, where you're often working with founders who have built excellent businesses but have limited financial literacy.`,
+    criteria:[
+      'Gives a specific example — not a generic description',
+      'Adapts the complexity level to the audience appropriately',
+      'Shows patience without condescension',
+      'Demonstrates that the communication achieved the intended outcome (client understood and made a decision)'
+    ],
+    feedback:`The common mistake: explaining how smart you were rather than how effectively you communicated. The outcome is the measure — did the client understand, and did they make a better decision as a result?`,
+    probe:`"Has a client ever rejected your advice? How did you handle it?"`,
+    model:`"The most relevant example is the valuation conversation I had with the founder of the seafood trading business. He had a number in his head — he had heard that food businesses sell for 8x EBITDA — and when I presented the 4.5x–5.0x range, he rejected it immediately.
+
+My approach: I didn't argue the multiple directly. Instead, I walked him through the three inputs that drive valuation — earnings, earnings quality, and risk — one at a time.
+
+First, earnings: I showed him the normalization bridge. His reported EBITDA included his own compensation and a one-off export contract. I walked through each adjustment line by line, in plain language. "This SGD 160k is what you pay yourself — a buyer would pay a GM this much instead. So a buyer sees SGD 1.05m, not SGD 1.2m." That conversation alone took 45 minutes.
+
+Second, earnings quality: I showed him a simple chart of customer concentration — his top three customers represented 70% of revenue. I asked: "If you sold this business and the new owner lost one of these three customers in year one, what would that do to the revenue?" He answered it himself.
+
+Third, risk: I showed him the buyer affordability test at 8x — the debt required to fund an 8x acquisition would exceed what the business's cash flow could service under reasonable leverage assumptions.
+
+By the end, he didn't agree with my range — he still thought the business was worth more — but he understood the reasoning, and he changed his question from 'Why is it only 5x?' to 'What would I need to do to the business to justify 6x?' That's the right question."`,
+    probeModel:`"Yes. The seafood founder ultimately decided not to proceed with a sale at the range I presented. He chose to grow the business for another two to three years before attempting a sale at a higher EBITDA base. I supported that decision — my job was to give him an accurate picture, not to push a transaction. If a founder makes an informed decision not to sell, that's a good outcome. The concern would be if they made an uninformed decision. He understood the analysis. I disagreed with his conclusion but respected the decision."`
+  },
+  {
+    stage:5,stageLabel:'Stage 5: Behavioural Interview',
+    q:`How do you handle a situation where you disagree with a senior colleague or partner on the approach to an analysis?`,
+    context:`This tests professional maturity. In a CF team, the partner's view drives the deal strategy. But an SA/AM who never pushes back adds no value — and one who pushes back carelessly creates friction. The balance is the answer.`,
+    criteria:[
+      'Does not say "I always defer to senior colleagues"',
+      'Does not say "I make my case forcefully until they agree"',
+      'Describes a real example where they pushed back with data, not opinion',
+      'Shows they can accept a decision they disagree with once the data has been heard'
+    ],
+    feedback:`The answer the interviewer is looking for: you prepare your case thoroughly, you raise it once with evidence, you make sure your view is heard, and then you execute the direction you're given — even if you still disagree. Professional disagreement is a skill.`,
+    probe:`"Have you ever been wrong when you disagreed with a senior?"`,
+    model:`"My approach: I raise a disagreement once, with data behind it, and then I support whatever direction is decided.
+
+The specific example: at Financial Alliance, I disagreed with a senior colleague's recommendation to allocate to a private credit manager. Their case was based primarily on the manager's track record and relationships. My DD had identified a governance concern — the manager's independent administrator had changed three times in 24 months, which is unusual and worth investigating. I believed this warranted delaying the allocation until we understood the reason.
+
+I raised it in a one-on-one, not in front of the client. I showed the administrator change history and asked directly: 'Have we asked the manager to explain this?' We hadn't. We requested the explanation, which turned out to be defensible — a cost rationalization decision — but we also uncovered a secondary issue with the valuation policy that we hadn't noticed before.
+
+The outcome: the allocation proceeded, but with a reduced initial size and a 12-month review gate. My colleague incorporated the governance flag into the monitoring framework.
+
+The lesson: I raised it with evidence, not just instinct. The senior had the final call and made it — I executed the decision without relitigating it. That's the right balance."`,
+    probeModel:`"Yes. In one case, I flagged a manager's performance as potentially inflated by a single illiquid position — my view was that the mark was too aggressive. The senior disagreed and the allocation proceeded. Over the next 12 months, the position was marked down significantly, but not for the reason I had identified — it was a macro event I hadn't anticipated. My governance concern about the mark was unproven. The lesson: my analytical flag wasn't wrong, but it wasn't the driver of the risk. Being directionally right but mechanically wrong still means I need to be more precise in how I frame analytical concerns."`
+  },
+  {
+    stage:5,stageLabel:'Stage 5: Behavioural Interview',
+    q:`Where do you see yourself in three years, and how does this role fit into that path?`,
+    context:`The interviewer is checking for ambition calibrated to realism — not someone who wants to be a partner in three years, and not someone who has no view. GT CF's progression: SA → Manager → Senior Manager → Director → Partner.`,
+    criteria:[
+      'Specific, not generic ("I want to grow and learn")',
+      'Realistic progression for SA/AM level — Manager in 3–4 years',
+      'Connects the three-year goal to specific skills they want to build',
+      'Names a credential or milestone they are targeting'
+    ],
+    feedback:`"I want to become a great corporate finance professional" is not a three-year goal. Name specific milestones — transactions closed, credentials completed, capabilities developed. The interviewer is also checking whether your three-year goal is consistent with the career path this role actually offers.`,
+    probe:`"What would cause you to leave this role before three years?"`,
+    model:`"In three years, I want to have closed five to eight transactions — a mix of sell-side and buy-side mandates, with increasing responsibility across each. In the first year, I expect to be contributing to analysis and IM sections under direction. By year two, I want to be leading the financial analysis and valuation workstreams independently and presenting to management. By year three, I want to be running client relationships on smaller mandates with the partner as oversight, not as day-to-day manager.
+
+The credential milestone: CFA Level III completed by 2027, which combined with CAIA positions me strongly for a Manager promotion.
+
+The skill development goal: by year three, I want to have originated at least two mandates — either through my own network or through referrals I've developed. That's the progression from technician to adviser, and it's what separates a good SA from a good Manager.
+
+The three-year goal is Manager at GT or equivalent — not to leave for a buy-side fund. My interest is in the advisory side of transactions, not the investment side. That's a deliberate choice."`,
+    probeModel:`"If the deal flow is not there — if the team is not winning mandates and I'm not building transaction execution experience — I would need to reassess. Not immediately; every firm has slow periods. But if after two years I had not contributed to a closed transaction, the role would not be serving the career development I'm here for. The other scenario: if the team's culture does not encourage SA/AM development — if I'm support staff rather than a developing adviser — that would also be a signal to move. But I have no indication that's GT's culture, which is part of why I'm here."`
+  },
+  {
+    stage:5,stageLabel:'Stage 5: Behavioural Interview',
+    q:`Tell me about a time you had to work under extreme deadline pressure. What was the situation, what did you do, and what was the result?`,
+    context:`CF operates under deal timelines that are externally imposed. The interviewer wants evidence that you can produce quality work under real time pressure — not that you stayed late once.`,
+    criteria:[
+      'Specific example with a real, hard external deadline',
+      'Explains what the stakes were if the deadline was missed',
+      'Describes the specific actions taken to meet the deadline',
+      'Honest about whether quality was maintained or compromised'
+    ],
+    feedback:`"I worked until 2am" is not a deadline story. The relevant question is: what analytical decisions did you make under time constraint, and how did you prioritize quality versus completeness?`,
+    probe:`"Did you make any errors under the pressure? How did you catch them?"`,
+    model:`"In Q4 2024, a client needed a full portfolio review and allocation recommendation within 48 hours — driven by a tax deadline that required the reallocation to be executed by end of the quarter. The review covered eight positions across three asset classes, and I needed to produce a written recommendation document that could withstand client scrutiny.
+
+My approach: I scoped the task in the first two hours and identified what could be expedited versus what required full rigour. Performance attribution was the most time-intensive component — I expedited this by focusing on the three largest positions by weight, which covered 65% of the portfolio, rather than doing equal depth on all eight. The remaining positions got a quick qualitative review against the original investment thesis.
+
+I used a document template to avoid formatting time and went straight to analysis. I produced the written recommendation in approximately 14 hours of sustained work across the two days, including a review pass for numerical errors.
+
+The result: the recommendation was accepted, the trades were executed before the quarter-end deadline, and the client was satisfied.
+
+The honest assessment: the depth on the five smaller positions was thinner than I would have liked under normal conditions. I flagged this explicitly in the document — those five positions would get a full review in the next quarterly cycle. Flagging the limitation is better than hiding it."`,
+    probeModel:`"Yes — I transposed two figures in the performance attribution table: I had the wrong benchmark return for one period. I caught it in my final review pass before sending. The lesson: even under extreme deadline pressure, a final numerical check before submission is non-negotiable. The five minutes spent checking is insurance against a credibility-damaging error that would take far longer to explain to a client."`
+  },
+  {
+    stage:5,stageLabel:'Stage 5: Behavioural Interview',
+    q:`This is the last question. Is there anything about your background you haven't had the chance to address that you think is relevant to this role? And what is the one thing about your candidacy that you think this interview hasn't captured?`,
+    context:`This is your closing argument. Use it. Don't say "no, I think we've covered everything" — that's a missed opportunity. Identify the one genuine strength that the interview structure didn't fully surface and make the case for it directly.`,
+    criteria:[
+      'Uses the question — does not pass',
+      'Identifies a specific, relevant strength that wasn't covered',
+      'Does not rehash what has already been said',
+      'Ends on a forward-looking, confident note without overreaching'
+    ],
+    feedback:`"I think we've covered everything" is the worst answer you can give to this question. Every candidate has at least one dimension that a structured interview doesn't fully surface. Identify yours and make the case for it in 60 seconds.`,
+    probe:null,
+    model:`"The one thing this interview structure doesn't fully capture is my work ethic on the analytical side — specifically, the fact that every piece of analysis I've described was self-initiated. The sell-side evaluation cases, the EBITDA normalization models, the comparable company analyses — none of that was assigned to me. I built that framework because I wanted to develop CF-relevant skills deliberately, not because it was required by my role.
+
+That self-direction matters in a CF team because there will be periods where deal flow is slow and the work is not always structured. The candidates who develop fastest in those periods are the ones who seek out analytical work rather than waiting to be assigned it. I've been doing that for 18 months already.
+
+The second thing: I'm already familiar with the profile of the businesses your team advises. I've spoken to founders about their exit expectations, their concerns about what happens to their employees post-sale, and their anxiety about valuation. I know how to have that conversation without making it feel like a transaction, which is a skill that takes time to develop and that I've already built.
+
+I want to close by saying: I'm clear about the gap I'm bringing into this role — no live transaction closed. I'm not asking you to overlook that. I'm asking you to weigh it against the analytical foundation, the credentials, and the client-facing experience I bring, and to conclude that the gap is closable faster with me than with a less experienced hire."`
+  }
+];
+
+let current=0;
+let submitted=false;
+
+function startInterview(){
+  showScreen('screenInterview');
+  updateStageBar(1);
+  renderQuestion();
+}
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function updateStageBar(stageId){
+  // stage tabs: 0=intro,1-5=stages,6=gap,7=scoring
+  document.querySelectorAll('.stage-tab').forEach((t,i)=>t.classList.remove('active','done'));
+  document.getElementById('stg0').classList.add('done');
+  for(let i=1;i<=5;i++){
+    const el=document.getElementById('stg'+i);
+    if(i<stageId) el.classList.add('done');
+    else if(i===stageId) el.classList.add('active');
+  }
+}
+
+function renderQuestion(){
+  if(current>=QUESTIONS.length){showGapAnalysis();return;}
+  const q=QUESTIONS[current];
+  submitted=false;
+  document.getElementById('qNumber').textContent=`Question ${current+1} of ${QUESTIONS.length} · ${q.stageLabel}`;
+  document.getElementById('qText').textContent=q.q;
+  const ctx=document.getElementById('qContext');
+  if(q.context){ctx.style.display='';ctx.textContent=q.context;}else ctx.style.display='none';
+  document.getElementById('answerArea').value='';
+  document.getElementById('answerArea').disabled=false;
+  document.getElementById('btnSubmit').disabled=false;
+  document.getElementById('btnSubmit').style.display='';
+  document.getElementById('btnNext').style.display='none';
+  document.getElementById('qProgress').textContent=`${current+1} / ${QUESTIONS.length}`;
+  document.getElementById('fEmpty').style.display='flex';
+  document.getElementById('fContent').style.display='none';
+  document.getElementById('fContent').innerHTML='';
+  updateStageBar(q.stage);
+  document.getElementById('qScroll').scrollTop=0;
+  document.getElementById('fScroll').scrollTop=0;
+}
+
+function submitAnswer(){
+  const q=QUESTIONS[current];
+  submitted=true;
+  document.getElementById('btnSubmit').style.display='none';
+  document.getElementById('btnNext').style.display='';
+  document.getElementById('answerArea').disabled=true;
+  renderFeedback(q);
+}
+
+function renderFeedback(q){
+  document.getElementById('fEmpty').style.display='none';
+  const el=document.getElementById('fContent');
+  el.style.display='';
+  let html='';
+  // Scoring criteria checklist
+  html+=`<div class="fb-section"><div class="fb-label">What the interviewer is assessing</div><div class="fb-checklist">`;
+  q.criteria.forEach(c=>{
+    html+=`<div class="fb-check-item"><span class="chk">◻</span><span>${c}</span></div>`;
+  });
+  html+=`</div></div>`;
+  // Interviewer feedback
+  html+=`<div class="fb-section"><div class="fb-label">Interviewer Read</div><div class="fb-verdict info">${q.feedback}</div></div>`;
+  // Model answer
+  html+=`<div class="fb-section"><div class="fb-label">CF-Ready Model Answer</div><div class="fb-model"><strong>Stronger version — use this phrasing:</strong>${nl2br(q.model)}</div></div>`;
+  // Probe follow-up
+  if(q.probe){
+    html+=`<div class="fb-section"><div class="probe-box"><div class="probe-label">Expected Follow-Up</div><div class="probe-txt">${q.probe}</div></div></div>`;
+    if(q.probeModel){
+      html+=`<div class="fb-section"><div class="fb-label">Model Probe Answer</div><div class="fb-model">${nl2br(q.probeModel)}</div></div>`;
+    }
+  }
+  el.innerHTML=html;
+  document.getElementById('fScroll').scrollTop=0;
+}
+
+function nl2br(s){return s.replace(/\n/g,'<br>');}
+
+function nextQuestion(){
+  current++;
+  renderQuestion();
+}
+
+function showGapAnalysis(){
+  showScreen('screenGap');
+  document.querySelectorAll('.stage-tab').forEach(t=>t.classList.remove('active','done'));
+  document.getElementById('stg6').classList.add('active');
+  for(let i=0;i<=5;i++) document.getElementById('stg'+i).classList.add('done');
+  document.getElementById('stg6').classList.remove('done');
+  document.getElementById('stg6').classList.add('active');
+}
+
+function showScoring(){
+  showScreen('screenScoring');
+  document.querySelectorAll('.stage-tab').forEach(t=>t.classList.remove('active','done'));
+  for(let i=0;i<=6;i++) document.getElementById('stg'+i).classList.add('done');
+  document.getElementById('stg7').classList.add('active');
+  buildScores();
+}
+
+const SCORES=[
+  {label:'Resume Walkthrough',score:6.5,color:'#1B4FD8'},
+  {label:'Technical Readiness',score:6,color:'#1B4FD8'},
+  {label:'M&A Relevance',score:5.5,color:'#B87A12'},
+  {label:'Valuation & Modelling',score:7,color:'#1E7A5A'},
+  {label:'Client-Facing Maturity',score:8,color:'#1E7A5A'},
+  {label:'Communication',score:7.5,color:'#1E7A5A'},
+  {label:'Fit for Senior Associate',score:7,color:'#1E7A5A'},
+  {label:'Fit for Assistant Manager',score:5.5,color:'#B87A12'}
+];
+
+function buildScores(){
+  const g=document.getElementById('scoreGrid');
+  g.innerHTML='';
+  SCORES.forEach(s=>{
+    const pct=(s.score/10)*100;
+    g.innerHTML+=`<div class="score-card">
+      <div class="score-card-label">${s.label}</div>
+      <div class="score-bar-wrap"><div class="score-bar" style="width:${pct}%;background:${s.color}"></div></div>
+      <span class="score-val">${s.score}</span><span class="score-denom">/10</span>
+    </div>`;
+  });
+}
+
+function confirmReset(){
+  if(confirm('Reset interview? All progress will be lost.')){
+    current=0;submitted=false;
+    showScreen('screenIntro');
+    document.querySelectorAll('.stage-tab').forEach(t=>t.classList.remove('active','done'));
+    document.getElementById('stg0').classList.add('active');
+  }
+}
+
+function toggleTheme(){
+  const d=document.documentElement;
+  const t=d.getAttribute('data-theme')==='dark'?'light':'dark';
+  d.setAttribute('data-theme',t);
+  localStorage.setItem('gt-theme',t);
+  document.querySelector('.theme-btn').textContent=t==='dark'?'☀️':'🌙';
+}
+(()=>{
+  const s=localStorage.getItem('gt-theme')||'dark';
+  document.documentElement.setAttribute('data-theme',s);
+  const btn=document.querySelector('.theme-btn');
+  if(btn) btn.textContent=s==='dark'?'☀️':'🌙';
+})();
+</script>
+</body>
+</html>

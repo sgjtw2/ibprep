@@ -19,6 +19,10 @@ const ALLOWED = new Set([
   'etfdb.com',
   'www.etftrends.com',
   'www.benzinga.com',
+  'www.imf.org',
+  'eservices.mas.gov.sg',
+  'api.worldbank.org',
+  'markets.newyorkfed.org',
 ]);
 
 exports.handler = async (event) => {
