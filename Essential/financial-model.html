@@ -2068,7 +2068,6 @@ body.wt-open #gridWrap{padding-bottom:150px;}
           <button class="tools-menu-tab" id="ttabDrills" onclick="setToolsTab('drills')">Drills</button>
           <button class="tools-menu-tab" id="ttabInterview" onclick="setToolsTab('interview')">Interview</button>
           <button class="tools-menu-tab" id="ttabReference" onclick="setToolsTab('reference')">Reference</button>
-          <button class="tools-menu-tab" id="ttabCareer" onclick="setToolsTab('career')">Career</button>
         </div>
         <!-- BUILD TAB -->
         <div class="tools-tab-content" id="ttab-build">
@@ -2140,6 +2139,7 @@ body.wt-open #gridWrap{padding-bottom:150px;}
         </div>
         <!-- INTERVIEW TAB -->
         <div class="tools-tab-content hidden" id="ttab-interview">
+          <span class="tools-item-section">Practice</span>
           <button class="tools-item" id="qaBtn" onclick="toggleQA();closeToolsMenu()">
             Interview Q&amp;A<span class="tools-item-badge"></span>
           </button>
@@ -2153,15 +2153,40 @@ body.wt-open #gridWrap{padding-bottom:150px;}
             Fit &amp; Behavioral<span class="tools-item-badge"></span>
           </button>
           <button class="tools-item" id="fitBtn" onclick="toggleFit();closeToolsMenu()">
-            Fit Q&amp;A<span class="tools-item-badge"></span>
+            Fit Questions<span class="tools-item-badge"></span>
           </button>
           <button class="tools-item" id="iafBtn" onclick="toggleIAF();closeToolsMenu()">
             Answer Frameworks<span class="tools-item-badge">NEW</span>
           </button>
           <div class="tools-divider"></div>
-          <a class="tools-item" href="interview-prep.html" style="text-decoration:none;display:flex;align-items:center;justify-content:space-between;">
-            Interview Prep<span style="margin-left:auto;font-size:9px;font-weight:700;letter-spacing:.06em;padding:1px 6px;border-radius:3px;background:rgba(201,60,46,.15);color:#C93C2E;border:1px solid rgba(201,60,46,.3);">GT CF</span>
+          <span class="tools-item-section">Study Guides</span>
+          <a class="tools-item" href="behavioral.html" style="text-decoration:none;">Behavioral Guide</a>
+          <a class="tools-item" href="accounting.html" style="text-decoration:none;">Accounting</a>
+          <a class="tools-item" href="valuation.html" style="text-decoration:none;">Valuation</a>
+          <a class="tools-item" href="ma-accretion.html" style="text-decoration:none;">M&amp;A / Accretion</a>
+          <a class="tools-item" href="lbo-practice.html" style="text-decoration:none;">LBO Practice</a>
+          <div class="tools-divider"></div>
+          <span class="tools-item-section">Mock Interview</span>
+          <a class="tools-item" href="interview-prep.html" style="text-decoration:none;display:flex;align-items:center;">
+            GT CF Prep<span style="margin-left:auto;font-size:9px;font-weight:700;letter-spacing:.06em;padding:1px 6px;border-radius:3px;background:rgba(201,60,46,.15);color:#C93C2E;border:1px solid rgba(201,60,46,.3);">GT CF</span>
           </a>
+          <div class="tools-divider"></div>
+          <span class="tools-item-section">Career</span>
+          <button class="tools-item" id="storyBankBtn" onclick="toggleStoryBank();closeToolsMenu()">
+            Story Bank<span class="tools-item-badge">NEW</span>
+          </button>
+          <button class="tools-item" id="roadmapBtn" onclick="toggleRoadmap();closeToolsMenu()">
+            IB Roadmap<span class="tools-item-badge"></span>
+          </button>
+          <button class="tools-item" id="crmBtn" onclick="toggleCRM();closeToolsMenu()">
+            Networking CRM<span class="tools-item-badge"></span>
+          </button>
+          <button class="tools-item" id="trackerBtn" onclick="toggleTracker();closeToolsMenu()">
+            App Tracker<span class="tools-item-badge"></span>
+          </button>
+          <button class="tools-item" id="netScriptsBtn" onclick="toggleNetScripts();closeToolsMenu()">
+            Networking Scripts<span class="tools-item-badge">NEW</span>
+          </button>
         </div>
         <!-- REFERENCE TAB -->
         <div class="tools-tab-content hidden" id="ttab-reference">
@@ -2203,25 +2228,6 @@ body.wt-open #gridWrap{padding-bottom:150px;}
           </button>
           <button class="tools-item" id="resourceBtn" onclick="toggleResources();closeToolsMenu()">
             Resource Hub<span class="tools-item-badge"></span>
-          </button>
-        </div>
-        <!-- CAREER TAB -->
-        <div class="tools-tab-content hidden" id="ttab-career">
-          <button class="tools-item" id="storyBankBtn" onclick="toggleStoryBank();closeToolsMenu()">
-            Story Bank<span class="tools-item-badge">NEW</span>
-          </button>
-          <button class="tools-item" id="roadmapBtn" onclick="toggleRoadmap();closeToolsMenu()">
-            IB Roadmap<span class="tools-item-badge"></span>
-          </button>
-          <button class="tools-item" id="crmBtn" onclick="toggleCRM();closeToolsMenu()">
-            Networking CRM<span class="tools-item-badge"></span>
-          </button>
-          <button class="tools-item" id="trackerBtn" onclick="toggleTracker();closeToolsMenu()">
-            App Tracker<span class="tools-item-badge"></span>
-          </button>
-          <div class="tools-divider"></div>
-          <button class="tools-item" id="netScriptsBtn" onclick="toggleNetScripts();closeToolsMenu()">
-            Networking Scripts<span class="tools-item-badge">NEW</span>
           </button>
         </div>
       </div>
@@ -4153,8 +4159,8 @@ function closeToolsMenu() {
 }
 
 let activeToolsTab = 'build';
-const TOOL_TABS = ['build','drills','interview','reference','career'];
-const TOOL_TAB_BTN_IDS = {build:'ttabBuild',drills:'ttabDrills',interview:'ttabInterview',reference:'ttabReference',career:'ttabCareer'};
+const TOOL_TABS = ['build','drills','interview','reference'];
+const TOOL_TAB_BTN_IDS = {build:'ttabBuild',drills:'ttabDrills',interview:'ttabInterview',reference:'ttabReference'};
 function setToolsTab(tab) {
   activeToolsTab = tab;
   TOOL_TABS.forEach(t => {
