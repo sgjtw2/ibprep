@@ -4291,12 +4291,12 @@ async function loadDogsLedger() {
 
 function parseDogName(ev) {
   const text = ev.summary || '';
-  // Strip payment notation and trailing punctuation to extract the dog/client name
   return text
     .replace(/\s*\(Paid\s+PS\s+\$?[\d,]+(?:\.\d+)?\)/gi, '')
     .replace(/\s*\(Paid\s+\$?[\d,]+(?:\.\d+)?(?:\s*\/\s*\$?[\d,]+(?:\.\d+)?)?\)/gi, '')
     .replace(/\s*\(\$[\d,]+(?:\.\d+)?\)/gi, '')
-    .replace(/\s*[-–—]\s*\d+\s*(nights?|days?|hrs?|hours?)\s*$/i, '')
+    .replace(/\s*[-–—]\s*\d+\s*(nights?|days?|hrs?|hours?)\s*$/i, '')  // strip "- 3 nights"
+    .replace(/\s*[-–—]\s*[A-Za-z][A-Za-z\s]*$/, '')                    // strip breed suffix e.g. "- Mongrel"
     .trim() || '(Unnamed)';
 }
 
@@ -4311,10 +4311,11 @@ function renderDogsLedger(events) {
   const dogs = {};
   events.forEach(ev => {
     const name = parseDogName(ev);
+    const key  = name.toLowerCase();
     const pay  = parsePayment(ev.summary) || parsePayment(ev.description || '');
     if (!pay) return;
-    if (!dogs[name]) dogs[name] = { name, sessions: 0, received: 0, total: 0, lastDate: '' };
-    const d = dogs[name];
+    if (!dogs[key]) dogs[key] = { name, sessions: 0, received: 0, total: 0, lastDate: '' };
+    const d = dogs[key];
     d.sessions++;
     d.received += pay.received;
     d.total    += pay.total;
