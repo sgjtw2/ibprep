@@ -1742,6 +1742,7 @@ body {
 .cal-dogs-total .cal-dogs-cell { font-weight:700; color:var(--t1); }
 .cal-dogs-total .cal-dogs-cell.green { color:#43A047; }
 .cal-dogs-total .cal-dogs-cell.amber { color:var(--amber-col,#B87A12); }
+.cal-dogs-breed { font-size:10px; color:var(--t3); margin-top:2px; font-style:italic; }
 .cal-dogs-empty { padding:32px; text-align:center; font-size:11px; color:var(--t3); }
 .cal-year-view { padding: 0 0 8px; }
 .cal-year-hdr {
@@ -4115,17 +4116,27 @@ function proratePayment(ev, pay) {
 }
 
 /* ── DOGS LEDGER ── */
-function extractDogName(title) {
+function parseDogEntry(title) {
   if (!title) return null;
-  return title
+  // Strip payment annotation first
+  const stripped = title
     .replace(/\s*\(Paid\s+[^)]*\)/gi, '')
     .replace(/\s*\(\$[\d,]+(?:\.\d+)?\)/gi, '')
-    .trim() || null;
+    .trim();
+  if (!stripped) return null;
+  // Split on em-dash (—) or spaced hyphen ( - ) to separate name(s) from breed(s)
+  const dashIdx = stripped.search(/\s*[—–]\s*|\s+-\s+/);
+  if (dashIdx !== -1) {
+    const namesPart  = stripped.slice(0, dashIdx).trim();
+    const breedPart  = stripped.slice(stripped.search(/[—–]|-(?=\s)/) + 1).trim();
+    return { names: namesPart, breed: breedPart };
+  }
+  return { names: stripped, breed: null };
 }
 
-function normalizeDogKey(name) {
-  // Sort names either side of & so "Ruby & Ruben" === "Ruben & Ruby"
-  return name.split(/\s*&\s*/).map(s => s.trim()).filter(Boolean)
+function normalizeDogKey(namesPart) {
+  // Only sort the NAMES (not breed) so "Ruby & Ruben" === "Ruben & Ruby"
+  return namesPart.split(/\s*&\s*/).map(s => s.trim()).filter(Boolean)
     .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
     .join(' & ');
 }
@@ -4143,11 +4154,13 @@ async function renderDogsView() {
     if (calHiddenIds.has(ev._calId)) return;
     const pay = parsePayment(ev.summary) || parsePayment(ev.description);
     if (!pay) return;
-    const raw = extractDogName(ev.summary);
-    if (!raw) return;
-    const key = normalizeDogKey(raw);
+    const entry = parseDogEntry(ev.summary);
+    if (!entry || !entry.names) return;
+    const key = normalizeDogKey(entry.names);
     if (!key) return;
-    if (!dogs[key]) dogs[key] = { display: key, bookings: 0, received: 0, total: 0 };
+    if (!dogs[key]) dogs[key] = { display: key, breed: entry.breed || null, bookings: 0, received: 0, total: 0 };
+    // Keep breed if not yet stored
+    if (!dogs[key].breed && entry.breed) dogs[key].breed = entry.breed;
     dogs[key].bookings++;
     dogs[key].received += pay.received;
     dogs[key].total    += pay.total;
@@ -4156,14 +4169,15 @@ async function renderDogsView() {
   const rows = Object.values(dogs).sort((a, b) => b.total - a.total || a.display.localeCompare(b.display));
   const fmt  = n => '$' + n.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
+  const yearNav = `
+    <div class="cal-dogs-year-sel">
+      <button class="cal-dogs-year-btn" onclick="calShift(-1)">‹</button>
+      <span class="cal-dogs-year-lbl">${calYear}</span>
+      <button class="cal-dogs-year-btn" onclick="calShift(1)">›</button>
+    </div>`;
+
   if (!rows.length) {
-    content.innerHTML = `
-      <div class="cal-dogs-year-sel">
-        <button class="cal-dogs-year-btn" onclick="calShift(-1)">‹</button>
-        <span class="cal-dogs-year-lbl">${calYear}</span>
-        <button class="cal-dogs-year-btn" onclick="calShift(1)">›</button>
-      </div>
-      <div class="cal-dogs-empty">No payment data found for ${calYear}.</div>`;
+    content.innerHTML = yearNav + `<div class="cal-dogs-empty">No payment data found for ${calYear}.</div>`;
     return;
   }
 
@@ -4172,12 +4186,7 @@ async function renderDogsView() {
   const totOutstanding = totTotal - totReceived;
   const totBookings    = rows.reduce((s, r) => s + r.bookings, 0);
 
-  content.innerHTML = `
-    <div class="cal-dogs-year-sel">
-      <button class="cal-dogs-year-btn" onclick="calShift(-1)">‹</button>
-      <span class="cal-dogs-year-lbl">${calYear}</span>
-      <button class="cal-dogs-year-btn" onclick="calShift(1)">›</button>
-    </div>
+  content.innerHTML = yearNav + `
     <div class="cal-dogs-hdr">
       <div>Dog(s)</div>
       <div style="text-align:right;padding-right:10px">Bookings</div>
@@ -4188,7 +4197,10 @@ async function renderDogsView() {
     ${rows.map(r => {
       const owed = r.total - r.received;
       return `<div class="cal-dogs-row">
-        <div class="cal-dogs-name">${esc(r.display)}</div>
+        <div>
+          <div class="cal-dogs-name">${esc(r.display)}</div>
+          ${r.breed ? `<div class="cal-dogs-breed">${esc(r.breed)}</div>` : ''}
+        </div>
         <div class="cal-dogs-cell">${r.bookings}</div>
         <div class="cal-dogs-cell">${fmt(r.total)}</div>
         <div class="cal-dogs-cell green">${fmt(r.received)}</div>
