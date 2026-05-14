@@ -4289,34 +4289,23 @@ async function loadDogsLedger() {
   }
 }
 
-function parseDogEntry(ev) {
+function parseDogName(ev) {
   let text = ev.summary || '';
-  // Strip payment and duration notations
   text = text
     .replace(/\s*\(Paid\s+PS\s+\$?[\d,]+(?:\.\d+)?\)/gi, '')
     .replace(/\s*\(Paid\s+\$?[\d,]+(?:\.\d+)?(?:\s*\/\s*\$?[\d,]+(?:\.\d+)?)?\)/gi, '')
     .replace(/\s*\(\$[\d,]+(?:\.\d+)?\)/gi, '')
     .replace(/\s*[-–—]\s*\d+\s*(nights?|days?|hrs?|hours?)\s*$/i, '')
+    .replace(/\s*[-–—]\s*[A-Za-z][A-Za-z\s]*$/, '')
     .trim();
-
-  if (!text) return { key: '(unnamed)', displayName: '(Unnamed)' };
-
-  // Split multi-dog entries: "Ruby & Ruben", "Ruben and Ruby"
+  if (!text) return '(Unnamed)';
+  // Normalise multi-dog order: "Ruben & Ruby" → "Ruby & Ruben"
   const parts = text.split(/\s*&\s*|\s+and\s+/i).map(p => p.trim()).filter(Boolean);
-
-  // Extract name + breed from each part ("Plum - Mongrel" → {name:"Plum", breed:"Mongrel"})
-  const parsed = parts.map(part => {
-    const m = part.match(/^(.+?)\s*[-–—]\s*([A-Za-z][A-Za-z\s]*)$/);
-    return m ? { name: m[1].trim(), breed: m[2].trim() } : { name: part, breed: '' };
-  });
-
-  // Sort alphabetically by name so "Ruby & Ruben" === "Ruben & Ruby"
-  parsed.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
-
-  const key         = parsed.map(p => p.name.toLowerCase()).join(' & ');
-  const displayName = parsed.map(p => p.breed ? `${p.name} - ${p.breed}` : p.name).join(' & ');
-
-  return { key, displayName };
+  if (parts.length > 1) {
+    parts.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+    return parts.join(' & ');
+  }
+  return text;
 }
 
 let dogsSortKey = 'total';
@@ -4329,12 +4318,11 @@ function renderDogsLedger(events) {
   // Aggregate by dog name
   const dogs = {};
   events.forEach(ev => {
-    const { key, displayName } = parseDogEntry(ev);
-    const pay = parsePayment(ev.summary) || parsePayment(ev.description || '');
+    const name = parseDogName(ev);
+    const key  = name.toLowerCase();
+    const pay  = parsePayment(ev.summary) || parsePayment(ev.description || '');
     if (!pay) return;
-    if (!dogs[key]) dogs[key] = { name: displayName, sessions: 0, received: 0, total: 0, lastDate: '' };
-    // Prefer the richer display name (one that includes a breed)
-    else if (displayName.length > dogs[key].name.length) dogs[key].name = displayName;
+    if (!dogs[key]) dogs[key] = { name, sessions: 0, received: 0, total: 0, lastDate: '' };
     const d = dogs[key];
     d.sessions++;
     d.received += pay.received;
