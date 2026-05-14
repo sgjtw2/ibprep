@@ -4208,8 +4208,8 @@ async function renderDogsView() {
       </div>`;
     }).join('')}
     <div class="cal-dogs-total">
-      <div class="cal-dogs-name">${rows.length} dog${rows.length === 1 ? '' : 's'} · ${totBookings} booking${totBookings === 1 ? '' : 's'}</div>
-      <div class="cal-dogs-cell"></div>
+      <div class="cal-dogs-name">${rows.length} dog${rows.length === 1 ? '' : 's'}</div>
+      <div class="cal-dogs-cell">${totBookings}</div>
       <div class="cal-dogs-cell">${fmt(totTotal)}</div>
       <div class="cal-dogs-cell green">${fmt(totReceived)}</div>
       <div class="cal-dogs-cell${totOutstanding > 0.005 ? ' amber' : ''}">${totOutstanding > 0.005 ? fmt(totOutstanding) : '—'}</div>
