@@ -1749,7 +1749,8 @@ body {
 .cal-dogs-total .cal-dogs-cell.green { color:#43A047; }
 .cal-dogs-total .cal-dogs-cell.amber { color:var(--amber-col,#B87A12); }
 .cal-dogs-breed { font-size:10px; color:var(--t3); margin-top:2px; font-style:italic; }
-.cal-dogs-detail { display:none; padding:2px 4px 10px 12px; }
+.cal-dogs-detail { padding:2px 4px 10px 12px; }
+.cal-dogs-detail[hidden] { display:none !important; }
 .cal-dogs-bk-row { display:grid; grid-template-columns:95px 1fr 80px; font-size:10px; color:var(--t2); padding:4px 0; border-top:1px solid var(--b1); gap:8px; align-items:start; }
 .cal-dogs-bk-row:first-child { border-top:none; }
 .cal-dogs-bk-date { color:var(--t3); font-size:9.5px; white-space:nowrap; padding-top:1px; }
@@ -4183,9 +4184,8 @@ function toggleDogDetail(entry) {
   const detail = entry.querySelector('.cal-dogs-detail');
   const chevron = entry.querySelector('.cal-dogs-chevron');
   if (!detail) return;
-  const isHidden = getComputedStyle(detail).display === 'none';
-  detail.style.display = isHidden ? 'block' : 'none';
-  if (chevron) chevron.style.transform = isHidden ? 'rotate(90deg)' : '';
+  detail.hidden = !detail.hidden;
+  if (chevron) chevron.style.transform = detail.hidden ? '' : 'rotate(90deg)';
 }
 
 function fmtEvDate(ev) {
@@ -4340,12 +4340,8 @@ async function renderDogsView() {
           <div class="cal-dogs-cell green">${fmt(r.received)}</div>
           <div class="cal-dogs-cell${owed > 0.005 ? ' amber' : ''}">${owed > 0.005 ? fmt(owed) : '—'}</div>
         </div>
-        <div class="cal-dogs-detail">
-          ${sorted.map(e => `<div class="cal-dogs-bk-row">
-            <span class="cal-dogs-bk-date">${e.display}</span>
-            <span class="cal-dogs-bk-title">${esc(e.title)}</span>
-            <span class="cal-dogs-bk-amt">${fmt(e.total)}</span>
-          </div>`).join('')}
+        <div class="cal-dogs-detail" hidden>
+          ${sorted.length === 0 ? '<div class="cal-dogs-bk-row"><span class="cal-dogs-bk-date" style="color:var(--t3)">No bookings found</span></div>' : sorted.map(e => `<div class="cal-dogs-bk-row"><span class="cal-dogs-bk-date">${e.display}</span><span class="cal-dogs-bk-title">${esc(e.title)}</span><span class="cal-dogs-bk-amt">${fmt(e.total)}</span></div>`).join('')}
         </div>
       </div>`;
     }).join('')}
