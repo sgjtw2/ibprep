@@ -4134,36 +4134,50 @@ let dogsViewAll = false;
 // Spelling corrections for individual name parts (lowercase → corrected display)
 const DOG_NAME_ALIASES = { 'megana': 'Mangena' };
 
-// When breed is embedded in name without em-dash (e.g. "Peanut Zuchon ($x)")
-// Key: full normalised name (lowercase, sorted, Training stripped)
-const DOG_NAME_OVERRIDES = { 'peanut zuchon': { name: 'Peanut', breed: 'Zuchon' } };
+// Breed embedded in name without em-dash — key: full normalised sorted name (lowercase)
+const DOG_NAME_OVERRIDES = {
+  'peanut zuchon':             { name: 'Peanut',          breed: 'Zuchon'   },
+  'poppie & tamago shiba inu': { name: 'Poppie & Tamago', breed: 'Shiba Inu'},
+  'ruben & ruby pomsky':       { name: 'Ruben & Ruby',    breed: 'Pomsky'   },
+};
 
-function cleanNamePart(part) {
-  return part.replace(/\bTraining\b/gi, '').replace(/\s+/g, ' ').trim();
-}
+// Explicit merge groups: all 'keys' collapse into 'canonical'
+// 'display' overrides the auto-generated display name when non-null
+const NAME_MERGE_GROUPS = [
+  { keys: ['ruby', 'ruben', 'ruben & ruby'],            canonical: 'ruben & ruby',          display: null },
+  { keys: ['megan', 'mangena & megan'],                 canonical: 'mangena & megan',       display: null },
+  { keys: ['buddy & pollo', 'buddy & duffy & pollo'],   canonical: 'buddy & duffy & pollo', display: 'Duffy, Buddy & Pollo' },
+];
 
 function parseDogEntry(title) {
   if (!title) return null;
-  const stripped = title
+  let s = title
     .replace(/\s*\(Paid\s+[^)]*\)/gi, '')
     .replace(/\s*\(\$[\d,]+(?:\.\d+)?\)/gi, '')
+    .replace(/\s*\+\s*\$[\d,]+(?:\.\d+)?[^&,(]*/gi, '')  // "+ $60 transport/pickup..."
+    .replace(/\s*-\$[\d,]+(?:\.\d+)?\/\w+/gi, '')         // "-$155/day"
     .trim();
-  if (!stripped) return null;
+  if (!s) return null;
 
   let rawNames, breed = null;
-  const m = stripped.match(/^(.+?)\s*[—–]\s*(.+)$/) || stripped.match(/^(.+?)\s+-\s+(.+)$/);
+  const m = s.match(/^(.+?)\s*[—–]\s*(.+)$/) || s.match(/^(.+?)\s+-\s+(.+)$/);
   if (m) { rawNames = m[1].trim(); breed = m[2].trim() || null; }
-  else    { rawNames = stripped; }
+  else    { rawNames = s; }
 
-  // Normalise commas as & separator, strip "Training" word, apply spelling aliases
-  const parts = rawNames.replace(/,/g, '&').split(/\s*&\s*/)
-    .map(n => cleanNamePart(n)).filter(Boolean)
+  rawNames = rawNames
+    .replace(/\bw\s*\/\s*/gi, '')   // strip "w/" (with)
+    .replace(/\//g, '&')            // / as separator
+    .replace(/,/g, '&')             // comma as separator
+    .replace(/\band\b/gi, '&');     // "and" as separator
+
+  const parts = rawNames.split(/\s*&\s*/)
+    .map(n => n.replace(/\bTraining\b/gi, '').replace(/\s+/g, ' ').trim())
+    .filter(Boolean)
     .map(n => DOG_NAME_ALIASES[n.toLowerCase()] || n);
   if (!parts.length) return null;
 
   const names = parts.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase())).join(' & ');
 
-  // Override: breed embedded in name without separator
   if (!breed) {
     const ov = DOG_NAME_OVERRIDES[names.toLowerCase()];
     if (ov) return { names: ov.name, breed: ov.breed };
@@ -4249,19 +4263,8 @@ async function renderDogsView() {
     }
   });
 
-  // Step 2: merge single-name keys into pair-name keys when unambiguous
-  // "ruby" → "ruben & ruby", "megan" → "mangena & megan"
-  const allKeys = Object.keys(raw);
-  const mergedInto = {};
-  allKeys.forEach(singleKey => {
-    const parts = singleKey.split(' & ');
-    if (parts.length !== 1) return;
-    const name = parts[0];
-    const matches = allKeys.filter(k => k !== singleKey && k.split(' & ').includes(name));
-    if (matches.length === 1) mergedInto[singleKey] = matches[0]; // skip if ambiguous (2+ pairs)
-  });
-  Object.entries(mergedInto).forEach(([src, dest]) => {
-    const s = raw[src], d = raw[dest];
+  // Step 2: apply explicit merge groups (NAME_MERGE_GROUPS)
+  function mergeInto(s, d) {
     Object.entries(s.breedMap).forEach(([bk, sv]) => {
       if (!d.breedMap[bk]) d.breedMap[bk] = { breed: sv.breed, bookings: 0, received: 0, total: 0, events: [] };
       d.breedMap[bk].bookings += sv.bookings;
@@ -4276,7 +4279,17 @@ async function renderDogsView() {
       d.noBreed.total    += s.noBreed.total;
       d.noBreed.events.push(...s.noBreed.events);
     }
-    delete raw[src];
+  }
+  NAME_MERGE_GROUPS.forEach(({ keys, canonical, display }) => {
+    const present = keys.filter(k => raw[k]);
+    if (!present.length) return;
+    if (!raw[canonical]) { raw[canonical] = raw[present[0]]; delete raw[present[0]]; }
+    present.forEach(memberKey => {
+      if (memberKey === canonical || !raw[memberKey]) return;
+      mergeInto(raw[memberKey], raw[canonical]);
+      delete raw[memberKey];
+    });
+    if (display && raw[canonical]) raw[canonical].display = display;
   });
 
   // Step 3: flatten to display rows
